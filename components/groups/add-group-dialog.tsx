@@ -71,8 +71,8 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create New Group</DialogTitle>
-          <DialogDescription>Add a new cell, ministry, or team</DialogDescription>
+          <DialogTitle>Create New LifeGroup</DialogTitle>
+          <DialogDescription>Add a new LifeGroup, ministry, or team</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -110,7 +110,7 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cell">Cell Group</SelectItem>
+                  <SelectItem value="cell">LifeGroup</SelectItem>
                   <SelectItem value="ministry">Ministry</SelectItem>
                   <SelectItem value="team">Team</SelectItem>
                   <SelectItem value="other">Other</SelectItem>

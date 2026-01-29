@@ -25,7 +25,7 @@ interface SidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Contacts', href: '/dashboard/contacts', icon: Users },
-  { name: 'Groups', href: '/dashboard/groups', icon: UsersRound },
+  { name: 'LifeGroups', href: '/dashboard/groups', icon: UsersRound },
   { name: 'Events', href: '/dashboard/events', icon: Calendar },
   { name: 'Tasks & Projects', href: '/dashboard/tasks', icon: CheckSquare },
 ]

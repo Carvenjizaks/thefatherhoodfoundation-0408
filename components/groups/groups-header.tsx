@@ -19,9 +19,9 @@ export function GroupsHeader({ organizationId, role }: GroupsHeaderProps) {
     <>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">Groups</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">LifeGroups</h2>
           <p className="text-muted-foreground mt-1">
-            Manage cells, ministries, and teams
+            Manage LifeGroups, ministries, and teams
           </p>
         </div>
         
@@ -31,7 +31,7 @@ export function GroupsHeader({ organizationId, role }: GroupsHeaderProps) {
             className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Create Group
+            Create LifeGroup
           </Button>
         )}
       </div>
