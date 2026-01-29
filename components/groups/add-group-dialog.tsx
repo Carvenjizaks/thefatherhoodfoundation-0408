@@ -75,8 +75,8 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create New LifeGroup</DialogTitle>
-          <DialogDescription>Add a new LifeGroup, ministry, or team</DialogDescription>
+          <DialogTitle>Create New Group</DialogTitle>
+          <DialogDescription>Add a new group, ministry, or team</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
