@@ -3,6 +3,10 @@
 -- Community organization with discovery, chat, resources, and events
 -- ============================================
 
+-- Drop existing views that might conflict
+DROP VIEW IF EXISTS public.group_statistics CASCADE;
+DROP VIEW IF EXISTS public.group_member_stats CASCADE;
+
 -- Group Types (categorization for discovery)
 CREATE TABLE IF NOT EXISTS public.group_types (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -172,23 +176,31 @@ CREATE POLICY "group_chat_messages_allow_all" ON public.group_chat_messages FOR 
 CREATE POLICY "group_events_allow_all" ON public.group_events FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "group_event_rsvps_allow_all" ON public.group_event_rsvps FOR ALL USING (true) WITH CHECK (true);
 
--- Insert default group types
-INSERT INTO public.group_types (organization_id, name, description, icon) VALUES
-('00000000-0000-0000-0000-000000000000', 'LifeGroup', 'Small groups for fellowship and spiritual growth', '👥'),
-('00000000-0000-0000-0000-000000000000', 'Ministry', 'Service-focused groups', '🙏'),
-('00000000-0000-0000-0000-000000000000', 'Bible Study', 'Groups focused on studying Scripture', '📖'),
-('00000000-0000-0000-0000-000000000000', 'Prayer Group', 'Groups dedicated to prayer', '🕊️'),
-('00000000-0000-0000-0000-000000000000', 'Youth Group', 'Groups for young people', '🎯'),
-('00000000-0000-0000-0000-000000000000', 'Interest Group', 'Groups based on hobbies and interests', '⭐')
-ON CONFLICT (organization_id, name) DO NOTHING;
+-- Insert default group types (only if organizations exist)
+DO $$
+DECLARE
+  default_org_id UUID;
+BEGIN
+  SELECT id INTO default_org_id FROM public.organizations LIMIT 1;
+  
+  IF default_org_id IS NOT NULL THEN
+    INSERT INTO public.group_types (organization_id, name, description, icon) VALUES
+    (default_org_id, 'LifeGroup', 'Small groups for fellowship and spiritual growth', '👥'),
+    (default_org_id, 'Ministry', 'Service-focused groups', '🙏'),
+    (default_org_id, 'Bible Study', 'Groups focused on studying Scripture', '📖'),
+    (default_org_id, 'Prayer Group', 'Groups dedicated to prayer', '🕊️'),
+    (default_org_id, 'Youth Group', 'Groups for young people', '🎯'),
+    (default_org_id, 'Interest Group', 'Groups based on hobbies and interests', '⭐')
+    ON CONFLICT (organization_id, name) DO NOTHING;
 
--- Insert default tags
-INSERT INTO public.group_tags (organization_id, name, color) VALUES
-('00000000-0000-0000-0000-000000000000', 'Family Friendly', '#10b981'),
-('00000000-0000-0000-0000-000000000000', 'Newcomers Welcome', '#3b82f6'),
-('00000000-0000-0000-0000-000000000000', 'Spanish Speaking', '#f59e0b'),
-('00000000-0000-0000-0000-000000000000', 'Online', '#8b5cf6'),
-('00000000-0000-0000-0000-000000000000', 'Daytime', '#eab308'),
-('00000000-0000-0000-0000-000000000000', 'Evening', '#6366f1'),
-('00000000-0000-0000-0000-000000000000', 'Weekend', '#ec4899')
-ON CONFLICT (organization_id, name) DO NOTHING;
+    INSERT INTO public.group_tags (organization_id, name, color) VALUES
+    (default_org_id, 'Family Friendly', '#10b981'),
+    (default_org_id, 'Newcomers Welcome', '#3b82f6'),
+    (default_org_id, 'Spanish Speaking', '#f59e0b'),
+    (default_org_id, 'Online', '#8b5cf6'),
+    (default_org_id, 'Daytime', '#eab308'),
+    (default_org_id, 'Evening', '#6366f1'),
+    (default_org_id, 'Weekend', '#ec4899')
+    ON CONFLICT (organization_id, name) DO NOTHING;
+  END IF;
+END $$;
