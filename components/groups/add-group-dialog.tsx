@@ -38,18 +38,30 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    console.log('[v0] Creating group with data:', { ...formData, organization_id: organizationId })
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('groups')
         .insert({
           ...formData,
           organization_id: organizationId,
           capacity: formData.capacity ? parseInt(formData.capacity) : null,
+          is_active: true,
+          is_open: true,
+          current_members: 0,
         })
+        .select()
 
-      if (error) throw error
+      console.log('[v0] Group creation response:', { data, error })
 
+      if (error) {
+        console.error('[v0] Error creating group:', error)
+        alert(`Error creating group: ${error.message}`)
+        throw error
+      }
+
+      console.log('[v0] Group created successfully:', data)
       onOpenChange(false)
       setFormData({
         name: '',
