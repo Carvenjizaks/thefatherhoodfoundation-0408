@@ -20,6 +20,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import Image from 'next/image'
+import { AddGroupDialog } from './add-group-dialog'
 
 interface Group {
   id: string
@@ -47,11 +48,21 @@ export function GroupsMainView() {
   const [selectedType, setSelectedType] = useState('all')
   const [selectedDay, setSelectedDay] = useState('all')
   const [selectedCampus, setSelectedCampus] = useState('all')
+  const [showAddDialog, setShowAddDialog] = useState(false)
+  const [organizationId, setOrganizationId] = useState<string>('')
   const [view, setView] = useState<'discover' | 'my-groups'>('discover')
 
   useEffect(() => {
+    fetchOrganization()
     fetchGroups()
   }, [])
+
+  const fetchOrganization = async () => {
+    const { data } = await supabase.from('organizations').select('id').limit(1).single()
+    if (data) {
+      setOrganizationId(data.id)
+    }
+  }
 
   useEffect(() => {
     filterGroups()
@@ -172,11 +183,18 @@ export function GroupsMainView() {
       </div>
       <Button 
         size="lg"
+        onClick={() => setShowAddDialog(true)}
         className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
       >
         <Plus className="h-5 w-5 mr-2" />
         Create Group
       </Button>
+
+      <AddGroupDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        organizationId={organizationId}
+      />
 
       {/* Stats Bar */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
