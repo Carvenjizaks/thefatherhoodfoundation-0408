@@ -3,116 +3,77 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 270 10% 15%;
-  --card: 0 0% 100%;
-  --card-foreground: 270 10% 15%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 270 10% 15%;
-  --primary: 270 91% 65%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 160 84% 45%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 270 10% 96%;
-  --muted-foreground: 270 10% 50%;
-  --accent: 160 84% 45%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 270 10% 90%;
-  --input: 270 10% 95%;
-  --ring: 270 91% 65%;
-  --radius: 0.75rem;
-  --chart-1: 270 91% 65%;
-  --chart-2: 160 84% 45%;
-  --chart-3: 180 80% 55%;
-  --chart-4: 150 75% 50%;
-  --chart-5: 280 85% 60%;
-  --sidebar: 270 10% 98%;
-  --sidebar-foreground: 270 10% 25%;
-  --sidebar-primary: 270 91% 65%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 270 10% 95%;
-  --sidebar-accent-foreground: 270 10% 30%;
-  --sidebar-border: 270 10% 92%;
-  --sidebar-ring: 270 91% 65%;
+  --background: 0 0% 100%; /* Preserved user color */
+  --foreground: 270 10% 15%; /* Preserved user color */
+  --card: 0 0% 100%; /* Preserved user color */
+  --card-foreground: 270 10% 15%; /* Preserved user color */
+  --popover: 0 0% 100%; /* Preserved user color */
+  --popover-foreground: 270 10% 15%; /* Preserved user color */
+  --primary: 270 91% 65%; /* Preserved user color */
+  --primary-foreground: 0 0% 100%; /* Preserved user color */
+  --secondary: 160 84% 45%; /* Preserved user color */
+  --secondary-foreground: 0 0% 100%; /* Preserved user color */
+  --muted: 270 10% 96%; /* Preserved user color */
+  --muted-foreground: 270 10% 50%; /* Preserved user color */
+  --accent: 160 84% 45%; /* Preserved user color */
+  --accent-foreground: 0 0% 100%; /* Preserved user color */
+  --destructive: 0 84% 60%; /* Preserved user color */
+  --destructive-foreground: 0 0% 100%; /* Preserved user color */
+  --border: 270 10% 90%; /* Preserved user color */
+  --input: 270 10% 95%; /* Preserved user color */
+  --ring: 270 91% 65%; /* Preserved user color */
+  --radius: 0.75rem; /* Preserved user radius */
+  --chart-1: 270 91% 65%; /* Preserved user color */
+  --chart-2: 160 84% 45%; /* Preserved user color */
+  --chart-3: 180 80% 55%; /* Preserved user color */
+  --chart-4: 150 75% 50%; /* Preserved user color */
+  --chart-5: 280 85% 60%; /* Preserved user color */
+  --sidebar: oklch(0.985 0 0); /* Added from default */
+  --sidebar-foreground: oklch(0.145 0 0); /* Added from default */
+  --sidebar-primary: oklch(0.205 0 0); /* Added from default */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Added from default */
+  --sidebar-accent: oklch(0.97 0 0); /* Added from default */
+  --sidebar-accent-foreground: oklch(0.205 0 0); /* Added from default */
+  --sidebar-border: oklch(0.922 0 0); /* Added from default */
+  --sidebar-ring: oklch(0.708 0 0); /* Added from default */
 }
 
 .dark {
-  --background: 270 10% 10%;
-  --foreground: 270 5% 95%;
-  --card: 270 10% 15%;
-  --card-foreground: 270 5% 95%;
-  --popover: 270 10% 15%;
-  --popover-foreground: 270 5% 95%;
-  --primary: 270 91% 65%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 160 84% 45%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 270 10% 25%;
-  --muted-foreground: 270 5% 65%;
-  --accent: 160 84% 45%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 75% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 270 10% 30%;
-  --input: 270 10% 25%;
-  --ring: 270 91% 65%;
-  --chart-1: 270 91% 65%;
-  --chart-2: 160 84% 45%;
-  --chart-3: 180 80% 55%;
-  --chart-4: 150 75% 50%;
-  --chart-5: 280 85% 60%;
-  --sidebar: 270 10% 18%;
-  --sidebar-foreground: 270 5% 90%;
-  --sidebar-primary: 270 91% 65%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 270 10% 25%;
-  --sidebar-accent-foreground: 270 5% 90%;
-  --sidebar-border: 270 10% 30%;
-  --sidebar-ring: 270 91% 65%;
+  --background: 270 10% 10%; /* Preserved user color */
+  --foreground: 270 5% 95%; /* Preserved user color */
+  --card: 270 10% 15%; /* Preserved user color */
+  --card-foreground: 270 5% 95%; /* Preserved user color */
+  --popover: 270 10% 15%; /* Preserved user color */
+  --popover-foreground: 270 5% 95%; /* Preserved user color */
+  --primary: 270 91% 65%; /* Preserved user color */
+  --primary-foreground: 0 0% 100%; /* Preserved user color */
+  --secondary: 160 84% 45%; /* Preserved user color */
+  --secondary-foreground: 0 0% 100%; /* Preserved user color */
+  --muted: 270 10% 25%; /* Preserved user color */
+  --muted-foreground: 270 5% 65%; /* Preserved user color */
+  --accent: 160 84% 45%; /* Preserved user color */
+  --accent-foreground: 0 0% 100%; /* Preserved user color */
+  --destructive: 0 75% 55%; /* Preserved user color */
+  --destructive-foreground: 0 0% 100%; /* Preserved user color */
+  --border: 270 10% 30%; /* Preserved user color */
+  --input: 270 10% 25%; /* Preserved user color */
+  --ring: 270 91% 65%; /* Preserved user color */
+  --chart-1: 270 91% 65%; /* Preserved user color */
+  --chart-2: 160 84% 45%; /* Preserved user color */
+  --chart-3: 180 80% 55%; /* Preserved user color */
+  --chart-4: 150 75% 50%; /* Preserved user color */
+  --chart-5: 280 85% 60%; /* Preserved user color */
+  --sidebar: oklch(0.205 0 0); /* Added from default */
+  --sidebar-foreground: oklch(0.985 0 0); /* Added from default */
+  --sidebar-primary: oklch(0.488 0.243 264.376); /* Added from default */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Added from default */
+  --sidebar-accent: oklch(0.269 0 0); /* Added from default */
+  --sidebar-accent-foreground: oklch(0.985 0 0); /* Added from default */
+  --sidebar-border: oklch(0.269 0 0); /* Added from default */
+  --sidebar-ring: oklch(0.439 0 0); /* Added from default */
 }
 
-@theme {
-  --font-sans: 'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', sans-serif;
-  --font-serif: 'Inter', 'Inter Fallback', sans-serif;
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: hsl(var(--sidebar));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
-}
+
 
 @layer base {
   * {
@@ -121,6 +82,5 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: var(--font-sans);
   }
 }
