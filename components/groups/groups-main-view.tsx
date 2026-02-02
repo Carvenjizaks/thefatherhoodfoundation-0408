@@ -111,25 +111,72 @@ export function GroupsMainView() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Discover Groups
+    <div className="flex flex-col gap-6 h-full">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/10 to-background border border-border/50">
+        <div className="relative z-10 p-6 md:p-8">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Discover Groups
+            </span>
           </h1>
-          <p className="text-muted-foreground mt-2">
-            Find your community and grow together
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl">
+            Find the perfect group to connect, grow, and build meaningful relationships
           </p>
         </div>
-        <Button 
-          size="lg"
-          className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Create Group
-        </Button>
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="p-4 md:p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 shrink-0">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl md:text-2xl font-bold">{groups.length}</p>
+                <p className="text-xs md:text-sm text-muted-foreground truncate">Active Groups</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="p-4 md:p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-secondary/10 shrink-0">
+                <TrendingUp className="h-5 w-5 text-secondary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl md:text-2xl font-bold">
+                  {groups.reduce((sum, g) => sum + (g.current_members || 0), 0)}
+                </p>
+                <p className="text-xs md:text-sm text-muted-foreground truncate">Total Members</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="p-4 md:p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-accent/10 shrink-0">
+                <MapPin className="h-5 w-5 text-accent" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl md:text-2xl font-bold">5</p>
+                <p className="text-xs md:text-sm text-muted-foreground truncate">Campuses</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <Button 
+        size="lg"
+        className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+      >
+        <Plus className="h-5 w-5 mr-2" />
+        Create Group
+      </Button>
 
       {/* Stats Bar */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -196,82 +243,65 @@ export function GroupsMainView() {
 
         <TabsContent value="discover" className="space-y-6">
           {/* Search and Filters */}
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search groups by name or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Group Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="cell">LifeGroup</SelectItem>
-                <SelectItem value="ministry">Ministry</SelectItem>
-                <SelectItem value="bible_study">Bible Study</SelectItem>
-                <SelectItem value="prayer">Prayer Group</SelectItem>
-                <SelectItem value="youth">Youth Group</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedDay} onValueChange={setSelectedDay}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Meeting Day" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Any Day</SelectItem>
-                <SelectItem value="monday">Monday</SelectItem>
-                <SelectItem value="tuesday">Tuesday</SelectItem>
-                <SelectItem value="wednesday">Wednesday</SelectItem>
-                <SelectItem value="thursday">Thursday</SelectItem>
-                <SelectItem value="friday">Friday</SelectItem>
-                <SelectItem value="saturday">Saturday</SelectItem>
-                <SelectItem value="sunday">Sunday</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedCampus} onValueChange={setSelectedCampus}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Campus" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Campuses</SelectItem>
-                <SelectItem value="Main Campus">Main Campus</SelectItem>
-                <SelectItem value="North Campus">North Campus</SelectItem>
-                <SelectItem value="Online">Online</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardContent className="p-4 md:p-6">
+              <div className="flex flex-col gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <Input
+                    placeholder="Search groups..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-11"
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Select value={selectedType} onValueChange={setSelectedType}>
+                    <SelectTrigger className="w-full sm:w-[160px]">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="cell">LifeGroup</SelectItem>
+                      <SelectItem value="ministry">Ministry</SelectItem>
+                      <SelectItem value="bible_study">Bible Study</SelectItem>
+                      <SelectItem value="prayer">Prayer Group</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  <Select value={selectedDay} onValueChange={setSelectedDay}>
+                    <SelectTrigger className="w-full sm:w-[140px]">
+                      <SelectValue placeholder="Day" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Any Day</SelectItem>
+                      <SelectItem value="Sunday">Sunday</SelectItem>
+                      <SelectItem value="Monday">Monday</SelectItem>
+                      <SelectItem value="Tuesday">Tuesday</SelectItem>
+                      <SelectItem value="Wednesday">Wednesday</SelectItem>
+                      <SelectItem value="Thursday">Thursday</SelectItem>
+                      <SelectItem value="Friday">Friday</SelectItem>
+                      <SelectItem value="Saturday">Saturday</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-          {/* Results Count */}
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Showing {filteredGroups.length} of {groups.length} groups
-            </p>
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              More Filters
-            </Button>
-          </div>
-
-          {/* Groups Grid */}
+                  <Select value={selectedCampus} onValueChange={setSelectedCampus}>
+                    <SelectTrigger className="w-full sm:w-[140px]">
+                      <SelectValue placeholder="Campus" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Campuses</SelectItem>
+                      <SelectItem value="main">Main Campus</SelectItem>
+                      <SelectItem value="north">North Campus</SelectItem>
+                      <SelectItem value="south">South Campus</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map(i => (
-                <Card key={i} className="overflow-hidden animate-pulse">
-                  <div className="h-48 bg-muted" />
-                  <CardContent className="p-6 space-y-3">
-                    <div className="h-6 bg-muted rounded" />
-                    <div className="h-4 bg-muted rounded w-3/4" />
-                    <div className="h-4 bg-muted rounded w-1/2" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <div>Loading...</div>
           ) : filteredGroups.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="p-12 text-center">
