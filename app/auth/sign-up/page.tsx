@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Image from 'next/image'
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -86,13 +87,21 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
       <Card className="w-full max-w-md backdrop-blur-sm bg-card/80 border-border/50 shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Create Account
-          </CardTitle>
-          <CardDescription className="text-center text-muted-foreground">
-            Set up your organization on Tribu
-          </CardDescription>
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <div className="relative h-16 w-16">
+              <Image src="/images/logo.png" alt="Powerhouse Logo" width={64} height={64} className="object-contain opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(225,73%,40%)]/10 to-[hsl(150,40%,72%)]/10 rounded-full mix-blend-overlay" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">
+              Create Account
+            </CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
+              Set up your organization on Powerhouse
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">
@@ -188,7 +197,7 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              className="w-full bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 transition-opacity text-white"
               disabled={loading}
             >
               {loading ? 'Creating Account...' : 'Create Account'}

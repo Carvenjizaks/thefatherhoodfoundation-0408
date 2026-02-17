@@ -38,7 +38,7 @@ export function TasksHeader({ organizationId, role }: TasksHeaderProps) {
             </Button>
             <Button 
               onClick={() => setShowAddTaskDialog(true)}
-              className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              className="bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Task

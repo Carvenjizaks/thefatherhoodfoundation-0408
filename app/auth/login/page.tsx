@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -56,13 +57,27 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
       <Card className="w-full max-w-md backdrop-blur-sm bg-card/80 border-border/50 shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Welcome Back
-          </CardTitle>
-          <CardDescription className="text-center text-muted-foreground">
-            Sign in to your Tribu account
-          </CardDescription>
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <div className="relative h-20 w-20">
+              <Image
+                src="/images/logo.png"
+                alt="PHFF Logo"
+                width={80}
+                height={80}
+                className="object-contain opacity-80"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(225,73%,40%)]/10 to-[hsl(150,40%,72%)]/10 rounded-full mix-blend-overlay" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
+              Sign in to your Powerhouse account
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -115,7 +130,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              className="w-full bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 transition-opacity text-white"
               disabled={loading}
             >
               {loading ? 'Signing in...' : 'Sign In'}

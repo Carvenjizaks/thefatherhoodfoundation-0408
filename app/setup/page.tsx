@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function SetupPage() {
   const router = useRouter()
@@ -116,12 +117,20 @@ export default function SetupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome to Tribu</CardTitle>
-          <CardDescription>
-            Complete your organization setup to get started
-          </CardDescription>
+      <Card className="w-full max-w-md backdrop-blur-sm bg-card/80 border-border/50 shadow-xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="relative h-16 w-16">
+              <Image src="/images/logo.png" alt="Powerhouse Logo" width={64} height={64} className="object-contain opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(225,73%,40%)]/10 to-[hsl(150,40%,72%)]/10 rounded-full mix-blend-overlay" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Welcome to Powerhouse</CardTitle>
+            <CardDescription>
+              Complete your organization setup to get started
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           {error && (

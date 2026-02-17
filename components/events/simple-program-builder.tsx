@@ -205,7 +205,7 @@ export function SimpleProgramBuilder({ eventId, eventDate, eventTitle, onUpdate 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <Card className="border-primary/20 bg-gradient-to-br from-[hsl(225,73%,40%)]/5 to-[hsl(150,40%,72%)]/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

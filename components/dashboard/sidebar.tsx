@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -50,19 +51,35 @@ export function DashboardSidebar({ profile }: SidebarProps) {
       )}
     >
       <div className="flex h-16 items-center justify-between px-4 border-b border-border">
-        {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <span className="text-white font-bold text-lg">T</span>
+        {!collapsed ? (
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-10 shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="PHFF Logo"
+                width={40}
+                height={40}
+                className="object-contain opacity-85"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-foreground">Tribu</span>
+              <span className="text-sm font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Powerhouse</span>
               {profile?.organization && (
-                <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+                <span className="text-xs text-muted-foreground truncate max-w-[140px]">
                   {profile.organization.name}
                 </span>
               )}
             </div>
+          </div>
+        ) : (
+          <div className="relative h-9 w-9 mx-auto">
+            <Image
+              src="/images/logo.png"
+              alt="PHFF Logo"
+              width={36}
+              height={36}
+              className="object-contain opacity-85"
+            />
           </div>
         )}
         <Button
@@ -135,7 +152,7 @@ export function DashboardSidebar({ profile }: SidebarProps) {
       {!collapsed && (
         <div className="border-t border-border p-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center">
               <span className="text-white font-semibold text-sm">
                 {profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || 'U'}
               </span>

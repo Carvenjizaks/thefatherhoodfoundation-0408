@@ -141,12 +141,12 @@ export default function ScheduleResponsePage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary/5 to-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[hsl(225,73%,40%)]/5 to-background p-4">
       <Card className="max-w-lg w-full border-border/50 shadow-lg">
         <CardContent className="p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4">
+            <div className="h-16 w-16 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center mx-auto mb-4">
               <Calendar className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">Preaching Schedule</h1>

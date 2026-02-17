@@ -33,14 +33,14 @@ export default async function DashboardPage() {
       value: eventsCount || 0,
       description: 'Scheduled events',
       icon: Calendar,
-      gradient: 'from-purple-500 to-purple-700'
+      gradient: 'from-[hsl(225,73%,40%)] to-[hsl(225,73%,55%)]'
     },
     {
       title: 'Pending Tasks',
       value: tasksCount || 0,
       description: 'Tasks to complete',
       icon: CheckSquare,
-      gradient: 'from-teal-500 to-teal-700'
+      gradient: 'from-[hsl(150,40%,55%)] to-[hsl(150,40%,72%)]'
     }
   ]
 

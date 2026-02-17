@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function SignUpSuccessPage() {
   return (
@@ -9,11 +10,11 @@ export default function SignUpSuccessPage() {
       <Card className="w-full max-w-md backdrop-blur-sm bg-card/80 border-border/50 shadow-xl text-center">
         <CardHeader className="space-y-4">
           <div className="flex justify-center">
-            <div className="rounded-full bg-primary/10 p-3">
-              <CheckCircle2 className="h-12 w-12 text-primary" />
+            <div className="relative h-16 w-16">
+              <Image src="/images/logo.png" alt="Powerhouse Logo" width={64} height={64} className="object-contain opacity-80" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Check Your Email</CardTitle>
           <CardDescription className="text-muted-foreground">
             We've sent you a confirmation email. Please click the link in the email to verify your account.
           </CardDescription>

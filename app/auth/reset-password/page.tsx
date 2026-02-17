@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Eye, EyeOff, Lock } from 'lucide-react'
+import Image from 'next/image'
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -109,15 +110,19 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      <Card className="w-full max-w-md border-2 shadow-xl">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <Lock className="h-6 w-6 text-primary" />
+      <Card className="w-full max-w-md border-border/50 backdrop-blur-sm bg-card/80 shadow-xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="relative h-14 w-14">
+              <Image src="/images/logo.png" alt="Powerhouse Logo" width={56} height={56} className="object-contain opacity-80" />
+            </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Reset Your Password</CardTitle>
-          <CardDescription className="text-balance">
-            Enter your new password below
-          </CardDescription>
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Reset Your Password</CardTitle>
+            <CardDescription className="text-balance">
+              Enter your new password below
+            </CardDescription>
+          </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

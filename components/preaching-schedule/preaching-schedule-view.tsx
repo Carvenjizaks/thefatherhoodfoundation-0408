@@ -582,7 +582,7 @@ export function PreachingScheduleView() {
                         <GripVertical className="h-4 w-4 text-muted-foreground/50 shrink-0" />
 
                         {/* Speaker Avatar */}
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center shrink-0">
                           <span className="text-white font-semibold text-sm">
                             {entry.speaker
                               ? `${entry.speaker.first_name[0]}${entry.speaker.last_name[0]}`

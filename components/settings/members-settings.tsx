@@ -138,7 +138,7 @@ export function MembersSettings({ organizationId, role }: MembersSettingsProps) 
                     className="flex items-center justify-between rounded-lg border border-border p-4 bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center shrink-0">
                         <span className="text-primary-foreground font-semibold text-sm">
                           {(member.full_name || member.email).charAt(0).toUpperCase()}
                         </span>
