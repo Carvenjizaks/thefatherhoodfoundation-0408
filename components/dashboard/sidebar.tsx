@@ -13,6 +13,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  BookOpen,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -27,6 +28,7 @@ const navigation = [
   { name: 'Contacts', href: '/dashboard/contacts', icon: Users },
   { name: 'Groups', href: '/dashboard/groups', icon: UsersRound },
   { name: 'Events', href: '/dashboard/events', icon: Calendar },
+  { name: 'Preaching', href: '/dashboard/preaching-schedule', icon: BookOpen },
   { name: 'Tasks & Projects', href: '/dashboard/tasks', icon: CheckSquare },
 ]
 

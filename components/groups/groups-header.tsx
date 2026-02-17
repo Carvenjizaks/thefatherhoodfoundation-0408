@@ -21,7 +21,7 @@ export function GroupsHeader({ organizationId, role }: GroupsHeaderProps) {
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Groups</h2>
           <p className="text-muted-foreground mt-1">
-            Manage cells, ministries, and teams
+            Manage groups, ministries, and teams
           </p>
         </div>
         

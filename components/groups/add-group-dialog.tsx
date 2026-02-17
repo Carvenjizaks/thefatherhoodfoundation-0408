@@ -22,6 +22,8 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
   const router = useRouter()
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
+  const [customType, setCustomType] = useState('')
+  const [showCustomType, setShowCustomType] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -36,18 +38,30 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    console.log('[v0] Creating group with data:', { ...formData, organization_id: organizationId })
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('groups')
         .insert({
           ...formData,
           organization_id: organizationId,
           capacity: formData.capacity ? parseInt(formData.capacity) : null,
+          is_active: true,
+          is_open: true,
+          current_members: 0,
         })
+        .select()
 
-      if (error) throw error
+      console.log('[v0] Group creation response:', { data, error })
 
+      if (error) {
+        console.error('[v0] Error creating group:', error)
+        alert(`Error creating group: ${error.message}`)
+        throw error
+      }
+
+      console.log('[v0] Group created successfully:', data)
       onOpenChange(false)
       setFormData({
         name: '',
@@ -59,6 +73,8 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
         location: '',
         capacity: '',
       })
+      setShowCustomType(false)
+      setCustomType('')
       router.refresh()
     } catch (err) {
       console.error('[v0] Error creating group:', err)
@@ -72,7 +88,7 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create New Group</DialogTitle>
-          <DialogDescription>Add a new cell, ministry, or team</DialogDescription>
+          <DialogDescription>Add a new group, ministry, or team</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,21 +117,70 @@ export function AddGroupDialog({ open, onOpenChange, organizationId }: AddGroupD
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>
-              <Select
-                value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value })}
-                disabled={loading}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cell">Cell Group</SelectItem>
-                  <SelectItem value="ministry">Ministry</SelectItem>
-                  <SelectItem value="team">Team</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+              {!showCustomType ? (
+                <div className="flex gap-2">
+                  <Select
+                    value={formData.type}
+                    onValueChange={(value) => {
+                      if (value === 'custom') {
+                        setShowCustomType(true)
+                      } else {
+                        setFormData({ ...formData, type: value })
+                      }
+                    }}
+                    disabled={loading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cell">LifeGroup</SelectItem>
+                      <SelectItem value="ministry">Ministry</SelectItem>
+                      <SelectItem value="team">Team</SelectItem>
+                      <SelectItem value="prayer">Prayer Group</SelectItem>
+                      <SelectItem value="bible_study">Bible Study</SelectItem>
+                      <SelectItem value="youth">Youth Group</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="custom">+ Add Custom Type</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <Input
+                    value={customType}
+                    onChange={(e) => setCustomType(e.target.value)}
+                    placeholder="Enter custom group type"
+                    disabled={loading}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      if (customType.trim()) {
+                        setFormData({ ...formData, type: customType.trim() })
+                        setShowCustomType(false)
+                        setCustomType('')
+                      }
+                    }}
+                    disabled={loading || !customType.trim()}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setShowCustomType(false)
+                      setCustomType('')
+                    }}
+                    disabled={loading}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
