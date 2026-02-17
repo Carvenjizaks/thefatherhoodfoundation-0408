@@ -1,7 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Users, UserPlus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Users, UserPlus, Share2, Check, Copy } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface DreamTeamHeaderProps {
   activeTab: string
@@ -9,6 +12,26 @@ interface DreamTeamHeaderProps {
 }
 
 export function DreamTeamHeader({ activeTab, onTabChange }: DreamTeamHeaderProps) {
+  const [copied, setCopied] = useState(false)
+
+  const handleShareLink = async () => {
+    const url = `${window.location.origin}/join/dreamteam`
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      toast.success('Signup link copied to clipboard', {
+        description: url,
+      })
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for environments where clipboard API is not available
+      toast.info('Share this link with volunteers:', {
+        description: url,
+        duration: 8000,
+      })
+    }
+  }
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
@@ -21,18 +44,38 @@ export function DreamTeamHeader({ activeTab, onTabChange }: DreamTeamHeaderProps
           Manage your volunteer team and sign-ups
         </p>
       </div>
-      <Tabs value={activeTab} onValueChange={onTabChange}>
-        <TabsList>
-          <TabsTrigger value="volunteers" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            <span className="hidden sm:inline">Volunteers</span>
-          </TabsTrigger>
-          <TabsTrigger value="signup" className="flex items-center gap-2">
-            <UserPlus className="h-4 w-4" />
-            <span className="hidden sm:inline">Sign Up</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="flex items-center gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleShareLink}
+          className="flex items-center gap-2"
+        >
+          {copied ? (
+            <>
+              <Check className="h-4 w-4 text-green-600" />
+              <span className="hidden sm:inline">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Share2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Share Form</span>
+            </>
+          )}
+        </Button>
+        <Tabs value={activeTab} onValueChange={onTabChange}>
+          <TabsList>
+            <TabsTrigger value="volunteers" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Volunteers</span>
+            </TabsTrigger>
+            <TabsTrigger value="signup" className="flex items-center gap-2">
+              <UserPlus className="h-4 w-4" />
+              <span className="hidden sm:inline">Sign Up</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
     </div>
   )
 }
