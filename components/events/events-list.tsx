@@ -73,7 +73,7 @@ export function EventsList({ events, role }: EventsListProps) {
                     <div className="flex gap-4 flex-1">
                       {/* Date Badge */}
                       <div className="flex-shrink-0">
-                        <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary to-secondary flex flex-col items-center justify-center text-white">
+                        <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex flex-col items-center justify-center text-white">
                           <span className="text-xs font-medium uppercase">
                             {format(eventDate, 'MMM')}
                           </span>

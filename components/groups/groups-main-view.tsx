@@ -124,10 +124,10 @@ export function GroupsMainView() {
   return (
     <div className="flex flex-col gap-6 h-full">
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/10 to-background border border-border/50">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(225,73%,40%)]/10 via-[hsl(150,40%,72%)]/10 to-background border border-border/50">
         <div className="relative z-10 p-6 md:p-8">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">
               Discover Groups
             </span>
           </h1>
@@ -184,7 +184,7 @@ export function GroupsMainView() {
       <Button 
         size="lg"
         onClick={() => setShowAddDialog(true)}
-        className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+        className="bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white"
       >
         <Plus className="h-5 w-5 mr-2" />
         Create Group
@@ -342,7 +342,7 @@ export function GroupsMainView() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredGroups.map((group) => (
                 <Card key={group.id} className="overflow-hidden group hover:shadow-lg transition-all border-border/50 bg-card/50 backdrop-blur">
-                  <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 overflow-hidden">
+                  <div className="relative h-48 bg-gradient-to-br from-[hsl(225,73%,40%)]/20 to-[hsl(150,40%,72%)]/20 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
                     {group.is_open && (
                       <Badge className="absolute top-3 right-3 z-20 bg-secondary">
@@ -397,7 +397,7 @@ export function GroupsMainView() {
                     )}
 
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                      <Button className="flex-1 bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white">
                         Join Group
                       </Button>
                       <Button variant="outline" size="icon">

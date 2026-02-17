@@ -127,7 +127,7 @@ export function ContactsList({ contacts, tags, role }: ContactsListProps) {
                   className="flex items-center justify-between p-4 rounded-lg border border-border/50 bg-card/50 hover:bg-accent/50 transition-colors"
                 >
                   <div className="flex items-center gap-4 flex-1">
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center flex-shrink-0">
                       <span className="text-white font-semibold">
                         {contact.first_name.charAt(0)}{contact.last_name.charAt(0)}
                       </span>

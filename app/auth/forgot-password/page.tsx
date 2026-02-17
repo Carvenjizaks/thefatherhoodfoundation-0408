@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ArrowLeft, Mail, CheckCircle2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -79,12 +80,19 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      <Card className="w-full max-w-md border-2 shadow-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Forgot Password?</CardTitle>
-          <CardDescription className="text-balance">
-            Enter your email address and we'll send you a link to reset your password
-          </CardDescription>
+      <Card className="w-full max-w-md border-border/50 backdrop-blur-sm bg-card/80 shadow-xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="relative h-14 w-14">
+              <Image src="/images/logo.png" alt="Powerhouse Logo" width={56} height={56} className="object-contain opacity-80" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Forgot Password?</CardTitle>
+            <CardDescription className="text-balance">
+              Enter your email and we'll send you a reset link
+            </CardDescription>
+          </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

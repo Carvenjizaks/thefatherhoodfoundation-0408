@@ -10,8 +10,8 @@ const _plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 const _inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Tribu - Community Management Platform',
-  description: 'Multi-tenant community management platform for churches and organizations',
+  title: 'Powerhouse - Community Management Platform',
+  description: 'Community management platform for churches and organizations',
   generator: 'v0.app',
   icons: {
     icon: [

@@ -23,7 +23,7 @@ export function DashboardHeader({ profile }: HeaderProps) {
   // Auth disabled for development
   const mockProfile = profile || {
     full_name: 'Development User',
-    email: 'dev@tribu.local',
+    email: 'dev@powerhouse.local',
     role: 'admin'
   }
 
@@ -49,7 +49,7 @@ export function DashboardHeader({ profile }: HeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">
                   {mockProfile.full_name?.charAt(0) || 'D'}
                 </span>

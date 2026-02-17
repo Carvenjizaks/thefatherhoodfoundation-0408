@@ -152,7 +152,7 @@ export function DashboardSidebar({ profile }: SidebarProps) {
       {!collapsed && (
         <div className="border-t border-border p-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center">
               <span className="text-white font-semibold text-sm">
                 {profile?.full_name?.charAt(0) || profile?.email?.charAt(0) || 'U'}
               </span>

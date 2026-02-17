@@ -139,7 +139,7 @@ export default function ResponsePage() {
   const assignment = responseData.assignment?.[0]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-[hsl(225,73%,40%)]/5 to-[hsl(150,40%,72%)]/5 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl shadow-xl">
         <CardHeader className="space-y-3">
           <div className="flex items-center justify-between">
@@ -252,7 +252,7 @@ export default function ResponsePage() {
               <Button
                 onClick={() => handleResponse('confirmed')}
                 disabled={submitting}
-                className="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                className="flex-1 bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white"
                 size="lg"
               >
                 <CheckCircle2 className="h-5 w-5 mr-2" />

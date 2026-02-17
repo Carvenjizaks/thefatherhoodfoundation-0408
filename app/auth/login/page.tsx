@@ -130,7 +130,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              className="w-full bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 transition-opacity text-white"
               disabled={loading}
             >
               {loading ? 'Signing in...' : 'Sign In'}
