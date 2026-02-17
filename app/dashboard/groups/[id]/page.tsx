@@ -1,9 +1,10 @@
 import { GroupDetailView } from '@/components/groups/group-detail-view'
 
-export default function GroupDetailPage({ params }: { params: { id: string } }) {
+export default async function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   return (
     <div className="space-y-6">
-      <GroupDetailView groupId={params.id} />
+      <GroupDetailView groupId={id} />
     </div>
   )
 }

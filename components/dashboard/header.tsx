@@ -29,7 +29,7 @@ export function DashboardHeader({ profile }: HeaderProps) {
 
   const handleSignOut = () => {
     // Sign out logic here
-    router.push('/auth/signin')
+    router.push('/auth/login')
   }
 
   return (
