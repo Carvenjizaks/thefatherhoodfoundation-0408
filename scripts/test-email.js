@@ -28,7 +28,9 @@ if (looksLikeEmail(envFromEmail)) {
   console.log('NOTE: RESEND_API_KEY contained an email — using it as the from email instead.')
 }
 
-const TEST_EMAIL = 'Rodgerbeukes73@gmail.com'
+// Resend without a verified domain can only send to the account owner email.
+// Once you verify a domain at resend.com/domains, change this to any recipient.
+const TEST_EMAIL = 'carven@nexiumbi.com'
 
 if (!RESEND_API_KEY) {
   console.error('ERROR: RESEND_API_KEY environment variable is not set.')
