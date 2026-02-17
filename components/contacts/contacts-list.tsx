@@ -30,6 +30,7 @@ interface Contact {
   phone?: string
   city?: string
   status: string
+  involvement?: Record<string, boolean>
   contact_tag_assignments: Array<{
     tag: {
       id: string
@@ -43,9 +44,17 @@ interface ContactsListProps {
   contacts: Contact[]
   tags: Array<{ id: string; name: string; color: string }>
   role: string
+  onRefresh?: () => void
 }
 
-export function ContactsList({ contacts, tags, role }: ContactsListProps) {
+const INVOLVEMENT_LABELS: Record<string, { label: string; className: string }> = {
+  dreamteam: { label: 'DreamTeam', className: 'bg-[hsl(225,73%,40%)]/10 text-[hsl(225,73%,40%)] border-[hsl(225,73%,40%)]/30' },
+  groups: { label: 'Groups', className: 'bg-[hsl(150,40%,55%)]/10 text-[hsl(150,40%,40%)] border-[hsl(150,40%,55%)]/30' },
+  events: { label: 'Events', className: 'bg-amber-500/10 text-amber-700 border-amber-500/30' },
+  tasks: { label: 'Tasks', className: 'bg-purple-500/10 text-purple-700 border-purple-500/30' },
+}
+
+export function ContactsList({ contacts, tags, role, onRefresh }: ContactsListProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTag, setSelectedTag] = useState<string>('all')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
@@ -164,8 +173,29 @@ export function ContactsList({ contacts, tags, role }: ContactsListProps) {
                           </div>
                         )}
                       </div>
-                      {contact.contact_tag_assignments.length > 0 && (
+                      {/* Involvement badges */}
+                      {contact.involvement && Object.keys(contact.involvement).length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
+                          {Object.entries(contact.involvement)
+                            .filter(([, active]) => active)
+                            .map(([key]) => {
+                              const info = INVOLVEMENT_LABELS[key]
+                              if (!info) return null
+                              return (
+                                <Badge
+                                  key={key}
+                                  variant="outline"
+                                  className={`text-xs ${info.className}`}
+                                >
+                                  {info.label}
+                                </Badge>
+                              )
+                            })}
+                        </div>
+                      )}
+                      {/* Tag badges */}
+                      {contact.contact_tag_assignments.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
                           {contact.contact_tag_assignments.map((assignment) => (
                             <Badge
                               key={assignment.tag.id}

@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { upsertContact } from '@/lib/contacts/upsert-contact'
 
 const SERVICE_AREAS: Record<string, string> = {
   ushering_hospitality: 'Ushering & Hospitality',
@@ -102,6 +103,28 @@ export async function POST(request: Request) {
         { errors: { form: 'Something went wrong. Please try again.' } },
         { status: 500 }
       )
+    }
+
+    // --- Upsert into unified contacts table ---
+    try {
+      const { contactId } = await upsertContact({
+        organizationId: org.id,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        tags: ['DreamTeam'],
+        involvement: { dreamteam: true },
+      })
+
+      // Link the volunteer record to the contact
+      await supabase
+        .from('dreamteam_volunteers')
+        .update({ contact_id: contactId })
+        .eq('organization_id', org.id)
+        .eq('email', email.trim().toLowerCase())
+    } catch (contactErr) {
+      console.error('Contact upsert failed (non-blocking):', contactErr)
     }
 
     // --- Trigger welcome email using the request origin for internal routing ---

@@ -50,8 +50,19 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
   }
 
   const fetchMembers = async () => {
-    // Auth disabled for development - using empty members list
-    setMembers([])
+    // Fetch contacts as assignable members
+    const { data } = await supabase
+      .from('contacts')
+      .select('id, first_name, last_name')
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .order('first_name')
+    setMembers(
+      (data || []).map((c: { id: string; first_name: string; last_name: string }) => ({
+        id: c.id,
+        full_name: `${c.first_name} ${c.last_name}`,
+      }))
+    )
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,15 +74,37 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
       const { error } = await supabase
         .from('tasks')
         .insert({
-          ...formData,
+          title: formData.title,
+          description: formData.description,
+          status: formData.status,
+          priority: formData.priority,
           organization_id: organizationId,
-          created_by: null, // Will be set when auth is re-enabled
-          assigned_to: formData.assigned_to || null,
+          created_by: null,
+          assigned_to: null,
+          assigned_contact_id: formData.assigned_to || null,
           project_id: formData.project_id || null,
           due_date: formData.due_date || null,
         })
 
       if (error) throw error
+
+      // Update contact involvement if assigned
+      if (formData.assigned_to) {
+        try {
+          await fetch('/api/contacts/upsert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              organizationId,
+              firstName: '', // Not needed for update-only
+              lastName: '',
+              involvement: { tasks: true },
+            }),
+          })
+        } catch {
+          // Non-blocking
+        }
+      }
 
       onOpenChange(false)
       setFormData({
