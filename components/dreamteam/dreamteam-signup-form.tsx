@@ -170,6 +170,25 @@ export function DreamTeamSignupForm({ organizationId }: { organizationId: string
         return
       }
 
+      // Upsert into unified contacts table
+      try {
+        await fetch('/api/contacts/upsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            organizationId,
+            firstName: formData.firstName.trim(),
+            lastName: formData.lastName.trim(),
+            email: formData.email.trim().toLowerCase(),
+            phone: formData.phone.trim(),
+            tags: ['DreamTeam'],
+            involvement: { dreamteam: true },
+          }),
+        })
+      } catch {
+        // Contact sync failure shouldn't block sign-up success
+      }
+
       // Send welcome email
       try {
         await fetch('/api/dreamteam/welcome-email', {

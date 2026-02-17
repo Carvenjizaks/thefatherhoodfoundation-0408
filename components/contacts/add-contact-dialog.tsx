@@ -39,23 +39,72 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
     notes: '',
   })
 
+  const [dupWarning, setDupWarning] = useState<string | null>(null)
+
+  const checkDuplicate = async () => {
+    setDupWarning(null)
+    const email = formData.email.trim().toLowerCase()
+    const phone = formData.phone.trim()
+
+    if (email) {
+      const { data } = await supabase
+        .from('contacts')
+        .select('id, first_name, last_name')
+        .eq('organization_id', organizationId)
+        .eq('email', email)
+        .single()
+      if (data) {
+        setDupWarning(`A contact with this email already exists: ${data.first_name} ${data.last_name}`)
+        return true
+      }
+    }
+    if (phone) {
+      const { data } = await supabase
+        .from('contacts')
+        .select('id, first_name, last_name')
+        .eq('organization_id', organizationId)
+        .eq('phone', phone)
+        .single()
+      if (data) {
+        setDupWarning(`A contact with this phone already exists: ${data.first_name} ${data.last_name}`)
+        return true
+      }
+    }
+    return false
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setDupWarning(null)
     setLoading(true)
 
     try {
-      // Auth disabled for development
+      // Check for duplicates first
+      const isDup = await checkDuplicate()
+      if (isDup) {
+        setLoading(false)
+        return
+      }
+
       const { error: insertError } = await supabase
         .from('contacts')
         .insert({
           ...formData,
           organization_id: organizationId,
-          created_by: null, // Will be set when auth is re-enabled
+          created_by: null,
           date_of_birth: formData.date_of_birth || null,
+          email: formData.email.trim().toLowerCase() || null,
+          phone: formData.phone.trim() || null,
         })
 
-      if (insertError) throw insertError
+      if (insertError) {
+        if (insertError.code === '23505') {
+          setDupWarning('A contact with this email or phone already exists.')
+          return
+        }
+        throw insertError
+      }
 
       onOpenChange(false)
       setFormData({
@@ -73,8 +122,8 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
         notes: '',
       })
       router.refresh()
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setLoading(false)
     }
@@ -94,6 +143,14 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {dupWarning && (
+            <Alert className="border-amber-500/50 bg-amber-500/10">
+              <AlertDescription className="text-amber-700 dark:text-amber-400">
+                {dupWarning} — Please review before adding.
+              </AlertDescription>
             </Alert>
           )}
 
