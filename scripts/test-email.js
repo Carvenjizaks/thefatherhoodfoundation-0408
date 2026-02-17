@@ -1,6 +1,33 @@
 // Direct test: send a welcome email + admin notification via Resend API
-const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'DreamTeam <onboarding@resend.dev>'
+// Detect which env var actually contains the API key (they may be swapped)
+const envApiKey = process.env.RESEND_API_KEY
+const envFromEmail = process.env.RESEND_FROM_EMAIL
+
+function looksLikeApiKey(val) {
+  return val && val.startsWith('re_')
+}
+function looksLikeEmail(val) {
+  return val && val.includes('@')
+}
+
+// Resolve the correct API key — check both vars in case they were swapped
+let RESEND_API_KEY = null
+if (looksLikeApiKey(envApiKey)) {
+  RESEND_API_KEY = envApiKey
+} else if (looksLikeApiKey(envFromEmail)) {
+  RESEND_API_KEY = envFromEmail
+  console.log('NOTE: RESEND_FROM_EMAIL contained the API key — using it as the API key instead.')
+}
+
+// Resolve the correct from email
+let FROM_EMAIL = 'DreamTeam <onboarding@resend.dev>'
+if (looksLikeEmail(envFromEmail)) {
+  FROM_EMAIL = envFromEmail
+} else if (looksLikeEmail(envApiKey)) {
+  FROM_EMAIL = envApiKey
+  console.log('NOTE: RESEND_API_KEY contained an email — using it as the from email instead.')
+}
+
 const TEST_EMAIL = 'Rodgerbeukes73@gmail.com'
 
 if (!RESEND_API_KEY) {
