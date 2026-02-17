@@ -6,7 +6,7 @@ import { DreamTeamSignupForm } from '@/components/dreamteam/dreamteam-signup-for
 import { DreamTeamVolunteersList } from '@/components/dreamteam/dreamteam-volunteers-list'
 
 export default function DreamTeamPage() {
-  const mockOrgId = 'dev-org-id'
+  const mockOrgId = '00000000-0000-0000-0000-000000000000'
   const [activeTab, setActiveTab] = useState('volunteers')
 
   return (

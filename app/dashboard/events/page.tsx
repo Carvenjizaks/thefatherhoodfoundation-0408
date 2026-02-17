@@ -2,10 +2,7 @@ import { EventsList } from '@/components/events/events-list'
 import { EventsHeader } from '@/components/events/events-header'
 
 export default function EventsPage() {
-  // Auth disabled for development - using mock data
-  console.log('[v0] Events page loaded without authentication')
-  
-  const mockOrgId = 'dev-org-id'
+  const mockOrgId = '00000000-0000-0000-0000-000000000000'
   const mockRole = 'admin'
 
   return (

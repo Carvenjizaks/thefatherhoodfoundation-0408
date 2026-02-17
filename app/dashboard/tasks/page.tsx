@@ -2,10 +2,7 @@ import { TasksBoard } from '@/components/tasks/tasks-board'
 import { TasksHeader } from '@/components/tasks/tasks-header'
 
 export default function TasksPage() {
-  // Auth disabled for development - using mock data
-  console.log('[v0] Tasks page loaded without authentication')
-  
-  const mockOrgId = 'dev-org-id'
+  const mockOrgId = '00000000-0000-0000-0000-000000000000'
   const mockRole = 'admin'
 
   return (
