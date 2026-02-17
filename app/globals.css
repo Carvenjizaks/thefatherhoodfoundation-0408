@@ -3,31 +3,31 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 0 0% 100%; /* Preserved user color */
-  --foreground: 270 10% 15%; /* Preserved user color */
-  --card: 0 0% 100%; /* Preserved user color */
-  --card-foreground: 270 10% 15%; /* Preserved user color */
-  --popover: 0 0% 100%; /* Preserved user color */
-  --popover-foreground: 270 10% 15%; /* Preserved user color */
-  --primary: 270 91% 65%; /* Preserved user color */
-  --primary-foreground: 0 0% 100%; /* Preserved user color */
-  --secondary: 160 84% 45%; /* Preserved user color */
-  --secondary-foreground: 0 0% 100%; /* Preserved user color */
-  --muted: 270 10% 96%; /* Preserved user color */
-  --muted-foreground: 270 10% 50%; /* Preserved user color */
-  --accent: 160 84% 45%; /* Preserved user color */
-  --accent-foreground: 0 0% 100%; /* Preserved user color */
-  --destructive: 0 84% 60%; /* Preserved user color */
-  --destructive-foreground: 0 0% 100%; /* Preserved user color */
-  --border: 270 10% 90%; /* Preserved user color */
-  --input: 270 10% 95%; /* Preserved user color */
-  --ring: 270 91% 65%; /* Preserved user color */
-  --radius: 0.75rem; /* Preserved user radius */
-  --chart-1: 270 91% 65%; /* Preserved user color */
-  --chart-2: 160 84% 45%; /* Preserved user color */
-  --chart-3: 180 80% 55%; /* Preserved user color */
-  --chart-4: 150 75% 50%; /* Preserved user color */
-  --chart-5: 280 85% 60%; /* Preserved user color */
+  --background: 0 0% 100%;
+  --foreground: 225 15% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 225 15% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 225 15% 15%;
+  --primary: 225 73% 40%; /* Royal Blue */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 150 40% 72%; /* Powder Green */
+  --secondary-foreground: 225 73% 20%;
+  --muted: 225 10% 96%;
+  --muted-foreground: 225 10% 50%;
+  --accent: 150 40% 72%; /* Powder Green */
+  --accent-foreground: 225 73% 20%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 225 10% 90%;
+  --input: 225 10% 95%;
+  --ring: 225 73% 40%;
+  --radius: 0.75rem;
+  --chart-1: 225 73% 40%;
+  --chart-2: 150 40% 72%;
+  --chart-3: 180 50% 55%;
+  --chart-4: 150 55% 50%;
+  --chart-5: 225 60% 60%;
   --sidebar: oklch(0.985 0 0); /* Added from default */
   --sidebar-foreground: oklch(0.145 0 0); /* Added from default */
   --sidebar-primary: oklch(0.205 0 0); /* Added from default */
@@ -39,30 +39,30 @@
 }
 
 .dark {
-  --background: 270 10% 10%; /* Preserved user color */
-  --foreground: 270 5% 95%; /* Preserved user color */
-  --card: 270 10% 15%; /* Preserved user color */
-  --card-foreground: 270 5% 95%; /* Preserved user color */
-  --popover: 270 10% 15%; /* Preserved user color */
-  --popover-foreground: 270 5% 95%; /* Preserved user color */
-  --primary: 270 91% 65%; /* Preserved user color */
-  --primary-foreground: 0 0% 100%; /* Preserved user color */
-  --secondary: 160 84% 45%; /* Preserved user color */
-  --secondary-foreground: 0 0% 100%; /* Preserved user color */
-  --muted: 270 10% 25%; /* Preserved user color */
-  --muted-foreground: 270 5% 65%; /* Preserved user color */
-  --accent: 160 84% 45%; /* Preserved user color */
-  --accent-foreground: 0 0% 100%; /* Preserved user color */
-  --destructive: 0 75% 55%; /* Preserved user color */
-  --destructive-foreground: 0 0% 100%; /* Preserved user color */
-  --border: 270 10% 30%; /* Preserved user color */
-  --input: 270 10% 25%; /* Preserved user color */
-  --ring: 270 91% 65%; /* Preserved user color */
-  --chart-1: 270 91% 65%; /* Preserved user color */
-  --chart-2: 160 84% 45%; /* Preserved user color */
-  --chart-3: 180 80% 55%; /* Preserved user color */
-  --chart-4: 150 75% 50%; /* Preserved user color */
-  --chart-5: 280 85% 60%; /* Preserved user color */
+  --background: 225 15% 10%;
+  --foreground: 225 5% 95%;
+  --card: 225 15% 15%;
+  --card-foreground: 225 5% 95%;
+  --popover: 225 15% 15%;
+  --popover-foreground: 225 5% 95%;
+  --primary: 225 73% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 150 40% 65%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 225 10% 25%;
+  --muted-foreground: 225 5% 65%;
+  --accent: 150 40% 65%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 75% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 225 10% 30%;
+  --input: 225 10% 25%;
+  --ring: 225 73% 55%;
+  --chart-1: 225 73% 55%;
+  --chart-2: 150 40% 65%;
+  --chart-3: 180 50% 55%;
+  --chart-4: 150 55% 50%;
+  --chart-5: 225 60% 60%;
   --sidebar: oklch(0.205 0 0); /* Added from default */
   --sidebar-foreground: oklch(0.985 0 0); /* Added from default */
   --sidebar-primary: oklch(0.488 0.243 264.376); /* Added from default */
