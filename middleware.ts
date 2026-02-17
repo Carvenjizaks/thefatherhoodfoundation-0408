@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // Auth disabled for development - direct access to all pages
-  console.log('[v0] Auth middleware disabled for development')
   return NextResponse.next()
 }
 
