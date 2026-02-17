@@ -1,6 +1,4 @@
 import React from "react"
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { DashboardSidebar } from '@/components/dashboard/sidebar'
 import { DashboardHeader } from '@/components/dashboard/header'
 
@@ -9,8 +7,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Auth disabled for development - using mock profile
-  console.log('[v0] Dashboard layout loaded without authentication')
+  // Using mock profile for development
   
   const mockProfile = {
     full_name: 'Development User',
