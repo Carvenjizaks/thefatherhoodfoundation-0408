@@ -104,10 +104,10 @@ export async function POST(request: Request) {
       )
     }
 
-    // --- Trigger welcome email (fire-and-forget) ---
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://powerhouse.vercel.app'
+    // --- Trigger welcome email using the request origin for internal routing ---
+    const origin = new URL(request.url).origin
     try {
-      await fetch(`${siteUrl}/api/dreamteam/welcome-email`, {
+      const emailRes = await fetch(`${origin}/api/dreamteam/welcome-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -118,7 +118,12 @@ export async function POST(request: Request) {
           organizationId: org.id,
         }),
       })
-    } catch {
+      if (!emailRes.ok) {
+        const errBody = await emailRes.text()
+        console.error('Welcome email API returned error:', emailRes.status, errBody)
+      }
+    } catch (emailErr) {
+      console.error('Welcome email fetch failed:', emailErr)
       // Email failure should not block a successful signup
     }
 

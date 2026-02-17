@@ -125,9 +125,27 @@ export async function POST(request: Request) {
     </html>
     `
 
+    // Resolve the correct API key and from email — handle swapped env vars
+    const envApiKey = process.env.RESEND_API_KEY
+    const envFromEmail = process.env.RESEND_FROM_EMAIL
+    const looksLikeKey = (v: string | undefined) => v?.startsWith('re_')
+    const looksLikeEmail = (v: string | undefined) => v ? v.includes('@') : false
+
+    const resolvedApiKey = looksLikeKey(envApiKey)
+      ? envApiKey
+      : looksLikeKey(envFromEmail)
+        ? envFromEmail
+        : null
+
+    const resolvedFromEmail = looksLikeEmail(envFromEmail)
+      ? envFromEmail
+      : looksLikeEmail(envApiKey)
+        ? envApiKey
+        : 'DreamTeam <onboarding@resend.dev>'
+
     // If Resend API key is available, send both emails
-    if (process.env.RESEND_API_KEY) {
-      const fromAddress = process.env.RESEND_FROM_EMAIL || 'DreamTeam <noreply@powerhouse.app>'
+    if (resolvedApiKey) {
+      const fromAddress = resolvedFromEmail
 
       // Send welcome email to volunteer
       try {
@@ -135,7 +153,7 @@ export async function POST(request: Request) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+            Authorization: `Bearer ${resolvedApiKey}`,
           },
           body: JSON.stringify({
             from: fromAddress,
@@ -159,7 +177,7 @@ export async function POST(request: Request) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+            Authorization: `Bearer ${resolvedApiKey}`,
           },
           body: JSON.stringify({
             from: fromAddress,
