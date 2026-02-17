@@ -39,6 +39,7 @@ import {
   Pencil,
   Trash2,
   AlertCircle,
+  Search,
 } from 'lucide-react'
 
 interface Speaker {
@@ -109,6 +110,21 @@ export function PreachingScheduleView() {
     notes: '',
   })
 
+  // Speaker search state
+  const [speakerSearch, setSpeakerSearch] = useState('')
+  const [showSpeakerDropdown, setShowSpeakerDropdown] = useState(false)
+
+  const filteredSpeakers = speakers.filter((s) => {
+    if (!speakerSearch.trim()) return true
+    const fullName = `${s.first_name} ${s.last_name}`.toLowerCase()
+    return fullName.includes(speakerSearch.toLowerCase())
+  })
+
+  const selectedSpeakerName = (speakerId: string) => {
+    const s = speakers.find((sp) => sp.id === speakerId)
+    return s ? `${s.first_name} ${s.last_name}` : ''
+  }
+
   // Drag state
   const [draggedEntry, setDraggedEntry] = useState<ScheduleEntry | null>(null)
   const [dragOverDate, setDragOverDate] = useState<string | null>(null)
@@ -131,7 +147,7 @@ export function PreachingScheduleView() {
         .from('contacts')
         .select('id, first_name, last_name, email, avatar_url')
         .eq('organization_id', org.id)
-        .eq('is_active', true)
+        .eq('status', 'active')
         .order('first_name')
       if (contacts) setSpeakers(contacts)
     }
@@ -387,12 +403,17 @@ export function PreachingScheduleView() {
 
   const openAddDialog = (dateStr: string) => {
     resetForm()
+    setSpeakerSearch('')
+    setShowSpeakerDropdown(false)
     setEntryForm((prev) => ({ ...prev, service_date: dateStr }))
     setShowAddEntry(true)
   }
 
   const openEditDialog = (entry: ScheduleEntry) => {
     setEditingEntry(entry)
+    const speaker = speakers.find((s) => s.id === entry.speaker_id)
+    setSpeakerSearch(speaker ? `${speaker.first_name} ${speaker.last_name}` : '')
+    setShowSpeakerDropdown(false)
     setEntryForm({
       service_date: entry.service_date,
       service_type: entry.service_type,
@@ -684,21 +705,68 @@ export function PreachingScheduleView() {
           <div className="flex flex-col gap-4 py-4">
             <div className="flex flex-col gap-2">
               <Label>Speaker *</Label>
-              <Select
-                value={entryForm.speaker_id}
-                onValueChange={(v) => setEntryForm({ ...entryForm, speaker_id: v })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a speaker" />
-                </SelectTrigger>
-                <SelectContent>
-                  {speakers.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      {s.first_name} {s.last_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={speakerSearch}
+                    onChange={(e) => {
+                      setSpeakerSearch(e.target.value)
+                      setShowSpeakerDropdown(true)
+                      if (!e.target.value) {
+                        setEntryForm({ ...entryForm, speaker_id: '' })
+                      }
+                    }}
+                    onFocus={() => setShowSpeakerDropdown(true)}
+                    placeholder="Search contacts by name..."
+                    className="pl-9"
+                  />
+                </div>
+                {showSpeakerDropdown && (
+                  <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-popover shadow-lg max-h-48 overflow-y-auto">
+                    {filteredSpeakers.length === 0 ? (
+                      <div className="p-3 text-sm text-muted-foreground text-center">
+                        No contacts found
+                      </div>
+                    ) : (
+                      filteredSpeakers.map((s) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => {
+                            setEntryForm({ ...entryForm, speaker_id: s.id })
+                            setSpeakerSearch(`${s.first_name} ${s.last_name}`)
+                            setShowSpeakerDropdown(false)
+                          }}
+                          className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm hover:bg-accent/50 transition-colors ${
+                            entryForm.speaker_id === s.id ? 'bg-primary/5 text-primary' : 'text-foreground'
+                          }`}
+                        >
+                          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center shrink-0">
+                            <span className="text-white text-xs font-semibold">
+                              {s.first_name[0]}{s.last_name[0]}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{s.first_name} {s.last_name}</p>
+                            {s.email && (
+                              <p className="text-xs text-muted-foreground truncate">{s.email}</p>
+                            )}
+                          </div>
+                          {entryForm.speaker_id === s.id && (
+                            <Check className="h-4 w-4 text-primary shrink-0" />
+                          )}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+              {entryForm.speaker_id && (
+                <p className="text-xs text-muted-foreground">
+                  Selected: <span className="font-medium text-foreground">{selectedSpeakerName(entryForm.speaker_id)}</span>
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -786,21 +854,68 @@ export function PreachingScheduleView() {
 
             <div className="flex flex-col gap-2">
               <Label>Speaker *</Label>
-              <Select
-                value={entryForm.speaker_id}
-                onValueChange={(v) => setEntryForm({ ...entryForm, speaker_id: v })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a speaker" />
-                </SelectTrigger>
-                <SelectContent>
-                  {speakers.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      {s.first_name} {s.last_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={speakerSearch}
+                    onChange={(e) => {
+                      setSpeakerSearch(e.target.value)
+                      setShowSpeakerDropdown(true)
+                      if (!e.target.value) {
+                        setEntryForm({ ...entryForm, speaker_id: '' })
+                      }
+                    }}
+                    onFocus={() => setShowSpeakerDropdown(true)}
+                    placeholder="Search contacts by name..."
+                    className="pl-9"
+                  />
+                </div>
+                {showSpeakerDropdown && (
+                  <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-popover shadow-lg max-h-48 overflow-y-auto">
+                    {filteredSpeakers.length === 0 ? (
+                      <div className="p-3 text-sm text-muted-foreground text-center">
+                        No contacts found
+                      </div>
+                    ) : (
+                      filteredSpeakers.map((s) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => {
+                            setEntryForm({ ...entryForm, speaker_id: s.id })
+                            setSpeakerSearch(`${s.first_name} ${s.last_name}`)
+                            setShowSpeakerDropdown(false)
+                          }}
+                          className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm hover:bg-accent/50 transition-colors ${
+                            entryForm.speaker_id === s.id ? 'bg-primary/5 text-primary' : 'text-foreground'
+                          }`}
+                        >
+                          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] flex items-center justify-center shrink-0">
+                            <span className="text-white text-xs font-semibold">
+                              {s.first_name[0]}{s.last_name[0]}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{s.first_name} {s.last_name}</p>
+                            {s.email && (
+                              <p className="text-xs text-muted-foreground truncate">{s.email}</p>
+                            )}
+                          </div>
+                          {entryForm.speaker_id === s.id && (
+                            <Check className="h-4 w-4 text-primary shrink-0" />
+                          )}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+              {entryForm.speaker_id && (
+                <p className="text-xs text-muted-foreground">
+                  Selected: <span className="font-medium text-foreground">{selectedSpeakerName(entryForm.speaker_id)}</span>
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
