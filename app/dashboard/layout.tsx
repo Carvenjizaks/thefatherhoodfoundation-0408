@@ -14,7 +14,7 @@ export default function DashboardLayout({
   
   const mockProfile = {
     full_name: 'Development User',
-    email: 'dev@tribu.local',
+    email: 'dev@powerhouse.local',
     role: 'admin',
     organization: {
       name: 'Development Org',
