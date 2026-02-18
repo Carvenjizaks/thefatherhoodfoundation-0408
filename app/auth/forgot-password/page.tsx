@@ -58,15 +58,24 @@ export default function ForgotPasswordPage() {
             <Alert className="bg-primary/5 border-primary/20">
               <Mail className="h-4 w-4 text-primary" />
               <AlertDescription className="text-sm text-muted-foreground">
-                If an account exists for <strong className="text-foreground">{email}</strong>, you will receive a password reset email shortly. Please check your spam folder if you don't see it.
+                If an account exists for <strong className="text-foreground">{email}</strong>, you will receive a password reset email shortly.
               </AlertDescription>
             </Alert>
-            <p className="text-sm text-center text-muted-foreground">
-              The link will expire in 1 hour.
-            </p>
+            <div className="space-y-2 text-sm text-center text-muted-foreground">
+              <p>The link will expire in 1 hour.</p>
+              <p className="font-medium">Please check your spam/junk folder if you don't see the email within a few minutes.</p>
+              <p className="text-xs">Note: Supabase free tier allows up to 3 emails per hour. If you've made multiple requests, please wait before trying again.</p>
+            </div>
           </CardContent>
-          <CardFooter>
-            <Button asChild variant="outline" className="w-full bg-transparent">
+          <CardFooter className="flex flex-col gap-3">
+            <Button 
+              variant="outline"
+              className="w-full bg-transparent"
+              onClick={() => setSuccess(false)}
+            >
+              Didn't receive it? Try again
+            </Button>
+            <Button asChild variant="ghost" className="w-full bg-transparent">
               <Link href="/auth/login">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Login
