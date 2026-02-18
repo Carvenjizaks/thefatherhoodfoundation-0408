@@ -1,12 +1,18 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
-/**
- * Server-side Supabase client that does not use cookies.
- * This avoids browser restriction issues in embedded previews.
- */
+// Note: This uses a simple client without cookie-based auth
+// to avoid "Browser Restriction Detected" errors in embedded previews.
+// Auth is handled via Supabase's built-in token management.
+
 export async function createClient() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      'Missing Supabase environment variables. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
+    )
+  }
+
+  return createSupabaseClient(supabaseUrl, supabaseAnonKey)
 }

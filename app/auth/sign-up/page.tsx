@@ -99,7 +99,7 @@ export default function SignUpPage() {
               Create Account
             </CardTitle>
             <CardDescription className="text-center text-muted-foreground">
-              Set up your organization on Powerhouse
+              Set up your organization on Powerhouse Community #WeCare
             </CardDescription>
           </div>
         </CardHeader>

@@ -36,7 +36,7 @@ export function DashboardHeader({ profile }: HeaderProps) {
     <header className="h-16 border-b border-border bg-card/30 backdrop-blur-sm flex items-center justify-between px-6">
       <div className="flex-1">
         <h1 className="text-lg font-semibold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">
-          Powerhouse Community
+          Powerhouse Community <span className="text-xs font-medium text-muted-foreground ml-1">#WeCare</span>
         </h1>
       </div>
 
