@@ -282,7 +282,7 @@ export default function JoinDreamTeamPage() {
             </div>
           </div>
           <p className="text-center text-xs text-muted-foreground mt-8">
-            Powered by <span className="font-semibold">Powerhouse</span>
+            Powered by <span className="font-semibold">Powerhouse Community #WeCare</span>
           </p>
         </div>
       </div>
@@ -544,7 +544,7 @@ export default function JoinDreamTeamPage() {
         </form>
 
         <p className="text-center text-xs text-muted-foreground mt-10">
-          Powered by <span className="font-semibold">Powerhouse</span>
+          Powered by <span className="font-semibold">Powerhouse Community #WeCare</span>
         </p>
       </main>
     </div>

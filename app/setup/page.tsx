@@ -126,7 +126,7 @@ export default function SetupPage() {
             </div>
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Welcome to Powerhouse</CardTitle>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Welcome to Powerhouse Community</CardTitle>
             <CardDescription>
               Complete your organization setup to get started
             </CardDescription>

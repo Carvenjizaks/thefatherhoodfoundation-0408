@@ -65,7 +65,8 @@ export function DashboardSidebar({ profile }: SidebarProps) {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Powerhouse</span>
+              <span className="text-sm font-bold bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] bg-clip-text text-transparent">Powerhouse Community</span>
+              <span className="text-[10px] font-semibold text-muted-foreground tracking-wide">#WeCare</span>
               {profile?.organization && (
                 <span className="text-xs text-muted-foreground truncate max-w-[140px]">
                   {profile.organization.name}

@@ -49,7 +49,7 @@ export default async function DashboardPage() {
       <div>
         <h2 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h2>
         <p className="text-muted-foreground mt-1">
-          Welcome back! Here's what's happening in your community.
+          Welcome back to Powerhouse Community #WeCare
         </p>
       </div>
 

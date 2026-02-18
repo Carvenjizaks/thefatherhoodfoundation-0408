@@ -75,7 +75,7 @@ export default function LoginPage() {
               Welcome Back
             </CardTitle>
             <CardDescription className="text-center text-muted-foreground">
-              Sign in to your Powerhouse account
+              Sign in to Powerhouse Community #WeCare
             </CardDescription>
           </div>
         </CardHeader>
