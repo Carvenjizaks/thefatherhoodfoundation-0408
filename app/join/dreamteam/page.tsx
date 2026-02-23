@@ -227,7 +227,20 @@ export default function JoinDreamTeamPage() {
       <div className="min-h-screen bg-background">
         <div className="mx-auto max-w-2xl px-4 py-12 md:py-20">
           <div className="rounded-2xl border border-border/50 bg-card shadow-xl overflow-hidden">
-            <div className="h-2 bg-gradient-to-r from-primary to-secondary" />
+            {/* Banner */}
+            <div className="relative w-full h-40 md:h-52">
+              <img
+                src="/images/dreamteam-banner.jpg"
+                alt="Powerhouse Community volunteers wearing #WeCare t-shirts, serving together"
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+              <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+                <span className="inline-block rounded-full bg-background/80 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-primary border border-border/50">
+                  #WeCare
+                </span>
+              </div>
+            </div>
             <div className="p-8 md:p-12 text-center">
               <div className="flex justify-center mb-6">
                 <div className="relative">
@@ -292,21 +305,6 @@ export default function JoinDreamTeamPage() {
   // Form
   return (
     <div className="min-h-screen bg-background">
-      {/* Banner Image */}
-      <div className="relative w-full h-48 md:h-64 lg:h-72 overflow-hidden">
-        <img
-          src="/images/dreamteam-banner.jpg"
-          alt="Powerhouse Community volunteers wearing #WeCare t-shirts, serving together"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-          <span className="inline-block rounded-full bg-background/80 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-primary border border-border/50">
-            #WeCare
-          </span>
-        </div>
-      </div>
-
       {/* Hero */}
       <header className="relative overflow-hidden border-b border-border/50">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
