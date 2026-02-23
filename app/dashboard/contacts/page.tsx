@@ -60,6 +60,8 @@ export default function ContactsPage() {
       <ContactsHeader
         organizationId={mockOrgId}
         role={mockRole}
+        tags={tags}
+        onRefresh={fetchContacts}
       />
       <ContactsList
         contacts={contacts as never[]}
