@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { sendEmail } from '@/lib/email'
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // Get organization details for the email
+    // Get organization details
     const { data: org } = await supabase
       .from('organizations')
       .select('name')
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     const orgName = org?.name || 'Powerhouse'
     const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://powerhouse.vercel.app'}/dashboard/preaching-schedule`
 
-    // Build the welcome email HTML
+    // Build welcome email HTML
     const emailHtml = `
     <!DOCTYPE html>
     <html>
@@ -64,8 +65,7 @@ export async function POST(request: Request) {
     </html>
     `
 
-    // Send the email using Supabase Edge Function or store the record
-    // For now, we'll mark the welcome email as sent and log it
+    // Mark welcome email as sent
     const { error: updateError } = await supabase
       .from('dreamteam_volunteers')
       .update({ welcome_email_sent: true })
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
 
     const ADMIN_EMAIL = 'rodgerbeukes73@gmail.com'
 
-    // Build admin notification email HTML
+    // Build admin notification email
     const adminEmailHtml = `
     <!DOCTYPE html>
     <html>
@@ -125,79 +125,30 @@ export async function POST(request: Request) {
     </html>
     `
 
-    // Resolve the correct API key and from email — handle swapped env vars
-    const envApiKey = process.env.RESEND_API_KEY
-    const envFromEmail = process.env.RESEND_FROM_EMAIL
-    const looksLikeKey = (v: string | undefined) => v?.startsWith('re_')
-    const looksLikeEmail = (v: string | undefined) => v ? v.includes('@') : false
-
-    const resolvedApiKey = looksLikeKey(envApiKey)
-      ? envApiKey
-      : looksLikeKey(envFromEmail)
-        ? envFromEmail
-        : null
-
-    const resolvedFromEmail = looksLikeEmail(envFromEmail)
-      ? envFromEmail
-      : looksLikeEmail(envApiKey)
-        ? envApiKey
-        : 'DreamTeam <onboarding@resend.dev>'
-
-    // If Resend API key is available, send both emails
-    if (resolvedApiKey) {
-      const fromAddress = resolvedFromEmail
-
+    // Send emails via SMTP
+    if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {
       // Send welcome email to volunteer
-      try {
-        const resendResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${resolvedApiKey}`,
-          },
-          body: JSON.stringify({
-            from: fromAddress,
-            to: [email],
-            subject: `Welcome to the DreamTeam, ${firstName}!`,
-            html: emailHtml,
-          }),
-        })
-
-        if (!resendResponse.ok) {
-          const errorData = await resendResponse.json()
-          console.error('Resend error (volunteer):', errorData)
-        }
-      } catch (emailErr) {
-        console.error('Email send error (volunteer):', emailErr)
+      const volunteerResult = await sendEmail({
+        to: email,
+        subject: `Welcome to the DreamTeam, ${firstName}!`,
+        html: emailHtml,
+      })
+      if (!volunteerResult.success) {
+        console.error('SMTP error (volunteer):', volunteerResult.error)
       }
 
-      // Send admin notification to rodgerbeukes73@gmail.com
-      try {
-        const adminResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${resolvedApiKey}`,
-          },
-          body: JSON.stringify({
-            from: fromAddress,
-            to: [ADMIN_EMAIL],
-            subject: `New DreamTeam Sign-Up: ${firstName} ${lastName} - ${serviceArea}`,
-            html: adminEmailHtml,
-          }),
-        })
-
-        if (!adminResponse.ok) {
-          const errorData = await adminResponse.json()
-          console.error('Resend error (admin):', errorData)
-        }
-      } catch (emailErr) {
-        console.error('Email send error (admin):', emailErr)
+      // Send admin notification
+      const adminResult = await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `New DreamTeam Sign-Up: ${firstName} ${lastName} - ${serviceArea}`,
+        html: adminEmailHtml,
+      })
+      if (!adminResult.success) {
+        console.error('SMTP error (admin):', adminResult.error)
       }
     } else {
-      console.log(`[DreamTeam] Welcome email would be sent to ${email} (no RESEND_API_KEY configured)`)
+      console.log(`[DreamTeam] SMTP not configured. Welcome email would be sent to ${email}`)
       console.log(`[DreamTeam] Admin notification would be sent to ${ADMIN_EMAIL}`)
-      console.log(`[DreamTeam] Volunteer: ${firstName} ${lastName} - Service Area: ${serviceArea}`)
     }
 
     return NextResponse.json({ success: true, message: 'Welcome email processed' })

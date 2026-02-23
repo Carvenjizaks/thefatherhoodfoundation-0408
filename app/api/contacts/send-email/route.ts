@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { sendEmail } from '@/lib/email'
 
 export async function POST(request: Request) {
   try {
@@ -14,26 +15,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Message body is required' }, { status: 400 })
     }
 
-    // Resolve the correct API key and from email (handle swapped env vars)
-    const envApiKey = process.env.RESEND_API_KEY
-    const envFromEmail = process.env.RESEND_FROM_EMAIL
-    const looksLikeKey = (v: string | undefined) => v?.startsWith('re_')
-    const looksLikeEmail = (v: string | undefined) => (v ? v.includes('@') : false)
-
-    const resolvedApiKey = looksLikeKey(envApiKey)
-      ? envApiKey
-      : looksLikeKey(envFromEmail)
-        ? envFromEmail
-        : null
-
-    const resolvedFromEmail = looksLikeEmail(envFromEmail)
-      ? envFromEmail
-      : looksLikeEmail(envApiKey)
-        ? envApiKey
-        : 'Powerhouse <onboarding@resend.dev>'
-
-    if (!resolvedApiKey) {
-      return NextResponse.json({ success: true, sent: 0, message: 'No API key configured' })
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+      return NextResponse.json({ success: true, sent: 0, message: 'SMTP credentials not configured' })
     }
 
     // Build branded HTML email
@@ -66,39 +49,15 @@ export async function POST(request: Request) {
     const errors: string[] = []
 
     for (const recipient of recipients) {
-      try {
-        const res = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${resolvedApiKey}`,
-          },
-          body: JSON.stringify({
-            from: resolvedFromEmail,
-            to: [recipient.email],
-            subject,
-            html: emailHtml,
-          }),
-        })
+      const result = await sendEmail({
+        to: recipient.email,
+        subject,
+        html: emailHtml,
+      })
 
-        const resBody = await res.json()
-        if (res.ok) {
-          sent++
-        } else {
-          // Check for domain verification error
-          if (resBody?.statusCode === 403 && resBody?.message?.includes('verify a domain')) {
-            return NextResponse.json({
-              success: false,
-              sent,
-              failed: recipients.length - sent,
-              errors: [recipient.email],
-              domainError: true,
-              message: 'Your Resend account requires a verified domain to send emails to other recipients. Please verify a domain at resend.com/domains and update your RESEND_FROM_EMAIL.',
-            })
-          }
-          errors.push(recipient.email)
-        }
-      } catch (err) {
+      if (result.success) {
+        sent++
+      } else {
         errors.push(recipient.email)
       }
     }
