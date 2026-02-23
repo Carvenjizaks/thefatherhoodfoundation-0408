@@ -32,12 +32,7 @@ export async function POST(request: Request) {
         ? envApiKey
         : 'Powerhouse <onboarding@resend.dev>'
 
-    console.log('[v0] Resolved API key:', resolvedApiKey ? `re_...${resolvedApiKey.slice(-4)}` : 'NONE')
-    console.log('[v0] Resolved from email:', resolvedFromEmail)
-    console.log('[v0] Recipients:', recipients.map((r: any) => r.email))
-
     if (!resolvedApiKey) {
-      console.log(`[v0] Would send to ${recipients.length} recipients (no RESEND_API_KEY)`)
       return NextResponse.json({ success: true, sent: 0, message: 'No API key configured' })
     }
 
@@ -87,15 +82,23 @@ export async function POST(request: Request) {
         })
 
         const resBody = await res.json()
-        console.log('[v0] Resend response:', res.status, JSON.stringify(resBody))
         if (res.ok) {
           sent++
         } else {
-          console.error(`[v0] Failed for ${recipient.email}:`, resBody)
+          // Check for domain verification error
+          if (resBody?.statusCode === 403 && resBody?.message?.includes('verify a domain')) {
+            return NextResponse.json({
+              success: false,
+              sent,
+              failed: recipients.length - sent,
+              errors: [recipient.email],
+              domainError: true,
+              message: 'Your Resend account requires a verified domain to send emails to other recipients. Please verify a domain at resend.com/domains and update your RESEND_FROM_EMAIL.',
+            })
+          }
           errors.push(recipient.email)
         }
       } catch (err) {
-        console.error(`[v0] Error for ${recipient.email}:`, err)
         errors.push(recipient.email)
       }
     }
