@@ -38,7 +38,6 @@ const PRESET_COLORS = [
 ]
 
 export function ManageTagsDialog({ open, onOpenChange, organizationId, onRefresh }: ManageTagsDialogProps) {
-  const supabase = createClient()
   const [tags, setTags] = useState<TagWithCount[]>([])
   const [tagName, setTagName] = useState('')
   const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0])
@@ -50,27 +49,43 @@ export function ManageTagsDialog({ open, onOpenChange, organizationId, onRefresh
   const [deletingTag, setDeletingTag] = useState<TagWithCount | null>(null)
 
   const fetchTags = useCallback(async () => {
+    const supabase = createClient()
     setFetching(true)
     try {
-      const { data } = await supabase
+      // Fetch tags
+      const { data: tagsData, error: tagsError } = await supabase
         .from('contact_tags')
-        .select('id, name, color, contact_tag_assignments(count)')
+        .select('id, name, color')
         .eq('organization_id', organizationId)
         .order('name')
 
-      const mapped = (data || []).map((t: any) => ({
+      if (tagsError) {
+        console.error('[v0] Error fetching tags:', tagsError)
+      }
+
+      // Fetch assignment counts separately
+      const { data: assignData } = await supabase
+        .from('contact_tag_assignments')
+        .select('tag_id')
+
+      const countMap = new Map<string, number>()
+      for (const a of assignData || []) {
+        countMap.set(a.tag_id, (countMap.get(a.tag_id) || 0) + 1)
+      }
+
+      const mapped = (tagsData || []).map((t: any) => ({
         id: t.id,
         name: t.name,
         color: t.color,
-        contact_count: t.contact_tag_assignments?.[0]?.count ?? 0,
+        contact_count: countMap.get(t.id) || 0,
       }))
       setTags(mapped)
     } catch (err) {
-      console.error('Error fetching tags:', err)
+      console.error('[v0] Error fetching tags:', err)
     } finally {
       setFetching(false)
     }
-  }, [supabase, organizationId])
+  }, [organizationId])
 
   useEffect(() => {
     if (open) fetchTags()
@@ -80,6 +95,7 @@ export function ManageTagsDialog({ open, onOpenChange, organizationId, onRefresh
     if (!tagName.trim()) return
     setLoading(true)
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('contact_tags')
         .insert({ organization_id: organizationId, name: tagName.trim(), color: selectedColor })
@@ -98,6 +114,7 @@ export function ManageTagsDialog({ open, onOpenChange, organizationId, onRefresh
     if (!editName.trim()) return
     setLoading(true)
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('contact_tags')
         .update({ name: editName.trim(), color: editColor })
@@ -117,6 +134,7 @@ export function ManageTagsDialog({ open, onOpenChange, organizationId, onRefresh
     if (!deletingTag) return
     setLoading(true)
     try {
+      const supabase = createClient()
       // Delete assignments first
       await supabase.from('contact_tag_assignments').delete().eq('tag_id', deletingTag.id)
       const { error } = await supabase.from('contact_tags').delete().eq('id', deletingTag.id)
