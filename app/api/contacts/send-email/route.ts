@@ -32,8 +32,12 @@ export async function POST(request: Request) {
         ? envApiKey
         : 'Powerhouse <onboarding@resend.dev>'
 
+    console.log('[v0] Resolved API key:', resolvedApiKey ? `re_...${resolvedApiKey.slice(-4)}` : 'NONE')
+    console.log('[v0] Resolved from email:', resolvedFromEmail)
+    console.log('[v0] Recipients:', recipients.map((r: any) => r.email))
+
     if (!resolvedApiKey) {
-      console.log(`[Contacts Email] Would send to ${recipients.length} recipients (no RESEND_API_KEY)`)
+      console.log(`[v0] Would send to ${recipients.length} recipients (no RESEND_API_KEY)`)
       return NextResponse.json({ success: true, sent: 0, message: 'No API key configured' })
     }
 
@@ -82,15 +86,16 @@ export async function POST(request: Request) {
           }),
         })
 
+        const resBody = await res.json()
+        console.log('[v0] Resend response:', res.status, JSON.stringify(resBody))
         if (res.ok) {
           sent++
         } else {
-          const err = await res.json()
-          console.error(`[Contacts Email] Failed for ${recipient.email}:`, err)
+          console.error(`[v0] Failed for ${recipient.email}:`, resBody)
           errors.push(recipient.email)
         }
       } catch (err) {
-        console.error(`[Contacts Email] Error for ${recipient.email}:`, err)
+        console.error(`[v0] Error for ${recipient.email}:`, err)
         errors.push(recipient.email)
       }
     }
