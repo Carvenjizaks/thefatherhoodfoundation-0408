@@ -62,6 +62,7 @@ export function DashboardSidebar({ profile }: SidebarProps) {
                 width={40}
                 height={40}
                 className="object-contain opacity-85"
+                priority
               />
             </div>
             <div className="flex flex-col">
@@ -82,6 +83,7 @@ export function DashboardSidebar({ profile }: SidebarProps) {
               width={36}
               height={36}
               className="object-contain opacity-85"
+              priority
             />
           </div>
         )}
