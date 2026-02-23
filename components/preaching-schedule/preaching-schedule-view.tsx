@@ -39,7 +39,6 @@ import {
   Pencil,
   Trash2,
   AlertCircle,
-  Search,
 } from 'lucide-react'
 import { ContactPicker } from '@/components/shared/contact-picker'
 
@@ -110,21 +109,6 @@ export function PreachingScheduleView() {
     scripture_reference: '',
     notes: '',
   })
-
-  // Speaker search state
-  const [speakerSearch, setSpeakerSearch] = useState('')
-  const [showSpeakerDropdown, setShowSpeakerDropdown] = useState(false)
-
-  const filteredSpeakers = speakers.filter((s) => {
-    if (!speakerSearch.trim()) return true
-    const fullName = `${s.first_name} ${s.last_name}`.toLowerCase()
-    return fullName.includes(speakerSearch.toLowerCase())
-  })
-
-  const selectedSpeakerName = (speakerId: string) => {
-    const s = speakers.find((sp) => sp.id === speakerId)
-    return s ? `${s.first_name} ${s.last_name}` : ''
-  }
 
   // Drag state
   const [draggedEntry, setDraggedEntry] = useState<ScheduleEntry | null>(null)
