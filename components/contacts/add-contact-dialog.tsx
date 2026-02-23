@@ -1,15 +1,14 @@
 'use client'
 
-import React from "react"
-
+import React from 'react'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
@@ -17,13 +16,16 @@ interface AddContactDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   organizationId: string
+  tags?: Array<{ id: string; name: string; color: string }>
+  onRefresh?: () => void
 }
 
-export function AddContactDialog({ open, onOpenChange, organizationId }: AddContactDialogProps) {
-  const router = useRouter()
+export function AddContactDialog({ open, onOpenChange, organizationId, tags = [], onRefresh }: AddContactDialogProps) {
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [dupWarning, setDupWarning] = useState<string | null>(null)
+  const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(new Set())
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -39,7 +41,14 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
     notes: '',
   })
 
-  const [dupWarning, setDupWarning] = useState<string | null>(null)
+  const toggleTag = (tagId: string) => {
+    setSelectedTagIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(tagId)) next.delete(tagId)
+      else next.add(tagId)
+      return next
+    })
+  }
 
   const checkDuplicate = async () => {
     setDupWarning(null)
@@ -80,14 +89,13 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
     setLoading(true)
 
     try {
-      // Check for duplicates first
       const isDup = await checkDuplicate()
       if (isDup) {
         setLoading(false)
         return
       }
 
-      const { error: insertError } = await supabase
+      const { data: inserted, error: insertError } = await supabase
         .from('contacts')
         .insert({
           ...formData,
@@ -97,6 +105,8 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
           email: formData.email.trim().toLowerCase() || null,
           phone: formData.phone.trim() || null,
         })
+        .select('id')
+        .single()
 
       if (insertError) {
         if (insertError.code === '23505') {
@@ -104,6 +114,13 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
           return
         }
         throw insertError
+      }
+
+      // Assign tags
+      if (inserted && selectedTagIds.size > 0) {
+        await supabase.from('contact_tag_assignments').insert(
+          [...selectedTagIds].map((tagId) => ({ contact_id: inserted.id, tag_id: tagId }))
+        )
       }
 
       onOpenChange(false)
@@ -121,7 +138,8 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
         status: 'active',
         notes: '',
       })
-      router.refresh()
+      setSelectedTagIds(new Set())
+      onRefresh?.()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
@@ -149,7 +167,7 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
           {dupWarning && (
             <Alert className="border-amber-500/50 bg-amber-500/10">
               <AlertDescription className="text-amber-700 dark:text-amber-400">
-                {dupWarning} — Please review before adding.
+                {dupWarning} -- Please review before adding.
               </AlertDescription>
             </Alert>
           )}
@@ -179,9 +197,9 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="add_email">Email</Label>
               <Input
-                id="email"
+                id="add_email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -189,9 +207,9 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="add_phone">Phone</Label>
               <Input
-                id="phone"
+                id="add_phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -201,9 +219,9 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="add_address">Address</Label>
             <Input
-              id="address"
+              id="add_address"
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               disabled={loading}
@@ -212,27 +230,27 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
 
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="city">City</Label>
+              <Label htmlFor="add_city">City</Label>
               <Input
-                id="city"
+                id="add_city"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="postal_code">Postal Code</Label>
+              <Label htmlFor="add_postal_code">Postal Code</Label>
               <Input
-                id="postal_code"
+                id="add_postal_code"
                 value={formData.postal_code}
                 onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="country">Country</Label>
+              <Label htmlFor="add_country">Country</Label>
               <Input
-                id="country"
+                id="add_country"
                 value={formData.country}
                 onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                 disabled={loading}
@@ -242,9 +260,9 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
 
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="date_of_birth">Date of Birth</Label>
+              <Label htmlFor="add_dob">Date of Birth</Label>
               <Input
-                id="date_of_birth"
+                id="add_dob"
                 type="date"
                 value={formData.date_of_birth}
                 onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
@@ -252,7 +270,7 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="gender">Gender</Label>
+              <Label htmlFor="add_gender">Gender</Label>
               <Select
                 value={formData.gender}
                 onValueChange={(value) => setFormData({ ...formData, gender: value })}
@@ -269,7 +287,7 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="add_status">Status</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
@@ -287,10 +305,33 @@ export function AddContactDialog({ open, onOpenChange, organizationId }: AddCont
             </div>
           </div>
 
+          {/* Tags */}
+          {tags.length > 0 && (
+            <div className="space-y-2">
+              <Label>Tags</Label>
+              <div className="flex flex-wrap gap-2 rounded-lg border border-border p-3">
+                {tags.map((tag) => {
+                  const isSelected = selectedTagIds.has(tag.id)
+                  return (
+                    <button key={tag.id} type="button" onClick={() => toggleTag(tag.id)} disabled={loading}>
+                      <Badge
+                        variant={isSelected ? 'default' : 'outline'}
+                        className="cursor-pointer transition-colors"
+                        style={isSelected ? { backgroundColor: tag.color, borderColor: tag.color, color: '#fff' } : { borderColor: tag.color }}
+                      >
+                        {tag.name}
+                      </Badge>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="add_notes">Notes</Label>
             <Textarea
-              id="notes"
+              id="add_notes"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={3}

@@ -246,6 +246,7 @@ export function ContactsList({ contacts, tags, role, onRefresh }: ContactsListPr
           open={!!editingContact}
           onOpenChange={(open) => !open && setEditingContact(null)}
           tags={tags}
+          onRefresh={onRefresh}
         />
       )}
 
@@ -254,6 +255,7 @@ export function ContactsList({ contacts, tags, role, onRefresh }: ContactsListPr
           contact={deletingContact}
           open={!!deletingContact}
           onOpenChange={(open) => !open && setDeletingContact(null)}
+          onRefresh={onRefresh}
         />
       )}
     </>

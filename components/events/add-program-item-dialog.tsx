@@ -12,7 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
-import { Plus, X, Clock, User, Star } from 'lucide-react'
+import { ContactPicker, type ContactOption } from '@/components/shared/contact-picker'
+import { Plus, X, Clock, User } from 'lucide-react'
 
 interface AddProgramItemDialogProps {
   open: boolean
@@ -36,9 +37,8 @@ export function AddProgramItemDialog({
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [contacts, setContacts] = useState<any[]>([])
   const [organizationId, setOrganizationId] = useState<string>('')
-  const [profiles, setProfiles] = useState<any[]>([]) // Declare profiles variable
+  const [assignedContacts, setAssignedContacts] = useState<Record<number, ContactOption | null>>({})
   
   const [formData, setFormData] = useState({
     title: '',
@@ -54,7 +54,7 @@ export function AddProgramItemDialog({
 
   useEffect(() => {
     if (open) {
-      fetchContacts()
+      fetchOrganization()
       
       // Auto-suggest start time based on last item's end time
       if (lastItem?.end_time) {
@@ -79,34 +79,13 @@ export function AddProgramItemDialog({
     }
   }, [formData.start_time, formData.end_time, eventDate])
 
-  const fetchContacts = async () => {
-    const mockOrgId = '00000000-0000-0000-0000-000000000000'
-    setOrganizationId(mockOrgId)
-    
-    // Fetch contacts from database with their star ratings
-    const { data, error } = await supabase
-      .from('contacts')
-      .select(`
-        id,
-        first_name,
-        last_name,
-        email,
-        phone,
-        participation_stats:contact_participation_stats(
-          star_rating,
-          total_assignments,
-          confirmed_count,
-          availability_rate
-        )
-      `)
-      .eq('organization_id', mockOrgId)
-      .eq('is_active', true)
-      .order('first_name')
-    
-    if (!error && data) {
-      setContacts(data)
-      console.log('[v0] Loaded contacts for task assignment:', data.length)
-    }
+  const fetchOrganization = async () => {
+    const { data: org } = await supabase
+      .from('organizations')
+      .select('id')
+      .limit(1)
+      .single()
+    if (org) setOrganizationId(org.id)
   }
 
   const addAssignment = () => {
@@ -139,8 +118,8 @@ export function AddProgramItemDialog({
 
       if (responseError) throw responseError
 
-      // Get contact details
-      const contact = contacts.find(c => c.id === contactId)
+      // Get contact details from assignedContacts map
+      const contact = Object.values(assignedContacts).find(c => c?.id === contactId)
       
       if (contact?.email) {
         console.log('[v0] Sending assignment email to:', contact.email)
@@ -368,45 +347,16 @@ export function AddProgramItemDialog({
                       onChange={(e) => updateAssignment(index, 'role_name', e.target.value)}
                       className="flex-1"
                     />
-                    <Select
-                      value={assignment.contact_id || 'unassigned'}
-                      onValueChange={(value) => updateAssignment(index, 'contact_id', value === 'unassigned' ? '' : value)}
-                    >
-                      <SelectTrigger className="w-[280px]">
-                        <SelectValue placeholder="Select contact..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="unassigned">Unassigned</SelectItem>
-                        {contacts.map(contact => {
-                          const stats = contact.participation_stats?.[0]
-                          const stars = stats?.star_rating || 0
-                          const availabilityRate = stats?.availability_rate || 0
-                          
-                          return (
-                            <SelectItem key={contact.id} value={contact.id}>
-                              <div className="flex items-center justify-between gap-2 w-full">
-                                <span>{contact.first_name} {contact.last_name}</span>
-                                {stats && (
-                                  <div className="flex items-center gap-1">
-                                    <div className="flex">
-                                      {[...Array(5)].map((_, i) => (
-                                        <Star 
-                                          key={i} 
-                                          className={`h-3 w-3 ${i < stars ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                                        />
-                                      ))}
-                                    </div>
-                                    <span className="text-xs text-muted-foreground ml-1">
-                                      {availabilityRate}%
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            </SelectItem>
-                          )
-                        })}
-                      </SelectContent>
-                    </Select>
+                    <ContactPicker
+                      organizationId={organizationId}
+                      value={assignment.contact_id}
+                      onChange={(contactId, contact) => {
+                        updateAssignment(index, 'contact_id', contactId || '')
+                        setAssignedContacts(prev => ({ ...prev, [index]: contact }))
+                      }}
+                      placeholder="Select contact..."
+                      className="w-[280px]"
+                    />
                     <Button
                       type="button"
                       variant="ghost"

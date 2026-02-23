@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ContactPicker } from '@/components/shared/contact-picker'
 
 interface AddTaskDialogProps {
   open: boolean
@@ -23,7 +24,6 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [projects, setProjects] = useState<any[]>([])
-  const [members, setMembers] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -37,7 +37,6 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
   useEffect(() => {
     if (open) {
       fetchProjects()
-      fetchMembers()
     }
   }, [open])
 
@@ -49,21 +48,7 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
     setProjects(data || [])
   }
 
-  const fetchMembers = async () => {
-    // Fetch contacts as assignable members
-    const { data } = await supabase
-      .from('contacts')
-      .select('id, first_name, last_name')
-      .eq('organization_id', organizationId)
-      .eq('status', 'active')
-      .order('first_name')
-    setMembers(
-      (data || []).map((c: { id: string; first_name: string; last_name: string }) => ({
-        id: c.id,
-        full_name: `${c.first_name} ${c.last_name}`,
-      }))
-    )
-  }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -200,22 +185,13 @@ export function AddTaskDialog({ open, onOpenChange, organizationId }: AddTaskDia
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="assigned_to">Assign To</Label>
-              <Select
-                value={formData.assigned_to}
-                onValueChange={(value) => setFormData({ ...formData, assigned_to: value })}
+              <ContactPicker
+                organizationId={organizationId}
+                value={formData.assigned_to || null}
+                onChange={(contactId) => setFormData({ ...formData, assigned_to: contactId || '' })}
+                placeholder="Select team member..."
                 disabled={loading}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select member" />
-                </SelectTrigger>
-                <SelectContent>
-                  {members.map((member) => (
-                    <SelectItem key={member.id} value={member.id}>
-                      {member.full_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              />
             </div>
 
             <div className="space-y-2">

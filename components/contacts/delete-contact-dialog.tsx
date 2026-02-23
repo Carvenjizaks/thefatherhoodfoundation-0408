@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
   AlertDialog,
@@ -18,27 +17,25 @@ interface DeleteContactDialogProps {
   contact: any
   open: boolean
   onOpenChange: (open: boolean) => void
+  onRefresh?: () => void
 }
 
-export function DeleteContactDialog({ contact, open, onOpenChange }: DeleteContactDialogProps) {
-  const router = useRouter()
+export function DeleteContactDialog({ contact, open, onOpenChange, onRefresh }: DeleteContactDialogProps) {
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
 
   const handleDelete = async () => {
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('contacts')
-        .delete()
-        .eq('id', contact.id)
-
+      // Delete tag assignments first
+      await supabase.from('contact_tag_assignments').delete().eq('contact_id', contact.id)
+      // Delete contact
+      const { error } = await supabase.from('contacts').delete().eq('id', contact.id)
       if (error) throw error
-
       onOpenChange(false)
-      router.refresh()
+      onRefresh?.()
     } catch (err) {
-      console.error('[v0] Error deleting contact:', err)
+      console.error('Error deleting contact:', err)
     } finally {
       setLoading(false)
     }

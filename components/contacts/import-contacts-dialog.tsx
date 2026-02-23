@@ -12,9 +12,10 @@ interface ImportContactsDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   organizationId: string
+  onRefresh?: () => void
 }
 
-export function ImportContactsDialog({ open, onOpenChange, organizationId }: ImportContactsDialogProps) {
+export function ImportContactsDialog({ open, onOpenChange, organizationId, onRefresh }: ImportContactsDialogProps) {
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -51,6 +52,7 @@ export function ImportContactsDialog({ open, onOpenChange, organizationId }: Imp
         text: `Successfully imported ${result.count} contacts!`,
       })
       setFile(null)
+      onRefresh?.()
     } catch (err: any) {
       setMessage({
         type: 'error',
