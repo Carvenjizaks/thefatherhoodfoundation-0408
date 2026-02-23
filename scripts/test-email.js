@@ -5,7 +5,9 @@ const SMTP_HOST = process.env.SMTP_HOST || 'send.smtp.com'
 const SMTP_PORT = Number(process.env.SMTP_PORT) || 587
 const SMTP_USER = process.env.SMTP_USER
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD
-const SMTP_FROM = process.env.SMTP_FROM_EMAIL || 'noreply@nexiumbi.com'
+const SMTP_FROM_RAW = process.env.SMTP_FROM_EMAIL || ''
+// Ensure from is a valid email, not just a domain
+const SMTP_FROM = SMTP_FROM_RAW.includes('@') ? SMTP_FROM_RAW : (SMTP_FROM_RAW ? `noreply@${SMTP_FROM_RAW}` : 'noreply@nexiumbi.com')
 
 console.log('=== SMTP.com Email Test ===')
 console.log('Host:', SMTP_HOST)

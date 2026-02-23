@@ -10,7 +10,9 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-const fromAddress = process.env.SMTP_FROM_EMAIL || 'noreply@nexiumbi.com'
+// Ensure from is a valid email, not just a domain
+const rawFrom = process.env.SMTP_FROM_EMAIL || ''
+const fromAddress = rawFrom.includes('@') ? rawFrom : (rawFrom ? `noreply@${rawFrom}` : 'noreply@nexiumbi.com')
 
 export async function sendEmail({
   to,
