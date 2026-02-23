@@ -23,9 +23,8 @@ export default function ContactsPage() {
         .eq('organization_id', mockOrgId)
         .order('created_at', { ascending: false })
 
-      console.log('[v0] Contacts fetch result:', { count: contactsData?.length, error: contactsError })
       if (contactsError) {
-        console.error('[v0] Error fetching contacts:', contactsError)
+        console.error('Error fetching contacts:', contactsError)
       }
 
       // Fetch tags
@@ -77,6 +76,7 @@ export default function ContactsPage() {
         organizationId={mockOrgId}
         role={mockRole}
         tags={tags}
+        contacts={contacts as never[]}
         onRefresh={fetchContacts}
       />
       <ContactsList
