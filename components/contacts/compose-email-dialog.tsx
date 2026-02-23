@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { X, Send, Loader2, Mail, CheckCircle2, AlertCircle } from 'lucide-react'
+import { X, Send, Loader2, Mail, CheckCircle2, AlertCircle, ExternalLink } from 'lucide-react'
 
 export interface EmailRecipient {
   id: string
@@ -51,7 +51,7 @@ export function ComposeEmailDialog({
   const [body, setBody] = useState('')
   const [sending, setSending] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [result, setResult] = useState<{ sent: number; failed: number } | null>(null)
+  const [result, setResult] = useState<{ sent: number; failed: number; domainError?: boolean } | null>(null)
 
   const validRecipients = recipients.filter((r) => r.email?.trim())
   const isBulk = validRecipients.length > 1
@@ -84,7 +84,7 @@ export function ComposeEmailDialog({
         }),
       })
       const data = await res.json()
-      setResult({ sent: data.sent ?? 0, failed: data.failed ?? 0 })
+      setResult({ sent: data.sent ?? 0, failed: data.failed ?? 0, domainError: data.domainError ?? false })
     } catch {
       setResult({ sent: 0, failed: validRecipients.length })
     } finally {
@@ -108,6 +108,27 @@ export function ComposeEmailDialog({
                   <p className="text-sm text-muted-foreground mt-1">
                     Successfully sent to {result.sent} {result.sent === 1 ? 'recipient' : 'recipients'}.
                   </p>
+                </div>
+              </>
+            ) : result.domainError ? (
+              <>
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
+                  <AlertCircle className="h-7 w-7 text-destructive" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Domain Verification Required</h3>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-sm">
+                    Your Resend account needs a verified domain to send emails to other recipients.
+                  </p>
+                  <a
+                    href="https://resend.com/domains"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
+                  >
+                    Verify domain at resend.com/domains
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
                 </div>
               </>
             ) : (
