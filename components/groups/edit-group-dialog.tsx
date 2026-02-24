@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Search, UserCheck, X } from 'lucide-react'
+import { Search, UserCheck, X, Upload, ImageIcon } from 'lucide-react'
 
 interface Contact {
   id: string
@@ -35,6 +35,9 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
   const [leaderSearch, setLeaderSearch] = useState('')
   const [selectedLeader, setSelectedLeader] = useState<Contact | null>(null)
   const [showLeaderDropdown, setShowLeaderDropdown] = useState(false)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [photoPreview, setPhotoPreview] = useState<string>('')
+  const [uploadingPhoto, setUploadingPhoto] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -44,7 +47,6 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
     meeting_day: '',
     meeting_time: '',
     location: '',
-    capacity: '',
     is_active: true,
     leader_profile_picture: '',
     leader_bio: '',
@@ -61,11 +63,13 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
         meeting_day: group.meeting_day || '',
         meeting_time: group.meeting_time || '',
         location: group.location || '',
-        capacity: group.capacity ? String(group.capacity) : '',
         is_active: group.is_active ?? true,
         leader_profile_picture: group.leader_profile_picture || '',
         leader_bio: group.leader_bio || '',
       })
+      if (group.leader_profile_picture) {
+        setPhotoPreview(group.leader_profile_picture)
+      }
     }
   }, [group])
 
@@ -105,10 +109,32 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
     return c.first_name.toLowerCase().includes(q) || c.last_name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
   })
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhotoFile(file)
+    setPhotoPreview(URL.createObjectURL(file))
+  }
+
+  const uploadPhoto = async (): Promise<string> => {
+    if (!photoFile) return formData.leader_profile_picture
+    setUploadingPhoto(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', photoFile)
+      const res = await fetch('/api/upload/leader-photo', { method: 'POST', body: fd })
+      const data = await res.json()
+      return data.url || ''
+    } finally {
+      setUploadingPhoto(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     try {
+      const photoUrl = await uploadPhoto()
       const supabase = createClient()
       const { error } = await supabase
         .from('groups')
@@ -120,10 +146,9 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
           meeting_day: formData.meeting_day,
           meeting_time: formData.meeting_time,
           location: formData.location,
-          capacity: formData.capacity ? parseInt(formData.capacity) : null,
           is_active: formData.is_active,
           leader_id: selectedLeader?.id ?? null,
-          leader_profile_picture: formData.leader_profile_picture || null,
+          leader_profile_picture: photoUrl || null,
           leader_bio: formData.leader_bio || null,
         })
         .eq('id', group.id)
@@ -206,15 +231,9 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Location</Label>
-              <Input value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} disabled={loading} />
-            </div>
-            <div className="space-y-2">
-              <Label>Capacity</Label>
-              <Input type="number" value={formData.capacity} onChange={(e) => setFormData({ ...formData, capacity: e.target.value })} disabled={loading} placeholder="Optional" />
-            </div>
+          <div className="space-y-2">
+            <Label>Location</Label>
+            <Input value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} disabled={loading} />
           </div>
 
                 <hr className="border-border" />
@@ -287,13 +306,29 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
             )}
 
             <div className="space-y-2">
-              <Label>Leader Profile Photo URL</Label>
-              <Input
-                value={formData.leader_profile_picture}
-                onChange={(e) => setFormData({ ...formData, leader_profile_picture: e.target.value })}
-                placeholder="https://... (optional, overrides contact photo)"
-                disabled={loading}
-              />
+              <Label>Leader Profile Photo</Label>
+              <div className="flex items-center gap-3">
+                {photoPreview ? (
+                  <div className="relative h-16 w-16 shrink-0">
+                    <img src={photoPreview} alt="Preview" className="h-16 w-16 rounded-full object-cover border border-border" />
+                    <button type="button" onClick={() => { setPhotoFile(null); setPhotoPreview(''); setFormData({ ...formData, leader_profile_picture: '' }) }} className="absolute -top-1 -right-1 h-5 w-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="h-16 w-16 shrink-0 rounded-full border-2 border-dashed border-border flex items-center justify-center bg-muted">
+                    <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                )}
+                <label className="cursor-pointer">
+                  <input type="file" accept="image/jpeg,image/jpg,image/png" className="sr-only" onChange={handlePhotoChange} disabled={loading || uploadingPhoto} />
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-border bg-background hover:bg-accent text-sm font-medium transition-colors">
+                    <Upload className="h-4 w-4" />
+                    {uploadingPhoto ? 'Uploading...' : 'Upload Photo'}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">JPEG or PNG, max 5MB</p>
+                </label>
+              </div>
             </div>
             <div className="space-y-2">
               <Label>Leader Bio</Label>

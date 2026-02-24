@@ -14,6 +14,7 @@ import { InviteMemberDialog } from './invite-member-dialog'
 import { JoinRequestsDialog } from './join-requests-dialog'
 import { GroupMessagingDialog } from './group-messaging-dialog'
 import { AttendanceTrackerDialog } from './attendance-tracker-dialog'
+import { ComposeEmailDialog } from '@/components/contacts/compose-email-dialog'
 
 interface GroupDetailViewProps {
   groupId: string
@@ -31,6 +32,7 @@ export function GroupDetailView({ groupId }: GroupDetailViewProps) {
   const [showRequests, setShowRequests] = useState(false)
   const [showMessaging, setShowMessaging] = useState(false)
   const [showAttendance, setShowAttendance] = useState(false)
+  const [showEmailMembers, setShowEmailMembers] = useState(false)
 
   useEffect(() => {
     fetchGroupData()
@@ -137,7 +139,16 @@ export function GroupDetailView({ groupId }: GroupDetailViewProps) {
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowEmailMembers(true)}
+                disabled={members.filter((m) => m.contact?.email).length === 0}
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                Email Members ({members.filter((m) => m.contact?.email).length})
+              </Button>
               <Button
                 size="sm"
                 variant="outline"
@@ -302,6 +313,19 @@ export function GroupDetailView({ groupId }: GroupDetailViewProps) {
         groupName={group.name}
         members={members}
         onSuccess={fetchGroupData}
+      />
+
+      <ComposeEmailDialog
+        open={showEmailMembers}
+        onOpenChange={setShowEmailMembers}
+        recipients={members
+          .filter((m) => m.contact?.email)
+          .map((m) => ({
+            id: m.contact.id,
+            name: `${m.contact.first_name} ${m.contact.last_name}`,
+            email: m.contact.email,
+          }))}
+        groupLabel={group.name}
       />
     </div>
   )
