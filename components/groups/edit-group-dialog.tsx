@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Search, UserCheck, X } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
 
 interface Contact {
   id: string
@@ -218,7 +217,7 @@ export function EditGroupDialog({ group, open, onOpenChange, onSuccess }: EditGr
             </div>
           </div>
 
-          <Separator />
+                <hr className="border-border" />
 
           {/* Leader Assignment */}
           <div className="space-y-3">
