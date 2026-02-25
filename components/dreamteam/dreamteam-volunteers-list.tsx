@@ -114,7 +114,7 @@ export function DreamTeamVolunteersList({ organizationId }: { organizationId: st
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `dreamteam-volunteers-${new Date().toISOString().split('T')[0]}.csv`
+    a.download = `dreamteam-dt-members-${new Date().toISOString().split('T')[0]}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -152,7 +152,7 @@ export function DreamTeamVolunteersList({ organizationId }: { organizationId: st
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.total}</p>
-              <p className="text-xs text-muted-foreground">Total Volunteers</p>
+              <p className="text-xs text-muted-foreground">Total DT-Members</p>
             </div>
           </CardContent>
         </Card>
@@ -187,7 +187,7 @@ export function DreamTeamVolunteersList({ organizationId }: { organizationId: st
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search volunteers..."
+                placeholder="Search DT-Members..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
@@ -228,7 +228,7 @@ export function DreamTeamVolunteersList({ organizationId }: { organizationId: st
         <Card className="border-border/50">
           <CardContent className="p-12 text-center">
             <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground/40" />
-            <h3 className="text-lg font-semibold mb-1">No volunteers found</h3>
+            <h3 className="text-lg font-semibold mb-1">No DT-Members found</h3>
             <p className="text-muted-foreground text-sm">
               {volunteers.length === 0
                 ? 'No one has signed up yet. Share the DreamTeam page to get started.'
