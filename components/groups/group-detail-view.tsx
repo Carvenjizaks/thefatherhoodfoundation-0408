@@ -21,7 +21,6 @@ interface GroupDetailViewProps {
 }
 
 export function GroupDetailView({ groupId }: GroupDetailViewProps) {
-  const supabase = createClient()
   const [group, setGroup] = useState<any>(null)
   const [members, setMembers] = useState<any[]>([])
   const [stats, setStats] = useState<any>(null)
@@ -40,7 +39,8 @@ export function GroupDetailView({ groupId }: GroupDetailViewProps) {
 
   const fetchGroupData = async () => {
     setLoading(true)
-    
+    const supabase = createClient()
+
     // Fetch group details with leader profile
     const { data: groupData } = await supabase
       .from('groups')

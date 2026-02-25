@@ -22,7 +22,6 @@ interface GroupMessagingDialogProps {
 }
 
 export function GroupMessagingDialog({ open, onOpenChange, groupId, groupName, members }: GroupMessagingDialogProps) {
-  const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [messageType, setMessageType] = useState<'bulk' | 'individual'>('bulk')
   const [subject, setSubject] = useState('')
@@ -34,7 +33,8 @@ export function GroupMessagingDialog({ open, onOpenChange, groupId, groupName, m
     setLoading(true)
 
     try {
-      const recipients = selectedMembers.length > 0 
+      const supabase = createClient()
+      const recipients = selectedMembers.length > 0
         ? members.filter(m => selectedMembers.includes(m.contact_id))
         : members
 
@@ -83,6 +83,7 @@ export function GroupMessagingDialog({ open, onOpenChange, groupId, groupName, m
     setLoading(true)
 
     try {
+      const supabase = createClient()
       for (const contactId of selectedMembers) {
         const member = members.find(m => m.contact_id === contactId)
         if (!member) continue

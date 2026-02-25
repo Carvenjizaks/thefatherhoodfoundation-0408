@@ -20,7 +20,6 @@ interface InviteMemberDialogProps {
 }
 
 export function InviteMemberDialog({ open, onOpenChange, groupId, groupName, onSuccess }: InviteMemberDialogProps) {
-  const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [contacts, setContacts] = useState<any[]>([])
   const [selectedContact, setSelectedContact] = useState('')
@@ -34,8 +33,9 @@ export function InviteMemberDialog({ open, onOpenChange, groupId, groupName, onS
   }, [open, groupName])
 
   const fetchAvailableContacts = async () => {
+    const supabase = createClient()
     const mockOrgId = '00000000-0000-0000-0000-000000000000'
-    
+
     // Get contacts not already in group
     const { data: existingMembers } = await supabase
       .from('group_members')
@@ -65,6 +65,7 @@ export function InviteMemberDialog({ open, onOpenChange, groupId, groupName, onS
     setLoading(true)
 
     try {
+      const supabase = createClient()
       const contact = contacts.find(c => c.id === selectedContact)
 
       // Create invitation

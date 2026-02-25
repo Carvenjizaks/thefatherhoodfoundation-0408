@@ -20,13 +20,13 @@ interface JoinRequestsDialogProps {
 }
 
 export function JoinRequestsDialog({ open, onOpenChange, groupId, groupName, requests, onSuccess }: JoinRequestsDialogProps) {
-  const supabase = createClient()
   const [processing, setProcessing] = useState<string | null>(null)
 
   const handleAccept = async (request: any) => {
     setProcessing(request.id)
 
     try {
+      const supabase = createClient()
       // Update request status
       const { error: updateError } = await supabase
         .from('group_join_requests')
@@ -71,6 +71,7 @@ export function JoinRequestsDialog({ open, onOpenChange, groupId, groupName, req
     setProcessing(request.id)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('group_join_requests')
         .update({
