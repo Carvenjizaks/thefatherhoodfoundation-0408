@@ -40,7 +40,6 @@ interface Group {
 }
 
 export function GroupsMainView() {
-  const supabase = createClient()
   const [groups, setGroups] = useState<Group[]>([])
   const [filteredGroups, setFilteredGroups] = useState<Group[]>([])
   const [loading, setLoading] = useState(true)
@@ -58,10 +57,9 @@ export function GroupsMainView() {
   }, [])
 
   const fetchOrganization = async () => {
+    const supabase = createClient()
     const { data } = await supabase.from('organizations').select('id').limit(1).single()
-    if (data) {
-      setOrganizationId(data.id)
-    }
+    if (data) setOrganizationId(data.id)
   }
 
   useEffect(() => {
@@ -69,7 +67,7 @@ export function GroupsMainView() {
   }, [searchQuery, selectedType, selectedDay, selectedCampus, groups])
 
   const fetchGroups = async () => {
-    console.log('[v0] Fetching groups...')
+    const supabase = createClient()
     const { data, error } = await supabase
       .from('groups')
       .select('*')
