@@ -244,7 +244,7 @@ export default function JoinDreamTeamPage() {
     <div className="min-h-screen bg-background">
       <header className="relative overflow-hidden border-b border-border/50">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-        <div className="relative mx-auto max-w-2xl px-4 py-12 md:py-16 text-center">
+        <div className="relative mx-auto max-w-3xl px-6 py-16 md:py-24 text-center">
           <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-secondary mb-5">
             <Users className="h-7 w-7 text-primary-foreground" />
           </div>
@@ -262,48 +262,48 @@ export default function JoinDreamTeamPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-8 md:py-12">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8" noValidate>
+      <main className="mx-auto max-w-3xl px-6 py-10 md:py-16">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12" noValidate>
           {errors.form && (
             <Alert variant="destructive"><AlertDescription>{errors.form}</AlertDescription></Alert>
           )}
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+          <section className="flex flex-col gap-6">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-3">
               <span className="h-px flex-1 bg-border" />Personal Information<span className="h-px flex-1 bg-border" />
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="firstName" className="text-sm font-medium">{'First Name '}<span className="text-destructive">*</span></Label>
-                <Input id="firstName" placeholder="e.g. John" value={formData.firstName} onChange={(e) => handleChange('firstName', e.target.value)} onBlur={() => handleBlur('firstName')} className={errors.firstName ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? 'firstName-error' : undefined} />
+                <Input id="firstName" placeholder="e.g. John" value={formData.firstName} onChange={(e) => handleChange('firstName', e.target.value)} onBlur={() => handleBlur('firstName')} className={`h-12 ${errors.firstName ? 'border-destructive focus-visible:ring-destructive' : ''}`} aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? 'firstName-error' : undefined} />
                 {errors.firstName && <p id="firstName-error" className="text-xs text-destructive">{errors.firstName}</p>}
               </div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="lastName" className="text-sm font-medium">{'Last Name '}<span className="text-destructive">*</span></Label>
-                <Input id="lastName" placeholder="e.g. Doe" value={formData.lastName} onChange={(e) => handleChange('lastName', e.target.value)} onBlur={() => handleBlur('lastName')} className={errors.lastName ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? 'lastName-error' : undefined} />
+                <Input id="lastName" placeholder="e.g. Doe" value={formData.lastName} onChange={(e) => handleChange('lastName', e.target.value)} onBlur={() => handleBlur('lastName')} className={`h-12 ${errors.lastName ? 'border-destructive focus-visible:ring-destructive' : ''}`} aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? 'lastName-error' : undefined} />
                 {errors.lastName && <p id="lastName-error" className="text-xs text-destructive">{errors.lastName}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="email" className="text-sm font-medium">{'Email Address '}<span className="text-destructive">*</span></Label>
-                <Input id="email" type="email" placeholder="e.g. john@example.com" value={formData.email} onChange={(e) => handleChange('email', e.target.value)} onBlur={() => handleBlur('email')} className={errors.email ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.email} aria-describedby={errors.email ? 'email-error' : undefined} />
+                <Input id="email" type="email" placeholder="e.g. john@example.com" value={formData.email} onChange={(e) => handleChange('email', e.target.value)} onBlur={() => handleBlur('email')} className={`h-12 ${errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}`} aria-invalid={!!errors.email} aria-describedby={errors.email ? 'email-error' : undefined} />
                 {errors.email && <p id="email-error" className="text-xs text-destructive">{errors.email}</p>}
               </div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="phone" className="text-sm font-medium">{'Phone Number '}<span className="text-destructive">*</span></Label>
-                <Input id="phone" type="tel" placeholder="e.g. 072 123 4567" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} onBlur={() => handleBlur('phone')} className={errors.phone ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? 'phone-error' : undefined} />
+                <Input id="phone" type="tel" placeholder="e.g. 072 123 4567" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} onBlur={() => handleBlur('phone')} className={`h-12 ${errors.phone ? 'border-destructive focus-visible:ring-destructive' : ''}`} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? 'phone-error' : undefined} />
                 {errors.phone && <p id="phone-error" className="text-xs text-destructive">{errors.phone}</p>}
               </div>
             </div>
           </section>
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+          <section className="flex flex-col gap-6">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-3">
               <span className="h-px flex-1 bg-border" />Church Membership<span className="h-px flex-1 bg-border" />
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
                 <Label className="text-sm font-medium">Are you a Powerhouse member or guest? <span className="text-destructive">*</span></Label>
                 <div className="flex gap-3">
                   {['Member', 'Guest'].map((option) => (
@@ -311,7 +311,7 @@ export default function JoinDreamTeamPage() {
                       key={option}
                       type="button"
                       onClick={() => handleChange('membershipStatus', option.toLowerCase())}
-                      className={`flex-1 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all ${
+                      className={`flex-1 h-12 px-4 rounded-lg border text-sm font-medium transition-all ${
                         formData.membershipStatus === option.toLowerCase()
                           ? 'border-primary bg-primary/10 text-primary'
                           : 'border-border bg-background text-muted-foreground hover:bg-accent'
@@ -323,7 +323,7 @@ export default function JoinDreamTeamPage() {
                 </div>
                 {errors.membershipStatus && <p className="text-xs text-destructive">{errors.membershipStatus}</p>}
               </div>
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 <Label className="text-sm font-medium">Have you completed Disciples Classes? <span className="text-destructive">*</span></Label>
                 <div className="flex gap-3">
                   {['Yes', 'No'].map((option) => (
@@ -331,7 +331,7 @@ export default function JoinDreamTeamPage() {
                       key={option}
                       type="button"
                       onClick={() => handleChange('disciplesClassCompleted', option.toLowerCase())}
-                      className={`flex-1 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all ${
+                      className={`flex-1 h-12 px-4 rounded-lg border text-sm font-medium transition-all ${
                         formData.disciplesClassCompleted === option.toLowerCase()
                           ? 'border-primary bg-primary/10 text-primary'
                           : 'border-border bg-background text-muted-foreground hover:bg-accent'
@@ -346,14 +346,14 @@ export default function JoinDreamTeamPage() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+          <section className="flex flex-col gap-6">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-3">
               <span className="h-px flex-1 bg-border" />Service Area<span className="h-px flex-1 bg-border" />
             </h2>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="serviceArea" className="text-sm font-medium">{'Ministry / Service Area '}<span className="text-destructive">*</span></Label>
               <Select value={formData.serviceArea} onValueChange={(value) => { handleChange('serviceArea', value); if (value !== 'other') setFormData(prev => ({ ...prev, otherServiceArea: '' })) }}>
-                <SelectTrigger id="serviceArea" className={errors.serviceArea ? 'border-destructive focus:ring-destructive' : ''} aria-invalid={!!errors.serviceArea}>
+                <SelectTrigger id="serviceArea" className={`h-12 ${errors.serviceArea ? 'border-destructive focus:ring-destructive' : ''}`} aria-invalid={!!errors.serviceArea}>
                   <SelectValue placeholder="Select a ministry area..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -369,34 +369,34 @@ export default function JoinDreamTeamPage() {
               )}
             </div>
             {formData.serviceArea === 'other' && (
-              <div className="flex flex-col gap-1.5 animate-in slide-in-from-top-2 duration-200">
+              <div className="flex flex-col gap-2 animate-in slide-in-from-top-2 duration-200">
                 <Label htmlFor="otherServiceArea" className="text-sm font-medium">{'Specify Your Service Area '}<span className="text-destructive">*</span></Label>
-                <Input id="otherServiceArea" placeholder="e.g. Prayer Team, Outreach, Administration..." value={formData.otherServiceArea} onChange={(e) => handleChange('otherServiceArea', e.target.value)} onBlur={() => handleBlur('otherServiceArea')} className={errors.otherServiceArea ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.otherServiceArea} aria-describedby={errors.otherServiceArea ? 'otherServiceArea-error' : undefined} />
+                <Input id="otherServiceArea" placeholder="e.g. Prayer Team, Outreach, Administration..." value={formData.otherServiceArea} onChange={(e) => handleChange('otherServiceArea', e.target.value)} onBlur={() => handleBlur('otherServiceArea')} className={`h-12 ${errors.otherServiceArea ? 'border-destructive focus-visible:ring-destructive' : ''}`} aria-invalid={!!errors.otherServiceArea} aria-describedby={errors.otherServiceArea ? 'otherServiceArea-error' : undefined} />
                 {errors.otherServiceArea && <p id="otherServiceArea-error" className="text-xs text-destructive">{errors.otherServiceArea}</p>}
               </div>
             )}
           </section>
 
-          <section className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+          <section className="flex flex-col gap-6">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-3">
               <span className="h-px flex-1 bg-border" />Additional Details<span className="h-px flex-1 bg-border" />
             </h2>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="skills" className="text-sm font-medium">Skills & Experience</Label>
-              <Textarea id="skills" placeholder="e.g. I play the guitar, have experience with sound systems, good with children..." value={formData.skills} onChange={(e) => handleChange('skills', e.target.value)} rows={3} />
+              <Textarea id="skills" placeholder="e.g. I play the guitar, have experience with sound systems, good with children..." value={formData.skills} onChange={(e) => handleChange('skills', e.target.value)} rows={4} />
               <p className="text-xs text-muted-foreground">Any relevant skills or experience you bring</p>
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="availability" className="text-sm font-medium">Availability</Label>
-              <Input id="availability" placeholder="e.g. Every Sunday, First Sunday of the month, Wednesday evenings..." value={formData.availability} onChange={(e) => handleChange('availability', e.target.value)} />
+              <Input id="availability" placeholder="e.g. Every Sunday, First Sunday of the month, Wednesday evenings..." value={formData.availability} onChange={(e) => handleChange('availability', e.target.value)} className="h-12" />
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="notes" className="text-sm font-medium">Additional Notes</Label>
-              <Textarea id="notes" placeholder="Anything else you would like us to know..." value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} rows={2} />
+              <Textarea id="notes" placeholder="Anything else you would like us to know..." value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} rows={3} />
             </div>
           </section>
 
-          <Button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground h-12 text-base font-semibold">
+          <Button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground h-14 text-base font-semibold rounded-xl">
             {isSubmitting ? (<><Loader2 className="h-5 w-5 mr-2 animate-spin" />{'Signing up...'}</>) : (<><Heart className="h-5 w-5 mr-2" />{'Join the DreamTeam'}</>)}
           </Button>
         </form>
