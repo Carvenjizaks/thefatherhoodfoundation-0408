@@ -41,7 +41,7 @@ export function DreamTeamHeader({ activeTab, onTabChange }: DreamTeamHeaderProps
           </span>
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Manage your volunteer team and sign-ups
+          Manage your DT-Members team and sign-ups
         </p>
       </div>
       <div className="flex items-center gap-3">
@@ -67,7 +67,7 @@ export function DreamTeamHeader({ activeTab, onTabChange }: DreamTeamHeaderProps
           <TabsList>
             <TabsTrigger value="volunteers" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
-              <span className="hidden sm:inline">Volunteers</span>
+              <span className="hidden sm:inline">DT-Members</span>
             </TabsTrigger>
             <TabsTrigger value="signup" className="flex items-center gap-2">
               <UserPlus className="h-4 w-4" />
