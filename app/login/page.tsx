@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation"
 
-export default async function LoginPage() {
-  redirect('/dashboard')
+export default function LoginPage() {
+  redirect("/auth/login")
 }
