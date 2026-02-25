@@ -36,7 +36,6 @@ const navigation = [
 ]
 
 const adminNavigation = [
-  { name: 'Organization', href: '/dashboard/organization', icon: Building2 },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
