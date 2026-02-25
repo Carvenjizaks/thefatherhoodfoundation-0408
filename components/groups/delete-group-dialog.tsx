@@ -22,12 +22,12 @@ interface DeleteGroupDialogProps {
 
 export function DeleteGroupDialog({ group, open, onOpenChange }: DeleteGroupDialogProps) {
   const router = useRouter()
-  const supabase = createClient()
   const [loading, setLoading] = useState(false)
 
   const handleDelete = async () => {
     setLoading(true)
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('groups')
         .delete()

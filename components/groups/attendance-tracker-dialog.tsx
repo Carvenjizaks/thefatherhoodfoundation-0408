@@ -22,7 +22,6 @@ interface AttendanceTrackerDialogProps {
 }
 
 export function AttendanceTrackerDialog({ open, onOpenChange, groupId, groupName, members, onSuccess }: AttendanceTrackerDialogProps) {
-  const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0])
   const [presentMembers, setPresentMembers] = useState<string[]>([])
@@ -48,6 +47,7 @@ export function AttendanceTrackerDialog({ open, onOpenChange, groupId, groupName
     setLoading(true)
 
     try {
+      const supabase = createClient()
       // Create attendance records for all members
       const attendanceRecords = members.map(member => ({
         group_id: groupId,
