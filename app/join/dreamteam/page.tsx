@@ -23,6 +23,8 @@ interface FormData {
   lastName: string
   email: string
   phone: string
+  membershipStatus: string
+  disciplesClassCompleted: string
   serviceArea: string
   otherServiceArea: string
   skills: string
@@ -49,6 +51,7 @@ export default function JoinDreamTeamPage() {
   const [orgError, setOrgError] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     firstName: '', lastName: '', email: '', phone: '',
+    membershipStatus: '', disciplesClassCompleted: '',
     serviceArea: '', otherServiceArea: '', skills: '', availability: '', notes: '',
   })
   const [errors, setErrors] = useState<FormErrors>({})
@@ -80,6 +83,8 @@ export default function JoinDreamTeamPage() {
         if (!value.trim()) return 'Phone number is required'
         if (!/^[+]?[\d\s()-]{7,15}$/.test(value.replace(/\s/g, ''))) return 'Please enter a valid phone number'
         return undefined
+      case 'membershipStatus': return !value ? 'Please select your membership status' : undefined
+      case 'disciplesClassCompleted': return !value ? 'Please answer this question' : undefined
       case 'serviceArea': return !value ? 'Please select a service area' : undefined
       case 'otherServiceArea':
         if (formData.serviceArea === 'other' && !value.trim()) return 'Please specify your service area'
@@ -107,7 +112,7 @@ export default function JoinDreamTeamPage() {
   const handleBlur = (name: string) => setTouched((prev) => ({ ...prev, [name]: true }))
 
   const validateAll = (): boolean => {
-    const fields: (keyof FormData)[] = ['firstName', 'lastName', 'email', 'phone', 'serviceArea']
+    const fields: (keyof FormData)[] = ['firstName', 'lastName', 'email', 'phone', 'membershipStatus', 'disciplesClassCompleted', 'serviceArea']
     if (formData.serviceArea === 'other') fields.push('otherServiceArea')
     const newTouched: Record<string, boolean> = {}
     const newErrors: FormErrors = {}
@@ -146,7 +151,7 @@ export default function JoinDreamTeamPage() {
 
   const resetForm = () => {
     setIsSuccess(false)
-    setFormData({ firstName: '', lastName: '', email: '', phone: '', serviceArea: '', otherServiceArea: '', skills: '', availability: '', notes: '' })
+    setFormData({ firstName: '', lastName: '', email: '', phone: '', membershipStatus: '', disciplesClassCompleted: '', serviceArea: '', otherServiceArea: '', skills: '', availability: '', notes: '' })
     setTouched({})
     setErrors({})
   }
@@ -289,6 +294,54 @@ export default function JoinDreamTeamPage() {
                 <Label htmlFor="phone" className="text-sm font-medium">{'Phone Number '}<span className="text-destructive">*</span></Label>
                 <Input id="phone" type="tel" placeholder="e.g. 072 123 4567" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)} onBlur={() => handleBlur('phone')} className={errors.phone ? 'border-destructive focus-visible:ring-destructive' : ''} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? 'phone-error' : undefined} />
                 {errors.phone && <p id="phone-error" className="text-xs text-destructive">{errors.phone}</p>}
+              </div>
+            </div>
+          </section>
+
+          <section className="flex flex-col gap-4">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+              <span className="h-px flex-1 bg-border" />Church Membership<span className="h-px flex-1 bg-border" />
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-medium">Are you a Powerhouse member or guest? <span className="text-destructive">*</span></Label>
+                <div className="flex gap-3">
+                  {['Member', 'Guest'].map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => handleChange('membershipStatus', option.toLowerCase())}
+                      className={`flex-1 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all ${
+                        formData.membershipStatus === option.toLowerCase()
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-border bg-background text-muted-foreground hover:bg-accent'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+                {errors.membershipStatus && <p className="text-xs text-destructive">{errors.membershipStatus}</p>}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-medium">Have you completed Disciples Classes? <span className="text-destructive">*</span></Label>
+                <div className="flex gap-3">
+                  {['Yes', 'No'].map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => handleChange('disciplesClassCompleted', option.toLowerCase())}
+                      className={`flex-1 py-2.5 px-4 rounded-lg border text-sm font-medium transition-all ${
+                        formData.disciplesClassCompleted === option.toLowerCase()
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-border bg-background text-muted-foreground hover:bg-accent'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+                {errors.disciplesClassCompleted && <p className="text-xs text-destructive">{errors.disciplesClassCompleted}</p>}
               </div>
             </div>
           </section>

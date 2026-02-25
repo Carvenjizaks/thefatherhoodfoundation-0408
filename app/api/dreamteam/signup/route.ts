@@ -19,6 +19,8 @@ export async function POST(request: Request) {
       lastName,
       email,
       phone,
+      membershipStatus,
+      disciplesClassCompleted,
       serviceArea,
       otherServiceArea,
       skills,
@@ -42,6 +44,8 @@ export async function POST(request: Request) {
     } else if (!/^[+]?[\d\s()-]{7,15}$/.test(phone.replace(/\s/g, ''))) {
       errors.phone = 'Please enter a valid phone number'
     }
+    if (!membershipStatus) errors.membershipStatus = 'Please select your membership status'
+    if (!disciplesClassCompleted) errors.disciplesClassCompleted = 'Please answer this question'
     if (!serviceArea) errors.serviceArea = 'Please select a service area'
     if (serviceArea === 'other' && !otherServiceArea?.trim()) {
       errors.otherServiceArea = 'Please specify your service area'
@@ -88,6 +92,8 @@ export async function POST(request: Request) {
         skills: skills?.trim() || null,
         availability: availability?.trim() || null,
         notes: notes?.trim() || null,
+        membership_status: membershipStatus || 'guest',
+        disciples_class_completed: disciplesClassCompleted === 'yes',
         status: 'active',
         welcome_email_sent: false,
       })
@@ -190,8 +196,10 @@ export async function POST(request: Request) {
             <div style="background:#ffffff;padding:28px 30px;border-radius:0 0 16px 16px;box-shadow:0 4px 6px rgba(0,0,0,0.05);">
               <p style="font-size:16px;color:#1a1a2e;margin:0 0 16px 0;">A new volunteer has signed up:</p>
               <table style="width:100%;border-collapse:collapse;margin:0 0 20px 0;">
-                <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;width:120px;">Name</td><td style="padding:8px 12px;font-size:14px;color:#1a1a2e;font-weight:600;border-bottom:1px solid #f0f0f0;">${firstName.trim()} ${lastName.trim()}</td></tr>
+                <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;width:160px;">Name</td><td style="padding:8px 12px;font-size:14px;color:#1a1a2e;font-weight:600;border-bottom:1px solid #f0f0f0;">${firstName.trim()} ${lastName.trim()}</td></tr>
                 <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;">Email</td><td style="padding:8px 12px;font-size:14px;color:#1a1a2e;border-bottom:1px solid #f0f0f0;">${email.trim().toLowerCase()}</td></tr>
+                <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;">Membership</td><td style="padding:8px 12px;font-size:14px;color:#1a1a2e;text-transform:capitalize;border-bottom:1px solid #f0f0f0;">${membershipStatus || 'Guest'}</td></tr>
+                <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;">Disciples Classes</td><td style="padding:8px 12px;font-size:14px;color:#1a1a2e;border-bottom:1px solid #f0f0f0;">${disciplesClassCompleted === 'yes' ? 'Yes - Completed' : 'No - Not yet'}</td></tr>
                 <tr><td style="padding:8px 12px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;">Service Area</td><td style="padding:8px 12px;font-size:14px;color:hsl(225,73%,40%);font-weight:600;border-bottom:1px solid #f0f0f0;">${serviceLabel}</td></tr>
               </table>
               <div style="text-align:center;margin:0 0 16px 0;">
