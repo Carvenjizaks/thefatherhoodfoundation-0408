@@ -25,16 +25,21 @@ export async function sendEmail({
   html: string
   from?: string
 }): Promise<{ success: boolean; error?: string }> {
+  const actualFrom = from || fromAddress
+  const actualTo = Array.isArray(to) ? to.join(', ') : to
+  console.log('[v0] Sending email:', { from: actualFrom, to: actualTo, subject })
+
   try {
-    await transporter.sendMail({
-      from: from || fromAddress,
-      to: Array.isArray(to) ? to.join(', ') : to,
+    const info = await transporter.sendMail({
+      from: actualFrom,
+      to: actualTo,
       subject,
       html,
     })
+    console.log('[v0] Email sent successfully:', { messageId: info.messageId, response: info.response })
     return { success: true }
   } catch (err: any) {
-    console.error('[Email] Send error:', err?.message || err)
+    console.error('[v0] Email send FAILED:', { error: err?.message, code: err?.code, responseCode: err?.responseCode, command: err?.command })
     return { success: false, error: err?.message || 'Failed to send email' }
   }
 }
