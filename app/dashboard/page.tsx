@@ -5,13 +5,15 @@ import { Users, UsersRound, Calendar, CheckSquare, TrendingUp, Activity } from '
 export default async function DashboardPage() {
   const supabase = await createClient()
   
-  // Auth disabled for development - use mock data
-  console.log('[v0] Dashboard loaded without authentication')
-  
-  const contactsCount = 0
-  const groupsCount = 0
-  const eventsCount = 0
-  const tasksCount = 0
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Fetch real counts if user is authenticated
+  const [{ count: contactsCount }, { count: groupsCount }, { count: eventsCount }, { count: tasksCount }] = await Promise.all([
+    supabase.from('contacts').select('*', { count: 'exact', head: true }),
+    supabase.from('groups').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('events').select('*', { count: 'exact', head: true }),
+    supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+  ])
 
   const stats = [
     {
