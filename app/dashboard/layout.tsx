@@ -1,5 +1,4 @@
 import React from "react"
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardSidebar } from '@/components/dashboard/sidebar'
 import { DashboardHeader } from '@/components/dashboard/header'
@@ -12,20 +11,16 @@ export default async function DashboardLayout({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Fetch profile from DB
-  const { data: profile } = await supabase
+  // Fetch profile from DB if user is logged in
+  const { data: profile } = user ? await supabase
     .from('profiles')
     .select('full_name, email, role, organization:organizations(name, slug)')
     .eq('id', user.id)
-    .single()
+    .single() : { data: null }
 
   const resolvedProfile = {
-    full_name: profile?.full_name ?? user.email ?? 'User',
-    email: profile?.email ?? user.email ?? '',
+    full_name: profile?.full_name ?? user?.email ?? 'Admin',
+    email: profile?.email ?? user?.email ?? '',
     role: profile?.role ?? 'admin',
     organization: Array.isArray(profile?.organization)
       ? profile.organization[0]

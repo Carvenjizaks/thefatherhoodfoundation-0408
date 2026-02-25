@@ -224,10 +224,10 @@ export default function JoinDreamTeamPage() {
                   ? formData.otherServiceArea
                   : SERVICE_AREAS.find(s => s.value === formData.serviceArea)?.label}
               </div>
-              <div className="mt-8">
-                <Button variant="outline" onClick={resetForm}>
-                  Sign up another volunteer
-                </Button>
+              <div className="mt-8 flex flex-col items-center gap-2">
+                <p className="text-sm text-muted-foreground">
+                  We will be in touch soon. God bless you!
+                </p>
               </div>
             </div>
           </div>
