@@ -135,120 +135,66 @@ export function GroupsMainView() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-4 md:p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary/10 shrink-0">
-                <Users className="h-5 w-5 text-primary" />
+      {/* Stats + Create Button */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="grid grid-cols-3 gap-4 flex-1">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                  <Users className="h-4 w-4 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xl font-bold">{groups.length}</p>
+                  <p className="text-xs text-muted-foreground">Active Groups</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">{groups.length}</p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">Active Groups</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-secondary/10 shrink-0">
+                  <TrendingUp className="h-4 w-4 text-secondary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xl font-bold">
+                    {groups.reduce((sum, g) => sum + (g.current_members || 0), 0)}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Total Members</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-4 md:p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-secondary/10 shrink-0">
-                <TrendingUp className="h-5 w-5 text-secondary" />
+            </CardContent>
+          </Card>
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                  <Heart className="h-4 w-4 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xl font-bold">{groups.filter(g => g.is_open).length}</p>
+                  <p className="text-xs text-muted-foreground">Open to Join</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">
-                  {groups.reduce((sum, g) => sum + (g.current_members || 0), 0)}
-                </p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">Total Members</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-4 md:p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-accent/10 shrink-0">
-                <MapPin className="h-5 w-5 text-accent" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xl md:text-2xl font-bold">5</p>
-                <p className="text-xs md:text-sm text-muted-foreground truncate">Campuses</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
+        <Button
+          size="lg"
+          onClick={() => setShowAddDialog(true)}
+          className="bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white shrink-0"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Create Group
+        </Button>
       </div>
-      <Button 
-        size="lg"
-        onClick={() => setShowAddDialog(true)}
-        className="bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white"
-      >
-        <Plus className="h-5 w-5 mr-2" />
-        Create Group
-      </Button>
 
       <AddGroupDialog
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
         organizationId={organizationId}
       />
-
-      {/* Stats Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-primary/10">
-                <Users className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{groups.length}</p>
-                <p className="text-sm text-muted-foreground">Active Groups</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-secondary/10">
-                <TrendingUp className="h-6 w-6 text-secondary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">325</p>
-                <p className="text-sm text-muted-foreground">Total Members</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-primary/10">
-                <Calendar className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">12</p>
-                <p className="text-sm text-muted-foreground">This Week</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 bg-card/50 backdrop-blur">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-secondary/10">
-                <Heart className="h-6 w-6 text-secondary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">8</p>
-                <p className="text-sm text-muted-foreground">Open to Join</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Tabs */}
       <Tabs value={view} onValueChange={(v: any) => setView(v)} className="w-full">
@@ -395,14 +341,13 @@ export function GroupsMainView() {
                     )}
 
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white">
-                        Join Group
-                      </Button>
+                      <Link href={`/dashboard/groups/${group.id}`} className="flex-1">
+                        <Button className="w-full bg-gradient-to-r from-[hsl(225,73%,40%)] to-[hsl(150,40%,60%)] hover:opacity-90 text-white">
+                          View Group
+                        </Button>
+                      </Link>
                       <Button variant="outline" size="icon">
                         <Share2 className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="icon">
-                        <Heart className="h-4 w-4" />
                       </Button>
                     </div>
                   </CardContent>
