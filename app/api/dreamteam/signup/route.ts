@@ -139,8 +139,6 @@ export async function POST(request: Request) {
     const ADMIN_EMAIL = 'rodgerbeukes73@gmail.com'
 
     try {
-      console.log('[v0] SMTP config check:', { host: process.env.SMTP_HOST, user: process.env.SMTP_USER ? 'SET' : 'MISSING', pass: process.env.SMTP_PASSWORD ? 'SET' : 'MISSING', from: process.env.SMTP_FROM_EMAIL })
-
       // Welcome email to volunteer
       const volunteerResult = await sendEmail({
         to: email.trim().toLowerCase(),
