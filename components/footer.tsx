@@ -17,7 +17,8 @@ export function Footer() {
                 alt="The Fatherhood Foundation Logo"
                 width={48}
                 height={48}
-                className="w-12 h-12"
+                className="w-12 h-12 rounded-full"
+                style={{ mixBlendMode: 'multiply' }}
               />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
