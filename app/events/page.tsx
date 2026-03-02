@@ -14,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { createClient } from "@/lib/supabase-client"
 
 // Event configuration with open/closed status
 const events = [
@@ -25,7 +24,7 @@ const events = [
     dates: "1 May 2026",
     schedule: "Thursday Night: 6:00pm - 8:30pm | Friday: 6:30pm - 9:00pm | Saturday: 8:30am - 1:00pm",
     location: "Venue: To be Announced",
-    banner: "/images/banners/mgm-may-banner.jpg",
+    banner: "/images/banners/mgm-couples-banner.jpg",
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
@@ -142,22 +141,24 @@ function EventRegistrationForm({
     setSubmitError(null)
 
     try {
-      const supabase = createClient()
-      
-      const registrationData = {
-        event_id: event.id,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        cellphone: formData.cellphone,
-        spouse_name: event.requiresSpouse ? formData.spouseName : null,
-        spouse_email: event.requiresSpouse ? formData.spouseEmail : null,
-        spouse_cellphone: event.requiresSpouse ? formData.spouseCellphone : null,
-      }
+      // Use unified contacts API
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.cellphone,
+          source: "event_registration",
+          sourceDetails: event.title,
+          spouseFirstName: event.requiresSpouse ? formData.spouseName : undefined,
+          spouseEmail: event.requiresSpouse ? formData.spouseEmail : undefined,
+          spouseCellphone: event.requiresSpouse ? formData.spouseCellphone : undefined,
+        }),
+      })
 
-      const { error } = await supabase.from("event_registrations").insert(registrationData)
-
-      if (error) throw error
+      if (!response.ok) throw new Error("Registration failed")
 
       setSubmitSuccess(true)
       setFormData({
@@ -179,15 +180,34 @@ function EventRegistrationForm({
   if (submitSuccess) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+        <div className="w-20 h-20 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Image
+            src="/images/logo.png"
+            alt="Fatherhood Foundation"
+            width={60}
+            height={60}
+            className="rounded-full"
+          />
         </div>
-        <h3 className="text-xl font-semibold text-green-800 mb-2">Registration Successful!</h3>
-        <p className="text-gray-600 mb-4">Thank you for registering for {event.title}. We will contact you with further details.</p>
-        <Button onClick={onClose} className="bg-[#8B2B3E] hover:bg-[#6B1F2E]">
-          Close
+        <h2 className="text-2xl font-bold text-[#8B2B3E] mb-3">
+          Welcome, {formData.firstName}!
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Your registration for <strong>{event.title}</strong> has been received successfully.
+        </p>
+        <div className="bg-[#8B2B3E]/5 rounded-lg p-4 mb-6">
+          <p className="text-sm text-[#8B2B3E] font-medium mb-2">Event Details:</p>
+          <p className="text-gray-700">{event.dates}</p>
+          <p className="text-gray-600 text-sm">{event.location}</p>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Please check your email to confirm your registration.
+        </p>
+        <p className="text-gray-600 mb-6">
+          We will contact you with further details closer to the event.
+        </p>
+        <Button onClick={onClose} className="bg-[#8B2B3E] hover:bg-[#6B1F2E] px-8">
+          Done
         </Button>
       </div>
     )
