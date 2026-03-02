@@ -1,10 +1,9 @@
-import { createClient } from "@supabase/supabase-js"
+import { createAdminClient } from "@/lib/supabase/server"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
-// Create admin client for server-side operations
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+// Create admin client for server-side operations - called lazily to ensure env vars are loaded
+function getSupabaseAdmin() {
+  return createAdminClient()
+}
 
 export type ContactSource = "newsletter" | "event_registration" | "volunteer" | "partnership"
 
@@ -34,7 +33,7 @@ export async function createContact(params: CreateContactParams) {
   } = params
 
   // Check if contact already exists
-  const { data: existingContact } = await supabaseAdmin
+  const { data: existingContact } = await getSupabaseAdmin()
     .from("contacts")
     .select("id, email_confirmed")
     .eq("email", email.toLowerCase())
@@ -46,7 +45,7 @@ export async function createContact(params: CreateContactParams) {
   if (existingContact) {
     contactId = existingContact.id
     // Update source details if registering for new event
-    await supabaseAdmin
+    await getSupabaseAdmin()
       .from("contacts")
       .update({
         source_details: sourceDetails,
@@ -55,7 +54,7 @@ export async function createContact(params: CreateContactParams) {
       .eq("id", contactId)
   } else {
     // Create new contact
-    const { data: newContact, error } = await supabaseAdmin
+    const { data: newContact, error } = await getSupabaseAdmin()
       .from("contacts")
       .insert({
         first_name: firstName,
@@ -75,7 +74,7 @@ export async function createContact(params: CreateContactParams) {
 
   // Add spouse if provided
   if (spouseFirstName) {
-    await supabaseAdmin.from("contact_spouses").insert({
+    await getSupabaseAdmin().from("contact_spouses").insert({
       contact_id: contactId,
       first_name: spouseFirstName,
       email: spouseEmail?.toLowerCase(),
@@ -84,7 +83,7 @@ export async function createContact(params: CreateContactParams) {
   }
 
   // Get the contact with confirmation token
-  const { data: contact } = await supabaseAdmin
+  const { data: contact } = await getSupabaseAdmin()
     .from("contacts")
     .select("*")
     .eq("id", contactId)
@@ -222,7 +221,7 @@ function generateWelcomeEmailHTML(firstName: string, confirmationUrl: string, so
 }
 
 export async function sendWelcomeEmail(contactId: string) {
-  const { data: contact } = await supabaseAdmin
+  const { data: contact } = await getSupabaseAdmin()
     .from("contacts")
     .select("*")
     .eq("id", contactId)
@@ -257,7 +256,7 @@ export async function sendWelcomeEmail(contactId: string) {
   )
 
   // Update contact as welcome email sent
-  await supabaseAdmin
+  await getSupabaseAdmin()
     .from("contacts")
     .update({
       welcome_email_sent: true,
@@ -267,7 +266,7 @@ export async function sendWelcomeEmail(contactId: string) {
     .eq("id", contactId)
 
   // Log the email
-  await supabaseAdmin.from("email_logs").insert({
+  await getSupabaseAdmin().from("email_logs").insert({
     contact_id: contactId,
     email_type: "welcome",
     subject,
@@ -278,7 +277,7 @@ export async function sendWelcomeEmail(contactId: string) {
 }
 
 export async function confirmEmail(token: string) {
-  const { data: contact, error } = await supabaseAdmin
+  const { data: contact, error } = await getSupabaseAdmin()
     .from("contacts")
     .update({
       email_confirmed: true,
@@ -296,7 +295,7 @@ export async function confirmEmail(token: string) {
 }
 
 export async function getContactByToken(token: string) {
-  const { data: contact } = await supabaseAdmin
+  const { data: contact } = await getSupabaseAdmin()
     .from("contacts")
     .select("*")
     .eq("confirmation_token", token)
