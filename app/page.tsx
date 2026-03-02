@@ -85,7 +85,7 @@ export default function HomePage() {
               fathers, husbands, and leaders.
             </p>
 
-            <div className="mb-12 bg-white rounded-3xl p-8 lg:p-12 border-4 border-[#8B2B3E] shadow-2xl">
+            <div className="mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#8B2B3E] mb-8 tracking-tight">PURPOSE</h2>
               <div className="max-w-4xl mx-auto space-y-6">
                 <p className="text-base lg:text-lg text-black leading-relaxed text-balance font-medium">
