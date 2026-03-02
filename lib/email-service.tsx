@@ -96,7 +96,7 @@ export async function createContact(params: CreateContactParams) {
 // SMTP.com API Configuration
 const SMTP_API_KEY = process.env.SMTP_COM_API_KEY
 const SMTP_API_URL = "https://api.smtp.com/v4/messages"
-const FROM_EMAIL = "noreply@fatherhoodfoundation.org"
+const FROM_EMAIL = "noreply@thefathersfoundations.org"
 const FROM_NAME = "The Fatherhood Foundation"
 
 async function sendEmailViaSMTP(
@@ -230,7 +230,7 @@ export async function sendWelcomeEmail(contactId: string) {
 
   if (!contact) throw new Error("Contact not found")
 
-  const confirmationUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://fatherhoodfoundation.org"}/confirm-email?token=${contact.confirmation_token}`
+  const confirmationUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://thefathersfoundations.org"}/confirm-email?token=${contact.confirmation_token}`
   
   const subject = contact.source === "event_registration"
     ? `Welcome! Please Confirm Your Registration for ${contact.source_details || "our event"}`
