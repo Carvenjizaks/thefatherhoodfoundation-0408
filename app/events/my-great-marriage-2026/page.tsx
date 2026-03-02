@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import Image from "next/image"
 import { createClient } from "@/lib/supabase-client"
 
@@ -23,10 +22,9 @@ type RegistrationFormData = {
   lastName: string
   email: string
   cellphone: string
-  includeSpouse: boolean
-  spouseName?: string
-  spouseEmail?: string
-  spouseCellphone?: string
+  spouseName: string
+  spouseEmail: string
+  spouseCellphone: string
 }
 
 const carouselImages = [
@@ -67,12 +65,11 @@ export default function MyGreatMarriageEventPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
     lastName: "",
     email: "",
     cellphone: "",
-    includeSpouse: false,
     spouseName: "",
     spouseEmail: "",
     spouseCellphone: "",
@@ -112,13 +109,19 @@ export default function MyGreatMarriageEventPage() {
       newErrors.cellphone = "Invalid phone number"
     }
 
-    if (formData.includeSpouse) {
-      if (formData.spouseEmail && !validateEmail(formData.spouseEmail)) {
-        newErrors.spouseEmail = "Invalid email address"
-      }
-      if (formData.spouseCellphone && !validatePhone(formData.spouseCellphone)) {
-        newErrors.spouseCellphone = "Invalid phone number"
-      }
+    // Spouse validation (required for marriage conference)
+    if (!formData.spouseName?.trim()) {
+      newErrors.spouseName = "Spouse name is required"
+    }
+    if (!formData.spouseEmail?.trim()) {
+      newErrors.spouseEmail = "Spouse email is required"
+    } else if (!validateEmail(formData.spouseEmail)) {
+      newErrors.spouseEmail = "Invalid email address"
+    }
+    if (!formData.spouseCellphone?.trim()) {
+      newErrors.spouseCellphone = "Spouse cellphone is required"
+    } else if (!validatePhone(formData.spouseCellphone)) {
+      newErrors.spouseCellphone = "Invalid phone number"
     }
 
     setErrors(newErrors)
@@ -141,9 +144,9 @@ export default function MyGreatMarriageEventPage() {
         last_name: formData.lastName,
         email: formData.email,
         cellphone: formData.cellphone,
-        spouse_name: formData.includeSpouse ? formData.spouseName || null : null,
-        spouse_email: formData.includeSpouse ? formData.spouseEmail || null : null,
-        spouse_cellphone: formData.includeSpouse ? formData.spouseCellphone || null : null,
+        spouse_name: formData.spouseName,
+        spouse_email: formData.spouseEmail,
+        spouse_cellphone: formData.spouseCellphone,
       }
 
       const { error } = await supabase.from("marriage_registrations").insert([registrationData])
@@ -158,7 +161,6 @@ export default function MyGreatMarriageEventPage() {
         lastName: "",
         email: "",
         cellphone: "",
-        includeSpouse: false,
         spouseName: "",
         spouseEmail: "",
         spouseCellphone: "",
@@ -312,61 +314,54 @@ export default function MyGreatMarriageEventPage() {
                     </div>
                   </div>
 
-                  {/* Include Spouse/Partner Checkbox */}
-                  <div className="flex items-center space-x-2 py-4 border-t">
-                    <Checkbox
-                      id="includeSpouse"
-                      checked={formData.includeSpouse}
-                      onCheckedChange={(checked) => handleInputChange("includeSpouse", checked as boolean)}
-                    />
-                    <Label htmlFor="includeSpouse" className="cursor-pointer">
-                      Register with spouse/partner
-                    </Label>
-                  </div>
+                  {/* Spouse/Partner Details */}
+                  <div className="space-y-4 p-4 bg-gray-50 rounded-lg border border-[#8B2B3E]/20">
+                    <h3 className="text-lg font-semibold text-primary">Spouse/Partner Details</h3>
 
-                  {/* Spouse/Partner Details (Conditional) */}
-                  {formData.includeSpouse && (
-                    <div className="space-y-4 p-4 bg-gray-50 rounded-lg border">
-                      <h3 className="text-lg font-semibold text-primary">Spouse/Partner Details (Optional)</h3>
-
-                      <div>
-                        <Label htmlFor="spouseName">Name of Spouse/Partner</Label>
-                        <Input
-                          id="spouseName"
-                          value={formData.spouseName}
-                          onChange={(e) => handleInputChange("spouseName", e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="spouseEmail">Email of Spouse/Partner</Label>
-                        <Input
-                          id="spouseEmail"
-                          type="email"
-                          value={formData.spouseEmail}
-                          onChange={(e) => handleInputChange("spouseEmail", e.target.value)}
-                          className="mt-1"
-                        />
-                        {errors.spouseEmail && <p className="text-sm text-red-500 mt-1">{errors.spouseEmail}</p>}
-                      </div>
-
-                      <div>
-                        <Label htmlFor="spouseCellphone">Cellphone of Spouse/Partner</Label>
-                        <Input
-                          id="spouseCellphone"
-                          type="tel"
-                          value={formData.spouseCellphone}
-                          onChange={(e) => handleInputChange("spouseCellphone", e.target.value)}
-                          placeholder="+264 81 234 5678"
-                          className="mt-1"
-                        />
-                        {errors.spouseCellphone && (
-                          <p className="text-sm text-red-500 mt-1">{errors.spouseCellphone}</p>
-                        )}
-                      </div>
+                    <div>
+                      <Label htmlFor="spouseName">
+                        Name <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="spouseName"
+                        value={formData.spouseName}
+                        onChange={(e) => handleInputChange("spouseName", e.target.value)}
+                        className="mt-1"
+                      />
+                      {errors.spouseName && <p className="text-sm text-red-500 mt-1">{errors.spouseName}</p>}
                     </div>
-                  )}
+
+                    <div>
+                      <Label htmlFor="spouseEmail">
+                        Email <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="spouseEmail"
+                        type="email"
+                        value={formData.spouseEmail}
+                        onChange={(e) => handleInputChange("spouseEmail", e.target.value)}
+                        className="mt-1"
+                      />
+                      {errors.spouseEmail && <p className="text-sm text-red-500 mt-1">{errors.spouseEmail}</p>}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="spouseCellphone">
+                        Cellphone <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="spouseCellphone"
+                        type="tel"
+                        value={formData.spouseCellphone}
+                        onChange={(e) => handleInputChange("spouseCellphone", e.target.value)}
+                        placeholder="+264 81 234 5678"
+                        className="mt-1"
+                      />
+                      {errors.spouseCellphone && (
+                        <p className="text-sm text-red-500 mt-1">{errors.spouseCellphone}</p>
+                      )}
+                    </div>
+                  </div>
 
                   {/* Error Message */}
                   {submitError && (
