@@ -1,39 +1,7 @@
 "use client"
 
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
-
-const UserIcon = () => (
-  <svg className="w-12 h-12 text-[#8B2B3E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-    />
-  </svg>
-)
-
-const HeartIcon = () => (
-  <svg className="w-12 h-12 text-[#8B2B3E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-    />
-  </svg>
-)
-
-const TargetIcon = () => (
-  <svg className="w-12 h-12 text-[#8B2B3E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-    />
-  </svg>
-)
 
 export function JourneySection() {
   return (
@@ -58,9 +26,14 @@ export function JourneySection() {
             <div className="flex flex-col items-center">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-[#8B2B3E]/20 rounded-full blur-xl" />
-                <Card className="relative w-24 h-24 flex items-center justify-center border-4 border-[#8B2B3E] bg-white shadow-lg">
-                  <UserIcon />
-                </Card>
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-[#8B2B3E] shadow-lg">
+                  <Image
+                    src="/images/step-identity.jpg"
+                    alt="Identity - Self discovery"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <div className="bg-[#8B2B3E]/10 text-[#8B2B3E] text-sm font-bold px-4 py-1 rounded-full mb-4">STEP 1</div>
               <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4">Identity</h3>
@@ -79,9 +52,14 @@ export function JourneySection() {
             <div className="flex flex-col items-center">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-[#8B2B3E]/20 rounded-full blur-xl" />
-                <Card className="relative w-24 h-24 flex items-center justify-center border-4 border-[#8B2B3E] bg-white shadow-lg">
-                  <HeartIcon />
-                </Card>
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-[#8B2B3E] shadow-lg">
+                  <Image
+                    src="/images/step-affirmation.jpg"
+                    alt="Affirmation - Father-son connection"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <div className="bg-[#8B2B3E]/10 text-[#8B2B3E] text-sm font-bold px-4 py-1 rounded-full mb-4">STEP 2</div>
               <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4">Affirmation</h3>
@@ -100,9 +78,14 @@ export function JourneySection() {
             <div className="flex flex-col items-center">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-[#8B2B3E]/20 rounded-full blur-xl" />
-                <Card className="relative w-24 h-24 flex items-center justify-center border-4 border-[#8B2B3E] bg-white shadow-lg">
-                  <TargetIcon />
-                </Card>
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-[#8B2B3E] shadow-lg">
+                  <Image
+                    src="/images/step-purpose.jpg"
+                    alt="Purpose - Destiny and calling"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <div className="bg-[#8B2B3E]/10 text-[#8B2B3E] text-sm font-bold px-4 py-1 rounded-full mb-4">STEP 3</div>
               <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4">Purpose</h3>

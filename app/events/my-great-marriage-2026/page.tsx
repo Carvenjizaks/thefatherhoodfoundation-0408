@@ -188,27 +188,34 @@ export default function MyGreatMarriageEventPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Event Hero Section */}
-      <section className="relative py-20 px-4 md:py-32">
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Main Event Image */}
-          <div className="mb-12">
-            <Image
-              src="/images/api-attachments-7vtuf3vkpuoemo76nmttu.jpg"
-              alt="MyGreatMarriage Conference 2026"
-              width={1200}
-              height={600}
-              className="w-full max-w-4xl mx-auto object-contain"
-              priority
-            />
-          </div>
-
-          {/* Event Details */}
+      {/* Event Hero Section - Full Width Banner */}
+      <section className="relative">
+        {/* Full-width banner image */}
+        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] relative">
+          <Image
+            src="/images/mygreatmarriage-banner.jpg"
+            alt="MyGreatMarriage Conference 2026 - 11 June & 12 June 2026"
+            fill
+            className="object-contain bg-white"
+            priority
+          />
+        </div>
+        
+        <div className="max-w-6xl mx-auto text-center px-4 py-12">
+          {/* Event Dates */}
           <div className="mb-8">
-            <p className="text-xl md:text-2xl text-gray-700 mb-4">Thursday Night 6pm - 8:30pm</p>
-            <p className="text-xl md:text-2xl text-gray-700 mb-4">Friday 6:30pm - 9pm</p>
-            <p className="text-xl md:text-2xl text-gray-700 mb-4">Saturday 8:30am - 1pm</p>
-            <p className="text-lg md:text-xl text-gray-600 italic">Venue: To be Announced</p>
+            <div className="inline-block bg-[#8B2B3E] text-white px-6 py-3 rounded-full mb-6">
+              <p className="text-lg md:text-xl font-semibold">Main Event: 1 May 2026</p>
+            </div>
+            <div className="inline-block bg-[#8B2B3E]/80 text-white px-6 py-3 rounded-full mb-6 ml-4">
+              <p className="text-lg md:text-xl font-semibold">Follow-Up: 2 September 2026</p>
+            </div>
+            <div className="mt-6">
+              <p className="text-xl md:text-2xl text-gray-700 mb-2">Thursday Night 6pm - 8:30pm</p>
+              <p className="text-xl md:text-2xl text-gray-700 mb-2">Friday 6:30pm - 9pm</p>
+              <p className="text-xl md:text-2xl text-gray-700 mb-2">Saturday 8:30am - 1pm</p>
+              <p className="text-lg md:text-xl text-gray-600 italic mt-4">Venue: To be Announced</p>
+            </div>
           </div>
 
           {/* CTA Button */}
@@ -225,7 +232,7 @@ export default function MyGreatMarriageEventPage() {
               <DialogHeader>
                 <DialogTitle className="text-2xl text-primary">MyGreatMarriage Conference Registration</DialogTitle>
                 <DialogDescription>
-                  Register for the conference on June 11-13, 2026. All fields marked with * are required.
+                  Register for the conference on 1 May 2026 (with follow-up on 2 September 2026). All fields marked with * are required.
                 </DialogDescription>
               </DialogHeader>
 

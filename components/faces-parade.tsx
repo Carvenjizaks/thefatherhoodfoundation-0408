@@ -82,10 +82,12 @@ export function FacesParade({ images, scrollSpeed = 50, enlargedIndices = [] }: 
             <div key={`${imageUrl}-${index}`} className="flex-shrink-0 mr-4">
               {imageErrors.has(imageUrl) ? (
                 <div
-                  className="rounded-full bg-gray-200 flex items-center justify-center"
+                  className="rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center"
                   style={{ width: `${size}px`, height: `${size}px` }}
                 >
-                  <span className="text-xs text-gray-500">N/A</span>
+                  <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
                 </div>
               ) : (
                 <Image
