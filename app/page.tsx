@@ -82,7 +82,7 @@ export default function HomePage() {
               alt="The Fatherhood Foundation"
               width={120}
               height={120}
-              className="mx-auto mb-8"
+              className="mx-auto mb-8 rounded-full"
             />
 
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-black mb-6 text-balance leading-tight">
