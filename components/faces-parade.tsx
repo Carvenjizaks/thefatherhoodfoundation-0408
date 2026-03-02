@@ -95,7 +95,7 @@ export function FacesParade({ images, scrollSpeed = 50, enlargedIndices = [] }: 
                   alt={`Portrait of a man ${Math.floor(index / 2) + 1}`}
                   width={size}
                   height={size}
-                  className="rounded-full object-cover border-2 border-gray-200"
+                  className="rounded-full object-cover border-3 border-white/80 shadow-lg"
                   style={{ width: `${size}px`, height: `${size}px` }}
                   onError={() => handleImageError(imageUrl)}
                 />
