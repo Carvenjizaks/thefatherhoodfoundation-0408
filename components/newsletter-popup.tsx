@@ -8,10 +8,11 @@ import { Label } from "@/components/ui/label"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { createClient } from "@/lib/supabase-client"
+
 
 export function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false)
@@ -111,6 +112,9 @@ export function NewsletterPopup() {
         {showWelcome ? (
           // Welcome Screen
           <div className="text-center py-6">
+            <DialogDescription className="sr-only">
+              Thank you for subscribing to our newsletter
+            </DialogDescription>
             <div className="w-20 h-20 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Image
                 src="/images/logo.png"
@@ -157,9 +161,9 @@ export function NewsletterPopup() {
               <DialogTitle className="text-center text-2xl text-[#8B2B3E]">
                 Stay Connected
               </DialogTitle>
-              <p className="text-center text-gray-600 mt-2">
+              <DialogDescription className="text-center text-gray-600 mt-2">
                 Subscribe to receive updates on events, programs, and inspiring stories from The Fatherhood Foundation.
-              </p>
+              </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">

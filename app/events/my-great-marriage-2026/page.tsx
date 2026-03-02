@@ -15,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase-client"
 
 type RegistrationFormData = {
   firstName: string
@@ -137,22 +136,26 @@ export default function MyGreatMarriageEventPage() {
     setSubmitError(null)
 
     try {
-      const supabase = createClient()
+      // Use unified contacts API
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.cellphone,
+          source: "event_registration",
+          sourceDetails: "MyGreatMarriage Conference 2026",
+          spouseFirstName: formData.spouseName,
+          spouseEmail: formData.spouseEmail,
+          spouseCellphone: formData.spouseCellphone,
+        }),
+      })
 
-      const registrationData = {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        cellphone: formData.cellphone,
-        spouse_name: formData.spouseName,
-        spouse_email: formData.spouseEmail,
-        spouse_cellphone: formData.spouseCellphone,
-      }
-
-      const { error } = await supabase.from("marriage_registrations").insert([registrationData])
-
-      if (error) {
-        throw new Error(error.message)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Registration failed")
       }
 
       setSubmitSuccess(true)
