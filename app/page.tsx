@@ -52,12 +52,21 @@ export default function HomePage() {
     "/faces/young-namibia.jpg",
   ]
 
+  // Real photos needed - diverse men from Namibia, South Africa, USA
+  // Mix of: white men, coloured men, black men, baster men from Rehoboth, coloured men from Cape Town
   const portraitFaces = [
-    "/portraits/portrait-professional-1.jpg", // Professional man in suit - REPLACED & ENLARGED
-    "/portraits/portrait-2.jpg",
-    "/portraits/portrait-professional-2.jpg", // Professional man with glasses - REPLACED & ENLARGED
-    "/portraits/portrait-4.jpg",
-    "/portraits/portrait-5.jpg",
+    "/portraits/man-namibia-black-1.jpg",
+    "/portraits/man-sa-coloured-capetown-1.jpg",
+    "/portraits/man-usa-white-1.jpg",
+    "/portraits/man-namibia-baster-rehoboth-1.jpg",
+    "/portraits/man-sa-black-1.jpg",
+    "/portraits/man-usa-black-1.jpg",
+    "/portraits/man-namibia-white-1.jpg",
+    "/portraits/man-sa-coloured-capetown-2.jpg",
+    "/portraits/man-usa-coloured-1.jpg",
+    "/portraits/man-namibia-baster-rehoboth-2.jpg",
+    "/portraits/man-sa-white-1.jpg",
+    "/portraits/man-namibia-black-2.jpg",
   ]
 
   return (
@@ -138,7 +147,7 @@ export default function HomePage() {
             <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
             <p className="text-center text-gray-300 text-balance">Real men, real stories, real transformation</p>
           </div>
-          <FacesParade images={portraitFaces} scrollSpeed={40} enlargedIndices={[0, 2]} />
+          <FacesParade images={portraitFaces} scrollSpeed={40} />
         </section>
 
         {/* Journey to Authentic Manhood */}
