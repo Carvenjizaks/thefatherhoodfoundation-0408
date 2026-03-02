@@ -1,34 +1,45 @@
-import React from "react"
-import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from 'sonner'
-import './globals.css'
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
 
-const _plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
-const _inter = Inter({ subsets: ["latin"] });
+// Updated font to Inter for Apple-like aesthetic
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
-  title: 'Powerhouse Community #WeCare',
-  description: 'Community management platform for churches and organizations - #WeCare',
-  generator: 'v0.app',
+  title: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
+  description:
+    "The Fatherhood Foundation provides resources, mentorship, and community support to help men become better fathers, husbands, and leaders.",
+  keywords: ["fatherhood", "parenting", "marriage", "mentoring", "community development", "family"],
+  openGraph: {
+    title: "The Fatherhood Foundation",
+    description:
+      "Empowering men to become better fathers, husbands, and leaders through mentorship and community support.",
+    type: "website",
+    images: ["/og-image.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Fatherhood Foundation",
+    description: "Empowering men to become better fathers, husbands, and leaders.",
+  },
+  generator: "v0.app",
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/icon.svg",
+        type: "image/svg+xml",
       },
     ],
-    apple: '/apple-icon.png',
+    apple: "/apple-icon.png",
   },
 }
 
@@ -38,19 +49,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster richColors position="top-right" />
-        </ThemeProvider>
-        <Analytics />
-      </body>
+    <html lang="en">
+      <body className={`${inter.className} font-sans antialiased`}>{children}</body>
     </html>
   )
 }
