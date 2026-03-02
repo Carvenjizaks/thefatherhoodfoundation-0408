@@ -14,7 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { createClient } from "@/lib/supabase-client"
 
 // Event configuration with open/closed status
 const events = [
@@ -142,22 +141,24 @@ function EventRegistrationForm({
     setSubmitError(null)
 
     try {
-      const supabase = createClient()
-      
-      const registrationData = {
-        event_id: event.id,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
-        cellphone: formData.cellphone,
-        spouse_name: event.requiresSpouse ? formData.spouseName : null,
-        spouse_email: event.requiresSpouse ? formData.spouseEmail : null,
-        spouse_cellphone: event.requiresSpouse ? formData.spouseCellphone : null,
-      }
+      // Use unified contacts API
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.cellphone,
+          source: "event_registration",
+          sourceDetails: event.title,
+          spouseFirstName: event.requiresSpouse ? formData.spouseName : undefined,
+          spouseEmail: event.requiresSpouse ? formData.spouseEmail : undefined,
+          spouseCellphone: event.requiresSpouse ? formData.spouseCellphone : undefined,
+        }),
+      })
 
-      const { error } = await supabase.from("event_registrations").insert(registrationData)
-
-      if (error) throw error
+      if (!response.ok) throw new Error("Registration failed")
 
       setSubmitSuccess(true)
       setFormData({
@@ -199,8 +200,11 @@ function EventRegistrationForm({
           <p className="text-gray-700">{event.dates}</p>
           <p className="text-gray-600 text-sm">{event.location}</p>
         </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Please check your email to confirm your registration.
+        </p>
         <p className="text-gray-600 mb-6">
-          We will contact you with further details closer to the event. We look forward to seeing you there!
+          We will contact you with further details closer to the event.
         </p>
         <Button onClick={onClose} className="bg-[#8B2B3E] hover:bg-[#6B1F2E] px-8">
           Done

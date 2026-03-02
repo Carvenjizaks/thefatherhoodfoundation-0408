@@ -69,20 +69,25 @@ export function NewsletterPopup() {
     setIsSubmitting(true)
 
     try {
-      const supabase = createClient()
-      
-      const { error } = await supabase.from("newsletter_subscribers").insert({
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        email: formData.email,
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          source: "newsletter",
+          sourceDetails: "Website popup subscription",
+        }),
       })
 
-      if (error) throw error
+      if (!response.ok) throw new Error("Failed to subscribe")
 
       localStorage.setItem("newsletter_subscribed", "true")
       setShowWelcome(true)
     } catch (err) {
-      // Still show welcome even if DB fails (for demo purposes)
+      console.error("[v0] Subscription error:", err)
+      // Still show welcome even if API fails
       localStorage.setItem("newsletter_subscribed", "true")
       setShowWelcome(true)
     } finally {
@@ -118,8 +123,11 @@ export function NewsletterPopup() {
             <h2 className="text-2xl font-bold text-[#8B2B3E] mb-3">
               Welcome to the Family!
             </h2>
-            <p className="text-gray-600 mb-6">
-              Thank you for subscribing, {formData.firstName}! You are now part of The Fatherhood Foundation community. We will keep you updated on our events, programs, and inspiring stories.
+            <p className="text-gray-600 mb-4">
+              Thank you for subscribing, {formData.firstName}! You are now part of The Fatherhood Foundation community.
+            </p>
+            <p className="text-sm text-gray-500 mb-4">
+              Please check your email to confirm your subscription.
             </p>
             <div className="bg-[#8B2B3E]/5 rounded-lg p-4 mb-6">
               <p className="text-sm text-[#8B2B3E] font-medium">
