@@ -112,9 +112,12 @@ export function NewsletterPopup() {
         {showWelcome ? (
           // Welcome Screen
           <div className="text-center py-6">
-            <DialogDescription className="sr-only">
-              Thank you for subscribing to our newsletter
-            </DialogDescription>
+            <DialogHeader className="sr-only">
+              <DialogTitle>Welcome to the Family</DialogTitle>
+              <DialogDescription>
+                Thank you for subscribing to our newsletter
+              </DialogDescription>
+            </DialogHeader>
             <div className="w-20 h-20 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Image
                 src="/images/logo.png"
