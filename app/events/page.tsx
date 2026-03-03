@@ -339,6 +339,7 @@ function EventCard({ event }: { event: typeof events[0] }) {
           src={event.banner}
           alt={event.title}
           fill
+          priority
           className="object-cover"
         />
         {/* Registration Status Badge */}
