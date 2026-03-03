@@ -25,7 +25,7 @@ const events = [
     schedule: "Thursday Night: 6:00pm - 8:30pm | Friday: 6:30pm - 9:00pm | Saturday: 8:30am - 1:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/mgm-couples-banner.jpg",
-    registrationOpen: true,
+    registrationOpen: false,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
   },
@@ -37,7 +37,7 @@ const events = [
     schedule: "Friday: 6:00pm - 9:00pm | Saturday: 8:00am - 5:00pm | Sunday: 8:00am - 1:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/goc26-banner.jpg",
-    registrationOpen: true,
+    registrationOpen: false,
     requiresSpouse: false,
     description: "The annual gathering for men seeking to become champions in their families and communities.",
   },
@@ -344,15 +344,9 @@ function EventCard({ event }: { event: typeof events[0] }) {
         />
         {/* Registration Status Badge */}
         <div className="absolute top-4 right-4">
-          {event.registrationOpen ? (
-            <Badge className="bg-green-600 text-white px-3 py-1 text-sm">
-              Open for Registration
-            </Badge>
-          ) : (
-            <Badge className="bg-gray-500 text-white px-3 py-1 text-sm">
-              Registration Closed
-            </Badge>
-          )}
+          <Badge className="bg-[#8B2B3E] text-white px-3 py-1 text-sm">
+            Registration Opening Soon
+          </Badge>
         </div>
       </div>
 
@@ -386,33 +380,12 @@ function EventCard({ event }: { event: typeof events[0] }) {
         <p className="text-gray-600 mb-6">{event.description}</p>
 
         {/* Registration Button */}
-        {event.registrationOpen ? (
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full bg-[#8B2B3E] hover:bg-[#6B1F2E] text-white py-3 text-lg">
-                Register Now
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-2xl text-[#8B2B3E]">
-                  Register for {event.title}
-                </DialogTitle>
-                <DialogDescription>
-                  {event.dates} | {event.location}
-                </DialogDescription>
-              </DialogHeader>
-              <EventRegistrationForm event={event} onClose={() => setDialogOpen(false)} />
-            </DialogContent>
-          </Dialog>
-        ) : (
-          <Button 
-            disabled 
-            className="w-full bg-gray-300 text-gray-500 py-3 text-lg cursor-not-allowed"
-          >
-            Registration Closed
-          </Button>
-        )}
+        <Button
+          disabled
+          className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed"
+        >
+          Registration Opening Soon
+        </Button>
       </div>
     </div>
   )
