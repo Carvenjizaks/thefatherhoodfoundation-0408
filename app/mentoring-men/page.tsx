@@ -8,7 +8,7 @@ import { ArrowRight, Users, Target, Award, MessageCircle } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "MentoringMen | The Fatherhood Foundation",
+  title: "Monthly Table Talk for Men | The Fatherhood Foundation",
   description:
     "Connect with experienced mentors who provide guidance, accountability, and wisdom for your journey as a man and leader.",
 }
@@ -33,7 +33,7 @@ export default function MentoringMenPage() {
 
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
-              MentoringMen
+Monthly Table Talk for Men
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
               Every man needs guidance from those who have walked the path before. Our mentorship program connects you
@@ -51,7 +51,7 @@ export default function MentoringMenPage() {
                   Wisdom Passed Down, Lives Transformed
                 </h2>
                 <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  The MentoringMen program pairs you with a seasoned mentor who understands the challenges you face.
+                  The Monthly Table Talk for Men program pairs you with a seasoned mentor who understands the challenges you face.
                   Through regular meetings, honest conversations, and practical guidance, you'll develop the character
                   and skills needed to lead your family and community well.
                 </p>

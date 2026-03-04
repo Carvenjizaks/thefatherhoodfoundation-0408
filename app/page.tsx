@@ -188,7 +188,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">MentoringMen</h3>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Monthly Table Talk for Men</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Connect with experienced mentors who provide guidance, accountability, and wisdom for your journey
                     as a man and leader.

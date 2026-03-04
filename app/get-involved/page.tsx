@@ -191,7 +191,7 @@ export default function GetInvolvedPage() {
                           <SelectValue placeholder="Select an area" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="mentoring">MentoringMen</SelectItem>
+                          <SelectItem value="mentoring">Monthly Table Talk for Men</SelectItem>
                           <SelectItem value="parenting">ActiveParenting</SelectItem>
                           <SelectItem value="marriage">MyGreatMarriage</SelectItem>
                           <SelectItem value="community">Community Development</SelectItem>

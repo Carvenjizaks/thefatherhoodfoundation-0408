@@ -64,7 +64,7 @@ export function Footer() {
                   href="/mentoring-men"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  MentoringMen
+                  Monthly Table Talk for Men
                 </Link>
               </li>
               <li>
