@@ -93,8 +93,8 @@ export default function GetInvolvedPage() {
         <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/men-shaking-hands--partnership--community.jpg"
-              alt="Get involved"
+              src="/images/get-involved-hero.jpg"
+              alt="Men working together in community partnership"
               fill
               className="object-cover opacity-20"
               priority
