@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 
 // Ensure URL has https:// protocol
 function getSupabaseUrl(): string {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  // Try SUPABASE_URL first (usually has correct format), then NEXT_PUBLIC_SUPABASE_URL
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || ''
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
