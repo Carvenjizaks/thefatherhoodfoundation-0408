@@ -307,7 +307,7 @@ export default function GetInvolvedPage() {
         <section className="py-20 lg:py-32">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
                 Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
                 and shared meals. No agenda, no pressure—just authentic fellowship.
