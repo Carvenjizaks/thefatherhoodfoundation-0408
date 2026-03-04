@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Calendar, Download } from "lucide-react"
@@ -22,6 +23,7 @@ export default function GetInvolvedPage() {
     email: "",
     phone: "",
     interest: "",
+    howToInvolve: "",
   })
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -51,6 +53,7 @@ export default function GetInvolvedPage() {
         email: "",
         phone: "",
         interest: "",
+        howToInvolve: "",
       })
       setAgreedToTerms(false)
     }, 5000)
@@ -195,6 +198,18 @@ export default function GetInvolvedPage() {
                           <SelectItem value="all">All Programs</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="howToInvolve">How would you like to get involved?</Label>
+                      <Textarea
+                        id="howToInvolve"
+                        name="howToInvolve"
+                        placeholder="Tell us how you'd like to contribute or participate..."
+                        value={formData.howToInvolve}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, howToInvolve: e.target.value }))}
+                        rows={4}
+                      />
                     </div>
 
                     <div className="space-y-4 pt-4">
