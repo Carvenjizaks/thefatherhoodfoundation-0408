@@ -23,8 +23,8 @@ export default function MentoringMenPage() {
         <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/two-men-having-coffee-and-mentoring-conversation.jpg"
-              alt="Mentoring conversation"
+              src="/images/men-table-talk.jpg"
+              alt="Men gathering around a table sharing stories and connecting"
               fill
               className="object-cover opacity-20"
               priority
