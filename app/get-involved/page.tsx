@@ -306,7 +306,7 @@ export default function GetInvolvedPage() {
                     </div>
 
                     <Button type="submit" size="lg" className="w-full">
-                      Submit Application
+                      SUBMIT
                     </Button>
                   </form>
                 ) : (
