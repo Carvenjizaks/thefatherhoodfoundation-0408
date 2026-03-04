@@ -1,6 +1,6 @@
 "use client"
 
-// v2 - Updated button text and sessions
+// v3 - Cache bust for hydration fix
 import type React from "react"
 
 import { useState } from "react"
@@ -183,12 +183,92 @@ export default function GetInvolvedPage() {
           </div>
         </section>
 
+        {/* Monthly Table Talk */}
+        <section className="py-20 lg:py-32 bg-[#F5F0E8]">
+          <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+                Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
+                and shared meals. No agenda, no pressure—just authentic fellowship.
+              </p>
+              <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
+                <span className="font-semibold">NAD 50</span>
+                <span className="text-white/80">|</span>
+                <span>Includes Drinks & Light Meal</span>
+              </div>
+            </div>
+
+            <Card className="mb-8 border-2 overflow-hidden">
+              <CardHeader className="bg-[#1E3A5F] text-white py-6 px-6">
+                <CardTitle className="text-2xl mb-2">Upcoming Table Talk Sessions</CardTitle>
+                <CardDescription className="text-white/80 text-base">
+                  All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-0">
+                {tableTalkSessions.map((monthGroup, groupIndex) => (
+                  <div key={monthGroup.month}>
+                    <div className="bg-[#8B2B3E] text-white px-6 py-3 font-bold text-lg">
+                      {monthGroup.month}
+                    </div>
+                    <div className="divide-y">
+                      {monthGroup.sessions.map((session, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-start gap-4">
+                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
+                            <div>
+                              <p className="font-bold text-foreground text-lg">{session.date}</p>
+                              <p className="text-muted-foreground">Reserve your seat at the table</p>
+                            </div>
+                          </div>
+                          <Button 
+                            className="bg-[#8B2B3E] hover:bg-[#6d2230]"
+                            onClick={() => setSelectedSession(session.dateValue)}
+                          >
+                            Register Now
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <div className="bg-white rounded-xl p-8 border-2 text-center">
+              <h3 className="text-xl font-bold mb-4">Payment Instructions</h3>
+              <p className="text-muted-foreground mb-4">
+                After registration, you will receive a <strong>Dynamic Code</strong>. Use this code as your payment reference.
+              </p>
+              <p className="text-lg">
+                Send payment to: <strong className="text-[#8B2B3E]">finance@fathersfound.org</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Sign Up Form */}
         <section className="py-20 lg:py-32">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="text-3xl">Sign Up Today</CardTitle>
+            <Card className="border-2 overflow-hidden">
+              {/* Banner Image */}
+              <div className="relative h-48 sm:h-64 w-full">
+                <Image
+                  src="/images/signup-banner.jpg"
+                  alt="Join our community of men"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white">Sign Up Today</h2>
+                </div>
+              </div>
+              <CardHeader className="pt-6">
                 <CardDescription className="text-base">
                   Start your journey with The Fatherhood Foundation. Fill out the form below to connect with us and
                   learn about opportunities that match your interests.
@@ -331,76 +411,6 @@ export default function GetInvolvedPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </section>
-
-        
-
-        {/* Monthly Table Talk */}
-        <section className="py-20 lg:py-32 bg-[#F5F0E8]">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-                Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
-                and shared meals. No agenda, no pressure—just authentic fellowship.
-              </p>
-              <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
-                <span className="font-semibold">NAD 50</span>
-                <span className="text-white/80">|</span>
-                <span>Includes Drinks & Light Meal</span>
-              </div>
-            </div>
-
-            <Card className="mb-8 border-2 overflow-hidden">
-              <CardHeader className="bg-[#1E3A5F] text-white py-6 px-6">
-                <CardTitle className="text-2xl mb-2">Upcoming Table Talk Sessions</CardTitle>
-                <CardDescription className="text-white/80 text-base">
-                  All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-0">
-                {tableTalkSessions.map((monthGroup, groupIndex) => (
-                  <div key={monthGroup.month}>
-                    <div className="bg-[#8B2B3E] text-white px-6 py-3 font-bold text-lg">
-                      {monthGroup.month}
-                    </div>
-                    <div className="divide-y">
-                      {monthGroup.sessions.map((session, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 hover:bg-muted/50 transition-colors"
-                        >
-                          <div className="flex items-start gap-4">
-                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
-                            <div>
-                              <p className="font-bold text-foreground text-lg">{session.date}</p>
-                              <p className="text-muted-foreground">Reserve your seat at the table</p>
-                            </div>
-                          </div>
-                          <Button 
-                            className="bg-[#8B2B3E] hover:bg-[#6d2230]"
-                            onClick={() => setSelectedSession(session.dateValue)}
-                          >
-                            Register Now
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <div className="bg-white rounded-xl p-8 border-2 text-center">
-              <h3 className="text-xl font-bold mb-4">Payment Instructions</h3>
-              <p className="text-muted-foreground mb-4">
-                After registration, you will receive a <strong>Dynamic Code</strong>. Use this code as your payment reference.
-              </p>
-              <p className="text-lg">
-                Send payment to: <strong className="text-[#8B2B3E]">finance@fathersfound.org</strong>
-              </p>
-            </div>
           </div>
         </section>
 

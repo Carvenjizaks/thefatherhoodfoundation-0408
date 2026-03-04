@@ -22,6 +22,11 @@ export async function POST(request: Request) {
       )
     }
 
+    // Log the Supabase URL for debugging
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+    const fixedUrl = supabaseUrl.startsWith('http') ? supabaseUrl : `https://${supabaseUrl}`
+    console.log("[v0] Supabase URL:", fixedUrl)
+
     const supabase = await createClient()
     
     // Generate unique dynamic code
@@ -42,9 +47,14 @@ export async function POST(request: Request) {
       .single()
 
     if (error) {
-      console.error("Registration error:", error)
+      console.error("Registration error:", {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      })
       return NextResponse.json(
-        { error: "Failed to register. Please try again." },
+        { error: `Registration failed: ${error.message}` },
         { status: 500 }
       )
     }
