@@ -351,10 +351,10 @@ export default function GetInvolvedPage() {
               </div>
             </div>
 
-            <Card className="mb-8 border-2">
-              <CardHeader className="bg-[#1E3A5F] text-white rounded-t-lg">
-                <CardTitle className="text-2xl">Upcoming Table Talk Sessions</CardTitle>
-                <CardDescription className="text-white/80">
+            <Card className="mb-8 border-2 overflow-hidden">
+              <CardHeader className="bg-[#1E3A5F] text-white py-6 px-6">
+                <CardTitle className="text-2xl mb-2">Upcoming Table Talk Sessions</CardTitle>
+                <CardDescription className="text-white/80 text-base">
                   All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
                 </CardDescription>
               </CardHeader>
