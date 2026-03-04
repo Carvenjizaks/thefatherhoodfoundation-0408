@@ -254,9 +254,21 @@ export default function GetInvolvedPage() {
         {/* Sign Up Form */}
         <section className="py-20 lg:py-32">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="text-3xl">Sign Up Today</CardTitle>
+            <Card className="border-2 overflow-hidden">
+              {/* Banner Image */}
+              <div className="relative h-48 sm:h-64 w-full">
+                <Image
+                  src="/images/signup-banner.jpg"
+                  alt="Join our community of men"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white">Sign Up Today</h2>
+                </div>
+              </div>
+              <CardHeader className="pt-6">
                 <CardDescription className="text-base">
                   Start your journey with The Fatherhood Foundation. Fill out the form below to connect with us and
                   learn about opportunities that match your interests.
