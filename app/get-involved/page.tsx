@@ -1,6 +1,6 @@
 "use client"
 
-// v2 - Updated button text and sessions
+// v3 - Cache bust for hydration fix
 import type React from "react"
 
 import { useState } from "react"

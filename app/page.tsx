@@ -1,6 +1,6 @@
 "use client"
 
-// v2 - Updated text content
+// v3 - Cache bust for hydration fix
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
