@@ -156,7 +156,7 @@ export default function VolunteerApplicationPage() {
               </div>
 
               <Button type="submit" disabled={!agreedToTerms} className="w-full h-12 text-base font-semibold" size="lg">
-                Submit Application
+                SUBMIT
               </Button>
             </form>
           </CardContent>

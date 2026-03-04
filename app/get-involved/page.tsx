@@ -1,5 +1,6 @@
 "use client"
 
+// v2 - Updated button text and sessions
 import type React from "react"
 
 import { useState } from "react"
@@ -83,29 +84,29 @@ export default function GetInvolvedPage() {
     { 
       month: "MARCH",
       sessions: [
-        { date: "14 March 2026", dateValue: "2026-03-14", description: "Facilitate TALK and appoint Table Leaders" },
-        { date: "28 March 2026", dateValue: "2026-03-28", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "14 March 2026", dateValue: "2026-03-14" },
+        { date: "28 March 2026", dateValue: "2026-03-28" },
       ]
     },
     { 
       month: "APRIL",
       sessions: [
-        { date: "11 April 2026", dateValue: "2026-04-11", description: "Facilitate TALK and appoint Table Leaders" },
-        { date: "25 April 2026", dateValue: "2026-04-25", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "11 April 2026", dateValue: "2026-04-11" },
+        { date: "25 April 2026", dateValue: "2026-04-25" },
       ]
     },
     { 
       month: "MAY",
       sessions: [
-        { date: "9 May 2026", dateValue: "2026-05-09", description: "Facilitate TALK and appoint Table Leaders" },
-        { date: "23 May 2026", dateValue: "2026-05-23", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "9 May 2026", dateValue: "2026-05-09" },
+        { date: "23 May 2026", dateValue: "2026-05-23" },
       ]
     },
     { 
       month: "JUNE",
       sessions: [
-        { date: "6 June 2026", dateValue: "2026-06-06", description: "Facilitate TALK and appoint Table Leaders" },
-        { date: "20 June 2026", dateValue: "2026-06-20", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "6 June 2026", dateValue: "2026-06-06" },
+        { date: "20 June 2026", dateValue: "2026-06-20" },
       ]
     },
   ]
@@ -306,7 +307,7 @@ export default function GetInvolvedPage() {
                     </div>
 
                     <Button type="submit" size="lg" className="w-full">
-                      Submit Application
+                      SUBMIT
                     </Button>
                   </form>
                 ) : (
@@ -351,10 +352,10 @@ export default function GetInvolvedPage() {
               </div>
             </div>
 
-            <Card className="mb-8 border-2">
-              <CardHeader className="bg-[#1E3A5F] text-white rounded-t-lg">
-                <CardTitle className="text-2xl">Upcoming Table Talk Sessions</CardTitle>
-                <CardDescription className="text-white/80">
+            <Card className="mb-8 border-2 overflow-hidden">
+              <CardHeader className="bg-[#1E3A5F] text-white py-6 px-6">
+                <CardTitle className="text-2xl mb-2">Upcoming Table Talk Sessions</CardTitle>
+                <CardDescription className="text-white/80 text-base">
                   All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
                 </CardDescription>
               </CardHeader>
@@ -374,7 +375,7 @@ export default function GetInvolvedPage() {
                             <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
                             <div>
                               <p className="font-bold text-foreground text-lg">{session.date}</p>
-                              <p className="text-muted-foreground">{session.description}</p>
+                              <p className="text-muted-foreground">Reserve your seat at the table</p>
                             </div>
                           </div>
                           <Button 
