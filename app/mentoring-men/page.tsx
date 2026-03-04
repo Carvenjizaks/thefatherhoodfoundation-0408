@@ -1,6 +1,6 @@
 "use client"
 
-// v3 - Cache bust for hydration fix
+// v4 - Force rebuild to fix hydration and Supabase URL
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
