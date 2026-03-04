@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Calendar, Download } from "lucide-react"
@@ -22,6 +23,7 @@ export default function GetInvolvedPage() {
     email: "",
     phone: "",
     interest: "",
+    howToInvolve: "",
   })
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -51,6 +53,7 @@ export default function GetInvolvedPage() {
         email: "",
         phone: "",
         interest: "",
+        howToInvolve: "",
       })
       setAgreedToTerms(false)
     }, 5000)
@@ -197,6 +200,18 @@ export default function GetInvolvedPage() {
                       </Select>
                     </div>
 
+                    <div className="space-y-2">
+                      <Label htmlFor="howToInvolve">How would you like to get involved?</Label>
+                      <Textarea
+                        id="howToInvolve"
+                        name="howToInvolve"
+                        placeholder="Tell us how you'd like to contribute or participate..."
+                        value={formData.howToInvolve}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, howToInvolve: e.target.value }))}
+                        rows={4}
+                      />
+                    </div>
+
                     <div className="space-y-4 pt-4">
                       <div className="flex items-start space-x-3">
                         <Checkbox
@@ -292,7 +307,7 @@ export default function GetInvolvedPage() {
         <section className="py-20 lg:py-32">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
                 Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
                 and shared meals. No agenda, no pressure—just authentic fellowship.
