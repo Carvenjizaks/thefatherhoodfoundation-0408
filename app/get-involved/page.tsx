@@ -370,9 +370,12 @@ export default function GetInvolvedPage() {
                           key={index}
                           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 hover:bg-muted/50 transition-colors"
                         >
-                          <div className="flex items-center gap-4">
-                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0" />
-                            <p className="font-bold text-foreground text-lg">{session.date}</p>
+                          <div className="flex items-start gap-4">
+                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
+                            <div>
+                              <p className="font-bold text-foreground text-lg">{session.date}</p>
+                              <p className="text-muted-foreground">Reserve your seat at the table</p>
+                            </div>
                           </div>
                           <Button 
                             className="bg-[#8B2B3E] hover:bg-[#6d2230]"
