@@ -36,8 +36,7 @@ export default function MentoringMenPage() {
 Monthly Table Talk for Men
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
-              Every man needs guidance from those who have walked the path before. Our mentorship program connects you
-              with experienced men who will walk alongside you in your journey.
+              A gathering space for men to connect, exchange life stories, and grow by learning from those who've walked the path before.
             </p>
           </div>
         </section>
