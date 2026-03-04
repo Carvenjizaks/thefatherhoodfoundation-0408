@@ -62,6 +62,27 @@ export function FacesParade({ images, scrollSpeed = 30 }: FacesParadeProps) {
     }
   }, [mounted, images.length, scrollSpeed])
 
+  if (!mounted) {
+    return (
+      <div className="w-full overflow-hidden bg-transparent py-12">
+        <div className="flex items-center gap-10">
+          {images.map((imageUrl, index) => (
+            <div key={`${imageUrl}-${index}`} className="flex-shrink-0">
+              <div className="relative w-[280px] h-[350px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/90">
+                <Image
+                  src={imageUrl || "/placeholder.svg"}
+                  alt="Portrait of a father"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full overflow-hidden bg-transparent py-12" ref={containerRef}>
       <div
