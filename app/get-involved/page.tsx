@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Calendar, Download } from "lucide-react"
+import { ArrowRight, Calendar } from "lucide-react"
 
 export default function GetInvolvedPage() {
   const [formData, setFormData] = useState({
@@ -58,24 +58,6 @@ export default function GetInvolvedPage() {
       setAgreedToTerms(false)
     }, 5000)
   }
-
-  const books = [
-    {
-      title: "Courage",
-      description: "Winning Life's Toughest Battles - Learn how to face life's challenges with courage and faith.",
-      image: "/images/books/courage.jpg",
-    },
-    {
-      title: "Maximized Manhood",
-      description: "A Guide to Family Survival - Discover biblical principles for leading your family well.",
-      image: "/images/books/maximized-manhood.jpg",
-    },
-    {
-      title: "Sexual Integrity",
-      description: "Building purity and strength in relationships and personal life.",
-      image: "/images/books/sexual-integrity.png",
-    },
-  ]
 
   const tableTalkDates = [
     { date: "January 15, 2025", location: "Community Center - Main Hall", time: "7:00 PM" },
@@ -263,45 +245,7 @@ export default function GetInvolvedPage() {
           </div>
         </section>
 
-        {/* Curriculum for Men */}
-        <section className="py-20 lg:py-32 bg-muted/20">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Curriculum for Men</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-                Access our comprehensive library of resources designed to help you grow as a man, father, and leader.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {books.map((book, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <div className="relative h-80 bg-muted">
-                    <Image
-                      src={book.image || "/placeholder.svg"}
-                      alt={book.title}
-                      fill
-                      className="object-contain p-4"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-3">{book.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{book.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Button asChild size="lg">
-                <Link href="/curriculum">
-                  <Download className="mr-2 h-5 w-5" />
-                  Explore Full Curriculum
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+        
 
         {/* Monthly Table Talk */}
         <section className="py-20 lg:py-32">
