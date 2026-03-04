@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { NewsletterPopup } from "@/components/newsletter-popup"
 
-// Updated font to Inter for Apple-like aesthetic
+// Cache bust v5 - Force complete rebuild
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
