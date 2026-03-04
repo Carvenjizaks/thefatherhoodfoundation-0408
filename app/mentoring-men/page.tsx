@@ -58,18 +58,18 @@ function JourneyStep({
       <div className="relative flex gap-6 lg:gap-8">
         {/* Timeline connector */}
         <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground font-bold text-lg shadow-lg">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#8B2B3E] text-white font-bold text-lg shadow-lg">
             {number}
           </div>
-          <div className="w-0.5 h-full bg-gradient-to-b from-primary to-transparent mt-4" />
+          <div className="w-0.5 h-full bg-[#8B2B3E]/30 mt-4" />
         </div>
 
         {/* Content */}
         <div className="flex-1 pb-16">
           <div className="bg-card border border-border rounded-2xl p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <Icon className="w-6 h-6 text-primary" />
+              <div className="p-3 rounded-xl bg-[#8B2B3E]/10">
+                <Icon className="w-6 h-6 text-[#8B2B3E]" />
               </div>
               <h3 className="text-xl lg:text-2xl font-bold text-foreground">{title}</h3>
             </div>
@@ -141,7 +141,7 @@ export default function MentoringMenPage() {
         </section>
 
         {/* Journey Section */}
-        <section className="py-20 lg:py-32 bg-background">
+        <section className="py-20 lg:py-32 bg-[#F5F0E8]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 text-balance">
@@ -189,24 +189,28 @@ export default function MentoringMenPage() {
         </section>
 
         {/* Values Grid */}
-        <section className="py-20 lg:py-32 bg-muted/30">
+        <section className="py-20 lg:py-32 bg-[#8B2B3E]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-12 text-center">What We Stand For</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
                   title: "Real Talk",
                   description: "No pretenses. No facades. Just authentic conversations about real life.",
-                  gradient: "from-amber-500 to-orange-600",
+                  bgColor: "bg-amber-500",
+                  textColor: "text-black",
                 },
                 {
                   title: "Brotherhood",
                   description: "A community of men who stand together, support each other, and grow as one.",
-                  gradient: "from-blue-500 to-indigo-600",
+                  bgColor: "bg-[#1E3A5F]",
+                  textColor: "text-white",
                 },
                 {
                   title: "Growth",
                   description: "Every gathering is an opportunity to become a better man, father, and leader.",
-                  gradient: "from-emerald-500 to-teal-600",
+                  bgColor: "bg-emerald-600",
+                  textColor: "text-white",
                 },
               ].map((item, index) => {
                 const { ref, isInView } = useInView()
@@ -214,15 +218,14 @@ export default function MentoringMenPage() {
                   <div
                     key={item.title}
                     ref={ref}
-                    className={`group relative overflow-hidden rounded-2xl transition-all duration-700 ${
+                    className={`group relative overflow-hidden rounded-2xl transition-all duration-700 hover:scale-105 ${
                       isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                    }`}
+                    } ${item.bgColor}`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-90`} />
-                    <div className="relative p-8 lg:p-10 text-white min-h-[250px] flex flex-col justify-end">
+                    <div className={`p-8 lg:p-10 min-h-[250px] flex flex-col justify-end ${item.textColor}`}>
                       <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                      <p className="text-white/90 leading-relaxed">{item.description}</p>
+                      <p className="opacity-90 leading-relaxed">{item.description}</p>
                     </div>
                   </div>
                 )
@@ -232,12 +235,7 @@ export default function MentoringMenPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-20 lg:py-32 bg-[#1a1a2e] relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-amber-500 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500 rounded-full blur-3xl" />
-          </div>
-
+        <section className="py-20 lg:py-32 bg-[#1E3A5F] relative overflow-hidden">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Your Seat at the Table is Waiting
