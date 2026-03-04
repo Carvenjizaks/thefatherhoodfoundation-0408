@@ -189,9 +189,9 @@ export default function MentoringMenPage() {
         </section>
 
         {/* Values Grid */}
-        <section className="py-20 lg:py-32 bg-[#8B2B3E]">
+        <section className="py-20 lg:py-32 bg-background">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-12 text-center">What We Stand For</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-12 text-center">What We Stand For</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
