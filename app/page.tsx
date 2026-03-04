@@ -140,7 +140,7 @@ export default function HomePage() {
             <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
             <p className="text-center text-white/80 text-balance">Real men, real stories, real transformation</p>
           </div>
-          <FacesParade images={portraitFaces} scrollSpeed={50} />
+          <FacesParade images={portraitFaces} />
         </section>
 
         {/* Journey to Authentic Manhood */}
