@@ -104,7 +104,7 @@ export default function VolunteerApplicationPage() {
                     <SelectValue placeholder="Select your area of interest" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="mentoring-men">MentoringMen</SelectItem>
+                    <SelectItem value="mentoring-men">Monthly Table Talk for Men</SelectItem>
                     <SelectItem value="active-parenting">ActiveParenting</SelectItem>
                     <SelectItem value="my-great-marriage">MyGreatMarriage</SelectItem>
                     <SelectItem value="community-development">Community Development</SelectItem>

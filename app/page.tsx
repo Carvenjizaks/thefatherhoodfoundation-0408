@@ -52,21 +52,14 @@ export default function HomePage() {
     "/faces/young-namibia.jpg",
   ]
 
-  // Real photos needed - diverse men from Namibia, South Africa, USA
-  // Mix of: white men, coloured men, black men, baster men from Rehoboth, coloured men from Cape Town
+  // Diverse fathers from all backgrounds
   const portraitFaces = [
-    "/portraits/man-namibia-black-1.jpg",
-    "/portraits/man-sa-coloured-capetown-1.jpg",
-    "/portraits/man-usa-white-1.jpg",
-    "/portraits/man-namibia-baster-rehoboth-1.jpg",
-    "/portraits/man-sa-black-1.jpg",
-    "/portraits/man-usa-black-1.jpg",
-    "/portraits/man-namibia-white-1.jpg",
-    "/portraits/man-sa-coloured-capetown-2.jpg",
-    "/portraits/man-usa-coloured-1.jpg",
-    "/portraits/man-namibia-baster-rehoboth-2.jpg",
-    "/portraits/man-sa-white-1.jpg",
-    "/portraits/man-namibia-black-2.jpg",
+    "/gallery/father-black-1.jpg",
+    "/gallery/father-white-1.jpg",
+    "/gallery/father-coloured-1.jpg",
+    "/gallery/father-asian-1.jpg",
+    "/gallery/father-latino-1.jpg",
+    "/gallery/father-black-2.jpg",
   ]
 
   return (
@@ -86,7 +79,7 @@ export default function HomePage() {
             />
 
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-black mb-6 text-balance leading-tight">
-              Empowering Men to Lead, <span className="text-[#8B2B3E]">Love, and Serve</span>
+              Empowering men to Learn, Grow and <span className="text-[#8B2B3E]">Contribute through serving</span>
             </h1>
 
             <p className="text-lg lg:text-xl text-black mb-12 max-w-3xl mx-auto text-balance leading-relaxed font-medium">
@@ -147,7 +140,7 @@ export default function HomePage() {
             <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
             <p className="text-center text-white/80 text-balance">Real men, real stories, real transformation</p>
           </div>
-          <FacesParade images={portraitFaces} scrollSpeed={40} />
+          <FacesParade images={portraitFaces} />
         </section>
 
         {/* Journey to Authentic Manhood */}
@@ -156,7 +149,7 @@ export default function HomePage() {
         <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
             <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-              Empowering Men to Lead, Love, and Serve
+              Empowering men to Learn, Grow and Contribute through serving
             </h2>
             <p className="text-lg lg:text-xl text-black leading-relaxed text-balance font-medium">
               The Fatherhood Foundation provides mentorship, resources, and community support to help men become better
@@ -188,7 +181,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">MentoringMen</h3>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Monthly Table Talk for Men</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Connect with experienced mentors who provide guidance, accountability, and wisdom for your journey
                     as a man and leader.

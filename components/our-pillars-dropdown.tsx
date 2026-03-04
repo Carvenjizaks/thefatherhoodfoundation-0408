@@ -11,7 +11,7 @@ interface PillarLink {
 }
 
 const pillars: PillarLink[] = [
-  { label: "MentoringMen", href: "/mentoring-men" },
+  { label: "Monthly Table Talk for Men", href: "/mentoring-men" },
   { label: "ActiveParenting", href: "/active-parenting" },
   { label: "MyGreatMarriage", href: "/my-great-marriage" },
   { label: "Community Development", href: "/community-development" },

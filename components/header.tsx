@@ -22,12 +22,13 @@ export function Header() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/events", label: "Events" },
+    { href: "/curriculum", label: "Curriculum for Men" },
     { href: "/partnership", label: "Partnership" },
     { href: "/get-involved", label: "Get Involved" },
   ]
 
   const mobilePillarLinks = [
-    { href: "/mentoring-men", label: "MentoringMen" },
+    { href: "/mentoring-men", label: "Monthly Table Talk for Men" },
     { href: "/active-parenting", label: "ActiveParenting" },
     { href: "/my-great-marriage", label: "MyGreatMarriage" },
     { href: "/community-development", label: "Community Development" },
