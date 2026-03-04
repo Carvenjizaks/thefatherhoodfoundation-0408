@@ -12,9 +12,10 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Calendar } from "lucide-react"
+import { ArrowRight, Calendar, CheckCircle, Copy } from "lucide-react"
 
 export default function GetInvolvedPage() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,25 @@ export default function GetInvolvedPage() {
   })
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  
+  // Table Talk Registration
+  const [selectedSession, setSelectedSession] = useState<string | null>(null)
+  const [registrationData, setRegistrationData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  })
+  const [isRegistering, setIsRegistering] = useState(false)
+  const [registrationResult, setRegistrationResult] = useState<{
+    dynamicCode: string
+    sessionDate: string
+    sessionTime: string
+    location: string
+    paymentAmount: string
+    paymentEmail: string
+  } | null>(null)
+  const [copiedCode, setCopiedCode] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -59,12 +79,80 @@ export default function GetInvolvedPage() {
     }, 5000)
   }
 
-  const tableTalkDates = [
-    { date: "January 15, 2025", location: "Community Center - Main Hall", time: "7:00 PM" },
-    { date: "February 12, 2025", location: "Riverside Church - Fellowship Room", time: "7:00 PM" },
-    { date: "March 19, 2025", location: "Downtown Library - Conference Room", time: "7:00 PM" },
-    { date: "April 16, 2025", location: "Community Center - Main Hall", time: "7:00 PM" },
+  const tableTalkSessions = [
+    { 
+      month: "MARCH",
+      sessions: [
+        { date: "14 March 2026", dateValue: "2026-03-14", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "28 March 2026", dateValue: "2026-03-28", description: "Facilitate TALK and appoint Table Leaders" },
+      ]
+    },
+    { 
+      month: "APRIL",
+      sessions: [
+        { date: "11 April 2026", dateValue: "2026-04-11", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "25 April 2026", dateValue: "2026-04-25", description: "Facilitate TALK and appoint Table Leaders" },
+      ]
+    },
+    { 
+      month: "MAY",
+      sessions: [
+        { date: "9 May 2026", dateValue: "2026-05-09", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "23 May 2026", dateValue: "2026-05-23", description: "Facilitate TALK and appoint Table Leaders" },
+      ]
+    },
+    { 
+      month: "JUNE",
+      sessions: [
+        { date: "6 June 2026", dateValue: "2026-06-06", description: "Facilitate TALK and appoint Table Leaders" },
+        { date: "20 June 2026", dateValue: "2026-06-20", description: "Facilitate TALK and appoint Table Leaders" },
+      ]
+    },
   ]
+
+  const handleSessionRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedSession) return
+    
+    setIsRegistering(true)
+    
+    try {
+      const response = await fetch("/api/table-talk/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...registrationData,
+          sessionDate: selectedSession,
+        }),
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        setRegistrationResult(data.registration)
+      } else {
+        alert(data.error || "Registration failed. Please try again.")
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.")
+    } finally {
+      setIsRegistering(false)
+    }
+  }
+
+  const copyDynamicCode = () => {
+    if (registrationResult?.dynamicCode) {
+      navigator.clipboard.writeText(registrationResult.dynamicCode)
+      setCopiedCode(true)
+      setTimeout(() => setCopiedCode(false), 2000)
+    }
+  }
+
+  const closeRegistrationDialog = () => {
+    setSelectedSession(null)
+    setRegistrationData({ firstName: "", lastName: "", email: "", phone: "" })
+    setRegistrationResult(null)
+  }
 
   return (
     <>
@@ -248,7 +336,7 @@ export default function GetInvolvedPage() {
         
 
         {/* Monthly Table Talk */}
-        <section className="py-20 lg:py-32">
+        <section className="py-20 lg:py-32 bg-[#F5F0E8]">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
@@ -256,47 +344,174 @@ export default function GetInvolvedPage() {
                 Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
                 and shared meals. No agenda, no pressure—just authentic fellowship.
               </p>
+              <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
+                <span className="font-semibold">NAD 50</span>
+                <span className="text-white/80">|</span>
+                <span>Includes Drinks & Light Meal</span>
+              </div>
             </div>
 
-            <Card className="mb-8">
-              <CardHeader>
+            <Card className="mb-8 border-2">
+              <CardHeader className="bg-[#1E3A5F] text-white rounded-t-lg">
                 <CardTitle className="text-2xl">Upcoming Table Talk Sessions</CardTitle>
-                <CardDescription>Mark your calendar and join us for our next gathering</CardDescription>
+                <CardDescription className="text-white/80">
+                  All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {tableTalkDates.map((session, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg border-2 hover:border-primary/50 transition-colors"
-                    >
-                      <div className="flex items-start gap-4">
-                        <Calendar className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                        <div>
-                          <p className="font-semibold text-foreground">{session.date}</p>
-                          <p className="text-sm text-muted-foreground">{session.location}</p>
-                          <p className="text-sm text-muted-foreground">{session.time}</p>
-                        </div>
-                      </div>
-                      <Button variant="outline">Register</Button>
+              <CardContent className="p-0">
+                {tableTalkSessions.map((monthGroup, groupIndex) => (
+                  <div key={monthGroup.month}>
+                    <div className="bg-[#8B2B3E] text-white px-6 py-3 font-bold text-lg">
+                      {monthGroup.month}
                     </div>
-                  ))}
-                </div>
+                    <div className="divide-y">
+                      {monthGroup.sessions.map((session, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-start gap-4">
+                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
+                            <div>
+                              <p className="font-bold text-foreground text-lg">{session.date}</p>
+                              <p className="text-muted-foreground">{session.description}</p>
+                            </div>
+                          </div>
+                          <Button 
+                            className="bg-[#8B2B3E] hover:bg-[#6d2230]"
+                            onClick={() => setSelectedSession(session.dateValue)}
+                          >
+                            Register Now
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </CardContent>
             </Card>
 
-            <div className="text-center">
-              <p className="text-muted-foreground mb-6">
-                Table Talk is free and open to all men. Dinner is provided. Bring a friend!
+            <div className="bg-white rounded-xl p-8 border-2 text-center">
+              <h3 className="text-xl font-bold mb-4">Payment Instructions</h3>
+              <p className="text-muted-foreground mb-4">
+                After registration, you will receive a <strong>Dynamic Code</strong>. Use this code as your payment reference.
               </p>
-              <Button asChild size="lg">
-                <Link href="/get-involved">
-                  Register for Table Talk <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+              <p className="text-lg">
+                Send payment to: <strong className="text-[#8B2B3E]">finance@fathersfound.org</strong>
+              </p>
             </div>
           </div>
         </section>
+
+        {/* Registration Dialog */}
+        <Dialog open={!!selectedSession} onOpenChange={(open) => !open && closeRegistrationDialog()}>
+          <DialogContent className="sm:max-w-md">
+            {!registrationResult ? (
+              <>
+                <DialogHeader>
+                  <DialogTitle>Register for Table Talk</DialogTitle>
+                  <DialogDescription>
+                    Fill in your details to register for the session. You will receive a unique Dynamic Code for payment.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSessionRegister} className="space-y-4 mt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="reg-firstName">First Name *</Label>
+                      <Input
+                        id="reg-firstName"
+                        value={registrationData.firstName}
+                        onChange={(e) => setRegistrationData(prev => ({ ...prev, firstName: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="reg-lastName">Last Name *</Label>
+                      <Input
+                        id="reg-lastName"
+                        value={registrationData.lastName}
+                        onChange={(e) => setRegistrationData(prev => ({ ...prev, lastName: e.target.value }))}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-email">Email *</Label>
+                    <Input
+                      id="reg-email"
+                      type="email"
+                      value={registrationData.email}
+                      onChange={(e) => setRegistrationData(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-phone">Phone *</Label>
+                    <Input
+                      id="reg-phone"
+                      type="tel"
+                      value={registrationData.phone}
+                      onChange={(e) => setRegistrationData(prev => ({ ...prev, phone: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="bg-muted p-4 rounded-lg text-sm">
+                    <p><strong>Fee:</strong> NAD 50 (Includes Drinks & Light Meal)</p>
+                    <p><strong>Location:</strong> Scouts Hall, Suiderhof, Windhoek</p>
+                    <p><strong>Time:</strong> 8:30am - 10:30am</p>
+                  </div>
+                  <Button type="submit" className="w-full bg-[#8B2B3E] hover:bg-[#6d2230]" disabled={isRegistering}>
+                    {isRegistering ? "Registering..." : "Complete Registration"}
+                  </Button>
+                </form>
+              </>
+            ) : (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-green-600">
+                    <CheckCircle className="w-6 h-6" />
+                    Registration Successful!
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 mt-4">
+                  <div className="bg-[#8B2B3E] text-white p-6 rounded-lg text-center">
+                    <p className="text-sm mb-2">Your Dynamic Code</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-3xl font-bold tracking-wider">{registrationResult.dynamicCode}</span>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-white hover:bg-white/20"
+                        onClick={copyDynamicCode}
+                      >
+                        {copiedCode ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+                    <p><strong>Session Date:</strong> {registrationResult.sessionDate}</p>
+                    <p><strong>Time:</strong> {registrationResult.sessionTime}</p>
+                    <p><strong>Location:</strong> {registrationResult.location}</p>
+                    <p><strong>Amount:</strong> {registrationResult.paymentAmount}</p>
+                  </div>
+
+                  <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                    <p className="font-semibold text-amber-800 mb-2">Payment Instructions:</p>
+                    <p className="text-sm text-amber-700">
+                      Use your Dynamic Code <strong>{registrationResult.dynamicCode}</strong> as your payment reference and send payment to:
+                    </p>
+                    <p className="text-lg font-bold text-amber-900 mt-2">{registrationResult.paymentEmail}</p>
+                  </div>
+
+                  <Button onClick={closeRegistrationDialog} className="w-full">
+                    Close
+                  </Button>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
 
       <Footer />

@@ -1,0 +1,80 @@
+import { createClient } from "@/lib/supabase/server"
+import { NextResponse } from "next/server"
+
+// Generate a unique dynamic code
+function generateDynamicCode(): string {
+  const prefix = "TT"
+  const timestamp = Date.now().toString(36).toUpperCase()
+  const random = Math.random().toString(36).substring(2, 6).toUpperCase()
+  return `${prefix}-${timestamp.slice(-4)}${random}`
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { firstName, lastName, email, phone, sessionDate } = body
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !phone || !sessionDate) {
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      )
+    }
+
+    const supabase = await createClient()
+    
+    // Generate unique dynamic code
+    const dynamicCode = generateDynamicCode()
+
+    // Insert registration
+    const { data, error } = await supabase
+      .from("table_talk_registrations")
+      .insert({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        phone,
+        session_date: sessionDate,
+        dynamic_code: dynamicCode,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Registration error:", error)
+      return NextResponse.json(
+        { error: "Failed to register. Please try again." },
+        { status: 500 }
+      )
+    }
+
+    // Send notification email to organizer (you can integrate with an email service)
+    // For now, we'll log the registration
+    console.log(`New Table Talk Registration:
+      Name: ${firstName} ${lastName}
+      Email: ${email}
+      Phone: ${phone}
+      Session: ${sessionDate}
+      Dynamic Code: ${dynamicCode}
+    `)
+
+    return NextResponse.json({
+      success: true,
+      registration: {
+        dynamicCode,
+        sessionDate,
+        sessionTime: "8:30am - 10:30am",
+        location: "Scouts Hall, Suiderhof, Windhoek",
+        paymentAmount: "NAD 50",
+        paymentEmail: "finance@fathersfound.org",
+      },
+    })
+  } catch (error) {
+    console.error("Registration error:", error)
+    return NextResponse.json(
+      { error: "An unexpected error occurred" },
+      { status: 500 }
+    )
+  }
+}
