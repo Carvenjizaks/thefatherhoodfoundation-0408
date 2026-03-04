@@ -92,9 +92,11 @@ export async function createContact(params: CreateContactParams) {
   return { contact, isNewContact }
 }
 
-// SMTP.com API Configuration
-const SMTP_API_KEY = process.env.SMTP_COM_API_KEY
-const SMTP_API_URL = "https://api.smtp.com/v4/messages"
+// SMTP Configuration for send.smtp.com
+const SMTP_HOST = "send.smtp.com"
+const SMTP_PORT = 587 // Using STARTTLS
+const SMTP_USER = process.env.SMTP_USERNAME
+const SMTP_PASS = process.env.SMTP_PASSWORD
 const FROM_EMAIL = "noreply@thefathersfoundations.org"
 const FROM_NAME = "The Fatherhood Foundation"
 
@@ -105,41 +107,32 @@ async function sendEmailViaSMTP(
   html: string,
   text: string
 ): Promise<boolean> {
-  if (!SMTP_API_KEY) {
-    console.error("[v0] SMTP_COM_API_KEY not configured")
+  if (!SMTP_USER || !SMTP_PASS) {
+    console.error("[v0] SMTP credentials not configured (SMTP_USERNAME, SMTP_PASSWORD)")
     return false
   }
 
   try {
-    const response = await fetch(SMTP_API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${SMTP_API_KEY}`,
-        "Content-Type": "application/json",
+    // Dynamic import of nodemailer
+    const nodemailer = await import("nodemailer")
+    
+    const transporter = nodemailer.default.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: false, // Use STARTTLS
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASS,
       },
-      body: JSON.stringify({
-        channel: "email",
-        recipients: {
-          to: [{ address: to, name: toName }],
-        },
-        originator: {
-          from: { address: FROM_EMAIL, name: FROM_NAME },
-        },
-        subject,
-        body: {
-          parts: [
-            { type: "text/html", content: html },
-            { type: "text/plain", content: text },
-          ],
-        },
-      }),
     })
 
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error("[v0] SMTP.com API error:", errorText)
-      return false
-    }
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      to: `"${toName}" <${to}>`,
+      subject,
+      text,
+      html,
+    })
 
     return true
   } catch (error) {
