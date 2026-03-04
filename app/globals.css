@@ -82,3 +82,21 @@
     color: var(--foreground);
   }
 }
+
+/* Faces Parade Animation */
+@keyframes faces-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-faces-scroll {
+  animation: faces-scroll 30s linear infinite;
+}
+
+.animate-faces-scroll:hover {
+  animation-play-state: paused;
+}
