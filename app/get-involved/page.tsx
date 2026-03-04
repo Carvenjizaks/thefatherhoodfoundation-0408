@@ -1,6 +1,6 @@
 "use client"
 
-// v3 - Cache bust for hydration fix
+// v4 - Force rebuild to fix hydration and Supabase URL
 import type React from "react"
 
 import { useState } from "react"
