@@ -79,7 +79,7 @@ export default function HomePage() {
             />
 
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-black mb-6 text-balance leading-tight">
-              Empowering Men to Lead, <span className="text-[#8B2B3E]">Love, and Serve</span>
+              Empowering men to Learn, Grow and <span className="text-[#8B2B3E]">Contribute through serving</span>
             </h1>
 
             <p className="text-lg lg:text-xl text-black mb-12 max-w-3xl mx-auto text-balance leading-relaxed font-medium">
@@ -149,7 +149,7 @@ export default function HomePage() {
         <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
             <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-              Empowering Men to Lead, Love, and Serve
+              Empowering men to Learn, Grow and Contribute through serving
             </h2>
             <p className="text-lg lg:text-xl text-black leading-relaxed text-balance font-medium">
               The Fatherhood Foundation provides mentorship, resources, and community support to help men become better

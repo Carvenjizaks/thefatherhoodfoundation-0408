@@ -9,6 +9,7 @@ interface FacesParadeProps {
 }
 
 export function FacesParade({ images, scrollSpeed = 30 }: FacesParadeProps) {
+  const [mounted, setMounted] = useState(false)
   const [position, setPosition] = useState(0)
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
   const containerRef = useRef<HTMLDivElement>(null)
@@ -22,6 +23,12 @@ export function FacesParade({ images, scrollSpeed = 30 }: FacesParadeProps) {
   }
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     let animationFrameId: number
 
     const animate = (currentTime: number) => {
@@ -53,7 +60,7 @@ export function FacesParade({ images, scrollSpeed = 30 }: FacesParadeProps) {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [images.length, scrollSpeed])
+  }, [mounted, images.length, scrollSpeed])
 
   return (
     <div className="w-full overflow-hidden bg-transparent py-12" ref={containerRef}>
