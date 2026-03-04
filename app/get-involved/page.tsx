@@ -1,5 +1,6 @@
 "use client"
 
+// v2 - Updated button text and sessions
 import type React from "react"
 
 import { useState } from "react"

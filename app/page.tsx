@@ -1,5 +1,6 @@
 "use client"
 
+// v2 - Updated text content
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
