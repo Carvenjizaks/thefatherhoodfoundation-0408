@@ -5,14 +5,19 @@ import { cookies } from 'next/headers'
 // Ensure URL has https:// protocol - v4 rebuild
 function getSupabaseUrl(): string {
   // Try SUPABASE_URL first (usually has correct format), then NEXT_PUBLIC_SUPABASE_URL
-  const rawUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-  let finalUrl = rawUrl
+  const rawUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
   
-  if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
-    finalUrl = `https://${rawUrl}`
+  if (!rawUrl) {
+    throw new Error('Missing Supabase URL: SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL must be set')
   }
   
-  return finalUrl
+  // If it already has a protocol, return as-is
+  if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+    return rawUrl
+  }
+  
+  // Add https:// if missing
+  return `https://${rawUrl}`
 }
 
 /**
