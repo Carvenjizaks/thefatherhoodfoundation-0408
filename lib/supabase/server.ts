@@ -12,7 +12,6 @@ function getSupabaseUrl(): string {
     finalUrl = `https://${rawUrl}`
   }
   
-  console.log('[v0] Supabase URL - raw:', rawUrl, '-> final:', finalUrl)
   return finalUrl
 }
 
