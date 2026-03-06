@@ -17,6 +17,8 @@ export default function CurriculumPage() {
     {
       title: "Courage: Winning Life's Toughest Battles",
       author: "Ed Cole",
+      introduction:
+        "True courage is not the absence of fear, but the mastery of it. Every man faces battles that test his resolve—whether in his career, relationships, or personal struggles. This book equips you with the spiritual weapons and practical wisdom to stand firm when everything around you is shaking.",
       description:
         "A powerful guide to developing the courage needed to face life's greatest challenges. Learn how to stand firm in adversity, overcome fear, and lead with strength and conviction.",
       image: "/images/books/courage.jpg",
@@ -25,6 +27,8 @@ export default function CurriculumPage() {
     {
       title: "Maximized Manhood: A Guide to Family Survival",
       author: "Edwin Louis Cole",
+      introduction:
+        "Manhood is not automatic—it must be developed, nurtured, and intentionally pursued. In a world that has lost its definition of masculinity, this timeless classic calls men back to their God-given purpose as protectors, providers, and spiritual leaders of their homes.",
       description:
         "The bestselling book that has helped millions of men understand their role as husband and father. Discover biblical principles for leading your family with wisdom and love.",
       image: "/images/books/maximized-manhood.jpg",
@@ -33,6 +37,8 @@ export default function CurriculumPage() {
     {
       title: "Sexual Integrity",
       author: "Edwin Louis Cole",
+      introduction:
+        "In a culture that cheapens intimacy, men are called to a higher standard. Sexual integrity is not about suppression but about channeling God's gift of sexuality within its proper boundaries. This book provides honest, biblical guidance for men who desire purity in an impure world.",
       description:
         "A frank and practical guide to maintaining purity in thought and action. Essential reading for men committed to honoring God and their families through sexual integrity.",
       image: "/images/books/sexual-integrity.jpg",
@@ -86,8 +92,11 @@ export default function CurriculumPage() {
                   </div>
 
                   <CardContent className="p-8 lg:p-12">
+                    <p className="text-lg text-foreground mb-6 leading-relaxed italic border-l-4 border-primary pl-4">
+                      {book.introduction}
+                    </p>
                     <CardTitle className="text-3xl mb-4">{book.title}</CardTitle>
-                    <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
 
                     <div className="mb-6">
                       <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
