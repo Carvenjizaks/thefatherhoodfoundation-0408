@@ -111,12 +111,63 @@ export default function CurriculumPage() {
           </div>
         </section>
 
+        {/* Books Carousel Section */}
+        <section className="py-8 bg-background border-b">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex gap-4 pb-4">
+                {books.map((book, index) => (
+                  <a
+                    key={index}
+                    href={`#book-${index}`}
+                    className="flex-shrink-0 w-72 sm:w-80 lg:w-96 group cursor-pointer"
+                  >
+                    <div className="relative w-full h-40 sm:h-48 lg:h-56 overflow-hidden rounded-lg border-2 border-primary/20 hover:border-primary transition-colors">
+                      <Image
+                        src={book.image || "/placeholder.svg"}
+                        alt={book.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {/* Dark gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      {/* Title overlay */}
+                      <div className="absolute inset-0 flex items-end p-4 sm:p-5">
+                        <h3
+                          className="font-black uppercase tracking-wide leading-tight text-white"
+                          style={{
+                            fontSize: "clamp(1.25rem, 4vw, 2rem)",
+                            textShadow: "1px 2px 8px rgba(0,0,0,0.8)",
+                          }}
+                        >
+                          {book.bannerTitle}
+                        </h3>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+            .scrollbar-hide {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `}</style>
+        </section>
+
         {/* Books Section */}
         <section className="py-20 lg:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="space-y-16">
               {books.map((book, index) => (
-                <Card key={index} className="overflow-hidden border-2">
+                <Card key={index} className="overflow-hidden border-2" id={`book-${index}`}>
                   {/* Full-width banner image with title overlay */}
                   <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden group">
                     <Image
