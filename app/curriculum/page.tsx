@@ -16,7 +16,10 @@ export default function CurriculumPage() {
   const books = [
     {
       title: "Courage: Winning Life's Toughest Battles",
+      bannerTitle: "Courage",
       author: "Ed Cole",
+      introduction:
+        "True courage is not the absence of fear, but the mastery of it. Every man faces battles that test his resolve—whether in his career, relationships, or personal struggles. This book equips you with the spiritual weapons and practical wisdom to stand firm when everything around you is shaking.",
       description:
         "A powerful guide to developing the courage needed to face life's greatest challenges. Learn how to stand firm in adversity, overcome fear, and lead with strength and conviction.",
       image: "/images/books/courage.jpg",
@@ -24,7 +27,10 @@ export default function CurriculumPage() {
     },
     {
       title: "Maximized Manhood: A Guide to Family Survival",
+      bannerTitle: "Maximized Manhood",
       author: "Edwin Louis Cole",
+      introduction:
+        "Manhood is not automatic—it must be developed, nurtured, and intentionally pursued. In a world that has lost its definition of masculinity, this timeless classic calls men back to their God-given purpose as protectors, providers, and spiritual leaders of their homes.",
       description:
         "The bestselling book that has helped millions of men understand their role as husband and father. Discover biblical principles for leading your family with wisdom and love.",
       image: "/images/books/maximized-manhood.jpg",
@@ -32,11 +38,47 @@ export default function CurriculumPage() {
     },
     {
       title: "Sexual Integrity",
+      bannerTitle: "Sexual Integrity",
       author: "Edwin Louis Cole",
+      introduction:
+        "In a culture that cheapens intimacy, men are called to a higher standard. Sexual integrity is not about suppression but about channeling God's gift of sexuality within its proper boundaries. This book provides honest, biblical guidance for men who desire purity in an impure world.",
       description:
         "A frank and practical guide to maintaining purity in thought and action. Essential reading for men committed to honoring God and their families through sexual integrity.",
-      image: "/images/books/sexual-integrity.png",
+      image: "/images/books/sexual-integrity.jpg",
       topics: ["Purity", "Self-Control", "Relationships", "Accountability"],
+    },
+    {
+      title: "Real Man",
+      bannerTitle: "Real Man",
+      author: "Edwin Louis Cole",
+      introduction:
+        "What does it mean to be a real man in today's world? Society offers countless counterfeits, but God's standard remains unchanged. A real man takes responsibility, keeps his word, and lives with integrity regardless of the cost. This book challenges you to rise above mediocrity and embrace authentic masculinity.",
+      description:
+        "Discover what it truly means to be a man of God. This powerful book strips away cultural confusion and reveals the timeless principles that define genuine manhood.",
+      image: "/images/books/real-man.jpg",
+      topics: ["Authenticity", "Responsibility", "Integrity", "Identity"],
+    },
+    {
+      title: "Communication, Sex and Money",
+      bannerTitle: "Communication, Sex & Money",
+      author: "Edwin Louis Cole",
+      introduction:
+        "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
+      description:
+        "A practical guide to navigating the most challenging areas of marriage. Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances.",
+      image: "/images/books/communication-sex-money.jpg",
+      topics: ["Marriage", "Communication", "Intimacy", "Finances"],
+    },
+    {
+      title: "Never Quit",
+      bannerTitle: "Never Quit",
+      author: "Edwin Louis Cole",
+      introduction:
+        "Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up. This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face.",
+      description:
+        "An inspiring call to perseverance and resilience. Learn how to overcome setbacks, push through adversity, and develop the unshakeable determination that defines true champions.",
+      image: "/images/books/never-quit.jpg",
+      topics: ["Perseverance", "Resilience", "Victory", "Determination"],
     },
   ]
 
@@ -69,51 +111,114 @@ export default function CurriculumPage() {
           </div>
         </section>
 
+        {/* Books Carousel Section */}
+        <section className="py-8 bg-background border-b">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex gap-4 pb-4">
+                {books.map((book, index) => (
+                  <a
+                    key={index}
+                    href={`#book-${index}`}
+                    className="flex-shrink-0 w-72 sm:w-80 lg:w-96 group cursor-pointer"
+                  >
+                    <div className="relative w-full h-40 sm:h-48 lg:h-56 overflow-hidden rounded-lg border-2 border-primary/20 hover:border-primary transition-colors">
+                      <Image
+                        src={book.image || "/placeholder.svg"}
+                        alt={book.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {/* Dark gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      {/* Title overlay */}
+                      <div className="absolute inset-0 flex items-end p-4 sm:p-5">
+                        <h3
+                          className="font-black uppercase tracking-wide leading-tight text-white"
+                          style={{
+                            fontSize: "clamp(1.25rem, 4vw, 2rem)",
+                            textShadow: "1px 2px 8px rgba(0,0,0,0.8)",
+                          }}
+                        >
+                          {book.bannerTitle}
+                        </h3>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+            .scrollbar-hide {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `}</style>
+        </section>
+
         {/* Books Section */}
         <section className="py-20 lg:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="space-y-16">
               {books.map((book, index) => (
-                <Card key={index} className="overflow-hidden border-2">
-                  <div
-                    className={`grid grid-cols-1 lg:grid-cols-2 gap-8 ${index % 2 === 1 ? "lg:grid-flow-dense" : ""}`}
-                  >
-                    <div className={`relative h-96 lg:h-auto bg-muted ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
-                      <Image
-                        src={book.image || "/placeholder.svg"}
-                        alt={book.title}
-                        fill
-                        className="object-contain p-8"
-                      />
+                <Card key={index} className="overflow-hidden border-2" id={`book-${index}`}>
+                  {/* Full-width banner image with title overlay */}
+                  <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden group">
+                    <Image
+                      src={book.image || "/placeholder.svg"}
+                      alt={book.title}
+                      fill
+                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
+                    />
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    {/* Dynamic title text */}
+                    <div className="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-10">
+                      <h2
+                        className="font-black uppercase tracking-widest leading-none text-white drop-shadow-2xl"
+                        style={{
+                          fontSize: "clamp(2rem, 6vw, 5rem)",
+                          textShadow: "2px 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)",
+                          letterSpacing: "0.08em",
+                        }}
+                      >
+                        {book.bannerTitle}
+                      </h2>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-8 lg:p-12">
+                    <p className="text-lg text-foreground mb-6 leading-relaxed italic border-l-4 border-primary pl-4">
+                      {book.introduction}
+                    </p>
+                    <CardTitle className="text-3xl mb-4">{book.title}</CardTitle>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
+
+                    <div className="mb-6">
+                      <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.topics.map((topic, topicIndex) => (
+                          <span
+                            key={topicIndex}
+                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                          >
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
-                    <CardContent
-                      className={`p-8 lg:p-12 flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""}`}
-                    >
-                      <CardTitle className="text-3xl mb-2">{book.title}</CardTitle>
-                      <p className="text-muted-foreground mb-6">by {book.author}</p>
-                      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
-
-                      <div className="mb-6">
-                        <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {book.topics.map((topic, topicIndex) => (
-                            <span
-                              key={topicIndex}
-                              className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                            >
-                              {topic}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Button size="lg" className="w-full sm:w-auto">
-                        <Download className="mr-2 h-5 w-5" />
-                        Download PDF
-                      </Button>
-                    </CardContent>
-                  </div>
+                    <Button size="lg" className="w-full sm:w-auto">
+                      <Download className="mr-2 h-5 w-5" />
+                      Download PDF
+                    </Button>
+                  </CardContent>
                 </Card>
               ))}
             </div>
