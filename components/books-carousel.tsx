@@ -52,34 +52,73 @@ export function BooksCarousel({ books }: BooksCarouselProps) {
       onMouseEnter={() => (isPausedRef.current = true)}
       onMouseLeave={() => (isPausedRef.current = false)}
     >
-      <div ref={trackRef} className="flex gap-4 will-change-transform" style={{ width: "max-content" }}>
+      <div ref={trackRef} className="flex gap-8 will-change-transform py-4" style={{ width: "max-content" }}>
         {doubled.map((book, index) => (
           <a
             key={index}
             href={`#book-${index % books.length}`}
-            className="flex-shrink-0 w-72 sm:w-80 lg:w-96 group cursor-pointer"
+            className="flex-shrink-0 group cursor-pointer"
+            style={{ perspective: "1000px" }}
           >
-            <div className="relative w-full h-40 sm:h-48 lg:h-56 overflow-hidden rounded-lg border-2 border-primary/20 hover:border-primary transition-colors duration-300">
-              <Image
-                src={book.image || "/placeholder.svg"}
-                alt={book.title}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              {/* Dark gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              {/* Title overlay */}
-              <div className="absolute inset-0 flex items-end p-4 sm:p-5">
-                <h3
-                  className="font-black uppercase tracking-wide leading-tight text-white"
-                  style={{
-                    fontSize: "clamp(1.25rem, 4vw, 2rem)",
-                    textShadow: "1px 2px 8px rgba(0,0,0,0.8)",
-                  }}
-                >
-                  {book.bannerTitle}
-                </h3>
+            {/* 3D Book Container */}
+            <div
+              className="relative w-44 sm:w-52 lg:w-60 h-60 sm:h-72 lg:h-80 transition-transform duration-500 group-hover:scale-105"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: "rotateY(-15deg)",
+              }}
+            >
+              {/* Book Cover (Front) */}
+              <div
+                className="absolute inset-0 overflow-hidden rounded-r-sm"
+                style={{
+                  transformStyle: "preserve-3d",
+                  boxShadow: "6px 6px 18px rgba(0,0,0,0.4), 2px 2px 6px rgba(0,0,0,0.2)",
+                }}
+              >
+                <Image
+                  src={book.image || "/placeholder.svg"}
+                  alt={book.title}
+                  fill
+                  className="object-cover"
+                />
+                {/* Dark gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                {/* Title overlay */}
+                <div className="absolute inset-0 flex items-end p-4">
+                  <h3
+                    className="font-black uppercase tracking-wide leading-tight text-white"
+                    style={{
+                      fontSize: "clamp(1rem, 3vw, 1.5rem)",
+                      textShadow: "1px 2px 6px rgba(0,0,0,0.9)",
+                    }}
+                  >
+                    {book.bannerTitle}
+                  </h3>
+                </div>
               </div>
+
+              {/* Book Spine (Left Edge) */}
+              <div
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-600"
+                style={{
+                  width: "20px",
+                  transform: "rotateY(90deg) translateZ(10px) translateX(-10px)",
+                  boxShadow: "inset -2px 0 4px rgba(0,0,0,0.3)",
+                }}
+              />
+
+              {/* Book Pages (Right Edge) */}
+              <div
+                className="absolute top-1 right-0 bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300"
+                style={{
+                  width: "18px",
+                  height: "calc(100% - 8px)",
+                  transform: "translateX(8px)",
+                  boxShadow: "inset 0 0 3px rgba(0,0,0,0.2)",
+                  backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px)",
+                }}
+              />
             </div>
           </a>
         ))}
