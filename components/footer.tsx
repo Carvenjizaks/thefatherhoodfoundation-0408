@@ -43,13 +43,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  About Us
+                <Link href="/curriculum" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Curriculum
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
+                <Link href="/events" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link href="/donate" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Donate
                 </Link>
               </li>
             </ul>
@@ -89,6 +94,22 @@ export function Footer() {
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Community Development
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/partnership"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Partnership
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/volunteer-application"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Volunteer
                 </Link>
               </li>
             </ul>
@@ -143,11 +164,14 @@ export function Footer() {
             © {currentYear} The Fatherhood Foundation. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Privacy Policy
+            <Link href="/get-involved" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Get Involved
             </Link>
-            <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Terms of Service
+            <Link href="/donate" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Donate
+            </Link>
+            <Link href="/events" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Events
             </Link>
           </div>
         </div>
