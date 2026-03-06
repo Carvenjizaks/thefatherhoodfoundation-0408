@@ -44,6 +44,36 @@ export default function CurriculumPage() {
       image: "/images/books/sexual-integrity.jpg",
       topics: ["Purity", "Self-Control", "Relationships", "Accountability"],
     },
+    {
+      title: "Real Man",
+      author: "Edwin Louis Cole",
+      introduction:
+        "What does it mean to be a real man in today's world? Society offers countless counterfeits, but God's standard remains unchanged. A real man takes responsibility, keeps his word, and lives with integrity regardless of the cost. This book challenges you to rise above mediocrity and embrace authentic masculinity.",
+      description:
+        "Discover what it truly means to be a man of God. This powerful book strips away cultural confusion and reveals the timeless principles that define genuine manhood.",
+      image: "/images/books/real-man.jpg",
+      topics: ["Authenticity", "Responsibility", "Integrity", "Identity"],
+    },
+    {
+      title: "Communication, Sex and Money",
+      author: "Edwin Louis Cole",
+      introduction:
+        "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
+      description:
+        "A practical guide to navigating the most challenging areas of marriage. Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances.",
+      image: "/images/books/communication-sex-money.jpg",
+      topics: ["Marriage", "Communication", "Intimacy", "Finances"],
+    },
+    {
+      title: "Never Quit",
+      author: "Edwin Louis Cole",
+      introduction:
+        "Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up. This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face.",
+      description:
+        "An inspiring call to perseverance and resilience. Learn how to overcome setbacks, push through adversity, and develop the unshakeable determination that defines true champions.",
+      image: "/images/books/never-quit.jpg",
+      topics: ["Perseverance", "Resilience", "Victory", "Determination"],
+    },
   ]
 
   return (
