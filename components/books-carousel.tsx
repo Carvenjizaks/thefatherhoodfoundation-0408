@@ -101,23 +101,23 @@ export function BooksCarousel({ books }: BooksCarouselProps) {
 
               {/* Book Spine (Left Edge) */}
               <div
-                className="absolute top-0 left-0 h-full bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-600"
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-700"
                 style={{
                   width: "20px",
                   transform: "rotateY(90deg) translateZ(10px) translateX(-10px)",
-                  boxShadow: "inset -2px 0 4px rgba(0,0,0,0.3)",
+                  boxShadow: "inset -2px 0 4px rgba(0,0,0,0.5)",
                 }}
               />
 
-              {/* Book Pages (Right Edge) */}
+              {/* Book Pages (Right Edge - Dark) */}
               <div
-                className="absolute top-1 right-0 bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300"
+                className="absolute top-1 right-0 bg-gradient-to-b from-neutral-900 via-neutral-800 to-neutral-900"
                 style={{
                   width: "18px",
                   height: "calc(100% - 8px)",
                   transform: "translateX(8px)",
-                  boxShadow: "inset 0 0 3px rgba(0,0,0,0.2)",
-                  backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px)",
+                  boxShadow: "inset -2px 0 6px rgba(0,0,0,0.6), inset 1px 0 2px rgba(255,255,255,0.05)",
+                  backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 3px)",
                 }}
               />
             </div>
