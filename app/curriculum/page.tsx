@@ -16,6 +16,7 @@ export default function CurriculumPage() {
   const books = [
     {
       title: "Courage: Winning Life's Toughest Battles",
+      bannerTitle: "Courage",
       author: "Ed Cole",
       introduction:
         "True courage is not the absence of fear, but the mastery of it. Every man faces battles that test his resolve—whether in his career, relationships, or personal struggles. This book equips you with the spiritual weapons and practical wisdom to stand firm when everything around you is shaking.",
@@ -26,6 +27,7 @@ export default function CurriculumPage() {
     },
     {
       title: "Maximized Manhood: A Guide to Family Survival",
+      bannerTitle: "Maximized Manhood",
       author: "Edwin Louis Cole",
       introduction:
         "Manhood is not automatic—it must be developed, nurtured, and intentionally pursued. In a world that has lost its definition of masculinity, this timeless classic calls men back to their God-given purpose as protectors, providers, and spiritual leaders of their homes.",
@@ -36,6 +38,7 @@ export default function CurriculumPage() {
     },
     {
       title: "Sexual Integrity",
+      bannerTitle: "Sexual Integrity",
       author: "Edwin Louis Cole",
       introduction:
         "In a culture that cheapens intimacy, men are called to a higher standard. Sexual integrity is not about suppression but about channeling God's gift of sexuality within its proper boundaries. This book provides honest, biblical guidance for men who desire purity in an impure world.",
@@ -46,6 +49,7 @@ export default function CurriculumPage() {
     },
     {
       title: "Real Man",
+      bannerTitle: "Real Man",
       author: "Edwin Louis Cole",
       introduction:
         "What does it mean to be a real man in today's world? Society offers countless counterfeits, but God's standard remains unchanged. A real man takes responsibility, keeps his word, and lives with integrity regardless of the cost. This book challenges you to rise above mediocrity and embrace authentic masculinity.",
@@ -56,6 +60,7 @@ export default function CurriculumPage() {
     },
     {
       title: "Communication, Sex and Money",
+      bannerTitle: "Communication, Sex & Money",
       author: "Edwin Louis Cole",
       introduction:
         "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
@@ -66,6 +71,7 @@ export default function CurriculumPage() {
     },
     {
       title: "Never Quit",
+      bannerTitle: "Never Quit",
       author: "Edwin Louis Cole",
       introduction:
         "Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up. This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face.",
@@ -131,7 +137,7 @@ export default function CurriculumPage() {
                           letterSpacing: "0.08em",
                         }}
                       >
-                        {book.title}
+                        {book.bannerTitle}
                       </h2>
                     </div>
                   </div>
