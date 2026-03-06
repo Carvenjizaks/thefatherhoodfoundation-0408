@@ -111,14 +111,29 @@ export default function CurriculumPage() {
             <div className="space-y-16">
               {books.map((book, index) => (
                 <Card key={index} className="overflow-hidden border-2">
-                  {/* Full-width banner image */}
-                  <div className="relative w-full h-48 sm:h-64 lg:h-80">
+                  {/* Full-width banner image with title overlay */}
+                  <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden group">
                     <Image
                       src={book.image || "/placeholder.svg"}
                       alt={book.title}
                       fill
-                      className="object-cover"
+                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
                     />
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    {/* Dynamic title text */}
+                    <div className="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-10">
+                      <h2
+                        className="font-black uppercase tracking-widest leading-none text-white drop-shadow-2xl"
+                        style={{
+                          fontSize: "clamp(2rem, 6vw, 5rem)",
+                          textShadow: "2px 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)",
+                          letterSpacing: "0.08em",
+                        }}
+                      >
+                        {book.title}
+                      </h2>
+                    </div>
                   </div>
 
                   <CardContent className="p-8 lg:p-12">
