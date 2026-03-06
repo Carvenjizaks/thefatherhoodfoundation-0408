@@ -134,7 +134,7 @@ export default function CurriculumPage() {
                       src={book.image || "/placeholder.svg"}
                       alt={book.title}
                       fill
-                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
+                      className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-700"
                     />
                     {/* Dark gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
