@@ -35,7 +35,7 @@ export default function CurriculumPage() {
       author: "Edwin Louis Cole",
       description:
         "A frank and practical guide to maintaining purity in thought and action. Essential reading for men committed to honoring God and their families through sexual integrity.",
-      image: "/images/books/sexual-integrity.png",
+      image: "/images/books/sexual-integrity.jpg",
       topics: ["Purity", "Self-Control", "Relationships", "Accountability"],
     },
   ]
