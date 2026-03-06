@@ -80,6 +80,7 @@ export function BooksCarousel({ books }: BooksCarouselProps) {
                   src={book.image || "/placeholder.svg"}
                   alt={book.title}
                   fill
+                  sizes="(max-width: 640px) 176px, (max-width: 1024px) 208px, 240px"
                   className="object-cover"
                 />
                 {/* Dark gradient overlay */}
