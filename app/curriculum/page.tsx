@@ -75,45 +75,39 @@ export default function CurriculumPage() {
             <div className="space-y-16">
               {books.map((book, index) => (
                 <Card key={index} className="overflow-hidden border-2">
-                  <div
-                    className={`grid grid-cols-1 lg:grid-cols-2 gap-8 ${index % 2 === 1 ? "lg:grid-flow-dense" : ""}`}
-                  >
-                    <div className={`relative h-96 lg:h-auto bg-muted ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
-                      <Image
-                        src={book.image || "/placeholder.svg"}
-                        alt={book.title}
-                        fill
-                        className="object-contain p-8"
-                      />
+                  {/* Full-width banner image */}
+                  <div className="relative w-full h-48 sm:h-64 lg:h-80">
+                    <Image
+                      src={book.image || "/placeholder.svg"}
+                      alt={book.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  <CardContent className="p-8 lg:p-12">
+                    <CardTitle className="text-3xl mb-4">{book.title}</CardTitle>
+                    <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
+
+                    <div className="mb-6">
+                      <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.topics.map((topic, topicIndex) => (
+                          <span
+                            key={topicIndex}
+                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                          >
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
-                    <CardContent
-                      className={`p-8 lg:p-12 flex flex-col justify-center ${index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""}`}
-                    >
-                      <CardTitle className="text-3xl mb-2">{book.title}</CardTitle>
-                      <p className="text-muted-foreground mb-6">by {book.author}</p>
-                      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
-
-                      <div className="mb-6">
-                        <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {book.topics.map((topic, topicIndex) => (
-                            <span
-                              key={topicIndex}
-                              className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                            >
-                              {topic}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Button size="lg" className="w-full sm:w-auto">
-                        <Download className="mr-2 h-5 w-5" />
-                        Download PDF
-                      </Button>
-                    </CardContent>
-                  </div>
+                    <Button size="lg" className="w-full sm:w-auto">
+                      <Download className="mr-2 h-5 w-5" />
+                      Download PDF
+                    </Button>
+                  </CardContent>
                 </Card>
               ))}
             </div>
