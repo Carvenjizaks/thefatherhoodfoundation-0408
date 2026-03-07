@@ -10,7 +10,8 @@ import { BooksCarousel } from "@/components/books-carousel"
 
 export const metadata: Metadata = {
   title: "Curriculum for Men | The Fatherhood Foundation",
-  description: "Access our comprehensive library of resources designed to help you grow as a man, father, and leader.",
+  description:
+    "Access our comprehensive library of resources designed to help you grow as a man, father, and leader.",
 }
 
 export default function CurriculumPage() {
