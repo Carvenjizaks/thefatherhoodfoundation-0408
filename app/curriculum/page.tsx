@@ -67,7 +67,7 @@ const books = [
       "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
     description:
       "A practical guide to navigating the most challenging areas of marriage. Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances.",
-    image: "/images/books/communication-sex-money.jpg",
+    image: "/images/books/communication-sex-money.webp",
     topics: ["Marriage", "Communication", "Intimacy", "Finances"],
   },
   {
