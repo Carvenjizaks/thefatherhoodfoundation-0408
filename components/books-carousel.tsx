@@ -70,7 +70,7 @@ export function BooksCarousel({ books }: BooksCarouselProps) {
             >
               {/* Book Cover (Front) */}
               <div
-                className="absolute inset-0 overflow-hidden rounded-r-sm w-44 sm:w-52 lg:w-60 h-60 sm:h-72 lg:h-80"
+                className="absolute inset-0 overflow-hidden rounded-r-sm"
                 style={{
                   transformStyle: "preserve-3d",
                   boxShadow: "6px 6px 18px rgba(0,0,0,0.4), 2px 2px 6px rgba(0,0,0,0.2)",
