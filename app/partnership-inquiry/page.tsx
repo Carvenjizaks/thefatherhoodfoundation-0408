@@ -13,11 +13,42 @@ import Link from "next/link"
 
 export default function PartnershipInquiryPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    organization: "",
+    phone: "",
+    message: "",
+  })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    console.log("[v0] Partnership inquiry form submitted")
+    setIsSubmitting(true)
+    
+    try {
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.phone,
+          source: "partnership",
+          sourceDetails: `Partnership Inquiry - ${formData.organization}`,
+        }),
+      })
+
+      if (!response.ok) throw new Error("Failed to submit")
+      
+      setSubmitted(true)
+    } catch (error) {
+      alert("Failed to submit inquiry. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (submitted) {
@@ -73,27 +104,58 @@ export default function PartnershipInquiryPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" placeholder="John" required />
+                  <Input 
+                    id="firstName" 
+                    placeholder="John" 
+                    value={formData.firstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                    required 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" placeholder="Doe" required />
+                  <Input 
+                    id="lastName" 
+                    placeholder="Doe" 
+                    value={formData.lastName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                    required 
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="john@example.com" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="john@example.com" 
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  required 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="organization">Organization Name</Label>
-                <Input id="organization" placeholder="Your Organization" required />
+                <Input 
+                  id="organization" 
+                  placeholder="Your Organization" 
+                  value={formData.organization}
+                  onChange={(e) => setFormData(prev => ({ ...prev, organization: e.target.value }))}
+                  required 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" />
+                <Input 
+                  id="phone" 
+                  type="tel" 
+                  placeholder="+1 (555) 123-4567" 
+                  value={formData.phone}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                />
               </div>
 
               <div className="space-y-2">
@@ -102,12 +164,14 @@ export default function PartnershipInquiryPage() {
                   id="message"
                   placeholder="Describe how you'd like to partner with The Fatherhood Foundation..."
                   rows={6}
+                  value={formData.message}
+                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                   required
                 />
               </div>
 
-              <Button type="submit" className="w-full h-12 text-base font-semibold" size="lg">
-                Submit Inquiry
+              <Button type="submit" disabled={isSubmitting} className="w-full h-12 text-base font-semibold" size="lg">
+                {isSubmitting ? "Submitting..." : "Submit Inquiry"}
               </Button>
             </form>
           </CardContent>

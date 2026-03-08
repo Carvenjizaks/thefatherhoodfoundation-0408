@@ -54,7 +54,9 @@ export default function GetInvolvedPage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!agreedToTerms) {
@@ -62,22 +64,42 @@ export default function GetInvolvedPage() {
       return
     }
 
-    // Form data submission deferred to backend
-    console.log("[v0] Form submitted:", formData)
+    setIsFormSubmitting(true)
 
-    setIsSubmitted(true)
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        interest: "",
-        howToInvolve: "",
+    try {
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.phone,
+          source: "newsletter",
+          sourceDetails: `Get Involved - Interest: ${formData.interest}`,
+        }),
       })
-      setAgreedToTerms(false)
-    }, 5000)
+
+      if (!response.ok) throw new Error("Failed to submit")
+
+      setIsSubmitted(true)
+      setTimeout(() => {
+        setIsSubmitted(false)
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          interest: "",
+          howToInvolve: "",
+        })
+        setAgreedToTerms(false)
+      }, 5000)
+    } catch (error) {
+      alert("Failed to submit. Please try again.")
+    } finally {
+      setIsFormSubmitting(false)
+    }
   }
 
   const tableTalkSessions = [
@@ -386,8 +408,8 @@ export default function GetInvolvedPage() {
                       </div>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full">
-                      SUBMIT
+                    <Button type="submit" size="lg" className="w-full" disabled={isFormSubmitting}>
+                      {isFormSubmitting ? "Submitting..." : "SUBMIT"}
                     </Button>
                   </form>
                 ) : (

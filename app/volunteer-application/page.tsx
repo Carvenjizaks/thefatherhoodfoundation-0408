@@ -16,15 +16,48 @@ import Link from "next/link"
 export default function VolunteerApplicationPage() {
   const [submitted, setSubmitted] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    interest: "",
+    availability: "",
+    experience: "",
+  })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!agreedToTerms) {
       alert("Please agree to the volunteer terms and conditions")
       return
     }
-    setSubmitted(true)
-    console.log("[v0] Volunteer application form submitted")
+    
+    setIsSubmitting(true)
+    
+    try {
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          cellphone: formData.phone,
+          source: "volunteer",
+          sourceDetails: `Volunteer Application - ${formData.interest} - Availability: ${formData.availability}`,
+        }),
+      })
+
+      if (!response.ok) throw new Error("Failed to submit")
+      
+      setSubmitted(true)
+    } catch (error) {
+      alert("Failed to submit application. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (submitted) {
@@ -79,27 +112,57 @@ export default function VolunteerApplicationPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" placeholder="John" required />
+                  <Input 
+                    id="firstName" 
+                    placeholder="John" 
+                    value={formData.firstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                    required 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" placeholder="Doe" required />
+                  <Input 
+                    id="lastName" 
+                    placeholder="Doe" 
+                    value={formData.lastName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                    required 
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="john@example.com" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="john@example.com" 
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  required 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" required />
+                <Input 
+                  id="phone" 
+                  type="tel" 
+                  placeholder="+1 (555) 123-4567" 
+                  value={formData.phone}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  required 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="interests">Area of Interest</Label>
-                <Select required>
+                <Select 
+                  value={formData.interest}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, interest: value }))}
+                  required
+                >
                   <SelectTrigger id="interests">
                     <SelectValue placeholder="Select your area of interest" />
                   </SelectTrigger>
@@ -116,7 +179,11 @@ export default function VolunteerApplicationPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="availability">Availability</Label>
-                <Select required>
+                <Select 
+                  value={formData.availability}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, availability: value }))}
+                  required
+                >
                   <SelectTrigger id="availability">
                     <SelectValue placeholder="Select your availability" />
                   </SelectTrigger>
@@ -135,6 +202,8 @@ export default function VolunteerApplicationPage() {
                   id="experience"
                   placeholder="Tell us about your experience and skills that would benefit The Fatherhood Foundation..."
                   rows={6}
+                  value={formData.experience}
+                  onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
                   required
                 />
               </div>
@@ -155,8 +224,8 @@ export default function VolunteerApplicationPage() {
                 </div>
               </div>
 
-              <Button type="submit" disabled={!agreedToTerms} className="w-full h-12 text-base font-semibold" size="lg">
-                SUBMIT
+              <Button type="submit" disabled={!agreedToTerms || isSubmitting} className="w-full h-12 text-base font-semibold" size="lg">
+                {isSubmitting ? "Submitting..." : "SUBMIT"}
               </Button>
             </form>
           </CardContent>
