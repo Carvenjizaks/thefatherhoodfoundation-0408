@@ -110,6 +110,7 @@ export async function POST(request: Request) {
       }
 
       // Always send registration confirmation email
+      console.log("[v0] Sending registration confirmation email to:", email)
       const emailSent = await sendRegistrationConfirmationEmail({
         email,
         firstName,
@@ -122,8 +123,11 @@ export async function POST(request: Request) {
         paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
       })
 
+      console.log("[v0] Registration confirmation email result:", emailSent)
       if (emailSent) {
-        console.log(`[v0] Registration confirmation email sent to: ${email}`)
+        console.log(`[v0] Registration confirmation email sent successfully to: ${email}`)
+      } else {
+        console.log(`[v0] Registration confirmation email FAILED for: ${email}`)
       }
     } catch (emailError) {
       console.error("[v0] Error sending emails:", emailError)
