@@ -209,7 +209,7 @@ export default function MentoringMenPage() {
                 {
                   title: "Growth",
                   description: "Every gathering is an opportunity to become a better man, father, and leader.",
-                  bgColor: "bg-emerald-600",
+                  bgColor: "bg-[#A67C52]",
                   textColor: "text-white",
                 },
               ].map((item, index) => {
