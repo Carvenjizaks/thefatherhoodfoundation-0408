@@ -404,7 +404,7 @@ export default function MyGreatMarriagePage() {
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          
           <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-12 max-w-7xl mx-auto">
             <Link href="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4 w-fit">
               <ArrowLeft className="w-4 h-4 mr-2" />
