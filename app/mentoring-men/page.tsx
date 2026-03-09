@@ -99,8 +99,8 @@ export default function MentoringMenPage() {
         <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#1a1a2e] to-[#16213e]">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/men-table-talk.jpg"
-              alt="Men gathering around a table sharing stories and connecting"
+              src="/images/table-talk-banner.jpg"
+              alt="Large gathering of men at Monthly Table Talk event"
               fill
               className="object-cover opacity-30"
               priority
