@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+import { createContact, sendWelcomeEmail } from "@/lib/email-service"
 
 // Generate a unique dynamic code
 function generateDynamicCode(): string {
@@ -59,9 +60,27 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send notification email to organizer (you can integrate with an email service)
-    // For now, we'll log the registration
-    console.log(`New Table Talk Registration:
+    // Create contact and send welcome/confirmation email
+    try {
+      const { contact, isNewContact } = await createContact({
+        firstName,
+        lastName,
+        email,
+        cellphone: phone,
+        source: "event_registration",
+        sourceDetails: `Table Talk for Men - ${sessionDate}`,
+      })
+
+      if (isNewContact && contact) {
+        await sendWelcomeEmail(contact.id)
+        console.log(`[v0] Welcome email sent to: ${email}`)
+      }
+    } catch (emailError) {
+      console.error("[v0] Error sending welcome email:", emailError)
+      // Don't fail the registration if email fails
+    }
+
+    console.log(`[v0] New Table Talk Registration:
       Name: ${firstName} ${lastName}
       Email: ${email}
       Phone: ${phone}
