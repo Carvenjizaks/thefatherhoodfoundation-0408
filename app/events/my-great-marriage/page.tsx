@@ -394,29 +394,54 @@ export default function MyGreatMarriagePage() {
 
   return (
     <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative">
+      {/* Hero Section with Sliding Couples Carousel */}
+      <section className="relative bg-[#8B2B3E] overflow-hidden">
         <div className="relative w-full h-[400px] md:h-[500px]">
-          <Image
-            src={eventDetails.banner}
-            alt={eventDetails.title}
-            fill
-            priority
-            className="object-cover"
-          />
+          {/* Sliding Couples Background */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="flex gap-4 animate-slide-hero">
+              {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((num, idx) => (
+                <div 
+                  key={idx} 
+                  className="flex-shrink-0 w-72 h-[400px] md:h-[500px] overflow-hidden"
+                >
+                  <img
+                    src={`/images/couples/couple-${num}.jpg`}
+                    alt={`Happy couple ${num}`}
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
           
-          <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-12 max-w-7xl mx-auto">
-            <Link href="/events" className="inline-flex items-center text-[#8B2B3E] hover:text-[#6d2230] mb-4 w-fit font-semibold drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]">
+          {/* Dark Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8B2B3E]/90 via-[#8B2B3E]/70 to-[#8B2B3E]/90" />
+          
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 lg:p-12 max-w-4xl mx-auto">
+            <Link href="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4 w-fit font-semibold">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Events
             </Link>
             <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4 shadow-lg">
               Registration Open
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold text-[#8B2B3E] mb-2 drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">{eventDetails.title}</h1>
-            <p className="text-xl lg:text-2xl text-[#8B2B3E]/90 italic font-semibold drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">{eventDetails.theme}</p>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">{eventDetails.title}</h1>
+            <p className="text-xl lg:text-2xl text-white/90 italic">{eventDetails.theme}</p>
+            <p className="text-lg text-white/80 mt-4">{eventDetails.dates}</p>
           </div>
         </div>
+        
+        <style jsx>{`
+          @keyframes slide-hero {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.33%); }
+          }
+          .animate-slide-hero {
+            animation: slide-hero 25s linear infinite;
+          }
+        `}</style>
       </section>
 
       {/* Who Is This For Section */}
@@ -493,39 +518,6 @@ export default function MyGreatMarriagePage() {
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Couples Gallery Slider */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm overflow-hidden">
-                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Celebrating Love</h2>
-                <div className="relative">
-                  <div className="flex gap-4 animate-slide">
-                    {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((num, idx) => (
-                      <div 
-                        key={idx} 
-                        className="flex-shrink-0 w-64 h-80 rounded-xl overflow-hidden shadow-lg"
-                      >
-                        <img
-                          src={`/images/couples/couple-${num}.jpg`}
-                          alt={`Happy couple ${num}`}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <style jsx>{`
-                  @keyframes slide {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
-                  }
-                  .animate-slide {
-                    animation: slide 30s linear infinite;
-                  }
-                  .animate-slide:hover {
-                    animation-play-state: paused;
-                  }
-                `}</style>
               </div>
 
               {/* Quote */}
