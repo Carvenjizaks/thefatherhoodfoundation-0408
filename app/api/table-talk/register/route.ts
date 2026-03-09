@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
-import { createContact, sendWelcomeEmail } from "@/lib/email-service"
+import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail } from "@/lib/email-service"
 import { generateRegistrationCode } from "@/lib/registration-code"
 
 export async function POST(request: Request) {
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Create contact and send welcome/confirmation email
+    // Create contact and send emails
     try {
       const { contact, isNewContact } = await createContact({
         firstName,
@@ -64,12 +64,32 @@ export async function POST(request: Request) {
         sourceDetails: `Table Talk for Men - ${sessionDate}`,
       })
 
+      // Send welcome email for new contacts
       if (isNewContact && contact) {
         await sendWelcomeEmail(contact.id)
         console.log(`[v0] Welcome email sent to: ${email}`)
       }
+
+      // Always send registration confirmation email with event details and code
+      const emailSent = await sendRegistrationConfirmationEmail({
+        email,
+        firstName,
+        lastName,
+        eventName: "Table Talk for Men",
+        sessionDate,
+        sessionTime: "8:30am - 10:30am",
+        location: "Scouts Hall, Suiderhof, Windhoek",
+        dynamicCode,
+        paymentAmount: "NAD 50",
+      })
+      
+      if (emailSent) {
+        console.log(`[v0] Registration confirmation email sent to: ${email}`)
+      } else {
+        console.error(`[v0] Failed to send registration confirmation email to: ${email}`)
+      }
     } catch (emailError) {
-      console.error("[v0] Error sending welcome email:", emailError)
+      console.error("[v0] Error sending emails:", emailError)
       // Don't fail the registration if email fails
     }
 
