@@ -127,6 +127,9 @@ export default function MentoringMenPage() {
             <p className="text-lg lg:text-xl text-white/80 text-balance leading-relaxed max-w-2xl mx-auto">
               A gathering space where men from all walks of life come together for real conversation about everyday life.
             </p>
+            <p className="mt-6 text-amber-400 font-semibold text-lg">
+              Include these dates in your calendar
+            </p>
             <div className="mt-10">
               <Button asChild size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
                 <Link href="/get-involved">
