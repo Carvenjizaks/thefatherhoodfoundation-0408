@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, X, Calendar, Clock, MapPin } from "lucide-react"
+import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 // Event configuration with open/closed status
 const events = [
@@ -25,6 +26,7 @@ const events = [
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
     price: "NAD 600 per couple",
     priceAmount: 600,
+    detailsPage: "/events/my-great-marriage",
   },
   {
     id: "goc26",
@@ -426,6 +428,15 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
         </div>
 
         <p className="text-gray-600 mb-4">{event.description}</p>
+
+        {event.detailsPage && (
+          <Link 
+            href={event.detailsPage}
+            className="inline-flex items-center gap-2 text-[#8B2B3E] font-semibold hover:underline mb-4"
+          >
+            Read More <ArrowRight className="w-4 h-4" />
+          </Link>
+        )}
 
         <div className="border-t pt-4 mb-6">
           <span className="text-xl font-bold text-[#8B2B3E]">{event.price}</span>
