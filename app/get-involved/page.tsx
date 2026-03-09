@@ -106,7 +106,6 @@ export default function GetInvolvedPage() {
     { 
       month: "MARCH",
       sessions: [
-        { date: "14 March 2026", dateValue: "2026-03-14" },
         { date: "28 March 2026", dateValue: "2026-03-28" },
       ]
     },
