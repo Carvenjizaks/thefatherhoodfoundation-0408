@@ -463,7 +463,7 @@ export default function MyGreatMarriagePage() {
       {/* Event Details */}
       <section className="py-12 lg:py-16 relative overflow-hidden">
         {/* Soft Thumbprint Background Pattern */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.08]">
           <svg className="absolute top-20 -left-20 w-96 h-96 text-[#8B2B3E]" viewBox="0 0 200 200" fill="currentColor">
             <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50 M100,70 Q110,70 115,80 Q120,90 120,100 Q120,110 112,118 Q105,125 95,122 Q85,120 80,110 Q75,100 80,90 Q85,80 95,72 Q97,70 100,70"/>
           </svg>
@@ -549,12 +549,12 @@ export default function MyGreatMarriagePage() {
 
               {/* Why Attend */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Why Attend?</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-8">Why Attend?</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
                   {whyAttend.map((reason, index) => (
-                    <div key={index} className="flex items-center gap-3 bg-[#8B2B3E]/5 rounded-lg p-4">
+                    <div key={index} className="flex items-center gap-4 bg-[#8B2B3E]/5 rounded-lg p-5">
                       <CheckCircle className="w-5 h-5 text-[#8B2B3E] flex-shrink-0" />
-                      <span className="font-medium text-gray-800">{reason}</span>
+                      <span className="font-medium text-gray-800 leading-snug">{reason}</span>
                     </div>
                   ))}
                 </div>
