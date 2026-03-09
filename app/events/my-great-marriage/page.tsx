@@ -549,12 +549,12 @@ export default function MyGreatMarriagePage() {
 
               {/* Why Attend */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Why Attend?</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-8">Why Attend?</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
                   {whyAttend.map((reason, index) => (
-                    <div key={index} className="flex items-center gap-3 bg-[#8B2B3E]/5 rounded-lg p-4">
+                    <div key={index} className="flex items-center gap-4 bg-[#8B2B3E]/5 rounded-lg p-5">
                       <CheckCircle className="w-5 h-5 text-[#8B2B3E] flex-shrink-0" />
-                      <span className="font-medium text-gray-800">{reason}</span>
+                      <span className="font-medium text-gray-800 leading-snug">{reason}</span>
                     </div>
                   ))}
                 </div>
