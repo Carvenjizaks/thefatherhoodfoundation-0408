@@ -300,7 +300,7 @@ export default function GetInvolvedPage() {
                 </div>
               </div>
               <p className="text-muted-foreground text-center text-sm mb-6">
-                After registration, you will receive a <strong>Dynamic Code</strong>. Please use your <strong>Name + Cellphone</strong> as payment reference.
+                Please use your <strong>Name + Cellphone</strong> as payment reference.
               </p>
               
               <div className="border-t pt-6">
