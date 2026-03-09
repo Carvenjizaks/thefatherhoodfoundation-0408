@@ -1,23 +1,50 @@
-import { Header } from "@/components/header"
+"use client"
+
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Building2, Handshake, Users2, Target } from "lucide-react"
-import type { Metadata } from "next"
+import { ScrollingImageCarousel } from "@/components/scrolling-image-carousel"
 
-export const metadata: Metadata = {
-  title: "Community Development | The Fatherhood Foundation",
-  description: "Make a lasting impact in your community through service, leadership, and collaborative initiatives.",
-}
+const communityImages = [
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Attachment-13-P4o703bCzecPRn2XTxweMqrFwiVPBB.jpeg",
+    alt: "Men gathered at outdoor community event",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Attachment-23-4yRyf2gOFliphn4aFCNjLy5TgTODaP.jpeg",
+    alt: "Large outdoor gathering with community members",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_2878-vWbv5h5xMMzNviWuPgX7B6PRdRxE86.jpeg",
+    alt: "Community outreach serving children",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0874-Fqq2iEybmNDZZuiYWArJtCT0o92K7z.jpeg",
+    alt: "Men attending community seminar",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0044-ZSKV5F7rVNiE5f9ir9qwYZ9bA4ueGR.jpeg",
+    alt: "Group photo of community members at event",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_7685-GxblfQHicLe9Iznc2UP1blYefuDBwf.jpeg",
+    alt: "School assembly presentation",
+  },
+  {
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0056-4k8zuQ2If9yvsmecd5ldQlIbM80kzH.jpeg",
+    alt: "Indoor community meeting",
+  },
+]
 
 export default function CommunityDevelopmentPage() {
   return (
     <>
-      <Header />
-
       <main className="pt-20">
+        {/* Scrolling Image Carousel */}
+        <ScrollingImageCarousel images={communityImages} />
         {/* Hero Section */}
         <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
           <div className="absolute inset-0 z-0">
