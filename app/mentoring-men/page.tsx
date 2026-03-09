@@ -114,16 +114,9 @@ export default function MentoringMenPage() {
               heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="mb-8">
-              <Image
-                src="/images/monthly-table-talk-logo.png"
-                alt="Monthly Table Talk for Men logo"
-                width={280}
-                height={280}
-                className="mx-auto drop-shadow-2xl w-auto h-auto"
-                priority
-              />
-            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
+              Monthly Table Talk for Men
+            </h1>
             <p className="text-lg lg:text-xl text-white/80 text-balance leading-relaxed max-w-2xl mx-auto">
               A gathering space where men from all walks of life come together for real conversation about everyday life.
             </p>
