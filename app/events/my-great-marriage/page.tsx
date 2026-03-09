@@ -406,15 +406,15 @@ export default function MyGreatMarriagePage() {
           />
           
           <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-12 max-w-7xl mx-auto">
-            <Link href="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4 w-fit">
+            <Link href="/events" className="inline-flex items-center text-[#8B2B3E] hover:text-[#6d2230] mb-4 w-fit font-semibold drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Events
             </Link>
-            <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4">
+            <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4 shadow-lg">
               Registration Open
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-2">{eventDetails.title}</h1>
-            <p className="text-xl lg:text-2xl text-white/90 italic">{eventDetails.theme}</p>
+            <h1 className="text-4xl lg:text-6xl font-bold text-[#8B2B3E] mb-2 drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">{eventDetails.title}</h1>
+            <p className="text-xl lg:text-2xl text-[#8B2B3E]/90 italic font-semibold drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">{eventDetails.theme}</p>
           </div>
         </div>
       </section>
