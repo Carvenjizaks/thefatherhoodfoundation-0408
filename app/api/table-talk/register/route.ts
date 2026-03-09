@@ -1,14 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail } from "@/lib/email-service"
-
-// Generate a unique dynamic code
-function generateDynamicCode(): string {
-  const prefix = "TT"
-  const timestamp = Date.now().toString(36).toUpperCase()
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase()
-  return `${prefix}-${timestamp.slice(-4)}${random}`
-}
+import { generateRegistrationCode } from "@/lib/registration-code"
 
 export async function POST(request: Request) {
   try {
@@ -30,8 +23,8 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
     
-    // Generate unique dynamic code
-    const dynamicCode = generateDynamicCode()
+    // Generate unique, secure registration code
+    const dynamicCode = generateRegistrationCode("TFF")
 
     // Insert registration
     const { data, error } = await supabase
