@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       .from("event_registrations")
       .select("id")
       .eq("email", email)
-      .eq("event_slug", eventSlug)
+      .eq("event_id", eventSlug)
       .single()
 
     if (existingRegistration) {
@@ -51,7 +51,12 @@ export async function POST(request: Request) {
       )
     }
 
-    // Insert registration
+    // Build spouse name if provided
+    const spouseName = spouseFirstName && spouseLastName 
+      ? `${spouseFirstName} ${spouseLastName}` 
+      : spouseFirstName || null
+
+    // Insert registration (matching actual database schema)
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")
       .insert({
@@ -59,18 +64,16 @@ export async function POST(request: Request) {
         last_name: lastName,
         email,
         phone,
-        event_slug: eventSlug,
+        event_id: eventSlug,
         event_name: eventName,
-        event_date: eventDate,
-        event_time: eventTime || "TBA",
-        event_location: eventLocation || "TBA",
-        registration_code: registrationCode,
+        session_date: eventDate,
+        dynamic_code: registrationCode,
         payment_amount: parseFloat(paymentAmount) || 0,
         payment_status: "pending",
-        spouse_first_name: spouseFirstName || null,
-        spouse_last_name: spouseLastName || null,
-        number_of_attendees: numberOfAttendees || 1,
-        special_requirements: specialRequirements || null,
+        spouse_name: spouseName,
+        spouse_email: null,
+        spouse_phone: null,
+        checked_in: false,
       })
       .select()
       .single()
