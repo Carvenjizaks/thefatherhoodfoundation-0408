@@ -507,6 +507,31 @@ export default function MyGreatMarriagePage() {
                 </div>
               </div>
 
+              {/* Thumbprints Banner */}
+              <div className="bg-[#8B2B3E] rounded-2xl py-6 overflow-hidden">
+                <div className="flex whitespace-nowrap animate-marquee">
+                  {[1, 2, 3].map((_, idx) => (
+                    <div key={idx} className="flex items-center gap-8 px-8">
+                      <span className="text-white/40 text-4xl">&#9756;</span>
+                      <p className="text-white text-lg md:text-xl font-medium">
+                        <span className="font-bold text-white/90">Thumb Prints:</span>{" "}
+                        <span className="italic">Every relationship is unique and special, and it deserves your full attention</span>
+                      </p>
+                      <span className="text-white/40 text-4xl">&#9758;</span>
+                    </div>
+                  ))}
+                </div>
+                <style jsx>{`
+                  @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.33%); }
+                  }
+                  .animate-marquee {
+                    animation: marquee 20s linear infinite;
+                  }
+                `}</style>
+              </div>
+
               {/* Why Attend */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Why Attend?</h2>
