@@ -106,28 +106,28 @@ export default function GetInvolvedPage() {
     { 
       month: "MARCH",
       sessions: [
-        { date: "28 March 2026", dateValue: "2026-03-28" },
+        { date: "28 March 2026", dateValue: "2026-03-28", time: "8:30am - 10:30am", isOpen: true },
       ]
     },
     { 
       month: "APRIL",
       sessions: [
-        { date: "11 April 2026", dateValue: "2026-04-11" },
-        { date: "25 April 2026", dateValue: "2026-04-25" },
+        { date: "11 April 2026", dateValue: "2026-04-11", time: "8:30am - 10:30am", isOpen: false },
+        { date: "25 April 2026", dateValue: "2026-04-25", time: "8:30am - 10:30am", isOpen: false },
       ]
     },
     { 
       month: "MAY",
       sessions: [
-        { date: "9 May 2026", dateValue: "2026-05-09" },
-        { date: "23 May 2026", dateValue: "2026-05-23" },
+        { date: "9 May 2026", dateValue: "2026-05-09", time: "8:30am - 10:30am", isOpen: false },
+        { date: "23 May 2026", dateValue: "2026-05-23", time: "8:30am - 10:30am", isOpen: false },
       ]
     },
     { 
       month: "JUNE",
       sessions: [
-        { date: "6 June 2026", dateValue: "2026-06-06" },
-        { date: "20 June 2026", dateValue: "2026-06-20" },
+        { date: "6 June 2026", dateValue: "2026-06-06", time: "8:30am - 10:30am", isOpen: false },
+        { date: "20 June 2026", dateValue: "2026-06-20", time: "8:30am - 10:30am", isOpen: false },
       ]
     },
   ]
@@ -237,21 +237,29 @@ export default function GetInvolvedPage() {
                       {monthGroup.sessions.map((session, index) => (
                         <div
                           key={index}
-                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 hover:bg-muted/50 transition-colors"
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 transition-colors ${session.isOpen ? 'hover:bg-muted/50' : 'bg-muted/30'}`}
                         >
                           <div className="flex items-start gap-4">
-                            <Calendar className="w-6 h-6 text-[#8B2B3E] flex-shrink-0 mt-1" />
+                            <Calendar className={`w-6 h-6 flex-shrink-0 mt-1 ${session.isOpen ? 'text-[#8B2B3E]' : 'text-muted-foreground'}`} />
                             <div>
-                              <p className="font-bold text-foreground text-lg">{session.date}</p>
-                              <p className="text-muted-foreground">Reserve your seat at the table</p>
+                              <p className={`font-bold text-lg ${session.isOpen ? 'text-foreground' : 'text-muted-foreground'}`}>{session.date}</p>
+                              <p className="text-muted-foreground text-sm">
+                                <span className="font-medium">TIME: {session.time}</span> (Includes Drinks & Light Meal)
+                              </p>
                             </div>
                           </div>
-                          <Button 
-                            className="bg-[#8B2B3E] hover:bg-[#6d2230]"
-                            onClick={() => setSelectedSession(session.dateValue)}
-                          >
-                            Register Now
-                          </Button>
+                          {session.isOpen ? (
+                            <Button 
+                              className="bg-[#8B2B3E] hover:bg-[#6d2230]"
+                              onClick={() => setSelectedSession(session.dateValue)}
+                            >
+                              Register Now
+                            </Button>
+                          ) : (
+                            <span className="inline-flex items-center px-4 py-2 rounded-md bg-muted text-muted-foreground font-medium text-sm">
+                              NOT OPEN YET
+                            </span>
+                          )}
                         </div>
                       ))}
                     </div>
