@@ -136,14 +136,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="bg-[#8B2B3E] py-16">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
-            <p className="text-center text-white/80 text-balance">Real men, real stories, real transformation</p>
-          </div>
-          <FacesParade images={portraitFaces} />
-        </section>
-
         {/* Journey to Authentic Manhood */}
         <JourneySection />
 
@@ -312,6 +304,15 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
+        </section>
+
+        {/* Faces of Fatherhood - Just above Footer */}
+        <section className="bg-[#8B2B3E] py-16">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
+            <p className="text-center text-white/80 text-balance">Real men, real stories, real transformation</p>
+          </div>
+          <FacesParade images={portraitFaces} />
         </section>
       </main>
 
