@@ -19,8 +19,8 @@ const eventDetails = {
   time: "Thursday: 6:00pm-8:30pm | Friday: 6:30pm-9:00pm | Saturday: 8:30am-1:00pm",
   location: "Venue: To be Announced",
   banner: "/images/banners/mgm-couples-banner.jpg",
-  price: "NAD 600 per couple",
-  priceAmount: 600,
+  price: "NAD 550 per couple",
+  priceAmount: 550,
   registrationOpen: true,
 }
 

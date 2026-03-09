@@ -24,8 +24,8 @@ const events = [
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
-    price: "NAD 600 per couple",
-    priceAmount: 600,
+    price: "NAD 550 per couple",
+    priceAmount: 550,
     detailsPage: "/events/my-great-marriage",
   },
   {
