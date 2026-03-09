@@ -299,9 +299,23 @@ export default function GetInvolvedPage() {
                   </div>
                 </div>
               </div>
-              <p className="text-muted-foreground text-center text-sm">
+              <p className="text-muted-foreground text-center text-sm mb-6">
                 After registration, you will receive a <strong>Dynamic Code</strong>. Please use your <strong>Name + Cellphone</strong> as payment reference.
               </p>
+              
+              <div className="border-t pt-6">
+                <h4 className="font-semibold text-[#8B2B3E] mb-4 text-center">Or Pay Via PayToday</h4>
+                <div className="flex justify-center">
+                  <a
+                    href="https://site.paytoday.com.na"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-3 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold rounded-lg transition-colors"
+                  >
+                    Pay Now
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
