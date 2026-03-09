@@ -7,7 +7,6 @@ import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JourneySection } from "@/components/journey-section"
-import { FacesParade } from "@/components/faces-parade"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -37,31 +36,6 @@ export default function HomePage() {
 
     return () => observerRef.current?.disconnect()
   }, [])
-
-  const diverseFaces = [
-    "/faces/man-usa.jpg",
-    "/faces/man-africa.jpg",
-    "/faces/man-uk.jpg",
-    "/faces/man-asia.jpg",
-    "/faces/man-namibia.jpg",
-    "/faces/man-australia.jpg",
-    "/faces/man-hungary.jpg",
-    "/faces/man-germany.jpg",
-    "/faces/young-usa.jpg",
-    "/faces/young-africa.jpg",
-    "/faces/young-asia.jpg",
-    "/faces/young-namibia.jpg",
-  ]
-
-  // Diverse fathers from all backgrounds
-  const portraitFaces = [
-    "/gallery/father-black-1.jpg",
-    "/gallery/father-white-1.jpg",
-    "/gallery/father-coloured-1.jpg",
-    "/gallery/father-asian-1.jpg",
-    "/gallery/father-latino-1.jpg",
-    "/gallery/father-black-2.jpg",
-  ]
 
   return (
     <>
@@ -306,14 +280,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Faces of Fatherhood - Just above Footer */}
-        <section className="bg-[#8B2B3E] py-16">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-white text-center mb-2">Faces of Fatherhood</h2>
-            <p className="text-center text-white/80 text-balance">Real men, real stories, real transformation</p>
-          </div>
-          <FacesParade images={portraitFaces} />
-        </section>
       </main>
 
       <Footer />
