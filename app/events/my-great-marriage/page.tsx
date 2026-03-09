@@ -461,8 +461,24 @@ export default function MyGreatMarriagePage() {
       </section>
 
       {/* Event Details */}
-      <section className="py-12 lg:py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="py-12 lg:py-16 relative overflow-hidden">
+        {/* Soft Thumbprint Background Pattern */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+          <svg className="absolute top-20 -left-20 w-96 h-96 text-[#8B2B3E]" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50 M100,70 Q110,70 115,80 Q120,90 120,100 Q120,110 112,118 Q105,125 95,122 Q85,120 80,110 Q75,100 80,90 Q85,80 95,72 Q97,70 100,70"/>
+          </svg>
+          <svg className="absolute top-60 right-10 w-80 h-80 text-[#8B2B3E] rotate-45" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50"/>
+          </svg>
+          <svg className="absolute bottom-40 left-1/4 w-64 h-64 text-[#8B2B3E] -rotate-12" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50 M100,70 Q110,70 115,80 Q120,90 120,100 Q120,110 112,118 Q105,125 95,122 Q85,120 80,110 Q75,100 80,90 Q85,80 95,72 Q97,70 100,70"/>
+          </svg>
+          <svg className="absolute bottom-20 right-1/4 w-72 h-72 text-[#8B2B3E] rotate-90" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30"/>
+          </svg>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-10">
