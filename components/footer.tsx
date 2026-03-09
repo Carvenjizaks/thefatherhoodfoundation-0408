@@ -77,7 +77,7 @@ export function Footer() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div className="max-w-xl">
               <h2 className="text-2xl lg:text-3xl font-bold mb-3 text-balance">
-                Join Our Mission to Transform Families
+                Join Our Mission to Transform Men, Who Will Bring Transformation to Their Families and Impact Community and the Marketplace
               </h2>
               <p className="text-white/70 text-balance">
                 Subscribe to receive updates on events, resources, and ways to get involved.
