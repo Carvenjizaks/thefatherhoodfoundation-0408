@@ -561,10 +561,9 @@ export default function MyGreatMarriagePage() {
               </div>
 
               {/* Quote */}
-              <div className="bg-[#8B2B3E] rounded-2xl p-8 text-center">
-                <p className="text-xl lg:text-2xl text-white italic leading-relaxed">
-                  &ldquo;Good marriages don&apos;t happen by accident. They are built intentionally, 
-                  one day at a time. Join us and invest in the most important relationship of your life!&rdquo;
+              <div className="bg-[#8B2B3E] rounded-2xl p-8 text-center overflow-visible">
+                <p className="text-xl lg:text-2xl text-white italic leading-relaxed text-balance max-w-none">
+                  &ldquo;Good marriages don&apos;t happen by accident. They are built intentionally, one day at a time. Join us and invest in the most important relationship of your life!&rdquo;
                 </p>
               </div>
             </div>
