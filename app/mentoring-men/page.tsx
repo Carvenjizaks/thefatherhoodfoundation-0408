@@ -127,11 +127,11 @@ export default function MentoringMenPage() {
             <p className="text-lg lg:text-xl text-white/80 text-balance leading-relaxed max-w-2xl mx-auto">
               A gathering space where men from all walks of life come together for real conversation about everyday life.
             </p>
-            <p className="mt-6 text-amber-400 font-semibold text-lg">
+            <p className="mt-6 text-white font-semibold text-lg">
               Include these dates in your calendar
             </p>
             <div className="mt-10">
-              <Button asChild size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+              <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold">
                 <Link href="/get-involved">
                   Join the Table <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -204,8 +204,8 @@ export default function MentoringMenPage() {
                 {
                   title: "Real Talk",
                   description: "No pretenses. No facades. Just authentic conversations about real life.",
-                  bgColor: "bg-amber-500",
-                  textColor: "text-black",
+                  bgColor: "bg-[#8B0000]",
+                  textColor: "text-white",
                 },
                 {
                   title: "Brotherhood",
@@ -251,7 +251,7 @@ export default function MentoringMenPage() {
               Join a brotherhood of men committed to growth, honesty, and becoming the best versions of themselves.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+              <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold">
                 <Link href="/get-involved">
                   Get Involved <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
