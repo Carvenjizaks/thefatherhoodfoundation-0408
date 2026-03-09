@@ -16,70 +16,59 @@ export const metadata: Metadata = {
 
 const books = [
   {
+    title: "Sexual Integrity: A Sexual Revolution Called Purity",
+    bannerTitle: "Sexual Integrity",
+    author: "Ed Cole",
+    introduction:
+      "In a culture that cheapens intimacy, men are called to a higher standard. Sexual integrity is not about suppression but about channeling God's gift of sexuality within its proper boundaries. This book provides honest, biblical guidance for men who desire purity in an impure world.",
+    description:
+      "A frank and practical guide to maintaining purity in thought and action. Essential reading for men committed to honoring God and their families through sexual integrity. Foreword by Nick and Christine Caine.",
+    image: "/images/books/sexual-integrity.jpg",
+    topics: ["Purity", "Self-Control", "Relationships", "Accountability"],
+  },
+  {
+    title: "Power of Potential: Maximize God's Principles to Fulfill Your Dreams",
+    bannerTitle: "Power of Potential",
+    author: "Ed Cole",
+    introduction:
+      "Every man has untapped potential waiting to be released. God has placed within you the seeds of greatness, but it takes intentional effort to cultivate them. This book shows you how to maximize God's principles to fulfill your dreams and become everything you were created to be.",
+    description:
+      "Discover how to unlock your God-given potential and fulfill your dreams. Learn the principles that turn ordinary men into extraordinary leaders. Foreword by Stan Toler.",
+    image: "/images/books/power-of-potential.webp",
+    topics: ["Potential", "Dreams", "Leadership", "Growth"],
+  },
+  {
+    title: "Communication, Sex and Money: Overcoming the Three Common Challenges in Relationships",
+    bannerTitle: "Communication, Sex & Money",
+    author: "Ed Cole",
+    introduction:
+      "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
+    description:
+      "A practical guide to navigating the most challenging areas of marriage. Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances. Foreword by Jack Hayford.",
+    image: "/images/books/communication-sex-money.webp",
+    topics: ["Marriage", "Communication", "Intimacy", "Finances"],
+  },
+  {
+    title: "Never Quit: Winners Are Not Those Who Never Fail But Those Who Never Quit",
+    bannerTitle: "Never Quit",
+    author: "Ed Cole",
+    introduction:
+      "Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up. This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face.",
+    description:
+      "An inspiring call to perseverance and resilience. Learn how to overcome setbacks, push through adversity, and develop the unshakeable determination that defines true champions. Foreword by Ray Johnston.",
+    image: "/images/books/never-quit.webp",
+    topics: ["Perseverance", "Resilience", "Victory", "Determination"],
+  },
+  {
     title: "Courage: Winning Life's Toughest Battles",
     bannerTitle: "Courage",
     author: "Ed Cole",
     introduction:
       "True courage is not the absence of fear, but the mastery of it. Every man faces battles that test his resolve—whether in his career, relationships, or personal struggles. This book equips you with the spiritual weapons and practical wisdom to stand firm when everything around you is shaking.",
     description:
-      "A powerful guide to developing the courage needed to face life's greatest challenges. Learn how to stand firm in adversity, overcome fear, and lead with strength and conviction.",
-    image: "/images/books/courage.jpg",
+      "A powerful guide to developing the courage needed to face life's greatest challenges. Learn how to stand firm in adversity, overcome fear, and lead with strength and conviction. Foreword by Casey Treat.",
+    image: "/images/books/courage.webp",
     topics: ["Overcoming Fear", "Building Character", "Leadership", "Faith"],
-  },
-  {
-    title: "Maximized Manhood: A Guide to Family Survival",
-    bannerTitle: "Maximized Manhood",
-    author: "Edwin Louis Cole",
-    introduction:
-      "Manhood is not automatic—it must be developed, nurtured, and intentionally pursued. In a world that has lost its definition of masculinity, this timeless classic calls men back to their God-given purpose as protectors, providers, and spiritual leaders of their homes.",
-    description:
-      "The bestselling book that has helped millions of men understand their role as husband and father. Discover biblical principles for leading your family with wisdom and love.",
-    image: "/images/books/maximized-manhood.jpg",
-    topics: ["Marriage", "Fatherhood", "Spiritual Leadership", "Family"],
-  },
-  {
-    title: "Sexual Integrity",
-    bannerTitle: "Sexual Integrity",
-    author: "Edwin Louis Cole",
-    introduction:
-      "In a culture that cheapens intimacy, men are called to a higher standard. Sexual integrity is not about suppression but about channeling God's gift of sexuality within its proper boundaries. This book provides honest, biblical guidance for men who desire purity in an impure world.",
-    description:
-      "A frank and practical guide to maintaining purity in thought and action. Essential reading for men committed to honoring God and their families through sexual integrity.",
-    image: "/images/books/sexual-integrity.jpg",
-    topics: ["Purity", "Self-Control", "Relationships", "Accountability"],
-  },
-  {
-    title: "Real Man",
-    bannerTitle: "Real Man",
-    author: "Edwin Louis Cole",
-    introduction:
-      "What does it mean to be a real man in today's world? Society offers countless counterfeits, but God's standard remains unchanged. A real man takes responsibility, keeps his word, and lives with integrity regardless of the cost. This book challenges you to rise above mediocrity and embrace authentic masculinity.",
-    description:
-      "Discover what it truly means to be a man of God. This powerful book strips away cultural confusion and reveals the timeless principles that define genuine manhood.",
-    image: "/images/books/real-man.jpg",
-    topics: ["Authenticity", "Responsibility", "Integrity", "Identity"],
-  },
-  {
-    title: "Communication, Sex and Money",
-    bannerTitle: "Communication, Sex & Money",
-    author: "Edwin Louis Cole",
-    introduction:
-      "The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing. Learn how to transform potential battlegrounds into foundations for a thriving marriage.",
-    description:
-      "A practical guide to navigating the most challenging areas of marriage. Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances.",
-    image: "/images/books/communication-sex-money.webp",
-    topics: ["Marriage", "Communication", "Intimacy", "Finances"],
-  },
-  {
-    title: "Never Quit",
-    bannerTitle: "Never Quit",
-    author: "Edwin Louis Cole",
-    introduction:
-      "Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up. This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face.",
-    description:
-      "An inspiring call to perseverance and resilience. Learn how to overcome setbacks, push through adversity, and develop the unshakeable determination that defines true champions.",
-    image: "/images/books/never-quit.jpg",
-    topics: ["Perseverance", "Resilience", "Victory", "Determination"],
   },
 ]
 
