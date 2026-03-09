@@ -296,3 +296,169 @@ export async function getContactByToken(token: string) {
 
   return contact
 }
+
+// Send registration confirmation email with event details and dynamic code
+export async function sendRegistrationConfirmationEmail(params: {
+  email: string
+  firstName: string
+  lastName: string
+  eventName: string
+  sessionDate: string
+  sessionTime: string
+  location: string
+  dynamicCode: string
+  paymentAmount: string
+}): Promise<boolean> {
+  const {
+    email,
+    firstName,
+    lastName,
+    eventName,
+    sessionDate,
+    sessionTime,
+    location,
+    dynamicCode,
+    paymentAmount,
+  } = params
+
+  const subject = `Registration Confirmed: ${eventName} - ${sessionDate}`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="background-color: #8B2B3E; padding: 30px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">The Fatherhood Foundation</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="color: #8B2B3E; margin: 0 0 20px 0; font-size: 24px;">Registration Confirmed!</h2>
+              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                Dear <strong>${firstName} ${lastName}</strong>,
+              </p>
+              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                Thank you for registering for <strong>${eventName}</strong>. Your registration has been received successfully.
+              </p>
+              
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px; margin-bottom: 30px;">
+                <tr>
+                  <td style="padding: 25px;">
+                    <h3 style="color: #8B2B3E; margin: 0 0 15px 0; font-size: 18px;">Event Details</h3>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Event:</td>
+                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${eventName}</td>
+                      </tr>
+                      <tr>
+                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Date:</td>
+                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${sessionDate}</td>
+                      </tr>
+                      <tr>
+                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Time:</td>
+                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${sessionTime}</td>
+                      </tr>
+                      <tr>
+                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Location:</td>
+                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${location}</td>
+                      </tr>
+                      <tr>
+                        <td style="color: #666666; font-size: 14px; padding: 8px 0;">Registration Fee:</td>
+                        <td style="color: #333333; font-size: 14px; padding: 8px 0; text-align: right; font-weight: bold;">${paymentAmount}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #8B2B3E; border-radius: 8px; margin-bottom: 30px;">
+                <tr>
+                  <td style="padding: 25px; text-align: center;">
+                    <p style="color: #ffffff; font-size: 14px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1px;">Your Registration Code</p>
+                    <p style="color: #ffffff; font-size: 32px; margin: 0; font-weight: bold; letter-spacing: 3px;">${dynamicCode}</p>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 10px 0 0 0;">Present this code at check-in</p>
+                  </td>
+                </tr>
+              </table>
+
+              <h3 style="color: #8B2B3E; margin: 0 0 15px 0; font-size: 18px;">Payment Instructions</h3>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Bank:</strong> FNB</p>
+                    <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Account Name:</strong> The FATHERHOOD FOUNDATION</p>
+                    <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Account Number:</strong> 64279664451</p>
+                    <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Branch Code:</strong> 282273</p>
+                    <p style="color: #333333; font-size: 14px; margin: 0;"><strong>Reference:</strong> Your Name + Cellphone</p>
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #666666; font-size: 14px; margin: 0 0 20px 0; text-align: center;">
+                Or pay online via <a href="https://site.paytoday.com.na" style="color: #8B2B3E; font-weight: bold;">PayToday</a>
+              </p>
+
+              <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
+              <p style="color: #666666; font-size: 14px; line-height: 1.6; margin: 0;">
+                We look forward to seeing you! If you have any questions, please contact us at info@thefathersfoundations.org
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f8f8f8; padding: 20px 30px; text-align: center;">
+              <p style="color: #999999; font-size: 12px; margin: 0 0 10px 0;">The Fatherhood Foundation</p>
+              <p style="color: #999999; font-size: 12px; margin: 0;">Empowering fathers. Strengthening families. Building communities.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  const text = `
+Registration Confirmed: ${eventName}
+
+Dear ${firstName} ${lastName},
+
+Thank you for registering for ${eventName}. Your registration has been received successfully.
+
+EVENT DETAILS
+-------------
+Event: ${eventName}
+Date: ${sessionDate}
+Time: ${sessionTime}
+Location: ${location}
+Registration Fee: ${paymentAmount}
+
+YOUR REGISTRATION CODE: ${dynamicCode}
+(Present this code at check-in)
+
+PAYMENT INSTRUCTIONS
+--------------------
+Bank: FNB
+Account Name: The FATHERHOOD FOUNDATION
+Account Number: 64279664451
+Branch Code: 282273
+Reference: Your Name + Cellphone
+
+Or pay online via PayToday: https://site.paytoday.com.na
+
+We look forward to seeing you!
+
+The Fatherhood Foundation
+Empowering fathers. Strengthening families. Building communities.
+`
+
+  return await sendEmailViaSMTP(email, `${firstName} ${lastName}`, subject, html, text)
+}
