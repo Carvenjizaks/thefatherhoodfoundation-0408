@@ -268,13 +268,39 @@ export default function GetInvolvedPage() {
               </CardContent>
             </Card>
 
-            <div className="bg-white rounded-xl p-8 border-2 text-center">
-              <h3 className="text-xl font-bold mb-4">Payment Instructions</h3>
-              <p className="text-muted-foreground mb-4">
-                After registration, you will receive a <strong>Dynamic Code</strong>. Use this code as your payment reference.
-              </p>
-              <p className="text-lg">
-                Send payment to: <strong className="text-[#8B2B3E]">finance@fathersfound.org</strong>
+            <div className="bg-white rounded-xl p-8 border-2">
+              <h3 className="text-xl font-bold mb-6 text-center">Payment Instructions</h3>
+              <div className="bg-muted/50 rounded-lg p-6 mb-6">
+                <h4 className="font-semibold text-[#8B2B3E] mb-4">Banking Details (EFT)</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Bank:</span>
+                    <span className="font-medium ml-2">FNB</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Account Type:</span>
+                    <span className="font-medium ml-2">Cheque Account</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Account Name:</span>
+                    <span className="font-medium ml-2">The FATHERHOOD FOUNDATION</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Account Number:</span>
+                    <span className="font-medium ml-2">64279664451</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Branch Code:</span>
+                    <span className="font-medium ml-2">282273</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Reference:</span>
+                    <span className="font-medium ml-2 text-[#8B2B3E]">Your Name + Cellphone</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-muted-foreground text-center text-sm">
+                After registration, you will receive a <strong>Dynamic Code</strong>. Please use your <strong>Name + Cellphone</strong> as payment reference.
               </p>
             </div>
           </div>
