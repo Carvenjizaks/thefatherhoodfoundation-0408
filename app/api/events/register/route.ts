@@ -32,16 +32,18 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
+    console.log("[v0] Event registration API called for:", eventName, email)
 
     // Generate unique registration code
     const registrationCode = generateRegistrationCode("EVT")
+    console.log("[v0] Generated registration code:", registrationCode)
 
     // Check for existing registration
     const { data: existingRegistration } = await supabase
       .from("event_registrations")
       .select("id")
       .eq("email", email)
-      .eq("event_slug", eventSlug)
+      .eq("event_id", eventSlug)
       .single()
 
     if (existingRegistration) {
@@ -51,34 +53,42 @@ export async function POST(request: Request) {
       )
     }
 
-    // Insert registration
+    // Build spouse name if provided
+    const spouseName = spouseFirstName && spouseLastName 
+      ? `${spouseFirstName} ${spouseLastName}` 
+      : spouseFirstName || null
+
+    // Insert registration (matching actual database schema)
+    const insertData = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone,
+      event_id: eventSlug,
+      event_name: eventName,
+      session_date: eventDate,
+      dynamic_code: registrationCode,
+      payment_amount: parseFloat(paymentAmount) || 0,
+      payment_status: "pending",
+      spouse_name: spouseName,
+      spouse_email: null,
+      spouse_phone: null,
+      checked_in: false,
+    }
+    console.log("[v0] Inserting event registration:", JSON.stringify(insertData))
+
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")
-      .insert({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        event_slug: eventSlug,
-        event_name: eventName,
-        event_date: eventDate,
-        event_time: eventTime || "TBA",
-        event_location: eventLocation || "TBA",
-        registration_code: registrationCode,
-        payment_amount: parseFloat(paymentAmount) || 0,
-        payment_status: "pending",
-        spouse_first_name: spouseFirstName || null,
-        spouse_last_name: spouseLastName || null,
-        number_of_attendees: numberOfAttendees || 1,
-        special_requirements: specialRequirements || null,
-      })
+      .insert(insertData)
       .select()
       .single()
+
+    console.log("[v0] Insert result:", { registration, insertError })
 
     if (insertError) {
       console.error("[v0] Error inserting event registration:", insertError)
       return NextResponse.json(
-        { error: "Failed to create registration" },
+        { error: "Failed to create registration", details: insertError.message },
         { status: 500 }
       )
     }
@@ -100,6 +110,7 @@ export async function POST(request: Request) {
       }
 
       // Always send registration confirmation email
+      console.log("[v0] Sending registration confirmation email to:", email)
       const emailSent = await sendRegistrationConfirmationEmail({
         email,
         firstName,
@@ -112,8 +123,11 @@ export async function POST(request: Request) {
         paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
       })
 
+      console.log("[v0] Registration confirmation email result:", emailSent)
       if (emailSent) {
-        console.log(`[v0] Registration confirmation email sent to: ${email}`)
+        console.log(`[v0] Registration confirmation email sent successfully to: ${email}`)
+      } else {
+        console.log(`[v0] Registration confirmation email FAILED for: ${email}`)
       }
     } catch (emailError) {
       console.error("[v0] Error sending emails:", emailError)

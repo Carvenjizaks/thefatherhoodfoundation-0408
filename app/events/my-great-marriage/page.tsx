@@ -15,8 +15,8 @@ const eventDetails = {
   slug: "mgm-may-2026",
   title: "MyGreatMarriage Conference 2026",
   theme: "Taking Your Marriage from Good to Great",
-  dates: "1 May 2026",
-  time: "Thursday: 6:00pm-8:30pm | Friday: 6:30pm-9:00pm | Saturday: 8:30am-1:00pm",
+  dates: "30 April - 2 May 2026",
+  time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
   location: "Venue: To be Announced",
   banner: "/images/banners/mgm-couples-banner.jpg",
   price: "NAD 550 per couple",
@@ -221,7 +221,7 @@ function RegistrationModal({ onClose }: { onClose: () => void }) {
                   <p><strong>Account Name:</strong> The FATHERHOOD FOUNDATION</p>
                   <p><strong>Account Number:</strong> 64279664451</p>
                   <p><strong>Branch Code:</strong> 282273</p>
-                  <p><strong>Reference:</strong> Your Name + Cellphone</p>
+                  <p><strong>Reference:</strong> MGM26-Name + Cellphone</p>
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t">
@@ -394,29 +394,54 @@ export default function MyGreatMarriagePage() {
 
   return (
     <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative">
+      {/* Hero Section with Sliding Couples Carousel */}
+      <section className="relative bg-[#8B2B3E] overflow-hidden">
         <div className="relative w-full h-[400px] md:h-[500px]">
-          <Image
-            src={eventDetails.banner}
-            alt={eventDetails.title}
-            fill
-            priority
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-          <div className="absolute inset-0 flex flex-col justify-end p-6 lg:p-12 max-w-7xl mx-auto">
-            <Link href="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4 w-fit">
+          {/* Sliding Couples Background */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="flex gap-4 animate-slide-hero">
+              {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((num, idx) => (
+                <div 
+                  key={idx} 
+                  className="flex-shrink-0 w-72 h-[400px] md:h-[500px] overflow-hidden"
+                >
+                  <img
+                    src={`/images/couples/couple-${num}.jpg`}
+                    alt={`Happy couple ${num}`}
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Dark Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8B2B3E]/90 via-[#8B2B3E]/70 to-[#8B2B3E]/90" />
+          
+          {/* Content */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 lg:p-12 max-w-4xl mx-auto">
+            <Link href="/events" className="inline-flex items-center text-white/80 hover:text-white mb-4 w-fit font-semibold">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Events
             </Link>
-            <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4">
+            <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4 shadow-lg">
               Registration Open
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-2">{eventDetails.title}</h1>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">{eventDetails.title}</h1>
             <p className="text-xl lg:text-2xl text-white/90 italic">{eventDetails.theme}</p>
+            <p className="text-lg text-white/80 mt-4">{eventDetails.dates}</p>
           </div>
         </div>
+        
+        <style jsx>{`
+          @keyframes slide-hero {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.33%); }
+          }
+          .animate-slide-hero {
+            animation: slide-hero 25s linear infinite;
+          }
+        `}</style>
       </section>
 
       {/* Who Is This For Section */}
@@ -436,8 +461,24 @@ export default function MyGreatMarriagePage() {
       </section>
 
       {/* Event Details */}
-      <section className="py-12 lg:py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="py-12 lg:py-16 relative overflow-hidden">
+        {/* Soft Thumbprint Background Pattern */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+          <svg className="absolute top-20 -left-20 w-96 h-96 text-[#8B2B3E]" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50 M100,70 Q110,70 115,80 Q120,90 120,100 Q120,110 112,118 Q105,125 95,122 Q85,120 80,110 Q75,100 80,90 Q85,80 95,72 Q97,70 100,70"/>
+          </svg>
+          <svg className="absolute top-60 right-10 w-80 h-80 text-[#8B2B3E] rotate-45" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50"/>
+          </svg>
+          <svg className="absolute bottom-40 left-1/4 w-64 h-64 text-[#8B2B3E] -rotate-12" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30 M100,50 Q120,50 130,65 Q140,80 140,100 Q140,120 125,135 Q110,150 90,145 Q70,140 60,120 Q50,100 60,80 Q70,60 90,50 Q95,48 100,50 M100,70 Q110,70 115,80 Q120,90 120,100 Q120,110 112,118 Q105,125 95,122 Q85,120 80,110 Q75,100 80,90 Q85,80 95,72 Q97,70 100,70"/>
+          </svg>
+          <svg className="absolute bottom-20 right-1/4 w-72 h-72 text-[#8B2B3E] rotate-90" viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100,10 Q140,10 160,40 Q180,70 180,100 Q180,140 150,170 Q120,200 80,190 Q40,180 20,140 Q0,100 20,60 Q40,20 80,10 Q90,8 100,10 M100,30 Q130,30 145,50 Q160,70 160,100 Q160,130 140,150 Q120,170 90,165 Q60,160 45,130 Q30,100 45,70 Q60,40 90,30 Q95,28 100,30"/>
+          </svg>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-10">
@@ -482,6 +523,31 @@ export default function MyGreatMarriagePage() {
                 </div>
               </div>
 
+              {/* Thumbprints Banner */}
+              <div className="bg-[#8B2B3E] rounded-2xl py-6 overflow-hidden">
+                <div className="flex whitespace-nowrap animate-marquee">
+                  {[1, 2, 3].map((_, idx) => (
+                    <div key={idx} className="flex items-center gap-8 px-8">
+                      <span className="text-white/40 text-4xl">&#9756;</span>
+                      <p className="text-white text-lg md:text-xl font-medium">
+                        <span className="font-bold text-white/90">Thumb Prints:</span>{" "}
+                        <span className="italic">Every relationship is unique and special, and it deserves your full attention</span>
+                      </p>
+                      <span className="text-white/40 text-4xl">&#9758;</span>
+                    </div>
+                  ))}
+                </div>
+                <style jsx>{`
+                  @keyframes marquee {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.33%); }
+                  }
+                  .animate-marquee {
+                    animation: marquee 20s linear infinite;
+                  }
+                `}</style>
+              </div>
+
               {/* Why Attend */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Why Attend?</h2>
@@ -521,8 +587,8 @@ export default function MyGreatMarriagePage() {
                     <div className="flex items-start gap-3">
                       <Clock className="w-5 h-5 text-[#8B2B3E] mt-0.5" />
                       <div className="text-sm text-gray-600">
-                        <p>Thursday: 6:00pm - 8:30pm</p>
-                        <p>Friday: 6:30pm - 9:00pm</p>
+                        <p>Thursday: 7:00pm - 9:00pm</p>
+                        <p>Friday: 7:00pm - 9:00pm</p>
                         <p>Saturday: 8:30am - 1:00pm</p>
                       </div>
                     </div>
@@ -553,7 +619,7 @@ export default function MyGreatMarriagePage() {
                     <p><strong>Account:</strong> The FATHERHOOD FOUNDATION</p>
                     <p><strong>Acc No:</strong> 64279664451</p>
                     <p><strong>Branch:</strong> 282273</p>
-                    <p><strong>Reference:</strong> Name + Cellphone</p>
+                    <p><strong>Reference:</strong> MGM26-Name + Cellphone</p>
                   </div>
                   <div className="mt-4 pt-4 border-t">
                     <a
