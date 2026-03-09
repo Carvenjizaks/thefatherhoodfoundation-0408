@@ -495,6 +495,39 @@ export default function MyGreatMarriagePage() {
                 </div>
               </div>
 
+              {/* Couples Gallery Slider */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm overflow-hidden">
+                <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6">Celebrating Love</h2>
+                <div className="relative">
+                  <div className="flex gap-4 animate-slide">
+                    {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((num, idx) => (
+                      <div 
+                        key={idx} 
+                        className="flex-shrink-0 w-64 h-80 rounded-xl overflow-hidden shadow-lg"
+                      >
+                        <img
+                          src={`/images/couples/couple-${num}.jpg`}
+                          alt={`Happy couple ${num}`}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <style jsx>{`
+                  @keyframes slide {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                  }
+                  .animate-slide {
+                    animation: slide 30s linear infinite;
+                  }
+                  .animate-slide:hover {
+                    animation-play-state: paused;
+                  }
+                `}</style>
+              </div>
+
               {/* Quote */}
               <div className="bg-[#8B2B3E] rounded-2xl p-8 text-center">
                 <p className="text-xl lg:text-2xl text-white italic leading-relaxed">
@@ -521,8 +554,8 @@ export default function MyGreatMarriagePage() {
                     <div className="flex items-start gap-3">
                       <Clock className="w-5 h-5 text-[#8B2B3E] mt-0.5" />
                       <div className="text-sm text-gray-600">
-                        <p>Thursday: 6:00pm - 8:30pm</p>
-                        <p>Friday: 6:30pm - 9:00pm</p>
+                        <p>Thursday: 7:00pm - 9:00pm</p>
+                        <p>Friday: 7:00pm - 9:00pm</p>
                         <p>Saturday: 8:30am - 1:00pm</p>
                       </div>
                     </div>
