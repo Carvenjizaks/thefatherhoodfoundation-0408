@@ -58,8 +58,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-lg lg:text-xl text-black mb-12 max-w-3xl mx-auto text-balance leading-relaxed font-medium">
-              The Fatherhood Foundation provides mentorship, resources, and community support to help men become better
-              fathers, husbands, and leaders.
+              The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
             </p>
 
             <div className="mb-12">
@@ -119,8 +118,7 @@ export default function HomePage() {
               Empowering men to Learn, Grow and Contribute through serving
             </h2>
             <p className="text-lg lg:text-xl text-black leading-relaxed text-balance font-medium">
-              The Fatherhood Foundation provides mentorship, resources, and community support to help men become better
-              fathers, husbands, and leaders.
+              The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
             </p>
           </div>
         </section>
