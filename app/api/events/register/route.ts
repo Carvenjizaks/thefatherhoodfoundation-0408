@@ -32,9 +32,11 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
+    console.log("[v0] Event registration API called for:", eventName, email)
 
     // Generate unique registration code
     const registrationCode = generateRegistrationCode("EVT")
+    console.log("[v0] Generated registration code:", registrationCode)
 
     // Check for existing registration
     const { data: existingRegistration } = await supabase
@@ -57,31 +59,36 @@ export async function POST(request: Request) {
       : spouseFirstName || null
 
     // Insert registration (matching actual database schema)
+    const insertData = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone,
+      event_id: eventSlug,
+      event_name: eventName,
+      session_date: eventDate,
+      dynamic_code: registrationCode,
+      payment_amount: parseFloat(paymentAmount) || 0,
+      payment_status: "pending",
+      spouse_name: spouseName,
+      spouse_email: null,
+      spouse_phone: null,
+      checked_in: false,
+    }
+    console.log("[v0] Inserting event registration:", JSON.stringify(insertData))
+
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")
-      .insert({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        event_id: eventSlug,
-        event_name: eventName,
-        session_date: eventDate,
-        dynamic_code: registrationCode,
-        payment_amount: parseFloat(paymentAmount) || 0,
-        payment_status: "pending",
-        spouse_name: spouseName,
-        spouse_email: null,
-        spouse_phone: null,
-        checked_in: false,
-      })
+      .insert(insertData)
       .select()
       .single()
+
+    console.log("[v0] Insert result:", { registration, insertError })
 
     if (insertError) {
       console.error("[v0] Error inserting event registration:", insertError)
       return NextResponse.json(
-        { error: "Failed to create registration" },
+        { error: "Failed to create registration", details: insertError.message },
         { status: 500 }
       )
     }
