@@ -120,7 +120,7 @@ export default function MentoringMenPage() {
                 alt="Monthly Table Talk for Men logo"
                 width={280}
                 height={280}
-                className="mx-auto drop-shadow-2xl"
+                className="mx-auto drop-shadow-2xl w-auto h-auto"
                 priority
               />
             </div>
