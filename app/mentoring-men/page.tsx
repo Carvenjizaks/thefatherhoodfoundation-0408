@@ -237,6 +237,70 @@ export default function MentoringMenPage() {
         {/* CTA */}
         <section className="py-20 lg:py-32 bg-[#1E3A5F] relative overflow-hidden">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            {/* Open Chair Illustration */}
+            <div className="mb-10">
+              <svg
+                viewBox="0 0 200 180"
+                className="w-40 h-36 mx-auto drop-shadow-lg"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Chair seat */}
+                <path
+                  d="M40 90 L160 90 L150 110 L50 110 Z"
+                  fill="#8B4513"
+                  stroke="#5D3A1A"
+                  strokeWidth="2"
+                />
+                {/* Chair back */}
+                <path
+                  d="M50 90 L50 30 L55 25 L145 25 L150 30 L150 90"
+                  fill="#A0522D"
+                  stroke="#5D3A1A"
+                  strokeWidth="2"
+                />
+                {/* Chair back slats */}
+                <rect x="65" y="35" width="8" height="50" fill="#8B4513" rx="2" />
+                <rect x="96" y="35" width="8" height="50" fill="#8B4513" rx="2" />
+                <rect x="127" y="35" width="8" height="50" fill="#8B4513" rx="2" />
+                {/* Chair back top rail */}
+                <path
+                  d="M50 30 L50 40 L150 40 L150 30 L145 25 L55 25 Z"
+                  fill="#A0522D"
+                  stroke="#5D3A1A"
+                  strokeWidth="1"
+                />
+                {/* Front legs */}
+                <path
+                  d="M55 110 L45 165"
+                  stroke="#5D3A1A"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M145 110 L155 165"
+                  stroke="#5D3A1A"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+                {/* Back legs */}
+                <path
+                  d="M60 110 L50 165"
+                  stroke="#5D3A1A"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M140 110 L150 165"
+                  stroke="#5D3A1A"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                {/* Seat cushion highlight */}
+                <ellipse cx="100" cy="95" rx="45" ry="8" fill="#CD853F" opacity="0.5" />
+              </svg>
+            </div>
+            
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Your Seat at the Table is Waiting
             </h2>
