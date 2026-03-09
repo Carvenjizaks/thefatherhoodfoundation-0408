@@ -221,7 +221,7 @@ function RegistrationModal({ onClose }: { onClose: () => void }) {
                   <p><strong>Account Name:</strong> The FATHERHOOD FOUNDATION</p>
                   <p><strong>Account Number:</strong> 64279664451</p>
                   <p><strong>Branch Code:</strong> 282273</p>
-                  <p><strong>Reference:</strong> Your Name + Cellphone</p>
+                  <p><strong>Reference:</strong> MGM26-Name + Cellphone</p>
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t">
@@ -586,7 +586,7 @@ export default function MyGreatMarriagePage() {
                     <p><strong>Account:</strong> The FATHERHOOD FOUNDATION</p>
                     <p><strong>Acc No:</strong> 64279664451</p>
                     <p><strong>Branch:</strong> 282273</p>
-                    <p><strong>Reference:</strong> Name + Cellphone</p>
+                    <p><strong>Reference:</strong> MGM26-Name + Cellphone</p>
                   </div>
                   <div className="mt-4 pt-4 border-t">
                     <a
