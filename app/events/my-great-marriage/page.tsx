@@ -529,9 +529,8 @@ export default function MyGreatMarriagePage() {
                   {[1, 2, 3].map((_, idx) => (
                     <div key={idx} className="flex items-center gap-8 px-8">
                       <span className="text-white/40 text-4xl">&#9756;</span>
-                      <p className="text-white text-lg md:text-xl font-medium">
-                        <span className="font-bold text-white/90">Thumb Prints:</span>{" "}
-                        <span className="italic">Every relationship is unique and special, and it deserves your full attention</span>
+                      <p className="text-white text-lg md:text-xl font-medium italic">
+                        Every relationship is unique and special, and it deserves your full attention
                       </p>
                       <span className="text-white/40 text-4xl">&#9758;</span>
                     </div>
