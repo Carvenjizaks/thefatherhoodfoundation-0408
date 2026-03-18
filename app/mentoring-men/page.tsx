@@ -191,26 +191,23 @@ export default function MentoringMenPage() {
         {/* Values Grid */}
         <section className="py-20 lg:py-32 bg-background">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-12 text-center">What We Stand For</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-12 text-center">THE TABLE IS FOR...</h2>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-12">
               {[
                 {
                   title: "Real Talk",
                   description: "No pretenses. No facades. Just authentic conversations about real life.",
                   bgColor: "bg-[#8B0000]",
-                  textColor: "text-white",
                 },
                 {
                   title: "Brotherhood",
                   description: "A community of men who stand together, support each other, and grow as one.",
                   bgColor: "bg-[#1E3A5F]",
-                  textColor: "text-white",
                 },
                 {
                   title: "Growth",
                   description: "Every gathering is an opportunity to become a better man, father, and leader.",
                   bgColor: "bg-[#A67C52]",
-                  textColor: "text-white",
                 },
               ].map((item, index) => {
                 const { ref, isInView } = useInView()
@@ -218,14 +215,18 @@ export default function MentoringMenPage() {
                   <div
                     key={item.title}
                     ref={ref}
-                    className={`group relative overflow-hidden rounded-2xl transition-all duration-700 hover:scale-105 ${
+                    className={`transition-all duration-700 ${
                       isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                    } ${item.bgColor}`}
+                    }`}
                     style={{ transitionDelay: `${index * 150}ms` }}
                   >
-                    <div className={`p-8 lg:p-10 min-h-[250px] flex flex-col justify-end ${item.textColor}`}>
-                      <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                      <p className="opacity-90 leading-relaxed">{item.description}</p>
+                    <div
+                      className={`group relative w-64 h-64 lg:w-72 lg:h-72 rounded-full ${item.bgColor} shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-500 flex items-center justify-center text-center p-8`}
+                    >
+                      <div className="text-white">
+                        <h3 className="text-2xl lg:text-3xl font-bold mb-3">{item.title}</h3>
+                        <p className="text-sm lg:text-base opacity-90 leading-relaxed">{item.description}</p>
+                      </div>
                     </div>
                   </div>
                 )
