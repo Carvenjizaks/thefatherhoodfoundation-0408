@@ -2,7 +2,8 @@
 
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const steps = [
   {
@@ -33,83 +34,97 @@ const steps = [
 
 function StepCard({
   step,
-  index,
+  isActive,
   isVisible,
+  onClick,
 }: {
   step: (typeof steps)[0]
-  index: number
+  isActive: boolean
   isVisible: boolean
+  onClick: () => void
 }) {
   return (
     <div
-      className={`flex flex-col items-center transition-all duration-700 ease-out ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-      }`}
-      style={{ transitionDelay: `${index * 200}ms` }}
+      onClick={onClick}
+      className={`flex flex-col items-center cursor-pointer transition-all duration-700 ease-out ${
+        isActive ? "scale-100 opacity-100" : "scale-90 opacity-60"
+      } ${isVisible ? "translate-y-0" : "translate-y-12 opacity-0"}`}
     >
       {/* Animated Icon Container */}
       <div className="relative mb-8 group">
         {/* Pulsing glow effect */}
         <div
           className={`absolute inset-0 bg-[#8B2B3E]/30 rounded-full blur-2xl transition-all duration-1000 ${
-            isVisible ? "scale-110 opacity-100" : "scale-75 opacity-0"
+            isActive && isVisible ? "scale-125 opacity-100" : "scale-75 opacity-0"
           }`}
-          style={{ transitionDelay: `${index * 200 + 300}ms` }}
         />
         {/* Rotating ring */}
         <div
           className={`absolute -inset-2 rounded-full border-2 border-dashed border-[#8B2B3E]/40 transition-all duration-1000 ${
-            isVisible ? "opacity-100 rotate-0" : "opacity-0 -rotate-180"
+            isActive && isVisible ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            transitionDelay: `${index * 200 + 200}ms`,
-            animation: isVisible ? "spin 20s linear infinite" : "none",
+            animation: isActive && isVisible ? "spin 20s linear infinite" : "none",
           }}
         />
         {/* Image container with hover effect */}
-        <div className="relative w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[#8B2B3E] shadow-xl group-hover:scale-110 group-hover:shadow-2xl transition-all duration-500">
+        <div className={`relative w-28 h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 shadow-xl transition-all duration-500 ${
+          isActive ? "border-[#8B2B3E] scale-110 shadow-2xl" : "border-[#8B2B3E]/40"
+        }`}>
           <Image src={step.image} alt={step.alt} fill className="object-cover" />
         </div>
       </div>
 
       {/* Step badge with animation */}
       <div
-        className={`bg-[#8B2B3E] text-white text-sm font-bold px-5 py-1.5 rounded-full mb-4 shadow-md transition-all duration-500 ${
-          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-75"
+        className={`text-white text-sm font-bold px-5 py-1.5 rounded-full mb-4 shadow-md transition-all duration-500 ${
+          isActive ? "bg-[#8B2B3E] scale-110" : "bg-[#8B2B3E]/60 scale-100"
         }`}
-        style={{ transitionDelay: `${index * 200 + 400}ms` }}
       >
         STEP {step.step}
       </div>
 
       {/* Title with animation */}
       <h3
-        className={`text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-6 transition-all duration-500 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        className={`text-2xl lg:text-3xl font-bold mb-6 transition-all duration-500 ${
+          isActive ? "text-[#8B2B3E]" : "text-[#8B2B3E]/60"
         }`}
-        style={{ transitionDelay: `${index * 200 + 500}ms` }}
       >
         {step.title}
       </h3>
-
-      {/* Card with animation */}
-      <Card
-        className={`w-full h-full border-2 border-[#8B2B3E]/10 hover:border-[#8B2B3E]/30 hover:shadow-xl transition-all duration-500 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-        style={{ transitionDelay: `${index * 200 + 600}ms` }}
-      >
-        <CardContent className="p-6 lg:p-8">
-          <p className="text-foreground/80 leading-relaxed text-pretty text-center">{step.description}</p>
-        </CardContent>
-      </Card>
     </div>
   )
 }
 
 export function JourneySection() {
   const [isVisible, setIsVisible] = useState(false)
+  const [activeStep, setActiveStep] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const nextStep = useCallback(() => {
+    setActiveStep((prev) => (prev + 1) % steps.length)
+  }, [])
+
+  const prevStep = useCallback(() => {
+    setActiveStep((prev) => (prev - 1 + steps.length) % steps.length)
+  }, [])
+
+  // Auto-slide effect
+  useEffect(() => {
+    if (isVisible && !isPaused) {
+      intervalRef.current = setInterval(() => {
+        nextStep()
+      }, 5000)
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [isVisible, isPaused, nextStep])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -129,7 +144,12 @@ export function JourneySection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-20 lg:py-32 bg-gradient-to-b from-background to-muted/30 overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      className="py-20 lg:py-32 bg-gradient-to-b from-background to-muted/30 overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header with staggered animation */}
         <div className="text-center mb-16 lg:mb-20">
@@ -157,31 +177,109 @@ export function JourneySection() {
         </div>
 
         <div className="relative">
-          {/* Animated Connection Line - Hidden on mobile */}
-          <div
-            className={`hidden lg:block absolute top-20 left-[15%] right-[15%] h-1 bg-gradient-to-r from-transparent via-[#8B2B3E] to-transparent z-0 transition-all duration-1000 delay-500 ${
-              isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-            }`}
-          />
+          {/* Progress Bar */}
+          <div className="mb-12 max-w-2xl mx-auto">
+            <div className="h-1 bg-[#8B2B3E]/20 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#8B2B3E] transition-all duration-500 ease-out"
+                style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }}
+              />
+            </div>
+            <div className="flex justify-between mt-2">
+              {steps.map((step, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveStep(i)}
+                  className={`text-sm font-medium transition-colors duration-300 ${
+                    i <= activeStep ? "text-[#8B2B3E]" : "text-[#8B2B3E]/40"
+                  }`}
+                >
+                  {step.title}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          {/* Animated dots on the line */}
-          <div className="hidden lg:flex absolute top-[76px] left-[15%] right-[15%] justify-between z-0">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className={`w-3 h-3 bg-[#8B2B3E] rounded-full transition-all duration-500 ${
-                  isVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"
-                }`}
-                style={{ transitionDelay: `${800 + i * 200}ms` }}
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevStep}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+            aria-label="Previous step"
+          >
+            <ChevronLeft className="w-6 h-6 text-[#8B2B3E]" />
+          </button>
+          <button
+            onClick={nextStep}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white shadow-lg rounded-full p-3 transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+            aria-label="Next step"
+          >
+            <ChevronRight className="w-6 h-6 text-[#8B2B3E]" />
+          </button>
+
+          {/* Step Cards - Carousel on mobile, Grid on desktop */}
+          <div className="hidden md:grid grid-cols-3 gap-10 lg:gap-16 relative z-10">
+            {steps.map((step, index) => (
+              <StepCard 
+                key={step.step} 
+                step={step} 
+                isActive={index === activeStep}
+                isVisible={isVisible}
+                onClick={() => setActiveStep(index)}
               />
             ))}
           </div>
 
-          {/* Step Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 relative z-10">
-            {steps.map((step, index) => (
-              <StepCard key={step.step} step={step} index={index} isVisible={isVisible} />
-            ))}
+          {/* Mobile Slider */}
+          <div className="md:hidden relative overflow-hidden">
+            <div 
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${activeStep * 100}%)` }}
+            >
+              {steps.map((step, index) => (
+                <div key={step.step} className="w-full flex-shrink-0 px-4">
+                  <StepCard 
+                    step={step} 
+                    isActive={index === activeStep}
+                    isVisible={isVisible}
+                    onClick={() => setActiveStep(index)}
+                  />
+                </div>
+              ))}
+            </div>
+            {/* Mobile Navigation Dots */}
+            <div className="flex justify-center gap-3 mt-8">
+              {steps.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveStep(i)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    i === activeStep ? "bg-[#8B2B3E] scale-125" : "bg-[#8B2B3E]/30"
+                  }`}
+                  aria-label={`Go to step ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Active Step Description Card */}
+          <div className="mt-12 max-w-3xl mx-auto">
+            <Card
+              className={`border-2 border-[#8B2B3E]/20 shadow-xl transition-all duration-500 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
+              <CardContent className="p-8 lg:p-10">
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="bg-[#8B2B3E] text-white text-sm font-bold px-4 py-1 rounded-full">
+                    STEP {steps[activeStep].step}
+                  </span>
+                  <h4 className="text-2xl font-bold text-[#8B2B3E]">{steps[activeStep].title}</h4>
+                </div>
+                <p className="text-foreground/80 leading-relaxed text-pretty text-lg">
+                  {steps[activeStep].description}
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
