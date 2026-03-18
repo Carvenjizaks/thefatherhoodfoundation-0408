@@ -126,6 +126,7 @@ function JourneyAroundTable() {
               delay={index * 100}
               isActive={index === activeStep}
               onClick={() => setActiveStep(index)}
+              onMouseEnter={() => setActiveStep(index)}
             />
           ))}
         </div>
@@ -166,6 +167,7 @@ function JourneyStep({
   delay = 0,
   isActive = false,
   onClick,
+  onMouseEnter,
 }: {
   number: string
   icon: React.ElementType
@@ -174,6 +176,7 @@ function JourneyStep({
   delay?: number
   isActive?: boolean
   onClick?: () => void
+  onMouseEnter?: () => void
 }) {
   const { ref, isInView } = useInView()
 
@@ -181,6 +184,7 @@ function JourneyStep({
     <div
       ref={ref}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
       className={`cursor-pointer transition-all duration-700 ease-out ${
         isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       }`}
