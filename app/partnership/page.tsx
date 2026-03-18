@@ -1,6 +1,5 @@
 "use client"
 
-// Partnership page - last updated
 import { useState } from "react"
 
 import { useRouter } from "next/navigation"
@@ -450,8 +449,8 @@ export default function PartnershipPage() {
                 <p className="text-sm lg:text-base text-white/80">Fathers Reached</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl lg:text-5xl font-bold text-white mb-2">12</p>
-                <p className="text-sm lg:text-base text-white/80">Communities Served</p>
+                <p className="text-4xl lg:text-5xl font-bold text-white mb-2">12,000+</p>
+                <p className="text-sm lg:text-base text-white/80">Community Members Served</p>
               </div>
               <div className="text-center">
                 <p className="text-4xl lg:text-5xl font-bold text-white mb-2">50+</p>
