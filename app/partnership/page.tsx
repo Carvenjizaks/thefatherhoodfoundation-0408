@@ -1,5 +1,5 @@
 "use client"
-// Cache invalidation: 2026-03-18
+
 import { useState } from "react"
 
 import { useRouter } from "next/navigation"
@@ -33,23 +33,23 @@ type DonationTier = {
 
 const donationTiers: DonationTier[] = [
   {
-    amount: 25,
+    amount: 14,
     label: "Supporter",
     description: "Help us reach one father with essential resources.",
   },
   {
-    amount: 75,
+    amount: 47,
     label: "Community Builder",
     description: "Sponsor a monthly Table Talk session.",
   },
   {
-    amount: 150,
+    amount: 79,
     label: "Impact Partner",
     description: "Provide curriculum for a small group of men.",
   },
   {
-    amount: 350,
-    label: "Visionary Leader",
+    amount: 197,
+    label: "Visionary & Impact Leader",
     description: "Fund comprehensive fatherhood programs.",
   },
 ]
