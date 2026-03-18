@@ -241,7 +241,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Community Development</h3>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Social Impact</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Make a lasting impact in your community through service, leadership, and collaborative initiatives.
                   </p>

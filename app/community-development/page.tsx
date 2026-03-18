@@ -59,7 +59,7 @@ export default function CommunityDevelopmentPage() {
 
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
-              Community Development
+              Social Impact
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
               Strong communities are built by engaged men who serve, lead, and make a difference. Discover how you can

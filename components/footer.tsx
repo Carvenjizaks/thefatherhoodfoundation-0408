@@ -53,7 +53,7 @@ export function Footer() {
     { label: "Table Talk for Men", href: "/mentoring-men" },
     { label: "ActiveParenting", href: "/active-parenting" },
     { label: "MyGreatMarriage", href: "/my-great-marriage" },
-    { label: "Community Development", href: "/community-development" },
+    { label: "Social Impact", href: "/community-development" },
   ]
 
   const socialLinks = [
