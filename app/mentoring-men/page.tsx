@@ -242,9 +242,9 @@ export default function MentoringMenPage() {
               src="/images/men-at-table.jpg"
               alt="Men sitting around a table in fellowship"
               fill
-              className="object-cover opacity-25"
+              className="object-cover opacity-50"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-[#1E3A5F]/80 to-[#1E3A5F]/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F]/90 via-[#1E3A5F]/50 to-[#1E3A5F]/30" />
           </div>
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
             
