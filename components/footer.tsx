@@ -51,7 +51,7 @@ export function Footer() {
 
   const programs = [
     { label: "Table Talk for Men", href: "/mentoring-men" },
-    { label: "ActiveParenting", href: "/active-parenting" },
+    // { label: "ActiveParenting", href: "/active-parenting" }, // Hidden - activate later
     { label: "MyGreatMarriage", href: "/my-great-marriage" },
     { label: "Social Impact", href: "/community-development" },
   ]

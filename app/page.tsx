@@ -171,6 +171,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
+              {/* ActiveParenting card - Hidden for now, activate later
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-[#8B2B3E]/50 bg-white">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
@@ -201,6 +202,7 @@ export default function HomePage() {
                   </div>
                 </CardContent>
               </Card>
+              */}
 
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-[#8B2B3E]/50 bg-white">
                 <CardContent className="p-8 lg:p-10">
