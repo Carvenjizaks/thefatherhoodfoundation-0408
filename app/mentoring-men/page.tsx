@@ -236,109 +236,17 @@ export default function MentoringMenPage() {
 
         {/* CTA */}
         <section className="py-20 lg:py-32 bg-[#1E3A5F] relative overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/men-at-table.jpg"
+              alt="Men sitting around a table in fellowship"
+              fill
+              className="object-cover opacity-25"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F] via-[#1E3A5F]/80 to-[#1E3A5F]/60" />
+          </div>
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-            {/* Open Chair Illustration */}
-            <div className="mb-10">
-              <svg
-                viewBox="0 0 240 220"
-                className="w-48 h-44 mx-auto drop-shadow-2xl"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  {/* Wood grain gradient */}
-                  <linearGradient id="woodGrain" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#8B5A2B" />
-                    <stop offset="25%" stopColor="#A0522D" />
-                    <stop offset="50%" stopColor="#8B4513" />
-                    <stop offset="75%" stopColor="#A0522D" />
-                    <stop offset="100%" stopColor="#6B3D1E" />
-                  </linearGradient>
-                  <linearGradient id="woodGrainDark" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#5D3A1A" />
-                    <stop offset="50%" stopColor="#704214" />
-                    <stop offset="100%" stopColor="#5D3A1A" />
-                  </linearGradient>
-                  <linearGradient id="seatTop" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#CD853F" />
-                    <stop offset="100%" stopColor="#8B4513" />
-                  </linearGradient>
-                  <linearGradient id="legGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#5D3A1A" />
-                    <stop offset="30%" stopColor="#8B4513" />
-                    <stop offset="70%" stopColor="#8B4513" />
-                    <stop offset="100%" stopColor="#4A2F15" />
-                  </linearGradient>
-                  {/* Shadow filter */}
-                  <filter id="chairShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="3" dy="5" stdDeviation="4" floodOpacity="0.3" />
-                  </filter>
-                </defs>
-                
-                <g filter="url(#chairShadow)">
-                  {/* Back legs (behind) */}
-                  <path d="M65 115 C63 140, 55 170, 50 200" stroke="url(#legGradient)" strokeWidth="10" strokeLinecap="round" fill="none" />
-                  <path d="M175 115 C177 140, 185 170, 190 200" stroke="url(#legGradient)" strokeWidth="10" strokeLinecap="round" fill="none" />
-                  
-                  {/* Chair back frame - outer */}
-                  <path
-                    d="M55 105 L55 35 Q55 25 65 22 L175 22 Q185 25 185 35 L185 105"
-                    fill="url(#woodGrain)"
-                    stroke="#4A2F15"
-                    strokeWidth="2"
-                  />
-                  
-                  {/* Chair back inner panel */}
-                  <rect x="65" y="32" width="110" height="68" rx="3" fill="#6B3D1E" opacity="0.4" />
-                  
-                  {/* Vertical slats with rounded tops */}
-                  <path d="M85 38 L85 92 Q85 95 88 95 L92 95 Q95 95 95 92 L95 38 Q95 35 90 35 Q85 35 85 38" fill="url(#woodGrainDark)" />
-                  <path d="M110 38 L110 92 Q110 95 113 95 L117 95 Q120 95 120 92 L120 38 Q120 35 115 35 Q110 35 110 38" fill="url(#woodGrainDark)" />
-                  <path d="M135 38 L135 92 Q135 95 138 95 L142 95 Q145 95 145 92 L145 38 Q145 35 140 35 Q135 35 135 38" fill="url(#woodGrainDark)" />
-                  <path d="M160 38 L160 92 Q160 95 163 95 L167 95 Q170 95 170 92 L170 38 Q170 35 165 35 Q160 35 160 38" fill="url(#woodGrainDark)" />
-                  
-                  {/* Top rail with curve */}
-                  <path
-                    d="M55 35 Q55 25 65 22 L175 22 Q185 25 185 35 L185 45 Q120 50 55 45 Z"
-                    fill="url(#woodGrain)"
-                    stroke="#4A2F15"
-                    strokeWidth="1"
-                  />
-                  
-                  {/* Seat - 3D effect */}
-                  <path
-                    d="M45 105 L195 105 L185 125 L55 125 Z"
-                    fill="url(#seatTop)"
-                    stroke="#4A2F15"
-                    strokeWidth="2"
-                  />
-                  {/* Seat front edge */}
-                  <path
-                    d="M55 125 L185 125 L180 132 L60 132 Z"
-                    fill="#6B3D1E"
-                    stroke="#4A2F15"
-                    strokeWidth="1"
-                  />
-                  {/* Seat highlight */}
-                  <ellipse cx="120" cy="112" rx="55" ry="6" fill="white" opacity="0.15" />
-                  
-                  {/* Front legs with taper */}
-                  <path d="M60 132 C58 155, 48 180, 42 210" stroke="url(#legGradient)" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  <path d="M180 132 C182 155, 192 180, 198 210" stroke="url(#legGradient)" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  
-                  {/* Cross brace between front legs */}
-                  <path d="M52 175 Q120 180 188 175" stroke="url(#woodGrainDark)" strokeWidth="6" strokeLinecap="round" fill="none" />
-                  
-                  {/* Subtle wood grain lines on seat */}
-                  <path d="M70 110 Q120 108 170 110" stroke="#6B3D1E" strokeWidth="0.5" opacity="0.3" fill="none" />
-                  <path d="M65 115 Q120 113 175 115" stroke="#6B3D1E" strokeWidth="0.5" opacity="0.3" fill="none" />
-                  <path d="M60 120 Q120 118 180 120" stroke="#6B3D1E" strokeWidth="0.5" opacity="0.3" fill="none" />
-                </g>
-                
-                {/* Floor shadow */}
-                <ellipse cx="120" cy="212" rx="70" ry="8" fill="black" opacity="0.2" />
-              </svg>
-            </div>
             
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Your Seat at the Table is Waiting
