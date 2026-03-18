@@ -1,9 +1,8 @@
 "use client"
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,7 +21,6 @@ import {
   Swords,
   Milestone,
   Medal,
-  CreditCard,
   CalendarCheck,
 } from "lucide-react"
 
@@ -112,7 +110,6 @@ export default function PartnershipPage() {
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
-          {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/5 via-background to-[#8B2B3E]/10" />
           <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#8B2B3E]/5 to-transparent" />
 
@@ -145,7 +142,7 @@ export default function PartnershipPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Donate Card — Full width prominent design */}
+              {/* Donate Card */}
               <Card className="lg:col-span-3 border-2 border-[#8B2B3E]/30 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-background via-[#8B2B3E]/5 to-background overflow-hidden">
                 <CardHeader className="pb-6 text-center border-b border-border/50">
                   <div className="w-16 h-16 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-4">
@@ -229,52 +226,80 @@ export default function PartnershipPage() {
                       {paymentMethod === "once" ? "Choose your payment method" : "Set up your monthly debit order"}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                      {/* PayPal Button */}
-                      <Button
-                        onClick={() => handleDonate("paypal")}
-                        disabled={!selectedAmount}
-                        variant="outline"
-                        className="h-14 px-8 text-base font-semibold border-2 border-[#0070BA] text-[#0070BA] hover:bg-[#0070BA] hover:text-white disabled:opacity-50 gap-2"
-                        size="lg"
-                      >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
-                        </svg>
-                        Pay with PayPal
-                      </Button>
+                      {/* One-Time Payment Options */}
+                      {paymentMethod === "once" && (
+                        <>
+                          {/* PayPal Button */}
+                          <Button
+                            onClick={() => handleDonate("paypal")}
+                            disabled={!selectedAmount}
+                            variant="outline"
+                            className="h-14 px-8 text-base font-semibold border-2 border-[#0070BA] text-[#0070BA] hover:bg-[#0070BA] hover:text-white disabled:opacity-50 gap-2"
+                            size="lg"
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+                            </svg>
+                            Pay with PayPal
+                          </Button>
 
-                      {/* PayToday Button */}
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
-                        size="lg"
-                      >
-                        <a
-                          href="https://site.paytoday.com.na"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                            <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
-                          </svg>
-                          {paymentMethod === "once" ? "PayToday" : "Setup with PayToday"}
-                        </a>
-                      </Button>
+                          {/* PayToday Button */}
+                          <Button
+                            asChild
+                            variant="outline"
+                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            size="lg"
+                          >
+                            <a
+                              href="https://site.paytoday.com.na"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
+                              </svg>
+                              PayToday
+                            </a>
+                          </Button>
+                        </>
+                      )}
 
-                      {/* Monthly Debit Order (only show for monthly) */}
+                      {/* Monthly Payment Options */}
                       {paymentMethod === "monthly" && (
-                        <Button
-                          onClick={() => handleDonate("debit-order")}
-                          disabled={!selectedAmount}
-                          variant="outline"
-                          className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white disabled:opacity-50 gap-2"
-                          size="lg"
-                        >
-                          <CalendarCheck className="w-5 h-5" />
-                          Monthly Debit Order
-                        </Button>
+                        <>
+                          {/* PayToday Monthly */}
+                          <Button
+                            asChild
+                            variant="outline"
+                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            size="lg"
+                          >
+                            <a
+                              href="https://site.paytoday.com.na"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
+                              </svg>
+                              Setup with PayToday
+                            </a>
+                          </Button>
+
+                          {/* Monthly Debit Order */}
+                          <Button
+                            onClick={() => handleDonate("debit-order")}
+                            disabled={!selectedAmount}
+                            variant="outline"
+                            className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white disabled:opacity-50 gap-2"
+                            size="lg"
+                          >
+                            <CalendarCheck className="w-5 h-5" />
+                            Monthly Debit Order
+                          </Button>
+                        </>
                       )}
                     </div>
 
@@ -376,18 +401,13 @@ export default function PartnershipPage() {
 
         {/* Gideon300 Partners Section */}
         <section className="py-24 lg:py-36 relative overflow-hidden">
-          {/* Warm gradient background */}
           <div className="absolute inset-0 bg-gradient-to-b from-amber-50/50 via-orange-50/30 to-amber-50/50 dark:from-amber-950/20 dark:via-background dark:to-amber-950/20" />
-          {/* Decorative corner accents */}
           <div className="absolute top-0 left-0 w-64 h-64 border-l-4 border-t-4 border-[#8B2B3E]/20" />
           <div className="absolute bottom-0 right-0 w-64 h-64 border-r-4 border-b-4 border-[#8B2B3E]/20" />
-          {/* Subtle radial glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            {/* Elegant Header */}
             <div className="text-center mb-20">
-              {/* Decorative shield emblem */}
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border-4 border-[#8B2B3E]/30 bg-gradient-to-br from-amber-100 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background mb-6">
                 <Shield className="w-10 h-10 text-[#8B2B3E]" />
               </div>
@@ -404,7 +424,7 @@ export default function PartnershipPage() {
                 <span className="h-px w-12 bg-[#8B2B3E]/40" />
               </div>
               <p className="text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4">
-                Like Gideon's 300 who changed history not by numbers but by unwavering commitment, we seek partners of 
+                Like Gideon&apos;s 300 who changed history not by numbers but by unwavering commitment, we seek partners of 
                 solid character ready to stand in the gap for the fatherless. More than donors — they are the heartbeat, 
                 hands, and voice of this mission.
               </p>
@@ -413,7 +433,6 @@ export default function PartnershipPage() {
               </p>
             </div>
 
-            {/* The Six Pillars */}
             <div className="mb-20">
               <div className="text-center mb-12">
                 <p className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-2">
@@ -427,19 +446,16 @@ export default function PartnershipPage() {
                     key={index}
                     className="group relative bg-gradient-to-br from-white to-amber-50/50 dark:from-background dark:to-[#8B2B3E]/5 border-2 border-[#8B2B3E]/20 hover:border-[#8B2B3E]/50 rounded-xl p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-[#8B2B3E]/10"
                   >
-                    {/* Corner accent */}
                     <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
                       <div className="absolute top-0 right-0 w-16 h-16 bg-[#8B2B3E]/5 group-hover:bg-[#8B2B3E]/10 transition-colors transform rotate-45 translate-x-8 -translate-y-8" />
                     </div>
 
-                    {/* Icon with ornate background */}
                     <div className="relative mb-6">
                       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B2B3E]/10 to-amber-100/50 dark:to-[#8B2B3E]/20 flex items-center justify-center border-2 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E]/40 transition-all">
                         <pillar.icon className="w-8 h-8 text-[#8B2B3E]" />
                       </div>
                     </div>
 
-                    {/* Symbol label */}
                     <p className="text-xs font-semibold uppercase tracking-widest text-[#8B2B3E]/70 mb-2">
                       {pillar.symbol}
                     </p>
@@ -451,7 +467,6 @@ export default function PartnershipPage() {
               </div>
             </div>
 
-            {/* Image placeholders row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-amber-100/80 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
                 <div className="text-center p-6">
@@ -473,10 +488,8 @@ export default function PartnershipPage() {
               </div>
             </div>
 
-            {/* Ornate CTA Card */}
             <div className="max-w-4xl mx-auto">
               <Card className="border-2 border-[#8B2B3E]/40 bg-gradient-to-br from-white via-amber-50/30 to-orange-50/50 dark:from-background dark:via-[#8B2B3E]/5 dark:to-background overflow-hidden relative">
-                {/* Decorative corner flourishes */}
                 <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-[#8B2B3E]/40" />
                 <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-[#8B2B3E]/40" />
                 <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-[#8B2B3E]/40" />
@@ -530,10 +543,10 @@ export default function PartnershipPage() {
           </div>
         </section>
 
-        {/* Impact Stats Section */}
-        <section className="py-16 lg:py-20 bg-[#8B2B3E]">
+        {/* Impact Stats */}
+        <section className="py-16 bg-[#8B2B3E]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">
                 <p className="text-4xl lg:text-5xl font-bold text-white mb-2">20,000+</p>
                 <p className="text-sm lg:text-base text-white/80">Fathers Reached</p>
@@ -544,7 +557,7 @@ export default function PartnershipPage() {
               </div>
               <div className="text-center">
                 <p className="text-4xl lg:text-5xl font-bold text-white mb-2">50+</p>
-                <p className="text-sm lg:text-base text-white/80">Active Volunteers</p>
+                <p className="text-sm lg:text-base text-white/80">Programs Running</p>
               </div>
               <div className="text-center">
                 <p className="text-4xl lg:text-5xl font-bold text-white mb-2">100%</p>
@@ -554,47 +567,34 @@ export default function PartnershipPage() {
           </div>
         </section>
 
-        {/* Testimonial / Quote Section */}
-        <section className="py-20 lg:py-28 bg-muted/30">
+        {/* Quote Section */}
+        <section className="py-20 lg:py-28 bg-background">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <div className="relative">
-              {/* Large quote mark */}
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[120px] leading-none text-[#8B2B3E]/10 font-serif">
-                "
-              </span>
-              <blockquote className="relative z-10 text-2xl lg:text-3xl font-medium text-foreground leading-relaxed text-balance mb-8">
-                Every dollar, every hour, and every partnership multiplies into something far greater — a father who
-                shows up, a child who feels seen, and a community that thrives.
-              </blockquote>
-              <p className="text-muted-foreground font-medium">The Fatherhood Foundation</p>
-            </div>
+            <blockquote className="text-2xl lg:text-3xl font-medium text-foreground leading-relaxed mb-6 italic">
+              &quot;Every father we reach is a family transformed, a community strengthened, and a generation changed.&quot;
+            </blockquote>
+            <p className="text-muted-foreground">— The Fatherhood Foundation</p>
           </div>
         </section>
 
         {/* Final CTA */}
-        <section className="py-20 lg:py-28 bg-background">
+        <section className="py-16 lg:py-20 bg-muted/30 border-t">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance">
-              The Time to Act is Now
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Ready to Make a Difference?
             </h2>
-            <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl mx-auto">
-              Fatherlessness is not inevitable — it is a challenge we can overcome together. Your involvement today
-              shapes families and communities for generations to come.
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join thousands of supporters who are helping us end fatherlessness, one father at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="h-14 px-8 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E]">
-                <Link href="/donate">
-                  Give Today
+              <Button asChild size="lg" className="h-14 px-10 bg-[#8B2B3E] hover:bg-[#6B1B2E]">
+                <Link href="#give">
+                  Give Now
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5"
-              >
-                <Link href="/get-involved">Explore All Options</Link>
+              <Button asChild variant="outline" size="lg" className="h-14 px-10 border-2 border-[#8B2B3E] text-[#8B2B3E]">
+                <Link href="/get-involved">Explore More Ways to Help</Link>
               </Button>
             </div>
           </div>

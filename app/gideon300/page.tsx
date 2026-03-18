@@ -1,5 +1,5 @@
 "use client"
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
@@ -87,7 +87,6 @@ export default function Gideon300Page() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
     setSubmitted(true)
   }
 
@@ -98,7 +97,6 @@ export default function Gideon300Page() {
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
-          {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/10 via-background to-[#8B2B3E]/5" />
           <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
@@ -120,7 +118,7 @@ export default function Gideon300Page() {
 
               <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-10">
                 Gideon300 Partners are not just donors — they are the heartbeat of our mission. They give, go, and grow
-                with us. Like Gideon's 300, this select group of committed partners will help us achieve what seems
+                with us. Like Gideon&apos;s 300, this select group of committed partners will help us achieve what seems
                 impossible: ending fatherlessness in our generation.
               </p>
 
@@ -157,7 +155,7 @@ export default function Gideon300Page() {
                   The Story Behind the Name
                 </p>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance">
-                  Why <span className="text-[#8B2B3E]">Gideon's 300</span>?
+                  Why <span className="text-[#8B2B3E]">Gideon&apos;s 300</span>?
                 </h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
@@ -176,7 +174,6 @@ export default function Gideon300Page() {
                 </div>
               </div>
 
-              {/* Placeholder for image */}
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#8B2B3E]/20 to-[#8B2B3E]/5 border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
                 <div className="text-center p-8">
                   <Crown className="w-16 h-16 text-[#8B2B3E]/40 mx-auto mb-4" />
