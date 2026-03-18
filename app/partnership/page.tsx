@@ -245,13 +245,18 @@ export default function PartnershipPage() {
 
                       {/* Pay Today / Card Button */}
                       <Button
-                        onClick={() => handleDonate("card")}
-                        disabled={!selectedAmount}
+                        asChild
                         className="h-14 px-8 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] shadow-lg disabled:opacity-50 gap-2"
                         size="lg"
                       >
-                        <CreditCard className="w-5 h-5" />
-                        {paymentMethod === "once" ? "Pay Today" : "Setup Card Payment"}
+                        <a
+                          href="https://site.paytoday.com.na"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <CreditCard className="w-5 h-5" />
+                          {paymentMethod === "once" ? "Pay Today" : "Setup Card Payment"}
+                        </a>
                       </Button>
 
                       {/* Monthly Debit Order (only show for monthly) */}
