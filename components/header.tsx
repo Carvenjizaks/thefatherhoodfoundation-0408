@@ -48,6 +48,8 @@ export function Header() {
               alt="The Fatherhood Foundation Logo"
               width={50}
               height={50}
+              loading="eager"
+              priority
               className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white"
             />
             <span className="text-sm lg:text-base font-semibold text-foreground sr-only lg:not-sr-only">
