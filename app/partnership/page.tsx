@@ -243,10 +243,11 @@ export default function PartnershipPage() {
                         Pay with PayPal
                       </Button>
 
-                      {/* Pay Today / Card Button */}
+                      {/* PayToday Button */}
                       <Button
                         asChild
-                        className="h-14 px-8 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] shadow-lg disabled:opacity-50 gap-2"
+                        variant="outline"
+                        className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
                         size="lg"
                       >
                         <a
@@ -254,8 +255,11 @@ export default function PartnershipPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <CreditCard className="w-5 h-5" />
-                          {paymentMethod === "once" ? "Pay Today" : "Setup Card Payment"}
+                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
+                            <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
+                          </svg>
+                          {paymentMethod === "once" ? "PayToday" : "Setup with PayToday"}
                         </a>
                       </Button>
 
