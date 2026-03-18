@@ -20,31 +20,63 @@ export default function MyGreatMarriagePage() {
 
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#8B2B3E]/10 via-background to-background">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/marriage-thumbprints.jpg"
-              alt="Two thumbprints forming a heart - symbolizing unique individuals united in marriage"
-              fill
-              className="object-cover opacity-40"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#FDF8F3]">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%238B2B3E" fill-opacity="0.4"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
-            <div className="mb-8">
-              <span className="inline-block px-4 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-semibold tracking-wider uppercase">
-                Two Unique Prints, One Unified Heart
-              </span>
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left - Content */}
+              <div className="text-center lg:text-left order-2 lg:order-1">
+                <span className="inline-block px-4 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-semibold tracking-wider uppercase mb-6">
+                  Two Unique Prints, One Unified Heart
+                </span>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#8B2B3E] mb-6 text-balance">
+                  MyGreatMarriage
+                </h1>
+                <p className="text-lg lg:text-xl text-foreground/70 text-balance leading-relaxed mb-8">
+                  A strong marriage is the foundation of a healthy family. Discover how to build lasting love, deep
+                  connection, and a partnership that thrives through every season.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white" asChild>
+                    <Link href="/get-involved">Get Started</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/10" asChild>
+                    <Link href="#overview">Learn More</Link>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right - Thumbprints Image */}
+              <div className="relative order-1 lg:order-2 flex justify-center">
+                <div className="relative w-80 h-80 lg:w-[450px] lg:h-[450px]">
+                  {/* Decorative ring */}
+                  <div className="absolute inset-0 rounded-full border-4 border-dashed border-[#8B2B3E]/20 animate-[spin_30s_linear_infinite]" />
+                  {/* Glow effect */}
+                  <div className="absolute inset-4 rounded-full bg-[#8B2B3E]/10 blur-2xl" />
+                  {/* Main image */}
+                  <div className="absolute inset-8 rounded-full overflow-hidden shadow-2xl border-4 border-white">
+                    <Image
+                      src="/images/marriage-thumbprints-banner.jpg"
+                      alt="Two thumbprints forming a heart - symbolizing unique individuals united in marriage"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                  {/* Floating hearts */}
+                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#D4A574] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                    <Heart className="w-6 h-6 text-white fill-white" />
+                  </div>
+                  <div className="absolute -bottom-2 -left-2 w-10 h-10 bg-[#8B2B3E] rounded-full flex items-center justify-center shadow-lg animate-bounce" style={{ animationDelay: '0.5s' }}>
+                    <Heart className="w-5 h-5 text-white fill-white" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
-              MyGreatMarriage
-            </h1>
-            <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed max-w-2xl mx-auto">
-              A strong marriage is the foundation of a healthy family. Discover how to build lasting love, deep
-              connection, and a partnership that thrives through every season.
-            </p>
           </div>
         </section>
 
