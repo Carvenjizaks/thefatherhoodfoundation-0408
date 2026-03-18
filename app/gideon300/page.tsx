@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"

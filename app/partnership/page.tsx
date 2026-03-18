@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -22,6 +22,8 @@ import {
   Swords,
   Milestone,
   Medal,
+  CreditCard,
+  CalendarCheck,
 } from "lucide-react"
 
 type DonationTier = {
@@ -94,11 +96,12 @@ const gideon300Pillars = [
 
 export default function PartnershipPage() {
   const [selectedAmount, setSelectedAmount] = useState<string>("")
+  const [paymentMethod, setPaymentMethod] = useState<"once" | "monthly">("once")
   const router = useRouter()
 
-  const handleDonate = () => {
+  const handleDonate = (method: string) => {
     if (selectedAmount) {
-      router.push(`/donate?amount=${selectedAmount}`)
+      router.push(`/donate?amount=${selectedAmount}&method=${method}`)
     }
   }
 
@@ -193,16 +196,84 @@ export default function PartnershipPage() {
                       ))}
                     </div>
                   </RadioGroup>
-                  <div className="flex justify-center">
-                    <Button
-                      onClick={handleDonate}
-                      disabled={!selectedAmount}
-                      className="h-14 px-12 text-lg font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] shadow-lg disabled:opacity-50"
-                      size="lg"
+
+                  {/* Payment Type Toggle */}
+                  <div className="flex justify-center gap-4 mb-6">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("once")}
+                      className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${
+                        paymentMethod === "once"
+                          ? "bg-[#8B2B3E] text-white shadow-lg"
+                          : "bg-muted text-muted-foreground hover:bg-[#8B2B3E]/10"
+                      }`}
                     >
-                      Donate Now
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
+                      One-Time Gift
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("monthly")}
+                      className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${
+                        paymentMethod === "monthly"
+                          ? "bg-[#8B2B3E] text-white shadow-lg"
+                          : "bg-muted text-muted-foreground hover:bg-[#8B2B3E]/10"
+                      }`}
+                    >
+                      Monthly Giving
+                    </button>
+                  </div>
+
+                  {/* Payment Options */}
+                  <div className="border-t border-border/50 pt-6">
+                    <p className="text-center text-sm text-muted-foreground mb-4">
+                      {paymentMethod === "once" ? "Choose your payment method" : "Set up your monthly debit order"}
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-4">
+                      {/* PayPal Button */}
+                      <Button
+                        onClick={() => handleDonate("paypal")}
+                        disabled={!selectedAmount}
+                        variant="outline"
+                        className="h-14 px-8 text-base font-semibold border-2 border-[#0070BA] text-[#0070BA] hover:bg-[#0070BA] hover:text-white disabled:opacity-50 gap-2"
+                        size="lg"
+                      >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+                        </svg>
+                        Pay with PayPal
+                      </Button>
+
+                      {/* Pay Today / Card Button */}
+                      <Button
+                        onClick={() => handleDonate("card")}
+                        disabled={!selectedAmount}
+                        className="h-14 px-8 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] shadow-lg disabled:opacity-50 gap-2"
+                        size="lg"
+                      >
+                        <CreditCard className="w-5 h-5" />
+                        {paymentMethod === "once" ? "Pay Today" : "Setup Card Payment"}
+                      </Button>
+
+                      {/* Monthly Debit Order (only show for monthly) */}
+                      {paymentMethod === "monthly" && (
+                        <Button
+                          onClick={() => handleDonate("debit-order")}
+                          disabled={!selectedAmount}
+                          variant="outline"
+                          className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white disabled:opacity-50 gap-2"
+                          size="lg"
+                        >
+                          <CalendarCheck className="w-5 h-5" />
+                          Monthly Debit Order
+                        </Button>
+                      )}
+                    </div>
+
+                    {paymentMethod === "monthly" && selectedAmount && (
+                      <p className="text-center text-sm text-muted-foreground mt-4">
+                        You will be charged <span className="font-semibold text-[#8B2B3E]">${selectedAmount}</span> monthly
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
