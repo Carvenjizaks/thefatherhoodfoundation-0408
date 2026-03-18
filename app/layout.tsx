@@ -9,7 +9,7 @@ import { Header } from "@/components/header"
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://thefatherhoodfoundation.org"),
+  metadataBase: new URL("https://thefatherhoodfoundation.org"),
   title: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
   description:
     "The Fatherhood Foundation provides resources, mentorship, and community support to help men become better fathers, husbands, and leaders.",
