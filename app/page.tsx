@@ -7,6 +7,7 @@ import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JourneySection } from "@/components/journey-section"
+import { QuotesTicker } from "@/components/quotes-ticker"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -96,6 +97,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Scrolling Quotes Ticker */}
+        <QuotesTicker />
 
         {/* Mission Statement - Removed fade-in-section opacity-0 */}
         <section className="py-20 lg:py-32 bg-white">
