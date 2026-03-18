@@ -21,6 +21,10 @@ import {
   CheckCircle2,
   Heart,
   Shield,
+  Flame,
+  Swords,
+  Milestone,
+  Medal,
 } from "lucide-react"
 
 const benefits = [
