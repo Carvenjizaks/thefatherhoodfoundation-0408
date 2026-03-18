@@ -20,22 +20,28 @@ export default function MyGreatMarriagePage() {
 
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
+        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#8B2B3E]/10 via-background to-background">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/happy-couple-walking-together--sunset--romantic.jpg"
-              alt="Happy couple"
+              src="/images/marriage-thumbprints.jpg"
+              alt="Two thumbprints forming a heart - symbolizing unique individuals united in marriage"
               fill
-              className="object-cover opacity-20"
+              className="object-cover opacity-40"
               priority
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
           </div>
 
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
+            <div className="mb-8">
+              <span className="inline-block px-4 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-semibold tracking-wider uppercase">
+                Two Unique Prints, One Unified Heart
+              </span>
+            </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
               MyGreatMarriage
             </h1>
-            <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
+            <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed max-w-2xl mx-auto">
               A strong marriage is the foundation of a healthy family. Discover how to build lasting love, deep
               connection, and a partnership that thrives through every season.
             </p>
