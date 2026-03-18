@@ -78,8 +78,16 @@ export default function CurriculumPage() {
       <Header />
 
       <main className="pt-20">
+        {/* Books Carousel — top of page */}
+        <section className="py-8 bg-background border-b">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
+            <BooksCarousel books={books} />
+          </div>
+        </section>
+
         {/* Hero Section */}
-        <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
+        <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
           <div className="absolute inset-0 z-0">
             <Image
               src="/books-on-wooden-table--learning--education.jpg"
@@ -90,23 +98,15 @@ export default function CurriculumPage() {
             />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
-            <BookOpen className="w-16 h-16 text-primary mx-auto mb-6" />
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
+          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-16">
+            <BookOpen className="w-12 h-12 text-primary mx-auto mb-4" />
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 text-balance">
               Curriculum for Men
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
               Transform your life through proven biblical principles. Our curriculum provides the foundation for
               becoming the man God created you to be.
             </p>
-          </div>
-        </section>
-
-        {/* Books Carousel Section */}
-        <section className="py-8 bg-background border-b">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
-            <BooksCarousel books={books} />
           </div>
         </section>
 
