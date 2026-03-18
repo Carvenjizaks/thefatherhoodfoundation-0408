@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, type ContactSource } from "@/lib/email-service"
+import { syncNewsletterSignup } from "@/lib/globalcontrol"
 
 export async function POST(request: Request) {
   try {
@@ -56,6 +57,15 @@ export async function POST(request: Request) {
       const emailResult = await sendWelcomeEmail(contact.id)
       console.log("[v0] Welcome email result:", emailResult)
     }
+
+    // Sync to GlobalControl CRM (non-blocking)
+    syncNewsletterSignup({
+      firstName,
+      lastName,
+      email,
+      cellphone,
+      source,
+    }).catch((err) => console.error("[GlobalControl] Sync error:", err))
 
     return NextResponse.json({
       success: true,

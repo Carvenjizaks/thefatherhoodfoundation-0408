@@ -50,6 +50,8 @@ export default function HomePage() {
               alt="The Fatherhood Foundation"
               width={120}
               height={120}
+              loading="eager"
+              priority
               className="mx-auto mb-8 rounded-full"
             />
 
