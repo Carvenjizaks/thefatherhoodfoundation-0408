@@ -130,8 +130,7 @@ export default function CommunityDevelopmentPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-foreground mb-4">Neighborhood Revitalization</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Participate in projects that improve local infrastructure, create community spaces, and enhance
-                    neighborhood safety and beauty.
+                    Participate in projects that improve local infrastructure, create community spaces, and enhance neighborhood safety and beauty. We turn community centers into multi-purpose facilities to truly serve the community — providing spaces where people can gather, grow, and thrive together.
                   </p>
                 </CardContent>
               </Card>
