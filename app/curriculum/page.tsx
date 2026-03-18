@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { Download, BookOpen } from "lucide-react"
+import { Download, BookOpen, Star, Users, ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
 import { BooksCarousel } from "@/components/books-carousel"
 
@@ -110,62 +110,80 @@ export default function CurriculumPage() {
           </div>
         </section>
 
-        {/* Books Section */}
-        <section className="py-20 lg:py-32">
+        {/* Books Grid — ecommerce layout */}
+        <section className="py-20 lg:py-28 bg-muted/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="space-y-16">
+            {/* Section header */}
+            <div className="flex items-end justify-between mb-10 border-b pb-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-2">Library</p>
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground">All Books</h2>
+              </div>
+              <span className="text-muted-foreground text-sm">{books.length} titles available</span>
+            </div>
+
+            {/* Product grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {books.map((book, index) => (
-                <Card key={index} className="overflow-hidden border-2" id={`book-${index}`}>
-                  {/* Full-width banner image with title overlay */}
-                  <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden group">
+                <Card
+                  key={index}
+                  id={`book-${index}`}
+                  className="group overflow-hidden border hover:shadow-xl transition-shadow duration-300 flex flex-col"
+                >
+                  {/* Product image */}
+                  <div className="relative aspect-[3/4] overflow-hidden bg-muted">
                     <Image
                       src={book.image || "/placeholder.svg"}
                       alt={book.title}
                       fill
-                      className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-700"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    {/* Dynamic title text */}
-                    <div className="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-10">
-                      <h2
-                        className="font-black uppercase tracking-widest leading-none text-white drop-shadow-2xl"
-                        style={{
-                          fontSize: "clamp(2rem, 6vw, 5rem)",
-                          textShadow: "2px 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)",
-                          letterSpacing: "0.08em",
-                        }}
-                      >
-                        {book.bannerTitle}
-                      </h2>
+                    {/* Subtle overlay on hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                    {/* Free badge */}
+                    <div className="absolute top-3 left-3">
+                      <span className="bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                        Free
+                      </span>
                     </div>
                   </div>
 
-                  <CardContent className="p-8 lg:p-12">
-                    <p className="text-lg text-foreground mb-6 leading-relaxed italic border-l-4 border-primary pl-4">
-                      {book.introduction}
+                  <CardContent className="flex flex-col flex-1 p-5 gap-4">
+                    {/* Author */}
+                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {book.author}
                     </p>
-                    <CardTitle className="text-3xl mb-4">{book.title}</CardTitle>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
 
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {book.topics.map((topic, topicIndex) => (
-                          <span
-                            key={topicIndex}
-                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                          >
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
+                    {/* Title */}
+                    <h3 className="font-bold text-foreground text-lg leading-snug line-clamp-2 text-pretty">
+                      {book.title}
+                    </h3>
+
+                    {/* Short description */}
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 flex-1">
+                      {book.description}
+                    </p>
+
+                    {/* Topics */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {book.topics.map((topic, topicIndex) => (
+                        <span
+                          key={topicIndex}
+                          className="px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium"
+                        >
+                          {topic}
+                        </span>
+                      ))}
                     </div>
 
-                    <Button size="lg" className="w-full sm:w-auto">
-                      <Download className="mr-2 h-5 w-5" />
-                      Download PDF
-                    </Button>
+                    {/* Divider */}
+                    <div className="border-t pt-4 flex items-center justify-between gap-3">
+                      <span className="text-sm font-semibold text-foreground">PDF Download</span>
+                      <Button size="sm" className="gap-1.5 shrink-0">
+                        <Download className="h-4 w-4" />
+                        Download
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
