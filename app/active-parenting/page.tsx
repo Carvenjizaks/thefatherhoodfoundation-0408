@@ -45,12 +45,8 @@ export default function ActiveParentingPage() {
         {/* Overview */}
         <section className="py-20 lg:py-32">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden order-2 lg:order-1">
-                <Image src="/father-reading-book-with-child--quality-time.jpg" alt="Father and child reading" fill className="object-cover" />
-              </div>
-
-              <div className="order-1 lg:order-2">
+            <div className="max-w-3xl mx-auto">
+              <div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
                   Present, Engaged, and Intentional
                 </h2>
@@ -70,6 +66,7 @@ export default function ActiveParentingPage() {
                 </Button>
               </div>
             </div>
+
           </div>
         </section>
 
