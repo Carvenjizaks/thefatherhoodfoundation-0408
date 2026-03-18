@@ -12,33 +12,32 @@ import { Textarea } from "@/components/ui/textarea"
 import {
   ArrowRight,
   Crown,
-  Globe,
-  Ticket,
-  Gift,
   Users,
-  Star,
-  Sparkles,
   CheckCircle2,
   Heart,
   Shield,
+  Flame,
+  Swords,
+  Milestone,
+  Medal,
 } from "lucide-react"
 
 const benefits = [
   {
-    icon: Globe,
-    title: "Mission Trips",
+    icon: Flame,
+    title: "The Torch Bearer",
     description:
       "Travel with us on domestic and international mission trips. Be hands-on in communities where fathers need support the most.",
   },
   {
-    icon: Ticket,
-    title: "VIP Event Access",
+    icon: Swords,
+    title: "The Warrior's Table",
     description:
-      "Receive priority seating, backstage access, and exclusive invitations to all Foundation events, galas, and conferences.",
+      "VIP access to gatherings, events, and the inner circle. Stand shoulder to shoulder with fellow warriors committed to the mission.",
   },
   {
-    icon: Gift,
-    title: "Partner Discounts",
+    icon: Medal,
+    title: "The Mark of Distinction",
     description:
       "Enjoy special pricing on all programs, curriculum materials, merchandise, and services from our partner network.",
   },
@@ -49,16 +48,16 @@ const benefits = [
       "Join private gatherings with fellow Gideon300 members and Foundation leadership. Network with like-minded men committed to the mission.",
   },
   {
-    icon: Star,
-    title: "Recognition & Impact Reports",
+    icon: Milestone,
+    title: "The Pillar of Legacy",
     description:
-      "Receive named recognition at events and in publications, plus quarterly reports showing exactly how your partnership creates change.",
+      "Your name etched among the founders. Shape the direction of initiatives that outlast generations.",
   },
   {
-    icon: Sparkles,
-    title: "Legacy Builder Status",
+    icon: Crown,
+    title: "The Crown of Service",
     description:
-      "Help shape the strategic direction of Foundation initiatives. Your voice matters in building programs that transform generations.",
+      "Lead by serving. Mentor, guide, and walk alongside fathers reclaiming their place in their families.",
   },
   {
     icon: Heart,
@@ -68,9 +67,9 @@ const benefits = [
   },
   {
     icon: Shield,
-    title: "Founding Member Recognition",
+    title: "The Shield of Honor",
     description:
-      "As part of the original 300, your name will be permanently honored as a founding partner of this transformational movement.",
+      "Stand as a guardian for fatherless children and families. As part of the original 300, your name will be permanently honored.",
   },
 ]
 
@@ -88,7 +87,6 @@ export default function Gideon300Page() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
     setSubmitted(true)
   }
 
@@ -99,7 +97,6 @@ export default function Gideon300Page() {
       <main className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
-          {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/10 via-background to-[#8B2B3E]/5" />
           <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
@@ -121,7 +118,7 @@ export default function Gideon300Page() {
 
               <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-10">
                 Gideon300 Partners are not just donors — they are the heartbeat of our mission. They give, go, and grow
-                with us. Like Gideon's 300, this select group of committed partners will help us achieve what seems
+                with us. Like Gideon&apos;s 300, this select group of committed partners will help us achieve what seems
                 impossible: ending fatherlessness in our generation.
               </p>
 
@@ -158,7 +155,7 @@ export default function Gideon300Page() {
                   The Story Behind the Name
                 </p>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance">
-                  Why <span className="text-[#8B2B3E]">Gideon's 300</span>?
+                  Why <span className="text-[#8B2B3E]">Gideon&apos;s 300</span>?
                 </h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
@@ -177,7 +174,6 @@ export default function Gideon300Page() {
                 </div>
               </div>
 
-              {/* Placeholder for image */}
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#8B2B3E]/20 to-[#8B2B3E]/5 border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
                 <div className="text-center p-8">
                   <Crown className="w-16 h-16 text-[#8B2B3E]/40 mx-auto mb-4" />
@@ -242,7 +238,7 @@ export default function Gideon300Page() {
                 </div>
                 <div className="text-center">
                   <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4">
-                    <Globe className="w-8 h-8 text-white" />
+                    <Flame className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">Go</h3>
                   <p className="text-white/80 text-sm">
