@@ -12,12 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import {
   ArrowRight,
   Crown,
-  Globe,
-  Ticket,
-  Gift,
   Users,
-  Star,
-  Sparkles,
   CheckCircle2,
   Heart,
   Shield,
@@ -29,20 +24,20 @@ import {
 
 const benefits = [
   {
-    icon: Globe,
-    title: "Mission Trips",
+    icon: Flame,
+    title: "The Torch Bearer",
     description:
       "Travel with us on domestic and international mission trips. Be hands-on in communities where fathers need support the most.",
   },
   {
-    icon: Ticket,
-    title: "VIP Event Access",
+    icon: Swords,
+    title: "The Warrior's Table",
     description:
-      "Receive priority seating, backstage access, and exclusive invitations to all Foundation events, galas, and conferences.",
+      "VIP access to gatherings, events, and the inner circle. Stand shoulder to shoulder with fellow warriors committed to the mission.",
   },
   {
-    icon: Gift,
-    title: "Partner Discounts",
+    icon: Medal,
+    title: "The Mark of Distinction",
     description:
       "Enjoy special pricing on all programs, curriculum materials, merchandise, and services from our partner network.",
   },
@@ -53,16 +48,16 @@ const benefits = [
       "Join private gatherings with fellow Gideon300 members and Foundation leadership. Network with like-minded men committed to the mission.",
   },
   {
-    icon: Star,
-    title: "Recognition & Impact Reports",
+    icon: Milestone,
+    title: "The Pillar of Legacy",
     description:
-      "Receive named recognition at events and in publications, plus quarterly reports showing exactly how your partnership creates change.",
+      "Your name etched among the founders. Shape the direction of initiatives that outlast generations.",
   },
   {
-    icon: Sparkles,
-    title: "Legacy Builder Status",
+    icon: Crown,
+    title: "The Crown of Service",
     description:
-      "Help shape the strategic direction of Foundation initiatives. Your voice matters in building programs that transform generations.",
+      "Lead by serving. Mentor, guide, and walk alongside fathers reclaiming their place in their families.",
   },
   {
     icon: Heart,
@@ -72,9 +67,9 @@ const benefits = [
   },
   {
     icon: Shield,
-    title: "Founding Member Recognition",
+    title: "The Shield of Honor",
     description:
-      "As part of the original 300, your name will be permanently honored as a founding partner of this transformational movement.",
+      "Stand as a guardian for fatherless children and families. As part of the original 300, your name will be permanently honored.",
   },
 ]
 

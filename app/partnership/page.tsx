@@ -143,28 +143,28 @@ export default function PartnershipPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Donate Card */}
-              <Card className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-background">
-                <CardHeader className="pb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#8B2B3E]/10 flex items-center justify-center mb-4">
-                    <Heart className="w-7 h-7 text-[#8B2B3E]" />
+              {/* Donate Card — Full width prominent design */}
+              <Card className="lg:col-span-3 border-2 border-[#8B2B3E]/30 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-background via-[#8B2B3E]/5 to-background overflow-hidden">
+                <CardHeader className="pb-6 text-center border-b border-border/50">
+                  <div className="w-16 h-16 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-[#8B2B3E]" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-foreground">Give</CardTitle>
-                  <CardDescription className="text-base">
+                  <CardTitle className="text-3xl font-bold text-foreground">Give to Transform Lives</CardTitle>
+                  <CardDescription className="text-base max-w-xl mx-auto">
                     Your financial gift directly funds mentorship programs, curriculum development, and community
-                    outreach that empowers fathers.
+                    outreach that empowers fathers to lead their families well.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-6 lg:p-8">
                   <RadioGroup value={selectedAmount} onValueChange={setSelectedAmount}>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                       {donationTiers.map((tier) => (
                         <div
                           key={tier.amount}
-                          className={`relative rounded-xl border-2 p-3 transition-all cursor-pointer ${
+                          className={`relative rounded-2xl border-2 p-5 transition-all cursor-pointer text-center group ${
                             selectedAmount === tier.amount.toString()
-                              ? "border-[#8B2B3E] bg-[#8B2B3E]/5"
-                              : "border-border hover:border-[#8B2B3E]/50"
+                              ? "border-[#8B2B3E] bg-[#8B2B3E] text-white shadow-lg shadow-[#8B2B3E]/20"
+                              : "border-border bg-background hover:border-[#8B2B3E]/50 hover:bg-[#8B2B3E]/5"
                           }`}
                           onClick={() => setSelectedAmount(tier.amount.toString())}
                         >
@@ -173,40 +173,54 @@ export default function PartnershipPage() {
                             id={`tier-${tier.amount}`}
                             className="sr-only"
                           />
-                          <Label htmlFor={`tier-${tier.amount}`} className="cursor-pointer block">
-                            <span className="text-xl font-bold text-foreground">${tier.amount}</span>
-                            <span className="text-xs text-muted-foreground block">{tier.label}</span>
+                          <Label htmlFor={`tier-${tier.amount}`} className="cursor-pointer block space-y-2">
+                            <span className={`text-3xl lg:text-4xl font-bold block ${
+                              selectedAmount === tier.amount.toString() ? "text-white" : "text-foreground"
+                            }`}>
+                              ${tier.amount}
+                            </span>
+                            <span className={`text-sm font-semibold block ${
+                              selectedAmount === tier.amount.toString() ? "text-white/90" : "text-[#8B2B3E]"
+                            }`}>
+                              {tier.label}
+                            </span>
+                            <span className={`text-xs block leading-relaxed ${
+                              selectedAmount === tier.amount.toString() ? "text-white/70" : "text-muted-foreground"
+                            }`}>
+                              {tier.description}
+                            </span>
                           </Label>
                         </div>
                       ))}
                     </div>
                   </RadioGroup>
-                  <Button
-                    onClick={handleDonate}
-                    disabled={!selectedAmount}
-                    className="w-full h-12 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E]"
-                    size="lg"
-                  >
-                    Donate Now
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleDonate}
+                      disabled={!selectedAmount}
+                      className="h-14 px-12 text-lg font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] shadow-lg disabled:opacity-50"
+                      size="lg"
+                    >
+                      Donate Now
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
 
               {/* Partner Card */}
-              <Card className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-background">
+              <Card className="lg:col-span-1 border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-background flex flex-col">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 rounded-2xl bg-[#8B2B3E]/10 flex items-center justify-center mb-4">
                     <Handshake className="w-7 h-7 text-[#8B2B3E]" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-foreground">Partner</CardTitle>
+                  <CardTitle className="text-2xl font-bold text-foreground">Partner With Us</CardTitle>
                   <CardDescription className="text-base">
-                    Align your organization or business with a mission that matters. Corporate partnerships create
-                    lasting, scalable impact.
+                    Align your organization with a mission that matters. Create lasting, scalable impact together.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-3">
+                <CardContent className="space-y-4 flex-1 flex flex-col">
+                  <ul className="space-y-3 flex-1">
                     <li className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Co-branded community initiatives</span>
@@ -219,14 +233,11 @@ export default function PartnershipPage() {
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Event sponsorship opportunities</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
-                      <span className="text-sm text-muted-foreground">Shared impact reporting</span>
-                    </li>
                   </ul>
                   <Button
                     asChild
-                    className="w-full h-12 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E]"
+                    variant="outline"
+                    className="w-full h-12 text-base font-semibold border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white"
                     size="lg"
                   >
                     <Link href="/partnership-inquiry">
@@ -238,39 +249,39 @@ export default function PartnershipPage() {
               </Card>
 
               {/* Volunteer Card */}
-              <Card className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-background">
+              <Card className="lg:col-span-2 border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl bg-background flex flex-col">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 rounded-2xl bg-[#8B2B3E]/10 flex items-center justify-center mb-4">
                     <Users className="w-7 h-7 text-[#8B2B3E]" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-foreground">Volunteer</CardTitle>
+                  <CardTitle className="text-2xl font-bold text-foreground">Volunteer Your Time</CardTitle>
                   <CardDescription className="text-base">
-                    Your time and talents can directly impact fathers in your community. Serve as a mentor, event
-                    coordinator, or program facilitator.
+                    Your time and talents can directly impact fathers. Serve as a mentor, facilitator, or event coordinator.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
+                <CardContent className="space-y-4 flex-1 flex flex-col">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                    <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Mentor and guide other men</span>
-                    </li>
-                    <li className="flex items-start gap-3">
+                    </div>
+                    <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Facilitate Table Talk sessions</span>
-                    </li>
-                    <li className="flex items-start gap-3">
+                    </div>
+                    <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Support events and outreach</span>
-                    </li>
-                    <li className="flex items-start gap-3">
+                    </div>
+                    <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-[#8B2B3E] shrink-0 mt-0.5" />
                       <span className="text-sm text-muted-foreground">Share your professional skills</span>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
                   <Button
                     asChild
-                    className="w-full h-12 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E]"
+                    variant="outline"
+                    className="w-full h-12 text-base font-semibold border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white"
                     size="lg"
                   >
                     <Link href="/volunteer-application">
