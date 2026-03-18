@@ -5,7 +5,7 @@ import "./globals.css"
 import { NewsletterPopup } from "@/components/newsletter-popup"
 import { Header } from "@/components/header"
 
-// Cache bust v6 - Force complete rebuild with fixed metadataBase
+// Cache bust v7 - Force complete rebuild
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
