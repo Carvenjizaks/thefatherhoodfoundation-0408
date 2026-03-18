@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { Download, BookOpen } from "lucide-react"
+import { BookOpen, ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
 import { BooksCarousel } from "@/components/books-carousel"
 
@@ -78,8 +78,16 @@ export default function CurriculumPage() {
       <Header />
 
       <main className="pt-20">
+        {/* Books Carousel — top of page */}
+        <section className="py-8 bg-background border-b">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
+            <BooksCarousel books={books} />
+          </div>
+        </section>
+
         {/* Hero Section */}
-        <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
+        <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-muted/30 to-background">
           <div className="absolute inset-0 z-0">
             <Image
               src="/books-on-wooden-table--learning--education.jpg"
@@ -90,82 +98,88 @@ export default function CurriculumPage() {
             />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
-            <BookOpen className="w-16 h-16 text-primary mx-auto mb-6" />
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
+          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-16">
+            <BookOpen className="w-12 h-12 text-primary mx-auto mb-4" />
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 text-balance">
               Curriculum for Men
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
-              Transform your life through proven biblical principles. Our curriculum provides the foundation for
-              becoming the man God created you to be.
+              Most men were never taught what it truly means to lead, love, and live with purpose. This curriculum
+              changes that — giving you the tools, language, and mindset to step into the version of yourself your
+              family, community, and future are waiting for. Learn practical skills and strategies to become an
+              engaged, present, and effective father to your children — because it takes both parents to raise them well.
             </p>
           </div>
         </section>
 
-        {/* Books Carousel Section */}
-        <section className="py-8 bg-background border-b">
+        {/* Books Grid — ecommerce layout */}
+        <section className="py-20 lg:py-28 bg-muted/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">Featured Books</h2>
-            <BooksCarousel books={books} />
-          </div>
-        </section>
+            {/* Section header */}
+            <div className="flex items-end justify-between mb-10 border-b pb-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-2">Library</p>
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground">All Books</h2>
+              </div>
+              <span className="text-muted-foreground text-sm">{books.length} titles available</span>
+            </div>
 
-        {/* Books Section */}
-        <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="space-y-16">
+            {/* Product grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {books.map((book, index) => (
-                <Card key={index} className="overflow-hidden border-2" id={`book-${index}`}>
-                  {/* Full-width banner image with title overlay */}
-                  <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden group">
+                <Card
+                  key={index}
+                  id={`book-${index}`}
+                  className="group overflow-hidden border hover:shadow-xl transition-shadow duration-300 flex flex-col"
+                >
+                  {/* Product image */}
+                  <div className="relative aspect-[3/4] overflow-hidden bg-muted">
                     <Image
                       src={book.image || "/placeholder.svg"}
                       alt={book.title}
                       fill
-                      className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-700"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    {/* Dynamic title text */}
-                    <div className="absolute inset-0 flex items-end p-6 sm:p-8 lg:p-10">
-                      <h2
-                        className="font-black uppercase tracking-widest leading-none text-white drop-shadow-2xl"
-                        style={{
-                          fontSize: "clamp(2rem, 6vw, 5rem)",
-                          textShadow: "2px 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)",
-                          letterSpacing: "0.08em",
-                        }}
-                      >
-                        {book.bannerTitle}
-                      </h2>
-                    </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                   </div>
 
-                  <CardContent className="p-8 lg:p-12">
-                    <p className="text-lg text-foreground mb-6 leading-relaxed italic border-l-4 border-primary pl-4">
-                      {book.introduction}
+                  <CardContent className="flex flex-col flex-1 p-5 gap-4">
+                    {/* Author */}
+                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      {book.author}
                     </p>
-                    <CardTitle className="text-3xl mb-4">{book.title}</CardTitle>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">{book.description}</p>
 
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-foreground mb-3">Key Topics:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {book.topics.map((topic, topicIndex) => (
-                          <span
-                            key={topicIndex}
-                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                          >
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
+                    {/* Title */}
+                    <h3 className="font-bold text-foreground text-lg leading-snug line-clamp-2 text-pretty">
+                      {book.title}
+                    </h3>
+
+                    {/* Short description */}
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 flex-1">
+                      {book.description}
+                    </p>
+
+                    {/* Topics */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {book.topics.map((topic, topicIndex) => (
+                        <span
+                          key={topicIndex}
+                          className="px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium"
+                        >
+                          {topic}
+                        </span>
+                      ))}
                     </div>
 
-                    <Button size="lg" className="w-full sm:w-auto">
-                      <Download className="mr-2 h-5 w-5" />
-                      Download PDF
-                    </Button>
+                    {/* CTA */}
+                    <div className="border-t pt-4">
+                      <Button asChild size="sm" className="w-full gap-1.5">
+                        <Link href="/curriculum/sign-up">
+                          Read More
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -237,23 +251,22 @@ export default function CurriculumPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="py-20 lg:py-32">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance">
-              Ready to Start Your Journey?
+        {/* Start with a Book CTA */}
+        <section className="py-16 bg-background border-t">
+          <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3 text-balance">
+              I want to Start with a Book
             </h2>
-            <p className="text-lg text-muted-foreground mb-10 text-balance leading-relaxed">
-              Download these life-changing resources today and begin your transformation.
+            <p className="text-muted-foreground mb-8 leading-relaxed text-balance">
+              Whether you are studying on your own or with others, we would love to walk this journey with you.
+              Sign up and let us know how you plan to engage with the curriculum.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link href="/get-involved">Join Our Community</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/">Back to Home</Link>
-              </Button>
-            </div>
+            <Button asChild size="lg" className="gap-2">
+              <Link href="/curriculum/sign-up">
+                Get Started
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
