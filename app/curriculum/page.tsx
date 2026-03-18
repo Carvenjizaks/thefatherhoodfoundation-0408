@@ -106,7 +106,8 @@ export default function CurriculumPage() {
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
               Most men were never taught what it truly means to lead, love, and live with purpose. This curriculum
               changes that — giving you the tools, language, and mindset to step into the version of yourself your
-              family, community, and future are waiting for.
+              family, community, and future are waiting for. Learn practical skills and strategies to become an
+              engaged, present, and effective father to your children — because it takes both parents to raise them well.
             </p>
           </div>
         </section>
