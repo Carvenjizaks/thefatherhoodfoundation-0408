@@ -1,5 +1,5 @@
 "use client"
-
+// Cache invalidation: 2026-03-18
 import { useState } from "react"
 
 import { useRouter } from "next/navigation"
@@ -458,7 +458,7 @@ export default function PartnershipPage() {
               </div>
               <div className="text-center">
                 <p className="text-4xl lg:text-5xl font-bold text-white mb-2">100%</p>
-                <p className="text-sm lg:text-base text-white/80">Mission Focused</p>
+                <p className="text-sm lg:text-base text-white/80">Engagement & Mission Focus</p>
               </div>
             </div>
           </div>
