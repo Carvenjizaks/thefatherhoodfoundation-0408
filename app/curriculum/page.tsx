@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { Download, BookOpen, Star, Users, ArrowRight } from "lucide-react"
+import { BookOpen, ArrowRight } from "lucide-react"
 import type { Metadata } from "next"
 import { BooksCarousel } from "@/components/books-carousel"
 
@@ -138,14 +138,7 @@ export default function CurriculumPage() {
                       fill
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
-                    {/* Subtle overlay on hover */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                    {/* Free badge */}
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                        Free
-                      </span>
-                    </div>
                   </div>
 
                   <CardContent className="flex flex-col flex-1 p-5 gap-4">
@@ -176,12 +169,13 @@ export default function CurriculumPage() {
                       ))}
                     </div>
 
-                    {/* Divider */}
-                    <div className="border-t pt-4 flex items-center justify-between gap-3">
-                      <span className="text-sm font-semibold text-foreground">PDF Download</span>
-                      <Button size="sm" className="gap-1.5 shrink-0">
-                        <Download className="h-4 w-4" />
-                        Download
+                    {/* CTA */}
+                    <div className="border-t pt-4">
+                      <Button asChild size="sm" className="w-full gap-1.5">
+                        <Link href="/curriculum/sign-up">
+                          Read More
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>
@@ -255,23 +249,22 @@ export default function CurriculumPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="py-20 lg:py-32">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance">
-              Ready to Start Your Journey?
+        {/* Start with a Book CTA */}
+        <section className="py-16 bg-background border-t">
+          <div className="max-w-3xl mx-auto px-6 lg:px-8 text-center">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3 text-balance">
+              I want to Start with a Book
             </h2>
-            <p className="text-lg text-muted-foreground mb-10 text-balance leading-relaxed">
-              Download these life-changing resources today and begin your transformation.
+            <p className="text-muted-foreground mb-8 leading-relaxed text-balance">
+              Whether you are studying on your own or with others, we would love to walk this journey with you.
+              Sign up and let us know how you plan to engage with the curriculum.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link href="/get-involved">Join Our Community</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/">Back to Home</Link>
-              </Button>
-            </div>
+            <Button asChild size="lg" className="gap-2">
+              <Link href="/curriculum/sign-up">
+                Get Started
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
