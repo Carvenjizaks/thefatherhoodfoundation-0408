@@ -1,5 +1,10 @@
 "use client"
-// Force rebuild - file updated
+
+/**
+ * Partnership Page - Fatherhood Foundation
+ * Last updated: 2026-03-18
+ */
+
 import { useState } from "react"
 
 import { useRouter } from "next/navigation"
@@ -38,17 +43,17 @@ const donationTiers: DonationTier[] = [
     description: "Help us reach one father with essential resources.",
   },
   {
-    amount: 47,
+    amount: 25,
     label: "Community Builder",
     description: "Sponsor a monthly Table Talk session.",
   },
   {
-    amount: 79,
+    amount: 47,
     label: "Impact Partner",
     description: "Provide curriculum for a small group of men.",
   },
   {
-    amount: 197,
+    amount: 79,
     label: "Visionary & Impact Leader",
     description: "Fund comprehensive fatherhood programs.",
   },
@@ -415,9 +420,9 @@ export default function PartnershipPage() {
                         committed to generational impact.
                       </p>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-2">
+                        <span className="flex items-center gap-2 font-semibold text-[#8B2B3E]">
                           <Shield className="w-4 h-4 text-[#8B2B3E]" />
-                          Annual covenant
+                          $197/month commitment
                         </span>
                         <span className="flex items-center gap-2">
                           <Flame className="w-4 h-4 text-[#8B2B3E]" />
