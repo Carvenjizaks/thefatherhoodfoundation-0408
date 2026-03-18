@@ -241,7 +241,7 @@ export default function Gideon300Page() {
                 </div>
                 <div className="text-center">
                   <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4">
-                    <Globe className="w-8 h-8 text-white" />
+                    <Flame className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2">Go</h3>
                   <p className="text-white/80 text-sm">

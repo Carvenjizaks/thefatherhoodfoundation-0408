@@ -1,12 +1,6 @@
 "use client"
 
-/**
- * Partnership Page - Fatherhood Foundation
- * Last updated: 2026-03-18
- */
-
 import { useState } from "react"
-
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
