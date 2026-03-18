@@ -7,6 +7,7 @@ import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JourneySection } from "@/components/journey-section"
+import { QuotesTicker } from "@/components/quotes-ticker"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -96,6 +97,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Scrolling Quotes Ticker */}
+        <QuotesTicker />
 
         {/* Mission Statement - Removed fade-in-section opacity-0 */}
         <section className="py-20 lg:py-32 bg-white">
@@ -241,7 +245,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Community Development</h3>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Social Impact</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Make a lasting impact in your community through service, leadership, and collaborative initiatives.
                   </p>
