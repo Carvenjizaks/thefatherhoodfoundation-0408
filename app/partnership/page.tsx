@@ -246,8 +246,7 @@ export default function PartnershipPage() {
                           {/* PayToday Button */}
                           <Button
                             asChild
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
                             size="lg"
                           >
                             <a
@@ -255,10 +254,11 @@ export default function PartnershipPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
-                              </svg>
+                              <img 
+                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
+                                alt="PayToday" 
+                                className="w-8 h-8 rounded"
+                              />
                               PayToday
                             </a>
                           </Button>
@@ -271,8 +271,7 @@ export default function PartnershipPage() {
                           {/* PayToday Monthly */}
                           <Button
                             asChild
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
                             size="lg"
                           >
                             <a
@@ -280,10 +279,11 @@ export default function PartnershipPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
-                              </svg>
+                              <img 
+                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
+                                alt="PayToday" 
+                                className="w-8 h-8 rounded"
+                              />
                               Setup with PayToday
                             </a>
                           </Button>
