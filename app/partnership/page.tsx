@@ -65,8 +65,9 @@ export default function PartnershipPage() {
               Partnership Opportunities
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              Join us in our mission to end fatherlessness and empower men to live fulfilled lives. Your support makes a
-              lasting impact.
+              When you invest in fathers, you invest in families, communities, and generations to come. Your support
+              fuels programs that equip men to lead with purpose, raise resilient children, and break the cycle of
+              fatherlessness for good.
             </p>
           </div>
         </div>
@@ -87,8 +88,8 @@ export default function PartnershipPage() {
                     <CardTitle className="text-2xl font-bold">Support Our Cause</CardTitle>
                   </div>
                   <CardDescription className="text-base">
-                    Make a monthly donation to help us achieve our mission of ending fatherlessness and transforming
-                    communities.
+                    Your monthly contribution directly powers mentorship circles, parenting workshops, and community
+                    gatherings that help men become the fathers and leaders their families need.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -206,9 +207,9 @@ export default function PartnershipPage() {
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold tracking-tight text-foreground mb-6">Your Impact Matters</h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Every contribution, whether financial, partnership, or volunteer time, helps us reach more fathers,
-              strengthen families, and build healthier communities. Together, we can end the plague of fatherlessness
-              and transform lives.
+              Every dollar, every hour, and every partnership multiplies into something far greater — a father who shows
+              up, a child who feels seen, and a community that thrives. Fatherlessness is not inevitable; it is a
+              challenge we can overcome together. Stand with us and be part of the transformation.
             </p>
           </div>
         </div>

@@ -204,8 +204,9 @@ export default function GetInvolvedPage() {
               Get Involved
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
-              Join us in our mission to empower men and strengthen families. There are many ways to contribute and
-              benefit from The Fatherhood Foundation.
+              Real change begins when men step forward — for themselves, their families, and their communities. Whether
+              you join a Table Talk, volunteer your time, or simply sign up to stay connected, your involvement helps
+              break the cycle of fatherlessness and empowers the next generation.
             </p>
           </div>
         </section>
