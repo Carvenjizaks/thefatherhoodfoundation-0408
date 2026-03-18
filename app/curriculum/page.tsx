@@ -104,8 +104,9 @@ export default function CurriculumPage() {
               Curriculum for Men
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
-              Transform your life through proven biblical principles. Our curriculum provides the foundation for
-              becoming the man God created you to be.
+              Most men were never taught what it truly means to lead, love, and live with purpose. This curriculum
+              changes that — giving you the tools, language, and mindset to step into the version of yourself your
+              family, community, and future are waiting for.
             </p>
           </div>
         </section>
