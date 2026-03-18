@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Baby, BookOpen, Calendar, Heart } from "lucide-react"
+import { ArrowRight, BookOpen, Heart } from "lucide-react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -97,38 +97,12 @@ export default function ActiveParentingPage() {
               <Card className="border-2">
                 <CardContent className="p-8">
                   <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                    <Calendar className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4">Dad & Kid Events</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Monthly activities designed for quality time with your children, from outdoor adventures to service
-                    projects and learning experiences.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2">
-                <CardContent className="p-8">
-                  <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
                     <Heart className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-2xl font-bold text-foreground mb-4">Support Groups</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Connect with other dads facing similar challenges. Share experiences, gain insights, and build
                     lasting friendships in a supportive environment.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2">
-                <CardContent className="p-8">
-                  <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
-                    <Baby className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4">Resource Library</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Access books, articles, videos, and practical tools covering every aspect of fatherhood and child
-                    development.
                   </p>
                 </CardContent>
               </Card>
