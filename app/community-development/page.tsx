@@ -140,10 +140,9 @@ export default function CommunityDevelopmentPage() {
                   <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
                     <Handshake className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4">Family Support Services</h3>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">Creating Authentic Communities</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Provide practical assistance to families in need—from home repairs to job training to emergency
-                    support during difficult times.
+                    Where people come together because they want to — in small groups, to support, help, and share life with one another. These are spaces built on genuine connection, mutual care, and the understanding that no one was meant to do life alone.
                   </p>
                 </CardContent>
               </Card>
