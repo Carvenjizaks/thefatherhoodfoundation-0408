@@ -33,7 +33,8 @@ function DonateContent() {
               <CardTitle className="text-2xl font-bold">Complete Your Donation</CardTitle>
             </div>
             <CardDescription className="text-base">
-              Thank you for supporting The Fatherhood Foundation. Your contribution makes a real difference.
+              Thank you for standing with us. Your generosity empowers men to step into fatherhood with confidence,
+              strengthens families, and sparks lasting change across entire communities.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
