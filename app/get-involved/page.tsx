@@ -106,7 +106,13 @@ export default function GetInvolvedPage() {
     { 
       month: "MARCH",
       sessions: [
-        { date: "28 March 2026", dateValue: "2026-03-28", time: "8:30am - 10:30am", isOpen: true },
+        { 
+          date: "28 March 2026", 
+          dateValue: "2026-03-28", 
+          time: "8:30am - 10:30am", 
+          isOpen: true,
+          description: "This Gathering will set the stage for 2026, share what is coming up and how you can get involved. We will also share the Theme for the year, so make sure to join us. Our current venue has seating limitations."
+        },
       ]
     },
     { 
@@ -214,7 +220,7 @@ export default function GetInvolvedPage() {
                 and shared meals. No agenda, no pressure—just authentic fellowship.
               </p>
               <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
-                <span className="font-semibold">NAD 50</span>
+                <span className="font-semibold">NAD 65</span>
                 <span className="text-white/80">|</span>
                 <span>Includes Drinks & Light Meal</span>
               </div>
@@ -237,28 +243,35 @@ export default function GetInvolvedPage() {
                       {monthGroup.sessions.map((session, index) => (
                         <div
                           key={index}
-                          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 transition-colors ${session.isOpen ? 'hover:bg-muted/50' : 'bg-muted/30'}`}
+                          className={`p-6 transition-colors ${session.isOpen ? 'hover:bg-muted/50' : 'bg-muted/30'}`}
                         >
-                          <div className="flex items-start gap-4">
-                            <Calendar className={`w-6 h-6 flex-shrink-0 mt-1 ${session.isOpen ? 'text-[#8B2B3E]' : 'text-muted-foreground'}`} />
-                            <div>
-                              <p className={`font-bold text-lg ${session.isOpen ? 'text-foreground' : 'text-muted-foreground'}`}>{session.date}</p>
-                              <p className="text-muted-foreground text-sm">
-                                <span className="font-medium">TIME: {session.time}</span> (Includes Drinks & Light Meal)
-                              </p>
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                            <div className="flex items-start gap-4">
+                              <Calendar className={`w-6 h-6 flex-shrink-0 mt-1 ${session.isOpen ? 'text-[#8B2B3E]' : 'text-muted-foreground'}`} />
+                              <div>
+                                <p className={`font-bold text-lg ${session.isOpen ? 'text-foreground' : 'text-muted-foreground'}`}>{session.date}</p>
+                                <p className="text-muted-foreground text-sm">
+                                  <span className="font-medium">TIME: {session.time}</span> (Includes Drinks & Light Meal)
+                                </p>
+                              </div>
                             </div>
+                            {session.isOpen ? (
+                              <Button 
+                                className="bg-[#8B2B3E] hover:bg-[#6d2230] flex-shrink-0"
+                                onClick={() => setSelectedSession(session.dateValue)}
+                              >
+                                Register Now
+                              </Button>
+                            ) : (
+                              <span className="inline-flex items-center px-4 py-2 rounded-md bg-muted text-muted-foreground font-medium text-sm flex-shrink-0">
+                                NOT OPEN YET
+                              </span>
+                            )}
                           </div>
-                          {session.isOpen ? (
-                            <Button 
-                              className="bg-[#8B2B3E] hover:bg-[#6d2230]"
-                              onClick={() => setSelectedSession(session.dateValue)}
-                            >
-                              Register Now
-                            </Button>
-                          ) : (
-                            <span className="inline-flex items-center px-4 py-2 rounded-md bg-muted text-muted-foreground font-medium text-sm">
-                              NOT OPEN YET
-                            </span>
+                          {session.description && (
+                            <div className="mt-4 ml-10 p-4 bg-[#8B2B3E]/5 border-l-4 border-[#8B2B3E] rounded-r-lg">
+                              <p className="text-sm text-foreground/80 leading-relaxed">{session.description}</p>
+                            </div>
                           )}
                         </div>
                       ))}
