@@ -1,5 +1,5 @@
 "use client"
-
+// Force rebuild - file updated
 import { useState } from "react"
 
 import { useRouter } from "next/navigation"
@@ -314,7 +314,7 @@ export default function PartnershipPage() {
               </div>
 
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8B2B3E] mb-4">
-                A Sacred Fellowship
+                The Remnant
               </p>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance leading-tight">
                 The <span className="text-[#8B2B3E]">Gideon300</span>
