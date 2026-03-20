@@ -104,20 +104,15 @@ export default function GetInvolvedPage() {
 
   const tableTalkSessions = [
     { 
-      month: "MARCH",
-      sessions: [
-        { 
-          date: "28 March 2026", 
-          dateValue: "2026-03-28", 
-          time: "8:30am - 10:30am", 
-          isOpen: true,
-          description: "This Gathering will set the stage for 2026, share what is coming up and how you can get involved. We will also share the Theme for the year, so make sure to join us. Our current venue has seating limitations."
-        },
-      ]
-    },
-    { 
       month: "APRIL",
       sessions: [
+        { 
+          date: "4th April 2026", 
+          dateValue: "2026-04-04", 
+          time: "8:30am - 10:30am", 
+          isOpen: true,
+          description: "This Gathering will set the stage for 2026, share what is coming up and how you can get involved. This gathering will set the tone for the year, so make sure to join us. Our current venue has seating limitations."
+        },
         { date: "11 April 2026", dateValue: "2026-04-11", time: "8:30am - 10:30am", isOpen: false },
         { date: "25 April 2026", dateValue: "2026-04-25", time: "8:30am - 10:30am", isOpen: false },
       ]
