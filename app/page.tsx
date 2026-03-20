@@ -240,6 +240,36 @@ export default function HomePage() {
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
                       <Image
+                        src="/pillars/missions-for-men.jpg"
+                        alt="Men on mission trips serving communities"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Missions for Men</h3>
+                  <p className="text-black mb-6 leading-relaxed text-center">
+                    Go beyond your comfort zone on domestic and international mission trips. Serve alongside brothers, transform communities, and discover your purpose through hands-on impact.
+                  </p>
+                  <div className="flex justify-center">
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
+                    >
+                      <Link href="/missions-for-men">
+                        Explore Program <ArrowRightIcon />
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-[#8B2B3E]/50 bg-white">
+                <CardContent className="p-8 lg:p-10">
+                  <div className="flex justify-center mb-6">
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
+                      <Image
                         src="/pillars/community-development.jpg"
                         alt="Diverse men working together in community service"
                         fill
