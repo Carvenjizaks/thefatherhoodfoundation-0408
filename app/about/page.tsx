@@ -168,12 +168,13 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {boardOfGovernors.map((member) => (
                 <Card key={member.name} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <div className="relative h-64 w-full bg-gradient-to-br from-[#8B2B3E]/20 to-[#8B2B3E]/5">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-32 h-32 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <Users className="w-16 h-16 text-[#8B2B3E]/40" />
-                      </div>
-                    </div>
+                  <div className="relative h-64 w-full">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover object-top"
+                    />
                   </div>
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
@@ -201,12 +202,13 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
               {managementTeam.map((member) => (
                 <Card key={`${member.name}-${member.role}`} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <div className="relative h-64 w-full bg-gradient-to-br from-[#8B2B3E]/20 to-[#8B2B3E]/5">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-32 h-32 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <Users className="w-16 h-16 text-[#8B2B3E]/40" />
-                      </div>
-                    </div>
+                  <div className="relative h-64 w-full">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover object-top"
+                    />
                   </div>
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
