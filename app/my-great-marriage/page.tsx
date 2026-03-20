@@ -31,16 +31,23 @@ export default function MyGreatMarriagePage() {
             <div className="flex justify-center">
               {/* Content */}
               <div className="text-center max-w-3xl space-y-6">
-                <div className="inline-block lg:block">
-                  <span className="inline-block px-5 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-bold tracking-widest uppercase mb-6">
-                    ✓ Two Unique Prints, One Heart
-                  </span>
+                {/* MGM Logo */}
+                <div className="flex justify-center mb-4">
+                  <Image 
+                    src="/images/mgm-logo.jpg" 
+                    alt="My Great Marriage Logo" 
+                    width={280} 
+                    height={280} 
+                    className="object-contain"
+                    priority
+                  />
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#1A1A1A] text-balance leading-tight">
-                  My<span className="text-[#8B2B3E]">Great</span>
-                  <span className="block">Marriage</span>
-                </h1>
+                <div className="inline-block lg:block">
+                  <span className="inline-block px-5 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-bold tracking-widest uppercase mb-6">
+                    Two Unique Prints, One Heart
+                  </span>
+                </div>
                 
                 <p className="text-lg lg:text-xl text-foreground/70 text-balance leading-relaxed max-w-lg">
                   Build the marriage you've always dreamed of. Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
