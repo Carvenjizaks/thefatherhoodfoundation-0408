@@ -175,7 +175,7 @@ export default function Gideon300Page() {
                 </div>
               </div>
 
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#8B2B3E]/10 to-[#8B2B3E]/5 flex items-center justify-center">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center">
                 <Image
                   src="/images/gideon300-badge.png"
                   alt="Gideon 300 Badge - The Fatherhood Foundation"
