@@ -230,18 +230,19 @@ export default function PartnershipPage() {
                       {paymentMethod === "once" && (
                         <>
                           {/* PayPal Button - Official styling */}
-                          <Button
+                          <button
                             onClick={() => handleDonate("paypal")}
                             disabled={!selectedAmount}
-                            className="h-14 px-8 text-base font-bold bg-[#FFC439] hover:bg-[#F0B72F] text-[#003087] disabled:opacity-50 gap-3 border-0 shadow-md"
-                            size="lg"
+                            className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-lg bg-[#FFC439] hover:bg-[#F0B72F] disabled:opacity-50 shadow-md transition-colors border-0 cursor-pointer"
                           >
-                            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M7.02 21.5c-.2 0-.36-.12-.42-.3L4.47 7.64c-.06-.22.1-.42.32-.42h4.78c1.87 0 3.43.68 4.26 1.86.75.95.97 2.2.65 3.62-.47 2.47-2.37 4.02-4.95 4.02H7.9c-.2 0-.38.16-.42.36l-.46 4.42zm.54-5.52h1.97c1.82 0 3.2-.96 3.5-2.44.15-.72.02-1.35-.36-1.82-.42-.5-1.14-.76-2.09-.76H8.02l-.46 5.02z" fill="#003087"/>
-                              <path d="M19.02 7.5c-.47 2.47-2.37 4.02-4.95 4.02h-1.63c-.2 0-.38.16-.42.36l-.76 4.72c-.04.2.1.4.32.4h2.36c.18 0 .34-.12.38-.3l.42-2.46c.04-.2.22-.36.42-.36h.82c2.58 0 4.48-1.55 4.95-4.02.26-1.42-.02-2.67-.65-3.62-.7-.95-1.98-1.54-3.56-1.54h-4.78c-.22 0-.38.2-.32.42l.68 3.96c.3-.38.7-.7 1.17-.95.6-.32 1.36-.48 2.23-.48h1.82c.95 0 1.67.26 2.09.76.38.47.51 1.1.36 1.82-.3 1.48-1.68 2.44-3.5 2.44h-1.97" fill="#0070E0"/>
-                            </svg>
-                            <span>PayPal</span>
-                          </Button>
+                            {/* PayPal "PP" icon */}
+                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003087] text-white font-black text-sm leading-none select-none">
+                              P
+                            </span>
+                            <span className="text-base font-bold leading-none">
+                              <span className="text-[#003087]">Pay</span><span className="text-[#0070E0]">Pal</span>
+                            </span>
+                          </button>
 
                           {/* PayToday Button */}
                           <Button
