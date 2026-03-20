@@ -394,7 +394,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
       {/* Banner Image */}
       <div className="relative w-full h-[200px] md:h-[280px] lg:h-[320px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
-        {event.banner ? (
+        {event.banner && event.banner.length > 0 ? (
           <Image
             src={event.banner}
             alt={event.title}
