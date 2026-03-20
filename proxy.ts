@@ -14,29 +14,23 @@ const EXCLUDED_PATHS = [
   "/books",
 ]
 
-export async function proxy(request: NextRequest) {
+async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (EXCLUDED_PATHS.some((p) => pathname.startsWith(p))) {
-    return NextResponse.next()
-  }
-
-  if (pathname === "/") {
+  if (pathname === "/" || EXCLUDED_PATHS.some((p) => pathname.startsWith(p))) {
     return NextResponse.next()
   }
 
   try {
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseKey) {
       return NextResponse.next()
     }
 
-    const url = supabaseUrl.startsWith("http") ? supabaseUrl : `https://${supabaseUrl}`
-
     const response = await fetch(
-      `${url}/rest/v1/page_settings?page_path=eq.${encodeURIComponent(pathname)}&select=is_visible,hidden_message`,
+      `${supabaseUrl}/rest/v1/page_settings?page_path=eq.${encodeURIComponent(pathname)}&select=is_visible,hidden_message`,
       {
         headers: {
           apikey: supabaseKey,
@@ -49,25 +43,19 @@ export async function proxy(request: NextRequest) {
     if (response.ok) {
       const data = await response.json()
       if (data && data.length > 0 && data[0].is_visible === false) {
-        const comingSoonUrl = new URL("/coming-soon", request.url)
-        comingSoonUrl.searchParams.set("from", pathname)
+        const url = new URL("/coming-soon", request.url)
+        url.searchParams.set("from", pathname)
         if (data[0].hidden_message) {
-          comingSoonUrl.searchParams.set("message", data[0].hidden_message)
+          url.searchParams.set("message", data[0].hidden_message)
         }
-        return NextResponse.redirect(comingSoonUrl)
+        return NextResponse.redirect(url)
       }
     }
   } catch {
-    // Allow through on DB errors
+    // Allow through on any error
   }
 
   return NextResponse.next()
 }
 
 export default proxy
-
-export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)).*)",
-  ],
-}
