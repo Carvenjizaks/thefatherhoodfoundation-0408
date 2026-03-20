@@ -97,7 +97,7 @@ const SMTP_HOST = "send.smtp.com"
 const SMTP_PORT = 587 // Using STARTTLS
 const SMTP_USER = process.env.SMTP_USERNAME
 const SMTP_PASS = process.env.SMTP_PASSWORD
-const FROM_EMAIL = "noreply@thefatherhoodfoundation.org"
+const FROM_EMAIL = "noreply@thefathersfoundations.org"
 const FROM_NAME = "The Fatherhood Foundation"
 
 async function sendEmailViaSMTP(
@@ -408,7 +408,7 @@ export async function sendRegistrationConfirmationEmail(params: {
 
               <hr style="border: none; border-top: 1px solid #eeeeee; margin: 30px 0;">
               <p style="color: #666666; font-size: 14px; line-height: 1.6; margin: 0;">
-                We look forward to seeing you! If you have any questions, please contact us at info@thefatherhoodfoundation.org
+                We look forward to seeing you! If you have any questions, please contact us at info@thefathersfoundations.org
               </p>
             </td>
           </tr>
