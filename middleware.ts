@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
+// Pages that should never be blocked
 const EXCLUDED_PATHS = [
   "/admin",
   "/api",
@@ -14,13 +15,15 @@ const EXCLUDED_PATHS = [
   "/books",
 ]
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Skip excluded paths
   if (EXCLUDED_PATHS.some((p) => pathname.startsWith(p))) {
     return NextResponse.next()
   }
 
+  // Homepage is always visible
   if (pathname === "/") {
     return NextResponse.next()
   }
@@ -58,13 +61,11 @@ export async function proxy(request: NextRequest) {
       }
     }
   } catch {
-    // Allow through on DB errors
+    // If DB check fails, allow through
   }
 
   return NextResponse.next()
 }
-
-export default proxy
 
 export const config = {
   matcher: [
