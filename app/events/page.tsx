@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 // Event configuration with open/closed status
 const events = [
@@ -473,7 +475,9 @@ export default function EventsPage() {
   const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null)
 
   return (
-    <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
+    <>
+      <Header />
+      <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
       {/* Hero Section */}
       <section className="bg-[#8B2B3E] py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -577,5 +581,7 @@ export default function EventsPage() {
         />
       )}
     </main>
+      <Footer />
+    </>
   )
 }

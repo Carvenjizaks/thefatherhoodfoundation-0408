@@ -1,5 +1,6 @@
 "use client"
 
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -42,6 +43,7 @@ const communityImages = [
 export default function CommunityDevelopmentPage() {
   return (
     <>
+      <Header />
       <main className="pt-20">
         {/* Scrolling Image Carousel */}
         <ScrollingImageCarousel images={communityImages} />

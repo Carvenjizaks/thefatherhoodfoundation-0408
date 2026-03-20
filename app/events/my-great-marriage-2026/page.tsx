@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 type RegistrationFormData = {
   firstName: string
@@ -192,8 +194,10 @@ export default function MyGreatMarriageEventPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Event Hero Section - Full Width Banner */}
+    <>
+      <Header />
+      <div className="min-h-screen bg-white pt-20">
+        {/* Event Hero Section - Full Width Banner */}
       <section className="relative bg-white">
         {/* Full-width banner image */}
         <div className="w-full max-w-5xl mx-auto py-8 px-4">
@@ -468,6 +472,8 @@ export default function MyGreatMarriageEventPage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+      <Footer />
+    </>
   )
 }

@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, CreditCard } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 function DonateContent() {
   const searchParams = useSearchParams()
@@ -95,8 +97,12 @@ function DonateContent() {
 
 export default function DonatePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-background pt-32 pb-16">Loading...</div>}>
-      <DonateContent />
-    </Suspense>
+    <>
+      <Header />
+      <Suspense fallback={<div className="min-h-screen bg-background pt-32 pb-16">Loading...</div>}>
+        <DonateContent />
+      </Suspense>
+      <Footer />
+    </>
   )
 }

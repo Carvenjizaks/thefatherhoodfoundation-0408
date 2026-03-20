@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, Send, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 interface ConfigStatus {
   configured: {
@@ -73,9 +75,11 @@ export default function TestEmailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <Link
+    <>
+      <Header />
+      <div className="min-h-screen bg-muted/30 py-8 px-4 pt-24">
+        <div className="max-w-2xl mx-auto">
+          <Link
           href="/admin"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6"
         >
@@ -209,9 +213,11 @@ export default function TestEmailPage() {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   )
 }
