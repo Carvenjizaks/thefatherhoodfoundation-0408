@@ -10,13 +10,13 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { createClient } from "@/lib/supabase-client"
-import { RefreshCw, LogOut, Eye, EyeOff, Save } from "lucide-react"
+import { RefreshCw, LogOut, Eye, EyeOff } from "lucide-react"
 
 interface PageSetting {
   id: string
-  slug: string
+  page_path: string
   page_name: string
-  is_active: boolean
+  is_visible: boolean
   hidden_message: string | null
   updated_at: string
 }
@@ -28,7 +28,8 @@ export default function AdminPageSettingsPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
-  const [savingSlug, setSavingSlug] = useState<string | null>(null)
+  const [savingPath, setSavingPath] = useState<string | null>(null)
+  const [savedPath, setSavedPath] = useState<string | null>(null)
 
   const supabase = useMemo(() => createClient(), [])
 
@@ -50,9 +51,7 @@ export default function AdminPageSettingsPage() {
     e.preventDefault()
     setLoginError("")
     setIsLoading(true)
-
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-
     if (error) {
       setLoginError(error.message)
       setIsLoading(false)
@@ -83,37 +82,39 @@ export default function AdminPageSettingsPage() {
     }
   }
 
-  const updatePage = async (slug: string, updates: Partial<PageSetting>) => {
-    setSavingSlug(slug)
+  const updatePage = async (page_path: string, updates: Partial<PageSetting>) => {
+    setSavingPath(page_path)
     try {
       const response = await fetch("/api/page-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, ...updates }),
+        body: JSON.stringify({ page_path, ...updates }),
       })
-
       if (response.ok) {
         const updated = await response.json()
-        setPages(pages.map(p => p.slug === slug ? { ...p, ...updated } : p))
+        setPages(prev => prev.map(p => p.page_path === page_path ? { ...p, ...updated } : p))
+        setSavedPath(page_path)
+        setTimeout(() => setSavedPath(null), 2000)
       }
     } catch (error) {
       console.error("Failed to update page:", error)
     } finally {
-      setSavingSlug(null)
+      setSavingPath(null)
     }
   }
 
-  const togglePageVisibility = (page: PageSetting) => {
-    updatePage(page.slug, { is_active: !page.is_active })
-  }
+  const enabledCount = pages.filter(p => p.is_visible).length
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Header />
         <main className="flex-1 flex items-center justify-center px-6 py-16">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
+          <Card className="w-full max-w-md border-2">
+            <CardHeader className="text-center pb-4">
+              <div className="w-14 h-14 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-4">
+                <Eye className="w-7 h-7 text-[#8B2B3E]" />
+              </div>
               <CardTitle className="text-2xl">Admin Login</CardTitle>
               <CardDescription>Sign in to manage page visibility</CardDescription>
             </CardHeader>
@@ -121,26 +122,14 @@ export default function AdminPageSettingsPage() {
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 {loginError && <p className="text-sm text-destructive">{loginError}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full bg-[#8B2B3E] hover:bg-[#6B1B2E]" disabled={isLoading}>
                   {isLoading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
@@ -157,10 +146,15 @@ export default function AdminPageSettingsPage() {
       <Header />
       <main className="flex-1 py-12">
         <div className="max-w-4xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
+
+          {/* Header */}
+          <div className="flex items-start justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Page Visibility Settings</h1>
-              <p className="text-muted-foreground mt-1">Show or hide pages on your website</p>
+              <h1 className="text-3xl font-bold text-foreground">Page Visibility</h1>
+              <p className="text-muted-foreground mt-1">
+                Toggle pages on or off for public access.{" "}
+                <span className="font-medium text-foreground">{enabledCount} of {pages.length}</span> pages enabled.
+              </p>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={fetchPages} disabled={isLoading}>
@@ -174,43 +168,59 @@ export default function AdminPageSettingsPage() {
             </div>
           </div>
 
+          {/* Legend */}
+          <div className="flex items-center gap-6 mb-6 p-4 rounded-lg bg-muted/30 border text-sm text-muted-foreground">
+            <span className="flex items-center gap-2"><Eye className="w-4 h-4 text-green-600" /> Enabled — publicly visible</span>
+            <span className="flex items-center gap-2"><EyeOff className="w-4 h-4 text-destructive" /> Disabled — redirects to Coming Soon</span>
+          </div>
+
           {isLoading ? (
-            <div className="text-center py-12">
+            <div className="text-center py-16">
               <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
               <p className="mt-4 text-muted-foreground">Loading pages...</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {pages.map((page) => (
-                <Card key={page.id} className={!page.is_active ? "border-destructive/50 bg-destructive/5" : ""}>
-                  <CardContent className="p-6">
+                <Card
+                  key={page.id}
+                  className={`transition-all duration-200 ${
+                    !page.is_visible
+                      ? "border-destructive/40 bg-destructive/5"
+                      : "border-green-500/30 bg-green-50/30 dark:bg-green-950/10"
+                  }`}
+                >
+                  <CardContent className="p-5">
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          {page.is_active ? (
-                            <Eye className="h-5 w-5 text-green-600" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                          {page.is_visible ? (
+                            <Eye className="h-4 w-4 text-green-600 shrink-0" />
                           ) : (
-                            <EyeOff className="h-5 w-5 text-destructive" />
+                            <EyeOff className="h-4 w-4 text-destructive shrink-0" />
                           )}
-                          <h3 className="text-lg font-semibold">{page.page_name}</h3>
-                          <span className="text-sm text-muted-foreground">/{page.slug}</span>
+                          <h3 className="text-base font-semibold text-foreground truncate">{page.page_name}</h3>
+                          <code className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                            {page.page_path}
+                          </code>
                         </div>
-                        
-                        {!page.is_active && (
-                          <div className="mt-4 space-y-2">
-                            <Label htmlFor={`message-${page.id}`} className="text-sm">
-                              Hidden Page Message
+
+                        {/* Hidden message field — only shows when disabled */}
+                        {!page.is_visible && (
+                          <div className="mt-4 space-y-1">
+                            <Label htmlFor={`msg-${page.id}`} className="text-xs text-muted-foreground">
+                              Custom message shown on Coming Soon page (optional)
                             </Label>
                             <div className="flex gap-2">
                               <Textarea
-                                id={`message-${page.id}`}
-                                placeholder="This page is temporarily unavailable..."
+                                id={`msg-${page.id}`}
+                                placeholder="This page will be available soon. Stay tuned!"
                                 defaultValue={page.hidden_message || ""}
-                                className="flex-1"
                                 rows={2}
+                                className="flex-1 text-sm"
                                 onBlur={(e) => {
-                                  if (e.target.value !== page.hidden_message) {
-                                    updatePage(page.slug, { hidden_message: e.target.value })
+                                  if (e.target.value !== (page.hidden_message || "")) {
+                                    updatePage(page.page_path, { hidden_message: e.target.value })
                                   }
                                 }}
                               />
@@ -218,16 +228,24 @@ export default function AdminPageSettingsPage() {
                           </div>
                         )}
                       </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <span className={`text-sm font-medium ${page.is_active ? "text-green-600" : "text-destructive"}`}>
-                          {page.is_active ? "Visible" : "Hidden"}
-                        </span>
+
+                      {/* Toggle */}
+                      <div className="flex flex-col items-center gap-1.5 shrink-0">
                         <Switch
-                          checked={page.is_active}
-                          onCheckedChange={() => togglePageVisibility(page)}
-                          disabled={savingSlug === page.slug}
+                          checked={page.is_visible}
+                          onCheckedChange={() => updatePage(page.page_path, { is_visible: !page.is_visible })}
+                          disabled={savingPath === page.page_path}
+                          className="data-[state=checked]:bg-green-600"
                         />
+                        <span className={`text-xs font-medium ${page.is_visible ? "text-green-600" : "text-destructive"}`}>
+                          {savingPath === page.page_path
+                            ? "Saving..."
+                            : savedPath === page.page_path
+                            ? "Saved!"
+                            : page.is_visible
+                            ? "Enabled"
+                            : "Disabled"}
+                        </span>
                       </div>
                     </div>
                   </CardContent>

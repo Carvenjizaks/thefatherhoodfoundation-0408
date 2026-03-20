@@ -229,25 +229,25 @@ export default function PartnershipPage() {
                       {/* One-Time Payment Options */}
                       {paymentMethod === "once" && (
                         <>
-                          {/* PayPal Button */}
-                          <Button
+                          {/* PayPal Button - Official styling */}
+                          <button
                             onClick={() => handleDonate("paypal")}
                             disabled={!selectedAmount}
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-[#0070BA] text-[#0070BA] hover:bg-[#0070BA] hover:text-white disabled:opacity-50 gap-2"
-                            size="lg"
+                            className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-lg bg-[#FFC439] hover:bg-[#F0B72F] disabled:opacity-50 shadow-md transition-colors border-0 cursor-pointer"
                           >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
-                            </svg>
-                            Pay with PayPal
-                          </Button>
+                            {/* PayPal "PP" icon */}
+                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003087] text-white font-black text-sm leading-none select-none">
+                              P
+                            </span>
+                            <span className="text-base font-bold leading-none">
+                              <span className="text-[#003087]">Pay</span><span className="text-[#0070E0]">Pal</span>
+                            </span>
+                          </button>
 
                           {/* PayToday Button */}
                           <Button
                             asChild
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
                             size="lg"
                           >
                             <a
@@ -255,10 +255,11 @@ export default function PartnershipPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
-                              </svg>
+                              <img 
+                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
+                                alt="PayToday" 
+                                className="w-8 h-8 rounded"
+                              />
                               PayToday
                             </a>
                           </Button>
@@ -271,8 +272,7 @@ export default function PartnershipPage() {
                           {/* PayToday Monthly */}
                           <Button
                             asChild
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-black bg-white text-black hover:bg-black hover:text-white shadow-lg gap-3"
+                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
                             size="lg"
                           >
                             <a
@@ -280,10 +280,11 @@ export default function PartnershipPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M8 12h8M12 8v8" strokeWidth="2" stroke="currentColor" strokeLinecap="round"/>
-                              </svg>
+                              <img 
+                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
+                                alt="PayToday" 
+                                className="w-8 h-8 rounded"
+                              />
                               Setup with PayToday
                             </a>
                           </Button>

@@ -20,21 +20,21 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const { slug, is_active, hidden_message } = await request.json()
+    const { page_path, is_visible, hidden_message } = await request.json()
 
-    if (!slug) {
-      return NextResponse.json({ error: "Slug is required" }, { status: 400 })
+    if (!page_path) {
+      return NextResponse.json({ error: "page_path is required" }, { status: 400 })
     }
 
     const supabase = createAdminClient()
     const { data, error } = await supabase
       .from("page_settings")
-      .update({ 
-        is_active, 
+      .update({
+        is_visible,
         hidden_message,
         updated_at: new Date().toISOString()
       })
-      .eq("slug", slug)
+      .eq("page_path", page_path)
       .select()
       .single()
 
