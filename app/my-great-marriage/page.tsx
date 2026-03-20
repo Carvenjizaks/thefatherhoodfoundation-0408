@@ -37,16 +37,16 @@ export default function MyGreatMarriagePage() {
                   <div className="absolute -inset-4 rounded-3xl border border-[#D4A574]/40" />
                   
                   {/* Main image with shadow */}
-                  <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-8 border-white hover:shadow-3xl transition-all duration-500">
+                  <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-8 border-white hover:shadow-3xl transition-all duration-500 bg-white">
                     <Image
                       src="/images/marriage-thumbprints-banner.jpg"
                       alt="Two thumbprints forming a heart - symbolizing unique individuals united in marriage"
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-500"
+                      className="object-contain hover:scale-105 transition-transform duration-500"
                       priority
                     />
                     {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#8B2B3E]/20 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#8B2B3E]/10 via-transparent to-transparent" />
                   </div>
                   
                   {/* Floating accent circles */}
