@@ -1,1 +1,1 @@
-// This file is intentionally empty. Routing logic is handled in proxy.ts
+// Intentionally empty — routing is handled in proxy.ts only

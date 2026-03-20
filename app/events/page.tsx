@@ -28,21 +28,7 @@ const events = [
     priceAmount: 550,
     detailsPage: "/events/my-great-marriage",
   },
-  {
-    id: "goc26",
-    slug: "goc26",
-    title: "Gathering of Champions 2026",
-    subtitle: "GOC26 - Annual Men's Conference",
-    dates: "17-19 July 2026",
-    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
-    location: "Venue: To be Announced",
-    banner: "/images/banners/goc26-banner.jpg",
-    registrationOpen: false,
-    requiresSpouse: false,
-    description: "The annual gathering for men seeking to become champions in their families and communities.",
-    price: "NAD 450 per person",
-    priceAmount: 450,
-  },
+
   {
     id: "mgm-sept-2026",
     slug: "mgm-sept-2026",
