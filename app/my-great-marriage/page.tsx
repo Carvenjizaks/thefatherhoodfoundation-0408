@@ -28,40 +28,9 @@ export default function MyGreatMarriagePage() {
           </div>
 
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-              {/* Left - Thumbprints Image */}
-              <div className="relative order-1 flex justify-center lg:justify-start">
-                <div className="relative w-72 h-96 lg:w-[400px] lg:h-[500px]">
-                  {/* Animated border rings */}
-                  <div className="absolute -inset-8 rounded-3xl border-2 border-dashed border-[#8B2B3E]/30 animate-[spin_40s_linear_infinite]" />
-                  <div className="absolute -inset-4 rounded-3xl border border-[#D4A574]/40" />
-                  
-                  {/* Main image with shadow */}
-                  <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-8 border-white hover:shadow-3xl transition-all duration-500 bg-white">
-                    <Image
-                      src="/images/marriage-conference-banner.jpg"
-                      alt="My Great Marriage Conference banner"
-                      fill
-                      className="object-contain hover:scale-105 transition-transform duration-500"
-                      priority
-                    />
-                    {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#8B2B3E]/10 via-transparent to-transparent" />
-                  </div>
-                  
-                  {/* Floating accent circles */}
-                  <div className="absolute -top-6 -right-6 w-16 h-16 bg-[#D4A574] rounded-full shadow-lg animate-bounce flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="absolute -bottom-6 -left-6 w-14 h-14 bg-[#8B2B3E] rounded-full shadow-lg animate-bounce flex items-center justify-center" style={{ animationDelay: '0.3s' }}>
-                    <Heart className="w-7 h-7 text-white fill-white" />
-                  </div>
-                  <div className="absolute top-1/2 -right-8 w-12 h-12 bg-white rounded-full shadow-lg animate-pulse border-2 border-[#D4A574]" />
-                </div>
-              </div>
-
-              {/* Right - Content */}
-              <div className="text-center lg:text-left order-2 space-y-6">
+            <div className="flex justify-center">
+              {/* Content */}
+              <div className="text-center max-w-3xl space-y-6">
                 <div className="inline-block lg:block">
                   <span className="inline-block px-5 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-bold tracking-widest uppercase mb-6">
                     ✓ Two Unique Prints, One Heart

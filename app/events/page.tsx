@@ -28,21 +28,7 @@ const events = [
     priceAmount: 550,
     detailsPage: "/events/my-great-marriage",
   },
-  {
-    id: "goc26",
-    slug: "goc26",
-    title: "Gathering of Champions 2026",
-    subtitle: "GOC26 - Annual Men's Conference",
-    dates: "17-19 July 2026",
-    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
-    location: "Venue: To be Announced",
-    banner: "/images/banners/goc26-banner.jpg",
-    registrationOpen: false,
-    requiresSpouse: false,
-    description: "The annual gathering for men seeking to become champions in their families and communities.",
-    price: "NAD 450 per person",
-    priceAmount: 450,
-  },
+
   {
     id: "mgm-sept-2026",
     slug: "mgm-sept-2026",
@@ -57,6 +43,21 @@ const events = [
     description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
     price: "NAD 300 per couple",
     priceAmount: 300,
+  },
+  {
+    id: "goc26",
+    slug: "goc26",
+    title: "Gathering of Champions 2026",
+    subtitle: "GOC26 - Annual Men's Conference",
+    dates: "17-19 July 2026",
+    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
+    location: "Venue: To be Announced",
+    banner: "",
+    registrationOpen: false,
+    requiresSpouse: false,
+    description: "The annual gathering for men seeking to become champions in their families and communities.",
+    price: "NAD 450 per person",
+    priceAmount: 450,
   },
 ]
 
@@ -392,14 +393,20 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
       {/* Banner Image */}
-      <div className="relative w-full h-[200px] md:h-[280px] lg:h-[320px]">
-        <Image
-          src={event.banner}
-          alt={event.title}
-          fill
-          priority
-          className="object-cover"
-        />
+      <div className="relative w-full h-[200px] md:h-[280px] lg:h-[320px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
+        {event.banner ? (
+          <Image
+            src={event.banner}
+            alt={event.title}
+            fill
+            priority
+            className="object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-white/80 text-6xl font-bold tracking-wider">{event.id.toUpperCase()}</span>
+          </div>
+        )}
         <div className="absolute top-4 right-4">
           <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm`}>
             {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
