@@ -1,8 +1,7 @@
-// Page visibility middleware - passes all requests through
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-export function middleware(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
