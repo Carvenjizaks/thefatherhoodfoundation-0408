@@ -39,8 +39,8 @@ export default function MyGreatMarriagePage() {
                   {/* Main image with shadow */}
                   <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-8 border-white hover:shadow-3xl transition-all duration-500 bg-white">
                     <Image
-                      src="/images/marriage-thumbprints-banner.jpg"
-                      alt="Two thumbprints forming a heart - symbolizing unique individuals united in marriage"
+                      src="/images/marriage-conference-banner.jpg"
+                      alt="My Great Marriage Conference banner"
                       fill
                       className="object-contain hover:scale-105 transition-transform duration-500"
                       priority
