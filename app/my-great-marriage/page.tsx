@@ -109,8 +109,8 @@ export default function MyGreatMarriagePage() {
                 </Button>
               </div>
 
-              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden">
-                <Image src="/couple-having-coffee-and-conversation--intimate-mo.jpg" alt="Couple connecting" fill className="object-cover" />
+              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-xl">
+                <Image src="/images/couples/couple-together-1.jpg" alt="Couple connecting" fill className="object-cover" />
               </div>
             </div>
           </div>
