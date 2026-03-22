@@ -15,7 +15,7 @@ const boardOfGovernors = [
   {
     name: "Christo Nicholls",
     role: "Board of Governors",
-    bio: "Christo Nicholls serves as a valued member of the Board of Governors, offering leadership support and strategic counsel to the foundation. He brings maturity, perspective, and a strong commitment to seeing men equipped to lead well in their homes, communities, and spheres of influence.",
+    bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
     image: "/team/christo-nicholls.jpg",
   },
   {
@@ -33,7 +33,7 @@ const boardOfGovernors = [
   {
     name: "Bruce Hansen",
     role: "Board of Governors",
-    bio: "Bruce Hansen serves on the Board of Governors and contributes wisdom, leadership perspective, and support to the advancement of the foundation's mission. He is committed to strengthening the leadership culture around the organization and helping position it for long-term influence and impact.",
+    bio: "Bruce Hansen serves as Managing Director of Simonis Storm Securities, bringing seasoned leadership and deep expertise in financial services, investment markets, and economic analysis. His work reflects a strong commitment to sound strategy, responsible stewardship, and long-term financial growth.",
     image: "/team/bruce-hansen.jpg",
   },
 ]
