@@ -218,40 +218,47 @@ export default function AboutPage() {
             {/* Half-moon arc layout */}
             <div className="relative max-w-6xl mx-auto">
               {/* Mobile: Stack layout */}
-              <div className="md:hidden flex flex-col gap-6">
+              <div className="lg:hidden flex flex-col gap-6">
                 {boardOfGovernors.map((member) => (
                   <ProfileCard key={member.name} member={member} />
                 ))}
               </div>
 
               {/* Desktop: Half-moon arc layout */}
-              <div className="hidden md:block relative" style={{ minHeight: "700px" }}>
-                {boardOfGovernors.map((member, index) => {
-                  // Calculate position along a half-moon arc
-                  const totalMembers = boardOfGovernors.length
-                  const angle = Math.PI * (index / (totalMembers - 1)) // 0 to PI (180 degrees)
-                  const radius = 280 // radius of the arc
-                  const centerX = 50 // center percentage
-                  const centerY = 10 // center Y percentage (top of arc)
-                  
-                  // Calculate x and y positions
-                  const x = centerX + (radius / 6) * Math.cos(Math.PI - angle)
-                  const y = centerY + (radius / 4) * Math.sin(angle)
-                  
-                  return (
+              <div className="hidden lg:block relative" style={{ minHeight: "580px" }}>
+                {/* Top row - 3 cards in arc */}
+                <div className="flex justify-center gap-6 mb-8">
+                  {boardOfGovernors.slice(0, 3).map((member, index) => {
+                    // Create subtle arc effect with different vertical positions
+                    const yOffset = index === 1 ? 0 : 40 // Middle card higher
+                    
+                    return (
+                      <div
+                        key={member.name}
+                        className="transition-all duration-500 hover:z-20"
+                        style={{
+                          width: "300px",
+                          transform: `translateY(${yOffset}px)`,
+                        }}
+                      >
+                        <ProfileCard member={member} isArc={true} />
+                      </div>
+                    )
+                  })}
+                </div>
+                
+                {/* Bottom row - 2 cards centered */}
+                <div className="flex justify-center gap-6" style={{ marginTop: "60px" }}>
+                  {boardOfGovernors.slice(3, 5).map((member) => (
                     <div
                       key={member.name}
-                      className="absolute transform -translate-x-1/2 transition-all duration-500 hover:z-20"
-                      style={{
-                        left: `${x}%`,
-                        top: `${y}%`,
-                        width: "280px",
-                      }}
+                      className="transition-all duration-500 hover:z-20"
+                      style={{ width: "300px" }}
                     >
                       <ProfileCard member={member} isArc={true} />
                     </div>
-                  )
-                })}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
