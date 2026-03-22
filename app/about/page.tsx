@@ -21,14 +21,14 @@ const boardOfGovernors = [
   {
     name: "Robert Burdett",
     role: "Board of Governors",
-    bio: "Robert Burdett serves on the Board of Governors with a heart for leadership development and meaningful impact. He contributes strategic insight and encouragement to the work of The Fatherhood Foundation, helping strengthen the organization's mission to build godly men and healthy communities.",
+    bio: "Robert Burdett is the Senior Pastor of PowerHouse Church in Katy, Texas, and a seasoned church leader with years of pastoral and executive ministry experience. He is known for his strong leadership, biblical teaching, and dedication to building a church culture marked by discipleship, outreach, and community impact. His ministry reflects a heart for people, a commitment to the local church, and a vision for lasting Kingdom influence.",
     image: "/team/robert-burdett.jpg",
   },
   {
-    name: "Brandon Saunders",
+    name: "Brandon Sanders",
     role: "Board of Governors",
-    bio: "Brandon Saunders is part of the Board of Governors, supporting the broader vision and future direction of the foundation. He brings valuable perspective and a shared commitment to principled leadership, strong families, and sustainable community transformation.",
-    image: "/team/brandon-saunders.jpg",
+    bio: "Brandon Sanders is a transformational leader and ministry practitioner serving as Executive Director of Wings of Life in Mobile, Alabama. With a deep commitment to restoration, recovery, and youth mentorship, he works closely with schools, counselors, and families to support vulnerable young people and individuals facing life-controlling challenges. His life and leadership reflect redemption, resilience, and a passion to see lives restored through faith, guidance, and practical care.",
+    image: "/team/brandon-sanders.jpg",
   },
   {
     name: "Bruce Hansen",
