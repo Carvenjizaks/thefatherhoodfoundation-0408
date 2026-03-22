@@ -103,10 +103,10 @@ const managementTeam = [
     image: "/team/bianca-clark.jpg",
   },
   {
-    name: "Astrido Philander",
+    name: "Astrido Barth-Philander",
     role: "Management Team",
-    bio: "Astrido Philander is part of the management team and plays an important role in supporting the ongoing work and coordination of The Fatherhood Foundation. She contributes to the strength of the organization through her service, leadership support, and commitment to the foundation's purpose and impact.",
-    image: "/team/astrido-philander.jpg",
+    bio: "Astrido Barth-Philander brings strong financial leadership and professional expertise in accounting, reporting, and business support. As Senior Manager: Finance at SanlamAllianz Namibia, he contributes strategic insight, governance discipline, and sound financial stewardship shaped by his chartered accountancy background and training through the University of Cape Town and the Institute of Chartered Accountants of Namibia.",
+    image: "/team/astrido-barth-philander.jpg",
   },
 ]
 
