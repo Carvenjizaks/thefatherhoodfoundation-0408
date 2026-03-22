@@ -28,7 +28,7 @@ const steps = [
     image: "/images/step-purpose.jpg",
     alt: "Purpose - Destiny and calling",
     description:
-      "The best gift a father can give his son is to connect him to his purpose. Purpose identified produces passion! Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
+      "Purpose identified produces passion! The best gift a father can give his children, is to connect them to their purpose. Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
   },
 ]
 
