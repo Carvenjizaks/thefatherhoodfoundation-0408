@@ -20,7 +20,7 @@ const steps = [
     image: "/images/step-affirmation.jpg",
     alt: "Affirmation - Father-son connection",
     description:
-      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Strong men create strong sons.",
+      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Men secure in their manhood, create strong sons.",
   },
   {
     step: 3,
