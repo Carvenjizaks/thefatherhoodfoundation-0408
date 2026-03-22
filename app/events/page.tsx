@@ -22,7 +22,7 @@ const events = [
     dates: "30 April - 2 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
-    banner: "/images/banners/mgm-couples-banner.jpg",
+    banner: "/images/mgm-banner-2026.png",
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",

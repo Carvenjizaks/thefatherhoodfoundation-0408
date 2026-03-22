@@ -202,8 +202,8 @@ export default function MyGreatMarriageEventPage() {
         {/* Full-width banner image */}
         <div className="w-full max-w-5xl mx-auto py-8 px-4">
           <Image
-            src="/images/mygreatmarriage-banner.jpg"
-            alt="MyGreatMarriage Conference 2026 - 11 June & 12 June 2026"
+            src="/images/mgm-banner-2026.png"
+            alt="MyGreatMarriage Conference 2026 - 30 April - 2 May 2026"
             width={1200}
             height={600}
             className="w-full h-auto object-contain"
