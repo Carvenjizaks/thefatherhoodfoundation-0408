@@ -311,9 +311,9 @@ export default function AboutPage() {
         <section className="py-16 lg:py-20 bg-[#1a1a1a] border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-              <AnimatedStat value="500" suffix="+" label="Men Mentored" />
-              <AnimatedStat value="50" suffix="+" label="Schools Reached" />
-              <AnimatedStat value="1,000" suffix="+" label="Youth Impacted" />
+              <AnimatedStat value="20 000" suffix="+" label="Impacted Men" />
+              <AnimatedStat value="500" suffix="+" label="Touched Marriages" />
+              <AnimatedStat value="15 000" suffix="+" label="Youth Reached" />
               <AnimatedStat value="10" suffix="+" label="Years of Impact" />
             </div>
           </div>
@@ -376,18 +376,22 @@ export default function AboutPage() {
                   Your donation directly funds mentoring programmes, leadership training, and youth development 
                   initiatives that transform lives.
                 </p>
-                <div className="space-y-4">
+<div className="space-y-4">
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$500 sponsors one youth for a full programme</span>
+                    <span>Support to reach more youth</span>
                   </div>
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$2,000 supports a father through mentorship</span>
+                    <span>Support the ministry to men through mentorship</span>
                   </div>
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$10,000 brings a programme to a new school</span>
+                    <span>Reach more new schools with our Character Development programme</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-white/90">
+                    <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
+                    <span>Join us to touch more marriages</span>
                   </div>
                 </div>
                 <Link href="/donate" className="block mt-8">
