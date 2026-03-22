@@ -202,10 +202,10 @@ const managementTeam = [
     image: "/team/carven-izaks.jpg",
   },
   {
-    name: "Bianca Clark",
+    name: "Bianca Clarke",
     role: "Management Team",
-    bio: "Bianca Clark serves on the management team and helps support the implementation of the foundation's programmes and operational priorities. She is committed to people development, organizational effectiveness, and the practical outworking of the foundation's mission in communities and leadership spaces.",
-    image: "/team/bianca-clark.jpg",
+    bio: "Bianca Clarke is a leadership and personal development professional serving through Africa B-Inspired (PTY) Ltd. With a focus on coaching, leadership facilitation, and empowering people and organizations, she brings insight, encouragement, and practical development expertise to the spaces she serves. She brings her wealth of knowledge in the area of governance.",
+    image: "/team/bianca-clarke.jpg",
   },
   {
     name: "Astrido Barth-Philander",
