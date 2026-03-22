@@ -153,7 +153,7 @@ export default function AboutPage() {
         </section>
 
         {/* Board of Governors */}
-        <section className="py-16 lg:py-24">
+        <section className="py-16 lg:py-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12 lg:mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Board of Governors</h2>
@@ -164,16 +164,62 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {boardOfGovernors.map((member) => (
-                <Card key={member.name} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
-                    <p className="text-[#8B2B3E] font-semibold text-sm mb-4">{member.role}</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
-                  </CardContent>
-                </Card>
-              ))}
+            {/* Half-moon arc layout */}
+            <div className="relative max-w-6xl mx-auto">
+              {/* Mobile: Stack layout */}
+              <div className="md:hidden flex flex-col gap-6">
+                {boardOfGovernors.map((member) => (
+                  <Card key={member.name} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-white text-2xl font-bold">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-foreground mb-1 text-center">{member.name}</h3>
+                      <p className="text-[#8B2B3E] font-semibold text-sm mb-4 text-center">{member.role}</p>
+                      <p className="text-muted-foreground text-sm leading-relaxed text-center">{member.bio}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Desktop: Half-moon arc layout */}
+              <div className="hidden md:block relative" style={{ minHeight: "700px" }}>
+                {boardOfGovernors.map((member, index) => {
+                  // Calculate position along a half-moon arc
+                  const totalMembers = boardOfGovernors.length
+                  const angle = Math.PI * (index / (totalMembers - 1)) // 0 to PI (180 degrees)
+                  const radius = 280 // radius of the arc
+                  const centerX = 50 // center percentage
+                  const centerY = 10 // center Y percentage (top of arc)
+                  
+                  // Calculate x and y positions
+                  const x = centerX + (radius / 6) * Math.cos(Math.PI - angle)
+                  const y = centerY + (radius / 4) * Math.sin(angle)
+                  
+                  return (
+                    <div
+                      key={member.name}
+                      className="absolute transform -translate-x-1/2 transition-all duration-500 hover:scale-105 hover:z-10"
+                      style={{
+                        left: `${x}%`,
+                        top: `${y}%`,
+                        width: "280px",
+                      }}
+                    >
+                      <Card className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl overflow-hidden bg-background">
+                        <CardContent className="p-5">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg">
+                            <span className="text-white text-lg font-bold">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                          </div>
+                          <h3 className="text-lg font-bold text-foreground mb-1 text-center">{member.name}</h3>
+                          <p className="text-[#8B2B3E] font-semibold text-xs mb-3 text-center">{member.role}</p>
+                          <p className="text-muted-foreground text-xs leading-relaxed text-center line-clamp-4">{member.bio}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </section>
