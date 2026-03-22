@@ -17,6 +17,17 @@ import { Label } from "@/components/ui/label"
 import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { Heart, Calendar, MapPin, Clock, Users, Sparkles } from "lucide-react"
+
+// MGM Brand Colors - Peach/Coral theme
+const mgmColors = {
+  primary: "#D4956A", // Warm peach/coral from logo
+  primaryDark: "#C17D4F",
+  primaryLight: "#E8B896",
+  accent: "#8B2B3E", // Keep accent for contrast
+  cream: "#FDF8F4",
+  warmWhite: "#FFFBF7",
+}
 
 type RegistrationFormData = {
   firstName: string
@@ -77,7 +88,7 @@ export default function MyGreatMarriageEventPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselImages.length)
-    }, 3000)
+    }, 4000)
 
     return () => clearInterval(interval)
   }, [])
@@ -106,7 +117,6 @@ export default function MyGreatMarriageEventPage() {
       newErrors.cellphone = "Invalid phone number"
     }
 
-    // Spouse validation (required for marriage conference)
     if (!formData.spouseName?.trim()) {
       newErrors.spouseName = "Spouse name is required"
     }
@@ -134,7 +144,6 @@ export default function MyGreatMarriageEventPage() {
     setSubmitError(null)
 
     try {
-      // Use unified contacts API
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -192,313 +201,400 @@ export default function MyGreatMarriageEventPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-white pt-20">
-        {/* Event Hero Section - Full Width Banner */}
-      <section className="relative bg-white">
-        {/* Full-width banner image */}
-        <div className="w-full max-w-5xl mx-auto py-8 px-4">
-          <Image
-            src="/images/mgm-banner-2026.png"
-            alt="MyGreatMarriage Conference 2026 - 30 April - 2 May 2026"
-            width={1200}
-            height={600}
-            className="w-full h-auto object-contain"
-            priority
-          />
-        </div>
+      <div className="min-h-screen pt-20" style={{ backgroundColor: mgmColors.warmWhite }}>
         
-        <div className="max-w-6xl mx-auto text-center px-4 py-12">
-          {/* Event Dates */}
-          <div className="mb-8">
-            <div className="inline-block bg-[#8B2B3E] text-white px-6 py-3 rounded-full mb-6">
-              <p className="text-lg md:text-xl font-semibold">Main Event: 1 May 2026</p>
-            </div>
-            <div className="inline-block bg-[#8B2B3E]/80 text-white px-6 py-3 rounded-full mb-6 ml-4">
-              <p className="text-lg md:text-xl font-semibold">Follow-Up: 2 September 2026</p>
-            </div>
-            <div className="mt-6">
-              <p className="text-xl md:text-2xl text-gray-700 mb-2">Thursday Night 6pm - 8:30pm</p>
-              <p className="text-xl md:text-2xl text-gray-700 mb-2">Friday 6:30pm - 9pm</p>
-              <p className="text-xl md:text-2xl text-gray-700 mb-2">Saturday 8:30am - 1pm</p>
-              <p className="text-lg md:text-xl text-gray-600 italic mt-4">Venue: To be Announced</p>
-            </div>
-          </div>
-
-          {/* CTA Button */}
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button
-                size="lg"
-                className="text-2xl px-16 py-8 bg-primary hover:bg-primary/90 text-white font-bold rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 animate-pulse"
-              >
-                Register Now
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-2xl text-primary">MyGreatMarriage Conference Registration</DialogTitle>
-                <DialogDescription>
-                  Register for the conference on 1 May 2026 (with follow-up on 2 September 2026). All fields marked with * are required.
-                </DialogDescription>
-              </DialogHeader>
-
-              {submitSuccess ? (
-                <div className="py-8 text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-green-600 mb-2">Registration Successful!</h3>
-                  <p className="text-gray-600">
-                    Thank you for registering. We'll send confirmation details to your email.
-                  </p>
+        {/* Hero Section - Warm & Inviting */}
+        <section className="relative overflow-hidden" style={{ backgroundColor: mgmColors.cream }}>
+          {/* Decorative circles */}
+          <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-20" style={{ backgroundColor: mgmColors.primary, transform: "translate(-50%, -50%)" }} />
+          <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-15" style={{ backgroundColor: mgmColors.primaryLight, transform: "translate(30%, 30%)" }} />
+          
+          <div className="relative max-w-7xl mx-auto px-4 py-12 lg:py-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              
+              {/* Left: Logo & Info */}
+              <div className="text-center lg:text-left">
+                <div className="mb-8">
+                  <Image
+                    src="/images/mgm-banner-2026.png"
+                    alt="MyGreatMarriage Conference 2026"
+                    width={500}
+                    height={500}
+                    className="w-full max-w-md mx-auto lg:mx-0"
+                    priority
+                  />
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Registrant Details */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-primary">Your Details</h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="firstName">
-                          First Name <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          id="firstName"
-                          value={formData.firstName}
-                          onChange={(e) => handleInputChange("firstName", e.target.value)}
-                          className="mt-1"
-                        />
-                        {errors.firstName && <p className="text-sm text-red-500 mt-1">{errors.firstName}</p>}
-                      </div>
-
-                      <div>
-                        <Label htmlFor="lastName">
-                          Last Name <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          id="lastName"
-                          value={formData.lastName}
-                          onChange={(e) => handleInputChange("lastName", e.target.value)}
-                          className="mt-1"
-                        />
-                        {errors.lastName && <p className="text-sm text-red-500 mt-1">{errors.lastName}</p>}
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="email">
-                        Email Address <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        className="mt-1"
-                      />
-                      {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="cellphone">
-                        Cellphone Number <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="cellphone"
-                        type="tel"
-                        value={formData.cellphone}
-                        onChange={(e) => handleInputChange("cellphone", e.target.value)}
-                        placeholder="+264 81 234 5678"
-                        className="mt-1"
-                      />
-                      {errors.cellphone && <p className="text-sm text-red-500 mt-1">{errors.cellphone}</p>}
-                    </div>
+                
+                <p className="text-xl lg:text-2xl text-gray-700 mb-8 leading-relaxed">
+                  A transformative experience for couples ready to deepen their connection and build a marriage that lasts.
+                </p>
+                
+                {/* Event Quick Info */}
+                <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-8">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                    <Calendar className="w-5 h-5" style={{ color: mgmColors.primary }} />
+                    <span className="font-medium text-gray-700">30 April - 2 May 2026</span>
                   </div>
-
-                  {/* Spouse/Partner Details */}
-                  <div className="space-y-4 p-4 bg-gray-50 rounded-lg border border-[#8B2B3E]/20">
-                    <h3 className="text-lg font-semibold text-primary">Spouse/Partner Details</h3>
-
-                    <div>
-                      <Label htmlFor="spouseName">
-                        Name <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="spouseName"
-                        value={formData.spouseName}
-                        onChange={(e) => handleInputChange("spouseName", e.target.value)}
-                        className="mt-1"
-                      />
-                      {errors.spouseName && <p className="text-sm text-red-500 mt-1">{errors.spouseName}</p>}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="spouseEmail">
-                        Email <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="spouseEmail"
-                        type="email"
-                        value={formData.spouseEmail}
-                        onChange={(e) => handleInputChange("spouseEmail", e.target.value)}
-                        className="mt-1"
-                      />
-                      {errors.spouseEmail && <p className="text-sm text-red-500 mt-1">{errors.spouseEmail}</p>}
-                    </div>
-
-                    <div>
-                      <Label htmlFor="spouseCellphone">
-                        Cellphone <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="spouseCellphone"
-                        type="tel"
-                        value={formData.spouseCellphone}
-                        onChange={(e) => handleInputChange("spouseCellphone", e.target.value)}
-                        placeholder="+264 81 234 5678"
-                        className="mt-1"
-                      />
-                      {errors.spouseCellphone && (
-                        <p className="text-sm text-red-500 mt-1">{errors.spouseCellphone}</p>
-                      )}
-                    </div>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                    <MapPin className="w-5 h-5" style={{ color: mgmColors.primary }} />
+                    <span className="font-medium text-gray-700">Venue TBA</span>
                   </div>
-
-                  {/* Error Message */}
-                  {submitError && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-sm text-red-600">{submitError}</p>
-                    </div>
-                  )}
-
-                  {/* Submit Button */}
-                  <div className="flex gap-4 pt-4">
-                    <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
-                      Cancel
+                </div>
+                
+                {/* CTA Button */}
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="text-xl px-12 py-7 text-white font-bold rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                      style={{ backgroundColor: mgmColors.primary }}
+                    >
+                      <Heart className="w-6 h-6 mr-2" />
+                      Register Your Couple
                     </Button>
-                    <Button type="submit" disabled={isSubmitting} className="flex-1 bg-primary hover:bg-primary/90">
-                      {isSubmitting ? "Submitting..." : "Complete Registration"}
-                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl" style={{ color: mgmColors.primary }}>
+                        MyGreatMarriage Conference Registration
+                      </DialogTitle>
+                      <DialogDescription>
+                        Register for the conference on 30 April - 2 May 2026. All fields marked with * are required.
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    {submitSuccess ? (
+                      <div className="py-8 text-center">
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                          <Heart className="w-8 h-8" style={{ color: mgmColors.primary }} />
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2" style={{ color: mgmColors.primary }}>Registration Successful!</h3>
+                        <p className="text-gray-600">
+                          Thank you for registering. We will send confirmation details to your email.
+                        </p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold" style={{ color: mgmColors.primary }}>Your Details</h3>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="firstName">
+                                First Name <span className="text-red-500">*</span>
+                              </Label>
+                              <Input
+                                id="firstName"
+                                value={formData.firstName}
+                                onChange={(e) => handleInputChange("firstName", e.target.value)}
+                                className="mt-1"
+                              />
+                              {errors.firstName && <p className="text-sm text-red-500 mt-1">{errors.firstName}</p>}
+                            </div>
+
+                            <div>
+                              <Label htmlFor="lastName">
+                                Last Name <span className="text-red-500">*</span>
+                              </Label>
+                              <Input
+                                id="lastName"
+                                value={formData.lastName}
+                                onChange={(e) => handleInputChange("lastName", e.target.value)}
+                                className="mt-1"
+                              />
+                              {errors.lastName && <p className="text-sm text-red-500 mt-1">{errors.lastName}</p>}
+                            </div>
+                          </div>
+
+                          <div>
+                            <Label htmlFor="email">
+                              Email Address <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="email"
+                              type="email"
+                              value={formData.email}
+                              onChange={(e) => handleInputChange("email", e.target.value)}
+                              className="mt-1"
+                            />
+                            {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+                          </div>
+
+                          <div>
+                            <Label htmlFor="cellphone">
+                              Cellphone Number <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="cellphone"
+                              type="tel"
+                              value={formData.cellphone}
+                              onChange={(e) => handleInputChange("cellphone", e.target.value)}
+                              placeholder="+264 81 234 5678"
+                              className="mt-1"
+                            />
+                            {errors.cellphone && <p className="text-sm text-red-500 mt-1">{errors.cellphone}</p>}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 p-4 rounded-lg border" style={{ backgroundColor: `${mgmColors.primary}10`, borderColor: `${mgmColors.primary}30` }}>
+                          <h3 className="text-lg font-semibold" style={{ color: mgmColors.primary }}>Spouse/Partner Details</h3>
+
+                          <div>
+                            <Label htmlFor="spouseName">
+                              Name <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="spouseName"
+                              value={formData.spouseName}
+                              onChange={(e) => handleInputChange("spouseName", e.target.value)}
+                              className="mt-1"
+                            />
+                            {errors.spouseName && <p className="text-sm text-red-500 mt-1">{errors.spouseName}</p>}
+                          </div>
+
+                          <div>
+                            <Label htmlFor="spouseEmail">
+                              Email <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="spouseEmail"
+                              type="email"
+                              value={formData.spouseEmail}
+                              onChange={(e) => handleInputChange("spouseEmail", e.target.value)}
+                              className="mt-1"
+                            />
+                            {errors.spouseEmail && <p className="text-sm text-red-500 mt-1">{errors.spouseEmail}</p>}
+                          </div>
+
+                          <div>
+                            <Label htmlFor="spouseCellphone">
+                              Cellphone <span className="text-red-500">*</span>
+                            </Label>
+                            <Input
+                              id="spouseCellphone"
+                              type="tel"
+                              value={formData.spouseCellphone}
+                              onChange={(e) => handleInputChange("spouseCellphone", e.target.value)}
+                              placeholder="+264 81 234 5678"
+                              className="mt-1"
+                            />
+                            {errors.spouseCellphone && (
+                              <p className="text-sm text-red-500 mt-1">{errors.spouseCellphone}</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {submitError && (
+                          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-sm text-red-600">{submitError}</p>
+                          </div>
+                        )}
+
+                        <div className="flex gap-4 pt-4">
+                          <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
+                            Cancel
+                          </Button>
+                          <Button 
+                            type="submit" 
+                            disabled={isSubmitting} 
+                            className="flex-1 text-white"
+                            style={{ backgroundColor: mgmColors.primary }}
+                          >
+                            {isSubmitting ? "Submitting..." : "Complete Registration"}
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
+              {/* Right: Featured Couple Image */}
+              <div className="relative hidden lg:block">
+                <div className="relative">
+                  {/* Main image with circular frame */}
+                  <div className="relative w-[450px] h-[450px] mx-auto rounded-full overflow-hidden border-8" style={{ borderColor: mgmColors.primary }}>
+                    <Image
+                      src={carouselImages[currentIndex].src}
+                      alt={carouselImages[currentIndex].alt}
+                      fill
+                      className="object-cover transition-all duration-1000"
+                    />
                   </div>
-                </form>
-              )}
-            </DialogContent>
-          </Dialog>
-        </div>
-      </section>
-
-      {/* Carousel Section */}
-      <section className="py-16 overflow-hidden bg-gradient-to-br from-primary/5 via-white to-primary/5">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-12">
-            Celebrating Love & Commitment
-          </h2>
-          <div className="relative h-[500px] md:h-[600px]">
-            <div className="flex items-center justify-center gap-8 absolute left-0 right-0">
-              {carouselImages.map((image, index) => {
-                const position = (index - currentIndex + carouselImages.length) % carouselImages.length
-                const isCentered = position === Math.floor(carouselImages.length / 2)
-
-                let scale = 0.7
-                let opacity = 0.4
-                let zIndex = 1
-                let translateX = (position - Math.floor(carouselImages.length / 2)) * 400
-
-                if (isCentered) {
-                  scale = 1.15
-                  opacity = 1
-                  zIndex = 10
-                  translateX = 0
-                } else if (Math.abs(position - Math.floor(carouselImages.length / 2)) === 1) {
-                  scale = 0.85
-                  opacity = 0.7
-                  zIndex = 5
-                }
-
-                return (
-                  <div
-                    key={index}
-                    className="absolute transition-all duration-700 ease-in-out"
-                    style={{
-                      transform: `translateX(${translateX}px) scale(${scale})`,
-                      opacity,
-                      zIndex,
-                    }}
-                  >
-                    <div className="relative w-[350px] h-[450px] md:w-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                      <Image
-                        src={image.src || "/placeholder.svg"}
-                        alt={image.alt}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 350px, 400px"
-                      />
-                      {isCentered && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
+                  {/* Decorative ring */}
+                  <div className="absolute inset-0 w-[470px] h-[470px] mx-auto rounded-full border-4 -translate-x-[10px] -translate-y-[10px]" style={{ borderColor: `${mgmColors.primaryLight}60` }} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Event Details Section with Featured Couple Image */}
-      <section className="py-16 px-4 bg-gray-50 relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/couples/couple-together-1.jpg"
-            alt="Couple together"
-            fill
-            className="object-cover opacity-10"
-          />
-        </div>
-        
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
-            <div>
-              <h2 className="text-3xl font-bold text-primary mb-6">About the Conference</h2>
-              <div className="prose prose-lg max-w-none text-black">
-                <p>
-                  Join us for a transformative experience focused on strengthening marriages and building lasting
-                  relationships. The MyGreatMarriage Conference brings together couples from all walks of life to learn,
-                  grow, and connect.
-                </p>
-                <h3 className="text-xl font-semibold text-primary mt-8 mb-4">What to Expect</h3>
-                <ul className="space-y-2 text-black">
-                  <li>Inspiring keynote speakers and relationship experts</li>
-                  <li>Interactive workshops and practical sessions</li>
-                  <li>Opportunities to connect with other couples</li>
-                  <li>Tools and resources for building a great marriage</li>
-                </ul>
-              </div>
+        {/* Event Schedule Cards */}
+        <section className="py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">Conference Schedule</h2>
+              <p className="text-lg text-gray-600">Three days of connection, growth, and transformation</p>
             </div>
             
-            {/* Featured Couple Image */}
-            <div className="relative">
-              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/images/couples/couple-together-1.jpg"
-                  alt="Happy couple sharing an intimate moment"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Day 1 */}
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-t-4 hover:shadow-xl transition-shadow" style={{ borderTopColor: mgmColors.primary }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                  <Clock className="w-7 h-7" style={{ color: mgmColors.primary }} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Thursday Evening</h3>
+                <p className="text-gray-500 text-sm mb-3">30 April 2026</p>
+                <p className="text-2xl font-semibold mb-4" style={{ color: mgmColors.primary }}>6:00 PM - 8:30 PM</p>
+                <p className="text-gray-600">Opening session and welcome dinner for all couples</p>
               </div>
-              {/* Decorative element */}
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-full -z-10" />
-              <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full -z-10" />
+              
+              {/* Day 2 */}
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-t-4 hover:shadow-xl transition-shadow" style={{ borderTopColor: mgmColors.primaryDark }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                  <Sparkles className="w-7 h-7" style={{ color: mgmColors.primary }} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Friday Evening</h3>
+                <p className="text-gray-500 text-sm mb-3">1 May 2026</p>
+                <p className="text-2xl font-semibold mb-4" style={{ color: mgmColors.primary }}>6:30 PM - 9:00 PM</p>
+                <p className="text-gray-600">Main event with keynote speakers and workshops</p>
+              </div>
+              
+              {/* Day 3 */}
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-t-4 hover:shadow-xl transition-shadow" style={{ borderTopColor: mgmColors.primary }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                  <Users className="w-7 h-7" style={{ color: mgmColors.primary }} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Saturday Morning</h3>
+                <p className="text-gray-500 text-sm mb-3">2 May 2026</p>
+                <p className="text-2xl font-semibold mb-4" style={{ color: mgmColors.primary }}>8:30 AM - 1:00 PM</p>
+                <p className="text-gray-600">Interactive sessions and couple activities</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Couples Gallery - Horizontal Scroll */}
+        <section className="py-16 overflow-hidden" style={{ backgroundColor: mgmColors.cream }}>
+          <div className="max-w-7xl mx-auto px-4 mb-10">
+            <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-800 mb-4">
+              Celebrating Love & Commitment
+            </h2>
+            <p className="text-center text-gray-600 text-lg">Join couples who are investing in their marriage</p>
+          </div>
+          
+          {/* Infinite scrolling gallery */}
+          <div className="relative">
+            <div className="flex gap-6 animate-scroll-gallery">
+              {[...carouselImages, ...carouselImages].map((image, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-72 h-96 rounded-2xl overflow-hidden shadow-lg"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={288}
+                    height={384}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <style jsx>{`
+            @keyframes scroll-gallery {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-scroll-gallery {
+              animation: scroll-gallery 30s linear infinite;
+            }
+          `}</style>
+        </section>
+
+        {/* What to Expect Section */}
+        <section className="py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              
+              {/* Image Side */}
+              <div className="relative order-2 lg:order-1">
+                <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/images/couples/couple-together-1.jpg"
+                    alt="Happy couple"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${mgmColors.primary}40, transparent)` }} />
+                </div>
+                {/* Floating card */}
+                <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 max-w-xs">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Heart className="w-6 h-6" style={{ color: mgmColors.primary }} />
+                    <span className="font-bold text-gray-800">Follow-Up Session</span>
+                  </div>
+                  <p className="text-gray-600 text-sm">2 September 2026 - Continue your journey together</p>
+                </div>
+              </div>
+              
+              {/* Content Side */}
+              <div className="order-1 lg:order-2">
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
+                  What to Expect
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Join us for a transformative experience focused on strengthening marriages and building lasting relationships.
+                </p>
+                
+                <div className="space-y-6">
+                  {[
+                    { title: "Inspiring Speakers", desc: "Learn from relationship experts and experienced couples" },
+                    { title: "Interactive Workshops", desc: "Practical sessions designed for real-life application" },
+                    { title: "Connect with Couples", desc: "Build friendships with like-minded couples" },
+                    { title: "Tools & Resources", desc: "Take home resources to continue growing together" },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${mgmColors.primary}20` }}>
+                        <Heart className="w-5 h-5" style={{ color: mgmColors.primary }} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-800">{item.title}</h4>
+                        <p className="text-gray-600">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 px-4" style={{ backgroundColor: mgmColors.primary }}>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+              Ready to Invest in Your Marriage?
+            </h2>
+            <p className="text-xl text-white/90 mb-10">
+              Join us for an unforgettable experience that will strengthen your bond and deepen your connection.
+            </p>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size="lg"
+                  className="text-xl px-12 py-7 font-bold rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                  style={{ backgroundColor: "white", color: mgmColors.primary }}
+                >
+                  <Heart className="w-6 h-6 mr-2" />
+                  Register Now
+                </Button>
+              </DialogTrigger>
+            </Dialog>
+          </div>
+        </section>
       </div>
       <Footer />
     </>
