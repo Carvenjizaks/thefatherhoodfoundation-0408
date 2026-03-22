@@ -376,18 +376,22 @@ export default function AboutPage() {
                   Your donation directly funds mentoring programmes, leadership training, and youth development 
                   initiatives that transform lives.
                 </p>
-                <div className="space-y-4">
+<div className="space-y-4">
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$500 sponsors one youth for a full programme</span>
+                    <span>Support to reach more youth</span>
                   </div>
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$2,000 supports a father through mentorship</span>
+                    <span>Support the ministry to men through mentorship</span>
                   </div>
                   <div className="flex items-center gap-4 text-white/90">
                     <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
-                    <span>N$10,000 brings a programme to a new school</span>
+                    <span>Reach more new schools with our Character Development programme</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-white/90">
+                    <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
+                    <span>Join us to touch more marriages</span>
                   </div>
                 </div>
                 <Link href="/donate" className="block mt-8">
