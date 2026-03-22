@@ -46,20 +46,24 @@ function StepCard({
   index: number
 }) {
   // Calculate slide direction: left cards slide from left, right from right, center from bottom
-  const getSlideDirection = () => {
-    if (index === 0) return "-translate-x-full opacity-0"
-    if (index === 2) return "translate-x-full opacity-0"
-    return "translate-y-16 opacity-0"
+  const getSlideStyles = () => {
+    if (!isVisible) {
+      if (index === 0) return { transform: "translateX(-100px)", opacity: 0 }
+      if (index === 2) return { transform: "translateX(100px)", opacity: 0 }
+      return { transform: "translateY(60px)", opacity: 0 }
+    }
+    return { transform: "translateX(0) translateY(0)", opacity: 1 }
   }
 
   return (
     <div
       onClick={onClick}
       className={`flex flex-col items-center cursor-pointer transition-all duration-1000 ease-out ${
-        isActive ? "scale-100 opacity-100" : "scale-95 opacity-70 hover:opacity-90 hover:scale-[0.98]"
-      } ${isVisible ? "translate-x-0 translate-y-0 opacity-100" : getSlideDirection()}`}
+        isActive ? "scale-100" : "scale-95 opacity-70 hover:opacity-90 hover:scale-[0.98]"
+      }`}
       style={{ 
-        transitionDelay: isVisible ? `${index * 200}ms` : "0ms"
+        ...getSlideStyles(),
+        transitionDelay: isVisible ? `${index * 250}ms` : "0ms"
       }}
     >
       {/* Animated Icon Container */}
