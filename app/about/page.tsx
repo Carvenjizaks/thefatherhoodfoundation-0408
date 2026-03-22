@@ -261,8 +261,9 @@ export default function AboutPage() {
               <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl">
                 The Fatherhood Foundation is a values-driven organization committed to raising strong men, 
                 strengthening families, and building healthier communities. Through mentoring, leadership development, 
-                youth engagement, school-based programmes, and community initiatives, we work to equip men and young 
-                people with the character, conviction, and practical tools needed to lead well in every sphere of life.
+                youth engagement, school-based programmes, and community initiatives, we equip and empower men to 
+                go and train young people in character, instill values, principles, and the practical tools needed 
+                to flourish in life.
               </p>
             </div>
           </div>
