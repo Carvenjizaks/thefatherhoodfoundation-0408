@@ -1,15 +1,66 @@
 "use client"
 
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Shield, Target, Heart } from "lucide-react"
 
+// Hover-expandable profile card component
+function ProfileCard({ member, isArc = false }: { member: { name: string; role: string; bio: string; image: string }, isArc?: boolean }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl z-20" 
+          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className={`transition-all duration-500 ${isArc ? "p-5" : "p-6"}`}>
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg transition-all duration-500 ${
+          isHovered 
+            ? "w-24 h-24 mb-4" 
+            : isArc ? "w-16 h-16" : "w-20 h-20 mb-4"
+        }`}>
+          <span className={`text-white font-bold transition-all duration-500 ${
+            isHovered ? "text-2xl" : isArc ? "text-lg" : "text-2xl"
+          }`}>
+            {member.name.split(' ').map(n => n[0]).join('')}
+          </span>
+        </div>
+        <h3 className={`font-bold text-foreground mb-1 text-center transition-all duration-300 ${
+          isHovered ? "text-xl" : isArc ? "text-lg" : "text-xl"
+        }`}>
+          {member.name}
+        </h3>
+        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 transition-all duration-300 ${
+          isArc && !isHovered ? "text-xs" : "text-sm"
+        }`}>
+          {member.role}
+        </p>
+        <div className={`overflow-hidden transition-all duration-500 ${
+          isHovered ? "max-h-96 opacity-100" : isArc ? "max-h-16 opacity-70" : "max-h-20 opacity-80"
+        }`}>
+          <p className={`text-muted-foreground leading-relaxed text-center transition-all duration-300 ${
+            isArc && !isHovered ? "text-xs line-clamp-3" : "text-sm"
+          }`}>
+            {member.bio}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 const boardOfGovernors = [
   {
-    name: "Carven Izaks",
-    role: "Founder | Board of Governors",
-    bio: "Carven Izaks is the founder and visionary leader of The Fatherhood Foundation. He is passionate about raising men of character, strengthening fathers and families, and building communities grounded in values, faith, and responsibility. Carven provides overall leadership to the organization and continues to drive its vision, strategy, and national growth.",
+    name: "Carven J. Izaks",
+    role: "Founder & Chairman",
+    bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development. His public profile also identifies him as Director at Nexium Business Intelligence.",
     image: "/team/carven-izaks.jpg",
   },
   {
@@ -169,16 +220,7 @@ export default function AboutPage() {
               {/* Mobile: Stack layout */}
               <div className="md:hidden flex flex-col gap-6">
                 {boardOfGovernors.map((member) => (
-                  <Card key={member.name} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center">
-                        <span className="text-white text-2xl font-bold">{member.name.split(' ').map(n => n[0]).join('')}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-foreground mb-1 text-center">{member.name}</h3>
-                      <p className="text-[#8B2B3E] font-semibold text-sm mb-4 text-center">{member.role}</p>
-                      <p className="text-muted-foreground text-sm leading-relaxed text-center">{member.bio}</p>
-                    </CardContent>
-                  </Card>
+                  <ProfileCard key={member.name} member={member} />
                 ))}
               </div>
 
@@ -199,23 +241,14 @@ export default function AboutPage() {
                   return (
                     <div
                       key={member.name}
-                      className="absolute transform -translate-x-1/2 transition-all duration-500 hover:scale-105 hover:z-10"
+                      className="absolute transform -translate-x-1/2 transition-all duration-500 hover:z-20"
                       style={{
                         left: `${x}%`,
                         top: `${y}%`,
                         width: "280px",
                       }}
                     >
-                      <Card className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-xl overflow-hidden bg-background">
-                        <CardContent className="p-5">
-                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg">
-                            <span className="text-white text-lg font-bold">{member.name.split(' ').map(n => n[0]).join('')}</span>
-                          </div>
-                          <h3 className="text-lg font-bold text-foreground mb-1 text-center">{member.name}</h3>
-                          <p className="text-[#8B2B3E] font-semibold text-xs mb-3 text-center">{member.role}</p>
-                          <p className="text-muted-foreground text-xs leading-relaxed text-center line-clamp-4">{member.bio}</p>
-                        </CardContent>
-                      </Card>
+                      <ProfileCard member={member} isArc={true} />
                     </div>
                   )
                 })}
@@ -238,13 +271,7 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
               {managementTeam.map((member) => (
-                <Card key={`${member.name}-${member.role}`} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
-                    <p className="text-[#8B2B3E] font-semibold text-sm mb-4">{member.role}</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
-                  </CardContent>
-                </Card>
+                <ProfileCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
           </div>
