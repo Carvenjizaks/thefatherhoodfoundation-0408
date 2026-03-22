@@ -311,7 +311,7 @@ export default function AboutPage() {
         <section className="py-16 lg:py-20 bg-[#1a1a1a] border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-              <AnimatedStat value="500" suffix="+" label="Men Mentored" />
+              <AnimatedStat value="20 000" suffix="+" label="Impacted Men" />
               <AnimatedStat value="50" suffix="+" label="Schools Reached" />
               <AnimatedStat value="1,000" suffix="+" label="Youth Impacted" />
               <AnimatedStat value="10" suffix="+" label="Years of Impact" />
