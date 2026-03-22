@@ -56,6 +56,52 @@ function ProfileCard({ member, isArc = false }: { member: { name: string; role: 
   )
 }
 
+// Horizontal sliding profile card for management team
+function HorizontalProfileCard({ member }: { member: { name: string; role: string; bio: string; image: string } }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl z-20 flex-[2]" 
+          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg flex-1"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className="p-6 h-full flex flex-col justify-center">
+        <div className="flex items-center gap-4">
+          <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] flex-shrink-0 flex items-center justify-center shadow-lg transition-all duration-500 ${
+            isHovered ? "w-20 h-20" : "w-16 h-16"
+          }`}>
+            <span className={`text-white font-bold transition-all duration-500 ${
+              isHovered ? "text-xl" : "text-lg"
+            }`}>
+              {member.name.split(' ').map(n => n[0]).join('')}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-bold text-foreground mb-1 truncate">
+              {member.name}
+            </h3>
+            <p className="text-[#8B2B3E] font-semibold text-sm">
+              {member.role}
+            </p>
+          </div>
+        </div>
+        <div className={`overflow-hidden transition-all duration-500 ${
+          isHovered ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
+        }`}>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            {member.bio}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 const boardOfGovernors = [
   {
     name: "Carven J. Izaks",
@@ -276,9 +322,17 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Mobile: Stack layout */}
+            <div className="lg:hidden flex flex-col gap-6 max-w-lg mx-auto">
               {managementTeam.map((member) => (
                 <ProfileCard key={`${member.name}-${member.role}`} member={member} />
+              ))}
+            </div>
+
+            {/* Desktop: Horizontal side-by-side layout with slide-open effect */}
+            <div className="hidden lg:flex gap-4 max-w-6xl mx-auto items-stretch" style={{ minHeight: "200px" }}>
+              {managementTeam.map((member) => (
+                <HorizontalProfileCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
           </div>
