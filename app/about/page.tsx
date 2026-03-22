@@ -4,52 +4,72 @@ import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, Shield, Target, Heart } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Users, Shield, Target, Heart, TrendingUp, Award, Globe, HandHeart } from "lucide-react"
+import Link from "next/link"
 
-// Hover-expandable profile card component
-function ProfileCard({ member, isArc = false }: { member: { name: string; role: string; bio: string; image: string }, isArc?: boolean }) {
+// Animated counter component
+function AnimatedStat({ value, label, prefix = "", suffix = "" }: { value: string; label: string; prefix?: string; suffix?: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-2">
+        {prefix}{value}{suffix}
+      </div>
+      <div className="text-white/70 text-sm sm:text-base uppercase tracking-wider">{label}</div>
+    </div>
+  )
+}
+
+// Governor card with slide-open bio on hover
+function GovernorCard({ member, isChairman = false }: { member: { name: string; role: string; bio: string; image: string }, isChairman?: boolean }) {
   const [isHovered, setIsHovered] = useState(false)
   
   return (
     <Card 
       className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
         isHovered 
-          ? "border-[#8B2B3E] shadow-2xl z-20" 
-          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg"
-      }`}
+          ? "border-[#8B2B3E] shadow-2xl" 
+          : "border-border hover:border-[#8B2B3E]/30 shadow-md hover:shadow-lg"
+      } ${isChairman ? "bg-gradient-to-b from-[#8B2B3E]/5 to-transparent" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <CardContent className={`transition-all duration-500 ${isArc ? "p-5" : "p-6"}`}>
-        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg transition-all duration-500 ${
+      <CardContent className={`p-6 ${isChairman ? "py-8" : ""}`}>
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
           isHovered 
-            ? "w-24 h-24 mb-4" 
-            : isArc ? "w-16 h-16" : "w-20 h-20 mb-4"
+            ? isChairman ? "w-28 h-28" : "w-20 h-20"
+            : isChairman ? "w-24 h-24" : "w-16 h-16"
         }`}>
           <span className={`text-white font-bold transition-all duration-500 ${
-            isHovered ? "text-2xl" : isArc ? "text-lg" : "text-2xl"
+            isHovered 
+              ? isChairman ? "text-3xl" : "text-xl"
+              : isChairman ? "text-2xl" : "text-lg"
           }`}>
             {member.name.split(' ').map(n => n[0]).join('')}
           </span>
         </div>
-        <h3 className={`font-bold text-foreground mb-1 text-center transition-all duration-300 ${
-          isHovered ? "text-xl" : isArc ? "text-lg" : "text-xl"
+        
+        <h3 className={`font-bold text-foreground text-center mb-1 transition-all duration-300 ${
+          isChairman ? "text-xl" : "text-base"
         }`}>
           {member.name}
         </h3>
-        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 transition-all duration-300 ${
-          isArc && !isHovered ? "text-xs" : "text-sm"
+        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 ${
+          isChairman ? "text-sm" : "text-xs"
         }`}>
           {member.role}
         </p>
-        <div className={`overflow-hidden transition-all duration-500 ${
-          isHovered ? "max-h-96 opacity-100" : isArc ? "max-h-16 opacity-70" : "max-h-20 opacity-80"
+        
+        <div className={`overflow-hidden transition-all duration-500 ease-out ${
+          isHovered ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
         }`}>
-          <p className={`text-muted-foreground leading-relaxed text-center transition-all duration-300 ${
-            isArc && !isHovered ? "text-xs line-clamp-3" : "text-sm"
-          }`}>
-            {member.bio}
-          </p>
+          <div className="pt-3 border-t border-[#8B2B3E]/20">
+            <p className={`text-muted-foreground leading-relaxed text-center ${
+              isChairman ? "text-sm" : "text-xs"
+            }`}>
+              {member.bio}
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -102,59 +122,42 @@ function HorizontalProfileCard({ member }: { member: { name: string; role: strin
   )
 }
 
-// Governor card with slide-open bio on hover
-function GovernorCard({ member, isChairman = false }: { member: { name: string; role: string; bio: string; image: string }, isChairman?: boolean }) {
+// Profile card for mobile
+function ProfileCard({ member }: { member: { name: string; role: string; bio: string; image: string } }) {
   const [isHovered, setIsHovered] = useState(false)
   
   return (
     <Card 
       className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
         isHovered 
-          ? "border-[#8B2B3E] shadow-2xl" 
-          : "border-border hover:border-[#8B2B3E]/30 shadow-md hover:shadow-lg"
-      } ${isChairman ? "bg-gradient-to-b from-[#8B2B3E]/5 to-transparent" : ""}`}
+          ? "border-[#8B2B3E] shadow-2xl z-20" 
+          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg"
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <CardContent className={`p-6 ${isChairman ? "py-8" : ""}`}>
-        {/* Avatar */}
-        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
-          isHovered 
-            ? isChairman ? "w-28 h-28" : "w-20 h-20"
-            : isChairman ? "w-24 h-24" : "w-16 h-16"
+      <CardContent className="p-6">
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg transition-all duration-500 ${
+          isHovered ? "w-24 h-24 mb-4" : "w-20 h-20 mb-4"
         }`}>
           <span className={`text-white font-bold transition-all duration-500 ${
-            isHovered 
-              ? isChairman ? "text-3xl" : "text-xl"
-              : isChairman ? "text-2xl" : "text-lg"
+            isHovered ? "text-2xl" : "text-2xl"
           }`}>
             {member.name.split(' ').map(n => n[0]).join('')}
           </span>
         </div>
-        
-        {/* Name & Role */}
-        <h3 className={`font-bold text-foreground text-center mb-1 transition-all duration-300 ${
-          isChairman ? "text-xl" : "text-base"
-        }`}>
+        <h3 className="text-xl font-bold text-foreground mb-1 text-center">
           {member.name}
         </h3>
-        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 ${
-          isChairman ? "text-sm" : "text-xs"
-        }`}>
+        <p className="text-[#8B2B3E] font-semibold text-center mb-3 text-sm">
           {member.role}
         </p>
-        
-        {/* Bio - slides open on hover */}
-        <div className={`overflow-hidden transition-all duration-500 ease-out ${
-          isHovered ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        <div className={`overflow-hidden transition-all duration-500 ${
+          isHovered ? "max-h-96 opacity-100" : "max-h-20 opacity-80"
         }`}>
-          <div className="pt-3 border-t border-[#8B2B3E]/20">
-            <p className={`text-muted-foreground leading-relaxed text-center ${
-              isChairman ? "text-sm" : "text-xs"
-            }`}>
-              {member.bio}
-            </p>
-          </div>
+          <p className="text-muted-foreground leading-relaxed text-center text-sm">
+            {member.bio}
+          </p>
         </div>
       </CardContent>
     </Card>
@@ -215,6 +218,29 @@ const managementTeam = [
   },
 ]
 
+const impactAreas = [
+  {
+    icon: TrendingUp,
+    title: "Measurable Results",
+    description: "Every programme is tracked to ensure real transformation in families and communities.",
+  },
+  {
+    icon: Award,
+    title: "Proven Approach",
+    description: "Our three-pillar model of Identity, Affirmation, and Purpose creates lasting change.",
+  },
+  {
+    icon: Globe,
+    title: "Growing Reach",
+    description: "Expanding from local communities to national and international impact.",
+  },
+  {
+    icon: HandHeart,
+    title: "100% Committed",
+    description: "Every donation directly supports programmes that transform lives.",
+  },
+]
+
 const values = [
   {
     icon: Shield,
@@ -244,48 +270,143 @@ export default function AboutPage() {
       <Header />
 
       <main className="min-h-screen bg-background">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/5 via-background to-[#8B2B3E]/10" />
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#8B2B3E]/5 to-transparent" />
-
+        {/* Hero Section - Donor Focused */}
+        <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden bg-[#1a1a1a]">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/10" />
+          
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="max-w-4xl">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
-                Who We Are
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">
+                Know That Your Support Makes a Difference
               </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
-                Raising Strong Men,{" "}
-                <span className="text-[#8B2B3E]">Strengthening Families</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 text-balance leading-tight">
+                Transforming Lives,{" "}
+                <span className="text-[#D4956A]">One Father at a Time</span>
               </h1>
-              <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl">
+              <p className="text-lg lg:text-xl text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
                 The Fatherhood Foundation is a values-driven organization committed to raising strong men, 
                 strengthening families, and building healthier communities. Through mentoring, leadership development, 
-                youth engagement, school-based programmes, and community initiatives, we work to equip men and young 
-                people with the character, conviction, and practical tools needed to lead well in every sphere of life.
+                youth engagement, school-based programmes, and community initiatives, we equip and empower men to 
+                go and train young people in character, instill values, principles, and the practical tools needed 
+                to flourish in life.
               </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/donate">
+                  <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-6 text-lg">
+                    Donate Now
+                  </Button>
+                </Link>
+                <Link href="/get-involved">
+                  <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg">
+                    Get Involved
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Mission Statement */}
-        <section className="py-16 lg:py-24 bg-[#8B2B3E]">
+        {/* Impact Statistics - Dark Section */}
+        <section className="py-16 lg:py-20 bg-[#1a1a1a] border-t border-white/10">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">Our Mission</h2>
-              <p className="text-xl lg:text-2xl text-white/90 leading-relaxed">
-                We exist to equip men with the values, tools, and support needed to become intentional fathers, 
-                committed husbands, and impactful leaders. Through strategic programmes, mentorship, and community 
-                engagement, we are building a culture of responsibility, leadership, and transformation.
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+              <AnimatedStat value="500" suffix="+" label="Men Mentored" />
+              <AnimatedStat value="50" suffix="+" label="Schools Reached" />
+              <AnimatedStat value="1,000" suffix="+" label="Youth Impacted" />
+              <AnimatedStat value="10" suffix="+" label="Years of Impact" />
+            </div>
+          </div>
+        </section>
+
+        {/* Why Support Us - Impact Areas */}
+        <section className="py-16 lg:py-24 bg-[#faf9f7]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12 lg:mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                Why Partner With Us
               </p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                Your Investment Creates Lasting Change
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                When you support The Fatherhood Foundation, you are directly investing in the transformation 
+                of men, families, and entire communities.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {impactAreas.map((area) => (
+                <Card key={area.title} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 rounded-full bg-[#8B2B3E] flex items-center justify-center mx-auto mb-4">
+                      <area.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-2">{area.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{area.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Mission Statement with Donation CTA */}
+        <section className="py-16 lg:py-24 bg-[#8B2B3E] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">Our Mission</h2>
+                <p className="text-xl text-white/90 leading-relaxed mb-6">
+                  We exist to equip men with the values, tools, and support needed to become intentional fathers, 
+                  committed husbands, and impactful leaders.
+                </p>
+                <p className="text-lg text-white/70 leading-relaxed">
+                  Through strategic programmes, mentorship, and community engagement, we are building a culture 
+                  of responsibility, leadership, and transformation that spans generations.
+                </p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+                <h3 className="text-2xl font-bold text-white mb-4">Help Us Reach More Fathers</h3>
+                <p className="text-white/80 mb-6">
+                  Your donation directly funds mentoring programmes, leadership training, and youth development 
+                  initiatives that transform lives.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-white/90">
+                    <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
+                    <span>N$500 sponsors one youth for a full programme</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-white/90">
+                    <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
+                    <span>N$2,000 supports a father through mentorship</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-white/90">
+                    <div className="w-3 h-3 rounded-full bg-[#D4956A]" />
+                    <span>N$10,000 brings a programme to a new school</span>
+                  </div>
+                </div>
+                <Link href="/donate" className="block mt-8">
+                  <Button className="w-full bg-white text-[#8B2B3E] hover:bg-white/90 py-6 text-lg font-semibold">
+                    Make a Donation
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Our Values */}
-        <section className="py-16 lg:py-24 bg-muted/30">
+        <section className="py-16 lg:py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12 lg:mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                What Guides Us
+              </p>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Our Values</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Our work is built on these core principles that guide everything we do.
@@ -309,9 +430,12 @@ export default function AboutPage() {
         </section>
 
         {/* Board of Governors */}
-        <section className="py-16 lg:py-24 overflow-hidden">
+        <section className="py-16 lg:py-24 bg-[#faf9f7] overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12 lg:mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                Leadership You Can Trust
+              </p>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Board of Governors</h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
                 The Board of Governors serves as a strategic advisory body to help strengthen the long-term vision, 
@@ -320,16 +444,13 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Clean grid layout */}
             <div className="max-w-6xl mx-auto">
-              {/* Chairman - Featured at top */}
               <div className="flex justify-center mb-8">
                 <div className="w-full max-w-md">
                   <GovernorCard member={boardOfGovernors[0]} isChairman={true} />
                 </div>
               </div>
               
-              {/* Other board members - 2x2 grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {boardOfGovernors.slice(1).map((member) => (
                   <GovernorCard key={member.name} member={member} />
@@ -340,9 +461,12 @@ export default function AboutPage() {
         </section>
 
         {/* Management Team */}
-        <section className="py-16 lg:py-24 bg-muted/30">
+        <section className="py-16 lg:py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12 lg:mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                Dedicated Team
+              </p>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Management Team</h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
                 The Management Team leads the day-to-day implementation of the vision and programmes of 
@@ -351,14 +475,12 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Mobile: Stack layout */}
             <div className="lg:hidden flex flex-col gap-6 max-w-lg mx-auto">
               {managementTeam.map((member) => (
                 <ProfileCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
 
-            {/* Desktop: Horizontal side-by-side layout with slide-open effect */}
             <div className="hidden lg:flex gap-4 max-w-6xl mx-auto items-stretch" style={{ minHeight: "200px" }}>
               {managementTeam.map((member) => (
                 <HorizontalProfileCard key={`${member.name}-${member.role}`} member={member} />
@@ -367,27 +489,29 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="py-16 lg:py-24 bg-[#1E3A5F]">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">Join Us in This Mission</h2>
-            <p className="text-xl text-white/80 mb-8 leading-relaxed">
-              Whether through partnership, volunteering, or participation in our programmes, 
-              you can be part of building stronger families and healthier communities.
+        {/* Final Donation CTA */}
+        <section className="py-20 lg:py-28 bg-[#1a1a1a] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/20" />
+          
+          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6">
+              Join Us in Restoring Fathers and Transforming Generations
+            </h2>
+            <p className="text-xl text-white/70 mb-10 leading-relaxed">
+              Whether through a donation, partnership, or volunteering, your support helps us reach more men, 
+              strengthen more families, and build healthier communities.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/get-involved"
-                className="inline-flex items-center justify-center px-8 py-4 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold rounded-lg transition-colors"
-              >
-                Get Involved
-              </a>
-              <a
-                href="/partnership"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg transition-colors border border-white/20"
-              >
-                Partner With Us
-              </a>
+              <Link href="/donate">
+                <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-10 py-6 text-lg">
+                  Give Today
+                </Button>
+              </Link>
+              <Link href="/partnership-inquiry">
+                <Button size="lg" variant="outline" className="border-[#D4956A] text-[#D4956A] hover:bg-[#D4956A]/10 px-10 py-6 text-lg">
+                  Become a Partner
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
