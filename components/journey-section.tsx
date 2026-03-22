@@ -12,7 +12,7 @@ const steps = [
     image: "/images/step-identity.jpg",
     alt: "Identity - Self discovery",
     description:
-      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life.",
+      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life as man, husband and father.",
   },
   {
     step: 2,
@@ -20,7 +20,7 @@ const steps = [
     image: "/images/step-affirmation.jpg",
     alt: "Affirmation - Father-son connection",
     description:
-      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Strong men create strong sons.",
+      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Men secure in their manhood, create strong sons.",
   },
   {
     step: 3,
@@ -28,7 +28,7 @@ const steps = [
     image: "/images/step-purpose.jpg",
     alt: "Purpose - Destiny and calling",
     description:
-      "The best gift a father can give his son is to connect him to his purpose. Purpose identified produces passion! Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
+      "Purpose identified produces passion! The best gift a father can give his children, is to connect them to their purpose. Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
   },
 ]
 
