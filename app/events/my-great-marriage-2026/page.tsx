@@ -444,7 +444,34 @@ export default function MyGreatMarriageEventPage() {
           </div>
         </section>
 
-        {/* Quotes Carousel - Below Hero */}
+        {/* Featured Quote - Standout Section */}
+        <section className="py-20 lg:py-28 px-4 relative overflow-hidden" style={{ backgroundColor: mgmColors.accent }}>
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-64 h-64 rounded-full opacity-10 bg-white" style={{ transform: "translate(-50%, -50%)" }} />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10 bg-white" style={{ transform: "translate(50%, 50%)" }} />
+          <div className="absolute top-1/2 left-1/4 w-4 h-4 rounded-full bg-white/20" />
+          <div className="absolute top-1/3 right-1/4 w-6 h-6 rounded-full bg-white/15" />
+          
+          <div className="max-w-5xl mx-auto text-center relative z-10">
+            {/* Large quotation mark */}
+            <div className="text-[120px] lg:text-[180px] leading-none font-serif text-white/20 absolute -top-8 left-1/2 -translate-x-1/2">"</div>
+            
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-8">
+              The formula for a successful marriage is:
+            </h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-8">
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-bold px-6 py-3 rounded-full bg-white/20 text-white">communication</span>
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-bold px-6 py-3 rounded-full bg-white/30 text-white">communication</span>
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-bold px-6 py-3 rounded-full bg-white/40 text-white">communication</span>
+            </div>
+            
+            {/* Decorative line */}
+            <div className="w-32 h-1 mx-auto rounded-full bg-white/40 mb-6" />
+            <p className="text-lg text-white/80 font-light">The foundation of every great marriage</p>
+          </div>
+        </section>
+
+        {/* Quotes Carousel */}
         <section className="py-10 px-4" style={{ backgroundColor: mgmColors.primary }}>
           <div className="max-w-4xl mx-auto text-center">
             <div className="relative h-24 flex items-center justify-center">
