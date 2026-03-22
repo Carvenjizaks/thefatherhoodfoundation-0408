@@ -34,32 +34,24 @@ const carouselImages = [
     alt: "Happy couple sharing an intimate moment on the couch",
   },
   {
-    src: "/images/api-attachments-vkvytvuqhrdxhulzl39if.jpg",
-    alt: "Wedding rings on open book",
+    src: "/images/couples/couple-1.jpg",
+    alt: "Happy couple together",
   },
   {
-    src: "/images/api-attachments-3cco1tdmna82dmr5sboox.jpg",
-    alt: "Couple embracing intimately",
+    src: "/images/couples/couple-2.jpg",
+    alt: "Couple sharing a moment",
   },
   {
-    src: "/images/api-attachments-njb52evdkx6olp7uysshr.jpg",
-    alt: "Young couple in lavender field",
+    src: "/images/couples/couple-3.jpg",
+    alt: "Loving couple",
   },
   {
-    src: "/images/api-attachments-hr15kqcd7nunfolseuz4r.jpg",
-    alt: "Couple embracing outdoors",
+    src: "/images/couples/couple-4.jpg",
+    alt: "Couple embracing",
   },
   {
-    src: "/images/api-attachments-w8wb9tckkk6wmsdkfx6yn.jpg",
-    alt: "African couple in elegant attire",
-  },
-  {
-    src: "/images/api-attachments-q8pjcd7ybmklfk4bnzhra.jpg",
-    alt: "African couple embracing in nature",
-  },
-  {
-    src: "/images/api-attachments-ag04ytd9w2o61keo4b3dt.jpg",
-    alt: "Couple in casual embrace",
+    src: "/images/couples/couple-5.jpg",
+    alt: "Joyful couple",
   },
 ]
 
