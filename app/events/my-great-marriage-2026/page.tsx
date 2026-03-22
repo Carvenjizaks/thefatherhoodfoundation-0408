@@ -66,13 +66,20 @@ const carouselImages = [
   },
 ]
 
+const marriageQuotes = [
+  "Friendship, not romance, holds the marriage together.",
+  "The degree of disappointment in marriage is usually based on the degree of difference between the ideal and real.",
+  "A great marriage is not when the perfect couple comes together. It is when an imperfect couple learns to enjoy their differences.",
+  "The greatest marriages are built on teamwork, mutual respect, and a healthy dose of grace.",
+]
+
 export default function MyGreatMarriageEventPage() {
-  console.log("[v0] MyGreatMarriage 2026 page loaded with new peach/coral design")
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
@@ -87,11 +94,18 @@ export default function MyGreatMarriageEventPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const imageInterval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselImages.length)
     }, 4000)
 
-    return () => clearInterval(interval)
+    const quoteInterval = setInterval(() => {
+      setCurrentQuoteIndex((prev) => (prev + 1) % marriageQuotes.length)
+    }, 5000)
+
+    return () => {
+      clearInterval(imageInterval)
+      clearInterval(quoteInterval)
+    }
   }, [])
 
   const validateEmail = (email: string) => {
@@ -428,6 +442,43 @@ export default function MyGreatMarriageEventPage() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Quotes Carousel - Below Hero */}
+        <section className="py-10 px-4" style={{ backgroundColor: mgmColors.primary }}>
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="relative h-24 flex items-center justify-center">
+              <p 
+                key={currentQuoteIndex}
+                className="text-xl lg:text-2xl text-white italic font-light leading-relaxed animate-fade-in"
+              >
+                "{marriageQuotes[currentQuoteIndex]}"
+              </p>
+            </div>
+            {/* Quote indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {marriageQuotes.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentQuoteIndex(idx)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    idx === currentQuoteIndex ? "bg-white w-6" : "bg-white/40"
+                  }`}
+                  aria-label={`Go to quote ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+          
+          <style jsx>{`
+            @keyframes fade-in {
+              0% { opacity: 0; transform: translateY(10px); }
+              100% { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+              animation: fade-in 0.6s ease-out forwards;
+            }
+          `}</style>
         </section>
 
         {/* Event Schedule Cards */}
