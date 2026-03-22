@@ -37,18 +37,30 @@ function StepCard({
   isActive,
   isVisible,
   onClick,
+  index,
 }: {
   step: (typeof steps)[0]
   isActive: boolean
   isVisible: boolean
   onClick: () => void
+  index: number
 }) {
+  // Calculate slide direction: left cards slide from left, right from right, center from bottom
+  const getSlideDirection = () => {
+    if (index === 0) return "-translate-x-full opacity-0"
+    if (index === 2) return "translate-x-full opacity-0"
+    return "translate-y-16 opacity-0"
+  }
+
   return (
     <div
       onClick={onClick}
-      className={`flex flex-col items-center cursor-pointer transition-all duration-700 ease-out ${
-        isActive ? "scale-100 opacity-100" : "scale-90 opacity-60"
-      } ${isVisible ? "translate-y-0" : "translate-y-12 opacity-0"}`}
+      className={`flex flex-col items-center cursor-pointer transition-all duration-1000 ease-out ${
+        isActive ? "scale-100 opacity-100" : "scale-95 opacity-70 hover:opacity-90 hover:scale-[0.98]"
+      } ${isVisible ? "translate-x-0 translate-y-0 opacity-100" : getSlideDirection()}`}
+      style={{ 
+        transitionDelay: isVisible ? `${index * 200}ms` : "0ms"
+      }}
     >
       {/* Animated Icon Container */}
       <div className="relative mb-8 group">
@@ -225,6 +237,7 @@ export function JourneySection() {
                 isActive={index === activeStep}
                 isVisible={isVisible}
                 onClick={() => setActiveStep(index)}
+                index={index}
               />
             ))}
           </div>
@@ -242,6 +255,7 @@ export function JourneySection() {
                     isActive={index === activeStep}
                     isVisible={isVisible}
                     onClick={() => setActiveStep(index)}
+                    index={index}
                   />
                 </div>
               ))}
@@ -264,18 +278,22 @@ export function JourneySection() {
           {/* Active Step Description Card */}
           <div className="mt-12 max-w-3xl mx-auto">
             <Card
-              className={`border-2 border-[#8B2B3E]/20 shadow-xl transition-all duration-500 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              className={`border-2 border-[#8B2B3E]/20 shadow-xl transition-all duration-700 ${
+                isVisible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-12"
               }`}
+              style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
             >
               <CardContent className="p-8 lg:p-10">
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="bg-[#8B2B3E] text-white text-sm font-bold px-4 py-1 rounded-full">
+                  <span className="bg-[#8B2B3E] text-white text-sm font-bold px-4 py-1 rounded-full shadow-md transition-all duration-300">
                     STEP {steps[activeStep].step}
                   </span>
-                  <h4 className="text-2xl font-bold text-[#8B2B3E]">{steps[activeStep].title}</h4>
+                  <h4 className="text-2xl font-bold text-[#8B2B3E] transition-all duration-300">{steps[activeStep].title}</h4>
                 </div>
-                <p className="text-foreground/80 leading-relaxed text-pretty text-lg">
+                <p 
+                  key={activeStep}
+                  className="text-foreground/80 leading-relaxed text-pretty text-lg animate-fade-in"
+                >
                   {steps[activeStep].description}
                 </p>
               </CardContent>
@@ -284,7 +302,7 @@ export function JourneySection() {
         </div>
       </div>
 
-      {/* CSS Animation for rotating ring */}
+      {/* CSS Animations */}
       <style jsx global>{`
         @keyframes spin {
           from {
@@ -293,6 +311,19 @@ export function JourneySection() {
           to {
             transform: rotate(360deg);
           }
+        }
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out forwards;
         }
       `}</style>
     </section>
