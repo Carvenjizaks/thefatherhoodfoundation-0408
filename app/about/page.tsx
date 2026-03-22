@@ -102,6 +102,65 @@ function HorizontalProfileCard({ member }: { member: { name: string; role: strin
   )
 }
 
+// Governor card with slide-open bio on hover
+function GovernorCard({ member, isChairman = false }: { member: { name: string; role: string; bio: string; image: string }, isChairman?: boolean }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl" 
+          : "border-border hover:border-[#8B2B3E]/30 shadow-md hover:shadow-lg"
+      } ${isChairman ? "bg-gradient-to-b from-[#8B2B3E]/5 to-transparent" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className={`p-6 ${isChairman ? "py-8" : ""}`}>
+        {/* Avatar */}
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
+          isHovered 
+            ? isChairman ? "w-28 h-28" : "w-20 h-20"
+            : isChairman ? "w-24 h-24" : "w-16 h-16"
+        }`}>
+          <span className={`text-white font-bold transition-all duration-500 ${
+            isHovered 
+              ? isChairman ? "text-3xl" : "text-xl"
+              : isChairman ? "text-2xl" : "text-lg"
+          }`}>
+            {member.name.split(' ').map(n => n[0]).join('')}
+          </span>
+        </div>
+        
+        {/* Name & Role */}
+        <h3 className={`font-bold text-foreground text-center mb-1 transition-all duration-300 ${
+          isChairman ? "text-xl" : "text-base"
+        }`}>
+          {member.name}
+        </h3>
+        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 ${
+          isChairman ? "text-sm" : "text-xs"
+        }`}>
+          {member.role}
+        </p>
+        
+        {/* Bio - slides open on hover */}
+        <div className={`overflow-hidden transition-all duration-500 ease-out ${
+          isHovered ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        }`}>
+          <div className="pt-3 border-t border-[#8B2B3E]/20">
+            <p className={`text-muted-foreground leading-relaxed text-center ${
+              isChairman ? "text-sm" : "text-xs"
+            }`}>
+              {member.bio}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 const boardOfGovernors = [
   {
     name: "Carven J. Izaks",
@@ -261,50 +320,20 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Half-moon arc layout */}
-            <div className="relative max-w-6xl mx-auto">
-              {/* Mobile: Stack layout */}
-              <div className="lg:hidden flex flex-col gap-6">
-                {boardOfGovernors.map((member) => (
-                  <ProfileCard key={member.name} member={member} />
-                ))}
+            {/* Clean grid layout */}
+            <div className="max-w-6xl mx-auto">
+              {/* Chairman - Featured at top */}
+              <div className="flex justify-center mb-8">
+                <div className="w-full max-w-md">
+                  <GovernorCard member={boardOfGovernors[0]} isChairman={true} />
+                </div>
               </div>
-
-              {/* Desktop: Half-moon arc layout */}
-              <div className="hidden lg:block relative" style={{ minHeight: "580px" }}>
-                {/* Top row - 3 cards in arc */}
-                <div className="flex justify-center gap-6 mb-8">
-                  {boardOfGovernors.slice(0, 3).map((member, index) => {
-                    // Create subtle arc effect with different vertical positions
-                    const yOffset = index === 1 ? 0 : 40 // Middle card higher
-                    
-                    return (
-                      <div
-                        key={member.name}
-                        className="transition-all duration-500 hover:z-20"
-                        style={{
-                          width: "300px",
-                          transform: `translateY(${yOffset}px)`,
-                        }}
-                      >
-                        <ProfileCard member={member} isArc={true} />
-                      </div>
-                    )
-                  })}
-                </div>
-                
-                {/* Bottom row - 2 cards centered */}
-                <div className="flex justify-center gap-6" style={{ marginTop: "60px" }}>
-                  {boardOfGovernors.slice(3, 5).map((member) => (
-                    <div
-                      key={member.name}
-                      className="transition-all duration-500 hover:z-20"
-                      style={{ width: "300px" }}
-                    >
-                      <ProfileCard member={member} isArc={true} />
-                    </div>
-                  ))}
-                </div>
+              
+              {/* Other board members - 2x2 grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {boardOfGovernors.slice(1).map((member) => (
+                  <GovernorCard key={member.name} member={member} />
+                ))}
               </div>
             </div>
           </div>
