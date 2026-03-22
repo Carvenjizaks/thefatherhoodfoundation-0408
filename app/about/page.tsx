@@ -1,21 +1,177 @@
 "use client"
 
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Shield, Target, Heart } from "lucide-react"
 
+// Hover-expandable profile card component
+function ProfileCard({ member, isArc = false }: { member: { name: string; role: string; bio: string; image: string }, isArc?: boolean }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl z-20" 
+          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className={`transition-all duration-500 ${isArc ? "p-5" : "p-6"}`}>
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-3 flex items-center justify-center shadow-lg transition-all duration-500 ${
+          isHovered 
+            ? "w-24 h-24 mb-4" 
+            : isArc ? "w-16 h-16" : "w-20 h-20 mb-4"
+        }`}>
+          <span className={`text-white font-bold transition-all duration-500 ${
+            isHovered ? "text-2xl" : isArc ? "text-lg" : "text-2xl"
+          }`}>
+            {member.name.split(' ').map(n => n[0]).join('')}
+          </span>
+        </div>
+        <h3 className={`font-bold text-foreground mb-1 text-center transition-all duration-300 ${
+          isHovered ? "text-xl" : isArc ? "text-lg" : "text-xl"
+        }`}>
+          {member.name}
+        </h3>
+        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 transition-all duration-300 ${
+          isArc && !isHovered ? "text-xs" : "text-sm"
+        }`}>
+          {member.role}
+        </p>
+        <div className={`overflow-hidden transition-all duration-500 ${
+          isHovered ? "max-h-96 opacity-100" : isArc ? "max-h-16 opacity-70" : "max-h-20 opacity-80"
+        }`}>
+          <p className={`text-muted-foreground leading-relaxed text-center transition-all duration-300 ${
+            isArc && !isHovered ? "text-xs line-clamp-3" : "text-sm"
+          }`}>
+            {member.bio}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Horizontal sliding profile card for management team
+function HorizontalProfileCard({ member }: { member: { name: string; role: string; bio: string; image: string } }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl z-20 flex-[2]" 
+          : "border-border hover:border-[#8B2B3E]/50 hover:shadow-lg flex-1"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className="p-6 h-full flex flex-col justify-center">
+        <div className="flex items-center gap-4">
+          <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] flex-shrink-0 flex items-center justify-center shadow-lg transition-all duration-500 ${
+            isHovered ? "w-20 h-20" : "w-16 h-16"
+          }`}>
+            <span className={`text-white font-bold transition-all duration-500 ${
+              isHovered ? "text-xl" : "text-lg"
+            }`}>
+              {member.name.split(' ').map(n => n[0]).join('')}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-bold text-foreground mb-1 truncate">
+              {member.name}
+            </h3>
+            <p className="text-[#8B2B3E] font-semibold text-sm">
+              {member.role}
+            </p>
+          </div>
+        </div>
+        <div className={`overflow-hidden transition-all duration-500 ${
+          isHovered ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
+        }`}>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            {member.bio}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Governor card with slide-open bio on hover
+function GovernorCard({ member, isChairman = false }: { member: { name: string; role: string; bio: string; image: string }, isChairman?: boolean }) {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <Card 
+      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+        isHovered 
+          ? "border-[#8B2B3E] shadow-2xl" 
+          : "border-border hover:border-[#8B2B3E]/30 shadow-md hover:shadow-lg"
+      } ${isChairman ? "bg-gradient-to-b from-[#8B2B3E]/5 to-transparent" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardContent className={`p-6 ${isChairman ? "py-8" : ""}`}>
+        {/* Avatar */}
+        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
+          isHovered 
+            ? isChairman ? "w-28 h-28" : "w-20 h-20"
+            : isChairman ? "w-24 h-24" : "w-16 h-16"
+        }`}>
+          <span className={`text-white font-bold transition-all duration-500 ${
+            isHovered 
+              ? isChairman ? "text-3xl" : "text-xl"
+              : isChairman ? "text-2xl" : "text-lg"
+          }`}>
+            {member.name.split(' ').map(n => n[0]).join('')}
+          </span>
+        </div>
+        
+        {/* Name & Role */}
+        <h3 className={`font-bold text-foreground text-center mb-1 transition-all duration-300 ${
+          isChairman ? "text-xl" : "text-base"
+        }`}>
+          {member.name}
+        </h3>
+        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 ${
+          isChairman ? "text-sm" : "text-xs"
+        }`}>
+          {member.role}
+        </p>
+        
+        {/* Bio - slides open on hover */}
+        <div className={`overflow-hidden transition-all duration-500 ease-out ${
+          isHovered ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        }`}>
+          <div className="pt-3 border-t border-[#8B2B3E]/20">
+            <p className={`text-muted-foreground leading-relaxed text-center ${
+              isChairman ? "text-sm" : "text-xs"
+            }`}>
+              {member.bio}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 const boardOfGovernors = [
   {
-    name: "Carven Izaks",
-    role: "Founder | Board of Governors",
-    bio: "Carven Izaks is the founder and visionary leader of The Fatherhood Foundation. He is passionate about raising men of character, strengthening fathers and families, and building communities grounded in values, faith, and responsibility. Carven provides overall leadership to the organization and continues to drive its vision, strategy, and national growth.",
+    name: "Carven J. Izaks",
+    role: "Founder & Chairman",
+    bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development. His public profile also identifies him as Director at Nexium Business Intelligence.",
     image: "/team/carven-izaks.jpg",
   },
   {
     name: "Christo Nicholls",
     role: "Board of Governors",
-    bio: "Christo Nicholls serves as a valued member of the Board of Governors, offering leadership support and strategic counsel to the foundation. He brings maturity, perspective, and a strong commitment to seeing men equipped to lead well in their homes, communities, and spheres of influence.",
+    bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
     image: "/team/christo-nicholls.jpg",
   },
   {
@@ -33,7 +189,7 @@ const boardOfGovernors = [
   {
     name: "Bruce Hansen",
     role: "Board of Governors",
-    bio: "Bruce Hansen serves on the Board of Governors and contributes wisdom, leadership perspective, and support to the advancement of the foundation's mission. He is committed to strengthening the leadership culture around the organization and helping position it for long-term influence and impact.",
+    bio: "Bruce Hansen serves as Managing Director of Simonis Storm Securities, bringing seasoned leadership and deep expertise in financial services, investment markets, and economic analysis. His work reflects a strong commitment to sound strategy, responsible stewardship, and long-term financial growth.",
     image: "/team/bruce-hansen.jpg",
   },
 ]
@@ -46,16 +202,16 @@ const managementTeam = [
     image: "/team/carven-izaks.jpg",
   },
   {
-    name: "Bianca Clark",
+    name: "Bianca Clarke",
     role: "Management Team",
-    bio: "Bianca Clark serves on the management team and helps support the implementation of the foundation's programmes and operational priorities. She is committed to people development, organizational effectiveness, and the practical outworking of the foundation's mission in communities and leadership spaces.",
-    image: "/team/bianca-clark.jpg",
+    bio: "Bianca Clarke is a leadership and personal development professional serving through Africa B-Inspired (PTY) Ltd. With a focus on coaching, leadership facilitation, and empowering people and organizations, she brings insight, encouragement, and practical development expertise to the spaces she serves. She brings her wealth of knowledge in the area of governance.",
+    image: "/team/bianca-clarke.jpg",
   },
   {
-    name: "Astrido Philander",
+    name: "Astrido Barth-Philander",
     role: "Management Team",
-    bio: "Astrido Philander is part of the management team and plays an important role in supporting the ongoing work and coordination of The Fatherhood Foundation. She contributes to the strength of the organization through her service, leadership support, and commitment to the foundation's purpose and impact.",
-    image: "/team/astrido-philander.jpg",
+    bio: "Astrido Barth-Philander brings strong financial leadership and professional expertise in accounting, reporting, and business support. As Senior Manager: Finance at SanlamAllianz Namibia, he contributes strategic insight, governance discipline, and sound financial stewardship shaped by his chartered accountancy background and training through the University of Cape Town and the Institute of Chartered Accountants of Namibia.",
+    image: "/team/astrido-barth-philander.jpg",
   },
 ]
 
@@ -153,7 +309,7 @@ export default function AboutPage() {
         </section>
 
         {/* Board of Governors */}
-        <section className="py-16 lg:py-24">
+        <section className="py-16 lg:py-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12 lg:mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Board of Governors</h2>
@@ -164,16 +320,21 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {boardOfGovernors.map((member) => (
-                <Card key={member.name} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
-                    <p className="text-[#8B2B3E] font-semibold text-sm mb-4">{member.role}</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
-                  </CardContent>
-                </Card>
-              ))}
+            {/* Clean grid layout */}
+            <div className="max-w-6xl mx-auto">
+              {/* Chairman - Featured at top */}
+              <div className="flex justify-center mb-8">
+                <div className="w-full max-w-md">
+                  <GovernorCard member={boardOfGovernors[0]} isChairman={true} />
+                </div>
+              </div>
+              
+              {/* Other board members - 2x2 grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {boardOfGovernors.slice(1).map((member) => (
+                  <GovernorCard key={member.name} member={member} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -190,15 +351,17 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Mobile: Stack layout */}
+            <div className="lg:hidden flex flex-col gap-6 max-w-lg mx-auto">
               {managementTeam.map((member) => (
-                <Card key={`${member.name}-${member.role}`} className="border-2 hover:border-[#8B2B3E]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{member.name}</h3>
-                    <p className="text-[#8B2B3E] font-semibold text-sm mb-4">{member.role}</p>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
-                  </CardContent>
-                </Card>
+                <ProfileCard key={`${member.name}-${member.role}`} member={member} />
+              ))}
+            </div>
+
+            {/* Desktop: Horizontal side-by-side layout with slide-open effect */}
+            <div className="hidden lg:flex gap-4 max-w-6xl mx-auto items-stretch" style={{ minHeight: "200px" }}>
+              {managementTeam.map((member) => (
+                <HorizontalProfileCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
           </div>

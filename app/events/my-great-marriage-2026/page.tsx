@@ -30,6 +30,10 @@ type RegistrationFormData = {
 
 const carouselImages = [
   {
+    src: "/images/couples/couple-together-1.jpg",
+    alt: "Happy couple sharing an intimate moment on the couch",
+  },
+  {
     src: "/images/api-attachments-vkvytvuqhrdxhulzl39if.jpg",
     alt: "Wedding rings on open book",
   },
@@ -202,8 +206,8 @@ export default function MyGreatMarriageEventPage() {
         {/* Full-width banner image */}
         <div className="w-full max-w-5xl mx-auto py-8 px-4">
           <Image
-            src="/images/mygreatmarriage-banner.jpg"
-            alt="MyGreatMarriage Conference 2026 - 11 June & 12 June 2026"
+            src="/images/mgm-banner-2026.png"
+            alt="MyGreatMarriage Conference 2026 - 30 April - 2 May 2026"
             width={1200}
             height={600}
             className="w-full h-auto object-contain"
@@ -452,23 +456,54 @@ export default function MyGreatMarriageEventPage() {
         </div>
       </section>
 
-      {/* Event Details Section */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-primary mb-6 text-center">About the Conference</h2>
-          <div className="prose prose-lg max-w-none text-black">
-            <p>
-              Join us for a transformative experience focused on strengthening marriages and building lasting
-              relationships. The MyGreatMarriage Conference brings together couples from all walks of life to learn,
-              grow, and connect.
-            </p>
-            <h3 className="text-xl font-semibold text-primary mt-8 mb-4">What to Expect</h3>
-            <ul className="space-y-2 text-black">
-              <li>Inspiring keynote speakers and relationship experts</li>
-              <li>Interactive workshops and practical sessions</li>
-              <li>Opportunities to connect with other couples</li>
-              <li>Tools and resources for building a great marriage</li>
-            </ul>
+      {/* Event Details Section with Featured Couple Image */}
+      <section className="py-16 px-4 bg-gray-50 relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/couples/couple-together-1.jpg"
+            alt="Couple together"
+            fill
+            className="object-cover opacity-10"
+          />
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Text Content */}
+            <div>
+              <h2 className="text-3xl font-bold text-primary mb-6">About the Conference</h2>
+              <div className="prose prose-lg max-w-none text-black">
+                <p>
+                  Join us for a transformative experience focused on strengthening marriages and building lasting
+                  relationships. The MyGreatMarriage Conference brings together couples from all walks of life to learn,
+                  grow, and connect.
+                </p>
+                <h3 className="text-xl font-semibold text-primary mt-8 mb-4">What to Expect</h3>
+                <ul className="space-y-2 text-black">
+                  <li>Inspiring keynote speakers and relationship experts</li>
+                  <li>Interactive workshops and practical sessions</li>
+                  <li>Opportunities to connect with other couples</li>
+                  <li>Tools and resources for building a great marriage</li>
+                </ul>
+              </div>
+            </div>
+            
+            {/* Featured Couple Image */}
+            <div className="relative">
+              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/images/couples/couple-together-1.jpg"
+                  alt="Happy couple sharing an intimate moment"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent" />
+              </div>
+              {/* Decorative element */}
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-full -z-10" />
+              <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full -z-10" />
+            </div>
           </div>
         </div>
       </section>

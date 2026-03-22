@@ -398,25 +398,18 @@ export default function MyGreatMarriagePage() {
     <>
       <Header />
       <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
-      {/* Hero Section with Sliding Couples Carousel */}
+      {/* Hero Section with Background Image */}
       <section className="relative bg-[#8B2B3E] overflow-hidden">
         <div className="relative w-full h-[400px] md:h-[500px]">
-          {/* Sliding Couples Background */}
-          <div className="absolute inset-0 flex items-center">
-            <div className="flex gap-4 animate-slide-hero">
-              {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((num, idx) => (
-                <div 
-                  key={idx} 
-                  className="flex-shrink-0 w-72 h-[400px] md:h-[500px] overflow-hidden"
-                >
-                  <img
-                    src={`/images/couples/couple-${num}.jpg`}
-                    alt={`Happy couple ${num}`}
-                    className="w-full h-full object-cover opacity-60"
-                  />
-                </div>
-              ))}
-            </div>
+          {/* Background Couple Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/couples/couple-together-1.jpg"
+              alt="Happy couple"
+              fill
+              className="object-cover opacity-40"
+              priority
+            />
           </div>
           
           {/* Dark Overlay for Text Readability */}
@@ -436,16 +429,6 @@ export default function MyGreatMarriagePage() {
             <p className="text-lg text-white/80 mt-4">{eventDetails.dates}</p>
           </div>
         </div>
-        
-        <style jsx>{`
-          @keyframes slide-hero {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-33.33%); }
-          }
-          .animate-slide-hero {
-            animation: slide-hero 25s linear infinite;
-          }
-        `}</style>
       </section>
 
       {/* Who Is This For Section */}
