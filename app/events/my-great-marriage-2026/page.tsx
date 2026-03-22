@@ -67,6 +67,7 @@ const carouselImages = [
 ]
 
 export default function MyGreatMarriageEventPage() {
+  console.log("[v0] MyGreatMarriage 2026 page loaded with new peach/coral design")
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
