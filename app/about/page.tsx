@@ -313,7 +313,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               <AnimatedStat value="20 000" suffix="+" label="Impacted Men" />
               <AnimatedStat value="500" suffix="+" label="Touched Marriages" />
-              <AnimatedStat value="1,000" suffix="+" label="Youth Impacted" />
+              <AnimatedStat value="15 000" suffix="+" label="Youth Reached" />
               <AnimatedStat value="10" suffix="+" label="Years of Impact" />
             </div>
           </div>
