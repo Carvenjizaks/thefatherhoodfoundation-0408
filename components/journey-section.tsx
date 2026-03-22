@@ -12,7 +12,7 @@ const steps = [
     image: "/images/step-identity.jpg",
     alt: "Identity - Self discovery",
     description:
-      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life.",
+      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life as man, husband and father.",
   },
   {
     step: 2,
