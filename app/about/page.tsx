@@ -472,30 +472,36 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Management Team */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+{/* Management Team - Warm Section */}
+        <section className="py-16 lg:py-24 relative overflow-hidden" style={{ background: "linear-gradient(180deg, #FDEEE3 0%, #FDF8F4 50%, #FDEEE3 100%)" }}>
+          {/* Decorative warm circles */}
+          <div className="absolute bottom-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: "linear-gradient(135deg, #E8B896, #D4956A)" }} />
+          <div className="absolute top-20 right-10 w-32 h-32 rounded-full opacity-25" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }} />
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12 lg:mb-16">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: "#D4956A" }}>
                 Dedicated Team
               </p>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Management Team</h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#5a3d2b" }}>The Management Team</h2>
+              <p className="text-lg max-w-3xl mx-auto" style={{ color: "#7a6455" }}>
                 The Management Team leads the day-to-day implementation of the vision and programmes of 
                 The Fatherhood Foundation. This team helps ensure that strategy becomes action and that the 
                 organization's work is carried out with excellence, consistency, and purpose.
               </p>
             </div>
 
+            {/* Mobile layout */}
             <div className="lg:hidden flex flex-col gap-6 max-w-lg mx-auto">
               {managementTeam.map((member) => (
-                <ProfileCard key={`${member.name}-${member.role}`} member={member} />
+                <GovernorCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
 
-            <div className="hidden lg:flex gap-4 max-w-6xl mx-auto items-stretch" style={{ minHeight: "200px" }}>
+            {/* Desktop layout - Cards side by side */}
+            <div className="hidden lg:grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {managementTeam.map((member) => (
-                <HorizontalProfileCard key={`${member.name}-${member.role}`} member={member} />
+                <GovernorCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
           </div>
