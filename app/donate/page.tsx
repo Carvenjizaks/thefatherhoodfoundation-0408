@@ -159,8 +159,8 @@ function DonateContent() {
               {paymentMethod === "paytoday" && (
                 <div className="mb-6">
                   <p className="text-sm mb-4" style={{ color: "#7a6455" }}>Click below to complete your payment via PayToday:</p>
-                  <Button className="text-white font-semibold flex items-center gap-2" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }}>
-                    <Image src="/images/logo.png" alt="Fatherhood Foundation" width={24} height={24} className="rounded" />
+                  <Button className="text-white font-semibold flex items-center gap-3 px-6 py-3 h-auto" style={{ background: "#00C8C8" }}>
+                    <Image src="/images/paytoday-logo.jpg" alt="PayToday" width={28} height={28} className="rounded-md" />
                     Pay with PayToday
                   </Button>
                 </div>
@@ -307,13 +307,13 @@ function DonateContent() {
                     }
                   >
                     {method.icon === "paytoday" ? (
-                      <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white border" style={{ borderColor: "#e8ddd4" }}>
+                      <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
                         <Image 
-                          src="/images/logo.png" 
-                          alt="Fatherhood Foundation" 
-                          width={32} 
-                          height={32}
-                          className="object-contain"
+                          src="/images/paytoday-logo.jpg" 
+                          alt="PayToday" 
+                          width={40} 
+                          height={40}
+                          className="object-cover rounded-lg"
                         />
                       </div>
                     ) : (
