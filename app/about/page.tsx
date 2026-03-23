@@ -20,51 +20,52 @@ function AnimatedStat({ value, label, prefix = "", suffix = "" }: { value: strin
   )
 }
 
-// Governor card with slide-open bio on hover
+// Governor card with slide-open bio on hover - Warm styling
 function GovernorCard({ member, isChairman = false }: { member: { name: string; role: string; bio: string; image: string }, isChairman?: boolean }) {
   const [isHovered, setIsHovered] = useState(false)
   
   return (
     <Card 
-      className={`border-2 transition-all duration-500 overflow-hidden bg-background cursor-pointer ${
+      className={`border-0 transition-all duration-500 overflow-hidden cursor-pointer rounded-2xl ${
         isHovered 
-          ? "border-[#8B2B3E] shadow-2xl" 
-          : "border-border hover:border-[#8B2B3E]/30 shadow-md hover:shadow-lg"
-      } ${isChairman ? "bg-gradient-to-b from-[#8B2B3E]/5 to-transparent" : ""}`}
+          ? "shadow-2xl scale-[1.02]" 
+          : "shadow-lg hover:shadow-xl"
+      } ${isChairman ? "bg-gradient-to-br from-[#FDF8F4] via-[#FEF3EB] to-[#FDEEE3]" : "bg-gradient-to-br from-[#FDF8F4] to-[#FEF3EB]"}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <CardContent className={`p-6 ${isChairman ? "py-8" : ""}`}>
-        <div className={`rounded-full bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
+      <CardContent className={`p-6 ${isChairman ? "py-10" : "py-8"}`}>
+        {/* Warm peach avatar */}
+        <div className={`rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
           isHovered 
-            ? isChairman ? "w-28 h-28" : "w-20 h-20"
-            : isChairman ? "w-24 h-24" : "w-16 h-16"
-        }`}>
-          <span className={`text-white font-bold transition-all duration-500 ${
+            ? isChairman ? "w-32 h-32" : "w-24 h-24"
+            : isChairman ? "w-28 h-28" : "w-20 h-20"
+        }`} style={{ background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
+          <span className={`text-white font-bold transition-all duration-500 drop-shadow-md ${
             isHovered 
-              ? isChairman ? "text-3xl" : "text-xl"
-              : isChairman ? "text-2xl" : "text-lg"
+              ? isChairman ? "text-4xl" : "text-2xl"
+              : isChairman ? "text-3xl" : "text-xl"
           }`}>
             {member.name.split(' ').map(n => n[0]).join('')}
           </span>
         </div>
         
-        <h3 className={`font-bold text-foreground text-center mb-1 transition-all duration-300 ${
-          isChairman ? "text-xl" : "text-base"
+        <h3 className={`font-bold text-[#5a3d2b] text-center mb-1 transition-all duration-300 ${
+          isChairman ? "text-2xl" : "text-lg"
         }`}>
           {member.name}
         </h3>
-        <p className={`text-[#8B2B3E] font-semibold text-center mb-3 ${
-          isChairman ? "text-sm" : "text-xs"
-        }`}>
+        <p className={`font-semibold text-center mb-3 ${
+          isChairman ? "text-base" : "text-sm"
+        }`} style={{ color: "#D4956A" }}>
           {member.role}
         </p>
         
         <div className={`overflow-hidden transition-all duration-500 ease-out ${
           isHovered ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
         }`}>
-          <div className="pt-3 border-t border-[#8B2B3E]/20">
-            <p className={`text-muted-foreground leading-relaxed text-center ${
+          <div className="pt-4 border-t" style={{ borderColor: "#D4956A40" }}>
+            <p className={`text-[#6b5344] leading-relaxed text-center ${
               isChairman ? "text-sm" : "text-xs"
             }`}>
               {member.bio}
@@ -433,15 +434,20 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Board of Governors */}
-        <section className="py-16 lg:py-24 bg-[#faf9f7] overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Board of Governors - Warm Section */}
+        <section className="py-16 lg:py-24 overflow-hidden relative" style={{ background: "linear-gradient(180deg, #FDF8F4 0%, #FDEEE3 50%, #FDF8F4 100%)" }}>
+          {/* Decorative warm circles */}
+          <div className="absolute top-20 left-10 w-32 h-32 rounded-full opacity-30" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }} />
+          <div className="absolute bottom-20 right-10 w-48 h-48 rounded-full opacity-20" style={{ background: "linear-gradient(135deg, #E8B896, #D4956A)" }} />
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-full opacity-20" style={{ background: "#D4956A" }} />
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12 lg:mb-16">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: "#D4956A" }}>
                 Leadership You Can Trust
               </p>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Board of Governors</h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#5a3d2b" }}>The Board of Governors</h2>
+              <p className="text-lg max-w-3xl mx-auto" style={{ color: "#7a6455" }}>
                 The Board of Governors serves as a strategic advisory body to help strengthen the long-term vision, 
                 direction, and governance-minded thinking of The Fatherhood Foundation. This team brings leadership 
                 insight, wisdom, and counsel to support the growth and sustainability of the organization.
@@ -449,12 +455,14 @@ export default function AboutPage() {
             </div>
 
             <div className="max-w-6xl mx-auto">
-              <div className="flex justify-center mb-8">
-                <div className="w-full max-w-md">
+              {/* Chairman - Featured prominently */}
+              <div className="flex justify-center mb-10">
+                <div className="w-full max-w-lg">
                   <GovernorCard member={boardOfGovernors[0]} isChairman={true} />
                 </div>
               </div>
               
+              {/* Other board members */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {boardOfGovernors.slice(1).map((member) => (
                   <GovernorCard key={member.name} member={member} />
@@ -464,30 +472,36 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Management Team */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+{/* Management Team - Warm Section */}
+        <section className="py-16 lg:py-24 relative overflow-hidden" style={{ background: "linear-gradient(180deg, #FDEEE3 0%, #FDF8F4 50%, #FDEEE3 100%)" }}>
+          {/* Decorative warm circles */}
+          <div className="absolute bottom-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: "linear-gradient(135deg, #E8B896, #D4956A)" }} />
+          <div className="absolute top-20 right-10 w-32 h-32 rounded-full opacity-25" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }} />
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12 lg:mb-16">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: "#D4956A" }}>
                 Dedicated Team
               </p>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">The Management Team</h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: "#5a3d2b" }}>The Management Team</h2>
+              <p className="text-lg max-w-3xl mx-auto" style={{ color: "#7a6455" }}>
                 The Management Team leads the day-to-day implementation of the vision and programmes of 
                 The Fatherhood Foundation. This team helps ensure that strategy becomes action and that the 
                 organization's work is carried out with excellence, consistency, and purpose.
               </p>
             </div>
 
+            {/* Mobile layout */}
             <div className="lg:hidden flex flex-col gap-6 max-w-lg mx-auto">
               {managementTeam.map((member) => (
-                <ProfileCard key={`${member.name}-${member.role}`} member={member} />
+                <GovernorCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
 
-            <div className="hidden lg:flex gap-4 max-w-6xl mx-auto items-stretch" style={{ minHeight: "200px" }}>
+            {/* Desktop layout - Cards side by side */}
+            <div className="hidden lg:grid lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {managementTeam.map((member) => (
-                <HorizontalProfileCard key={`${member.name}-${member.role}`} member={member} />
+                <GovernorCard key={`${member.name}-${member.role}`} member={member} />
               ))}
             </div>
           </div>
