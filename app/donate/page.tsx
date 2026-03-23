@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Heart, Building2, CreditCard, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { createClient } from "@/lib/supabase-client"
@@ -22,22 +23,16 @@ const frequencyOptions = [
 
 const paymentMethods = [
   { 
-    value: "paypal", 
-    label: "PayPal", 
-    description: "Pay securely with PayPal",
-    icon: "💳"
-  },
-  { 
     value: "paytoday", 
     label: "PayToday", 
     description: "Local payment processing",
-    icon: "🏦"
+    icon: "paytoday"
   },
   { 
     value: "bank-transfer", 
     label: "Bank Transfer", 
     description: "Direct bank deposit",
-    icon: "🏛️"
+    icon: "bank"
   },
 ]
 
@@ -161,19 +156,11 @@ function DonateContent() {
                 </div>
               )}
 
-              {paymentMethod === "paypal" && (
-                <div className="mb-6">
-                  <p className="text-sm mb-4" style={{ color: "#7a6455" }}>Click below to complete your payment via PayPal:</p>
-                  <Button className="text-white font-semibold" style={{ background: "#0070ba" }}>
-                    Pay with PayPal
-                  </Button>
-                </div>
-              )}
-
               {paymentMethod === "paytoday" && (
                 <div className="mb-6">
                   <p className="text-sm mb-4" style={{ color: "#7a6455" }}>Click below to complete your payment via PayToday:</p>
-                  <Button className="text-white font-semibold" style={{ background: "#D4956A" }}>
+                  <Button className="text-white font-semibold flex items-center gap-2" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }}>
+                    <Image src="/images/logo.png" alt="Fatherhood Foundation" width={24} height={24} className="rounded" />
                     Pay with PayToday
                   </Button>
                 </div>
@@ -319,7 +306,21 @@ function DonateContent() {
                       : { borderColor: "#e8ddd4" }
                     }
                   >
-                    <span className="text-2xl">{method.icon}</span>
+                    {method.icon === "paytoday" ? (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white border" style={{ borderColor: "#e8ddd4" }}>
+                        <Image 
+                          src="/images/logo.png" 
+                          alt="Fatherhood Foundation" 
+                          width={32} 
+                          height={32}
+                          className="object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }}>
+                        <Building2 className="w-5 h-5 text-white" />
+                      </div>
+                    )}
                     <div>
                       <div className="font-bold" style={{ color: "#5a3d2b" }}>{method.label}</div>
                       <div className="text-sm" style={{ color: "#9a8a7a" }}>{method.description}</div>
