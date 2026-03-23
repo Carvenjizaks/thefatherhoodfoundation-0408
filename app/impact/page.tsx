@@ -66,19 +66,19 @@ const stories = [
     quote: "The Fatherhood Foundation gave me the tools to become the father I never had. My relationship with my children has been completely transformed.",
     name: "Michael T.",
     role: "Programme Graduate",
-    image: "/images/couples/couple-1.jpg"
+    image: "/images/impact/father-child-hero.jpg"
   },
   {
     quote: "Through the mentorship programme, I discovered my true identity as a man. It changed everything about how I lead my family.",
     name: "David K.",
     role: "Community Leader",
-    image: "/images/couples/couple-2.jpg"
+    image: "/images/impact/men-mentorship.jpg"
   },
   {
-    quote: "My Great Marriage conference saved our relationship. We learned to communicate and truly understand each other.",
-    name: "Sarah & James",
-    role: "MGM Attendees",
-    image: "/images/couples/couple-together-1.jpg"
+    quote: "The youth programme changed my life. I now have purpose and direction thanks to the mentors who believed in me.",
+    name: "James M.",
+    role: "Youth Programme Graduate",
+    image: "/images/impact/youth-program.jpg"
   },
 ]
 
@@ -129,8 +129,8 @@ export default function ImpactPage() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/couples/couple-together-1.jpg"
-              alt="Father and family"
+              src="/images/impact/father-child-hero.jpg"
+              alt="Father embracing his son"
               fill
               className="object-cover"
               priority
@@ -243,8 +243,8 @@ export default function ImpactPage() {
               <div className="relative">
                 <div className="relative h-[500px] rounded-3xl overflow-hidden">
                   <Image
-                    src="/images/couples/couple-3.jpg"
-                    alt="Father and child"
+                    src="/images/impact/men-mentorship.jpg"
+                    alt="Men in mentorship programme"
                     fill
                     className="object-cover"
                   />
