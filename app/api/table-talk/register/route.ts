@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail } from "@/lib/email-service"
 import { generateRegistrationCode } from "@/lib/registration-code"
-import { syncTableTalkRegistration } from "@/lib/globalcontrol"
+
 
 export async function POST(request: Request) {
   try {
@@ -93,15 +93,6 @@ export async function POST(request: Request) {
       console.error("[v0] Error sending emails:", emailError)
       // Don't fail the registration if email fails
     }
-
-    // Sync to GlobalControl CRM (non-blocking)
-    syncTableTalkRegistration({
-      firstName,
-      lastName,
-      email,
-      phone,
-      sessionDate,
-    }).catch((err) => console.error("[GlobalControl] Sync error:", err))
 
     console.log(`[v0] New Table Talk Registration:
       Name: ${firstName} ${lastName}
