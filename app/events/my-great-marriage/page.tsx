@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, X, Calendar, Clock, MapPin, Heart, Users, MessageCircle, Sparkles, Shield, ArrowLeft } from "lucide-react"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 const eventDetails = {
   id: "mgm-may-2026",
@@ -391,9 +393,11 @@ function RegistrationModal({ onClose }: { onClose: () => void }) {
 
 export default function MyGreatMarriagePage() {
   const [showRegistration, setShowRegistration] = useState(false)
-
+  
   return (
-    <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
+    <>
+      <Header />
+      <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
       {/* Hero Section with Sliding Couples Carousel */}
       <section className="relative bg-[#8B2B3E] overflow-hidden">
         <div className="relative w-full h-[400px] md:h-[500px]">
@@ -646,7 +650,9 @@ export default function MyGreatMarriagePage() {
       </section>
 
       {/* Registration Modal */}
-      {showRegistration && <RegistrationModal onClose={() => setShowRegistration(false)} />}
-    </main>
+        {showRegistration && <RegistrationModal onClose={() => setShowRegistration(false)} />}
+      </main>
+      <Footer />
+    </>
   )
 }

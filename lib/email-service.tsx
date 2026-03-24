@@ -222,7 +222,7 @@ export async function sendWelcomeEmail(contactId: string) {
 
   if (!contact) throw new Error("Contact not found")
 
-  const confirmationUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://thefathersfoundations.org"}/confirm-email?token=${contact.confirmation_token}`
+  const confirmationUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://thefatherhoodfoundation.org"}/confirm-email?token=${contact.confirmation_token}`
   
   const subject = contact.source === "event_registration"
     ? `Welcome! Please Confirm Your Registration for ${contact.source_details || "our event"}`

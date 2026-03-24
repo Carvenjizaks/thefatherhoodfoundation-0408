@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowLeft, Handshake } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 export default function PartnershipInquiryPage() {
   const [submitted, setSubmitted] = useState(false)
@@ -53,35 +55,41 @@ export default function PartnershipInquiryPage() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-background pt-32 pb-16">
-        <div className="max-w-2xl mx-auto px-4 md:px-8">
-          <Card className="border-2 shadow-lg text-center">
-            <CardContent className="pt-12 pb-12">
-              <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Handshake className="h-8 w-8 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold mb-4">Thank You for Your Interest!</h2>
-              <p className="text-muted-foreground mb-8">
-                We've received your partnership inquiry and will be in touch within 2-3 business days to discuss
-                collaboration opportunities.
-              </p>
-              <Link href="/partnership">
-                <Button variant="outline">Back to Partnership</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+      <>
+        <Header />
+        <main className="min-h-screen bg-background pt-32 pb-16">
+          <div className="max-w-2xl mx-auto px-4 md:px-8">
+            <Card className="border-2 shadow-lg text-center">
+              <CardContent className="pt-12 pb-12">
+                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <Handshake className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-2xl font-bold mb-4">Thank You for Your Interest!</h2>
+                <p className="text-muted-foreground mb-8">
+                  We've received your partnership inquiry and will be in touch within 2-3 business days to discuss
+                  collaboration opportunities.
+                </p>
+                <Link href="/partnership">
+                  <Button variant="outline">Back to Partnership</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </>
     )
   }
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-16">
-      <div className="max-w-2xl mx-auto px-4 md:px-8">
-        <Link
-          href="/partnership"
-          className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
-        >
+    <>
+      <Header />
+      <main className="min-h-screen bg-background pt-32 pb-16">
+        <div className="max-w-2xl mx-auto px-4 md:px-8">
+          <Link
+            href="/partnership"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
+          >
           <ArrowLeft className="h-4 w-4" />
           Back to Partnership
         </Link>
@@ -176,7 +184,9 @@ export default function PartnershipInquiryPage() {
             </form>
           </CardContent>
         </Card>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer />
+    </>
   )
 }

@@ -22,6 +22,7 @@ export function Header() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
+    { href: "/impact", label: "Our Impact" },
     { href: "/events", label: "Events" },
     { href: "/curriculum", label: "Curriculum for Men" },
     { href: "/partnership", label: "Partnership" },
@@ -31,14 +32,14 @@ export function Header() {
   const mobilePillarLinks = [
     { href: "/mentoring-men", label: "Monthly Table Talk for Men" },
     // { href: "/active-parenting", label: "ActiveParenting" }, // Hidden - activate later
-    { href: "/my-great-marriage", label: "MyGreatMarriage" },
+    { href: "/events/my-great-marriage-2026", label: "MyGreatMarriage" },
     { href: "/community-development", label: "Social Impact" },
   ]
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-border" : "bg-transparent"
+        isScrolled ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-sm" : "bg-background/80 backdrop-blur-sm"
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-8">

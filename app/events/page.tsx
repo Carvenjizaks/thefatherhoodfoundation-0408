@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 // Event configuration with open/closed status
 const events = [
@@ -21,12 +23,13 @@ const events = [
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/mgm26-banner.jpg",
+    banner: "/images/mgm-banner-2026.png",
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
     price: "NAD 550 per couple",
     priceAmount: 550,
-    detailsPage: "/events/my-great-marriage",
+    detailsPage: "/events/my-great-marriage-2026",
   },
 
   {
@@ -473,7 +476,9 @@ export default function EventsPage() {
   const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null)
 
   return (
-    <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
+    <>
+      <Header />
+      <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
       {/* Hero Section */}
       <section className="bg-[#8B2B3E] py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -577,5 +582,7 @@ export default function EventsPage() {
         />
       )}
     </main>
+      <Footer />
+    </>
   )
 }

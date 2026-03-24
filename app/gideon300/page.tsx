@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
@@ -174,11 +175,14 @@ export default function Gideon300Page() {
                 </div>
               </div>
 
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#8B2B3E]/20 to-[#8B2B3E]/5 border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <Crown className="w-16 h-16 text-[#8B2B3E]/40 mx-auto mb-4" />
-                  <p className="text-muted-foreground text-sm">Image placeholder</p>
-                </div>
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden flex items-center justify-center">
+                <Image
+                  src="/images/gideon300-badge.png"
+                  alt="Gideon 300 Badge - The Fatherhood Foundation"
+                  width={400}
+                  height={400}
+                  className="object-contain"
+                />
               </div>
             </div>
           </div>

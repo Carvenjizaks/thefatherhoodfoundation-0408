@@ -12,7 +12,7 @@ const steps = [
     image: "/images/step-identity.jpg",
     alt: "Identity - Self discovery",
     description:
-      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life.",
+      "A man must see himself accurately—through the lens of truth, not distortion. This is the foundation of correct identity. To end fatherlessness, we must lead men to discover who they really are. This understanding informs and empowers every responsibility a man carries in his life as man, husband and father.",
   },
   {
     step: 2,
@@ -20,7 +20,7 @@ const steps = [
     image: "/images/step-affirmation.jpg",
     alt: "Affirmation - Father-son connection",
     description:
-      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Strong men create strong sons.",
+      "There is transformative power when a father affirms a son or daughter. Many men have never been embraced or affirmed by their father. We believe this is what breaks and heals the father wound and prepares men for their destiny. Men secure in their manhood, create strong sons.",
   },
   {
     step: 3,
@@ -28,7 +28,7 @@ const steps = [
     image: "/images/step-purpose.jpg",
     alt: "Purpose - Destiny and calling",
     description:
-      "The best gift a father can give his son is to connect him to his purpose. Purpose identified produces passion! Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
+      "Purpose identified produces passion! The best gift a father can give his children, is to connect them to their purpose. Every man is meant to lead others toward something greater. We believe that once a man has a clear identity and has been affirmed by a father, he must be launched into his purpose.",
   },
 ]
 
@@ -37,18 +37,38 @@ function StepCard({
   isActive,
   isVisible,
   onClick,
+  index,
 }: {
   step: (typeof steps)[0]
   isActive: boolean
   isVisible: boolean
   onClick: () => void
+  index: number
 }) {
+  // Calculate slide direction: left cards slide from left, right from right, center from bottom
+  const getSlideStyles = (): React.CSSProperties => {
+    if (!isVisible) {
+      if (index === 0) return { transform: "translateX(-120px)", opacity: 0 }
+      if (index === 2) return { transform: "translateX(120px)", opacity: 0 }
+      return { transform: "translateY(80px)", opacity: 0 }
+    }
+    // When visible, set opacity based on active state
+    return { 
+      transform: "translateX(0) translateY(0)", 
+      opacity: isActive ? 1 : 0.7 
+    }
+  }
+
   return (
     <div
       onClick={onClick}
-      className={`flex flex-col items-center cursor-pointer transition-all duration-700 ease-out ${
-        isActive ? "scale-100 opacity-100" : "scale-90 opacity-60"
-      } ${isVisible ? "translate-y-0" : "translate-y-12 opacity-0"}`}
+      className={`flex flex-col items-center cursor-pointer transition-all duration-1000 ease-out ${
+        isActive ? "scale-100" : "scale-95 hover:scale-[0.98]"
+      }`}
+      style={{ 
+        ...getSlideStyles(),
+        transitionDelay: isVisible ? `${index * 300}ms` : "0ms"
+      }}
     >
       {/* Animated Icon Container */}
       <div className="relative mb-8 group">
@@ -225,6 +245,7 @@ export function JourneySection() {
                 isActive={index === activeStep}
                 isVisible={isVisible}
                 onClick={() => setActiveStep(index)}
+                index={index}
               />
             ))}
           </div>
@@ -242,6 +263,7 @@ export function JourneySection() {
                     isActive={index === activeStep}
                     isVisible={isVisible}
                     onClick={() => setActiveStep(index)}
+                    index={index}
                   />
                 </div>
               ))}
@@ -264,18 +286,22 @@ export function JourneySection() {
           {/* Active Step Description Card */}
           <div className="mt-12 max-w-3xl mx-auto">
             <Card
-              className={`border-2 border-[#8B2B3E]/20 shadow-xl transition-all duration-500 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              className={`border-2 border-[#8B2B3E]/20 shadow-xl transition-all duration-700 ${
+                isVisible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-12"
               }`}
+              style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
             >
               <CardContent className="p-8 lg:p-10">
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="bg-[#8B2B3E] text-white text-sm font-bold px-4 py-1 rounded-full">
+                  <span className="bg-[#8B2B3E] text-white text-sm font-bold px-4 py-1 rounded-full shadow-md transition-all duration-300">
                     STEP {steps[activeStep].step}
                   </span>
-                  <h4 className="text-2xl font-bold text-[#8B2B3E]">{steps[activeStep].title}</h4>
+                  <h4 className="text-2xl font-bold text-[#8B2B3E] transition-all duration-300">{steps[activeStep].title}</h4>
                 </div>
-                <p className="text-foreground/80 leading-relaxed text-pretty text-lg">
+                <p 
+                  key={activeStep}
+                  className="text-foreground/80 leading-relaxed text-pretty text-lg animate-fade-in"
+                >
                   {steps[activeStep].description}
                 </p>
               </CardContent>
@@ -284,7 +310,7 @@ export function JourneySection() {
         </div>
       </div>
 
-      {/* CSS Animation for rotating ring */}
+      {/* CSS Animations */}
       <style jsx global>{`
         @keyframes spin {
           from {
@@ -293,6 +319,19 @@ export function JourneySection() {
           to {
             transform: rotate(360deg);
           }
+        }
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out forwards;
         }
       `}</style>
     </section>
