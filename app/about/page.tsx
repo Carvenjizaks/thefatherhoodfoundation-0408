@@ -102,19 +102,27 @@ function GovernorCard({ member, isChairman = false }: { member: { name: string; 
       onMouseLeave={() => setIsHovered(false)}
     >
       <CardContent className={`p-6 ${isChairman ? "py-10" : "py-8"}`}>
-        {/* Warm peach avatar */}
-        <div className={`rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
+        {/* Avatar — photo if available, else initials */}
+        <div className={`rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center shadow-lg transition-all duration-500 ${
           isHovered 
             ? isChairman ? "w-32 h-32" : "w-24 h-24"
             : isChairman ? "w-28 h-28" : "w-20 h-20"
-        }`} style={{ background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
-          <span className={`text-white font-bold transition-all duration-500 drop-shadow-md ${
-            isHovered 
-              ? isChairman ? "text-4xl" : "text-2xl"
-              : isChairman ? "text-3xl" : "text-xl"
-          }`}>
-            {member.name.split(' ').map(n => n[0]).join('')}
-          </span>
+        }`} style={member.image ? {} : { background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
+          {member.image ? (
+            <img
+              src={member.image}
+              alt={member.name}
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <span className={`text-white font-bold transition-all duration-500 drop-shadow-md ${
+              isHovered 
+                ? isChairman ? "text-4xl" : "text-2xl"
+                : isChairman ? "text-3xl" : "text-xl"
+            }`}>
+              {member.name.split(' ').map(n => n[0]).join('')}
+            </span>
+          )}
         </div>
         
         <h3 className={`font-bold text-[#5a3d2b] text-center mb-1 transition-all duration-300 ${
@@ -392,41 +400,6 @@ export default function AboutPage() {
               <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
                 <Link href="/partnership">Get Involved</Link>
               </Button>
-
-      <main className="min-h-screen bg-background">
-        {/* Hero Section - Donor Focused */}
-        <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden bg-[#1a1a1a]">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/10" />
-          
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">
-                Know That Your Support Makes a Difference
-              </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 text-balance leading-tight">
-                Transforming Lives,{" "}
-                <span className="text-[#D4956A]">One Father at a Time</span>
-              </h1>
-              <p className="text-lg lg:text-xl text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
-                The Fatherhood Foundation is a values-driven organization committed to raising strong men, 
-                strengthening families, and building healthier communities. Through mentoring, leadership development, 
-                youth engagement, school-based programmes, and community initiatives, we equip and empower men to 
-                go and train young people in character, instill values, principles, and the practical tools needed 
-                to flourish in life.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/donate">
-                  <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-6 text-lg">
-                    Donate Now
-                  </Button>
-                </Link>
-                <Link href="/get-involved">
-                  <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg">
-                    Get Involved
-                  </Button>
-                </Link>
-              </div>
             </div>
           </div>
         </section>
