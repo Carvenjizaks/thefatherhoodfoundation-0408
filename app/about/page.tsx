@@ -102,19 +102,27 @@ function GovernorCard({ member, isChairman = false }: { member: { name: string; 
       onMouseLeave={() => setIsHovered(false)}
     >
       <CardContent className={`p-6 ${isChairman ? "py-10" : "py-8"}`}>
-        {/* Warm peach avatar */}
-        <div className={`rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg transition-all duration-500 ${
+        {/* Avatar — photo if available, else initials */}
+        <div className={`rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center shadow-lg transition-all duration-500 ${
           isHovered 
             ? isChairman ? "w-32 h-32" : "w-24 h-24"
             : isChairman ? "w-28 h-28" : "w-20 h-20"
-        }`} style={{ background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
-          <span className={`text-white font-bold transition-all duration-500 drop-shadow-md ${
-            isHovered 
-              ? isChairman ? "text-4xl" : "text-2xl"
-              : isChairman ? "text-3xl" : "text-xl"
-          }`}>
-            {member.name.split(' ').map(n => n[0]).join('')}
-          </span>
+        }`} style={member.image ? {} : { background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
+          {member.image ? (
+            <img
+              src={member.image}
+              alt={member.name}
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <span className={`text-white font-bold transition-all duration-500 drop-shadow-md ${
+              isHovered 
+                ? isChairman ? "text-4xl" : "text-2xl"
+                : isChairman ? "text-3xl" : "text-xl"
+            }`}>
+              {member.name.split(' ').map(n => n[0]).join('')}
+            </span>
+          )}
         </div>
         
         <h3 className={`font-bold text-[#5a3d2b] text-center mb-1 transition-all duration-300 ${
