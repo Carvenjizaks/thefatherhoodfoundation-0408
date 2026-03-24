@@ -22,6 +22,7 @@ const events = [
     dates: "30 April - 2 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
+    banner: "/images/banners/mgm26-banner.jpg",
     banner: "/images/mgm-banner-2026.png",
     registrationOpen: true,
     requiresSpouse: true,
@@ -54,7 +55,7 @@ const events = [
     dates: "17-19 July 2026",
     time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
     location: "Venue: To be Announced",
-    banner: "",
+    banner: "/images/banners/goc26-banner.jpg",
     registrationOpen: false,
     requiresSpouse: false,
     description: "The annual gathering for men seeking to become champions in their families and communities.",
@@ -396,7 +397,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
       {/* Banner Image */}
       <div className="relative w-full h-[200px] md:h-[280px] lg:h-[320px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
-        {event.banner ? (
+        {event.banner && event.banner.length > 0 ? (
           <Image
             src={event.banner}
             alt={event.title}
