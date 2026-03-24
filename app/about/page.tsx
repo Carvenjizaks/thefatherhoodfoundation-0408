@@ -2,304 +2,339 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import { Shield, Target, Heart, Users, TrendingUp, Award, Globe, HandHeart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Heart, Users, Shield, Star, TrendingUp, Award, Globe, HandHeart, Target } from "lucide-react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
-// ── Data ────────────────────────────────────────────────────────────────────
+// ─── Data ────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: "20 000+", label: "Impacted Men" },
-  { value: "500+", label: "Touched Marriages" },
-  { value: "15 000+", label: "Youth Reached" },
-  { value: "10+", label: "Years of Impact" },
+  { value: "20,000+", label: "Men Impacted" },
+  { value: "500+",    label: "Marriages Strengthened" },
+  { value: "15,000+", label: "Youth Reached" },
+  { value: "10+",     label: "Years of Service" },
+]
+
+const whyPartner = [
+  { icon: TrendingUp, title: "Measurable Results",   desc: "Every programme is tracked to ensure real transformation in families and communities." },
+  { icon: Award,      title: "Proven Approach",      desc: "Our three-pillar model of Identity, Affirmation, and Purpose creates lasting change." },
+  { icon: Globe,      title: "Growing Reach",        desc: "Expanding from local communities to national and international impact." },
+  { icon: HandHeart,  title: "100% Committed",       desc: "Every donation directly supports programmes that transform lives." },
 ]
 
 const values = [
-  { icon: Heart, title: "Service", description: "We lead by serving others, putting the needs of families and communities at the forefront of everything we do." },
-  { icon: Shield, title: "Responsibility", description: "We believe in accountability and taking ownership of our roles as fathers, husbands, and community leaders." },
-  { icon: Star, title: "Transformation", description: "We are committed to long-term, lasting change that impacts generations to come." },
-  { icon: Users, title: "Brotherhood", description: "We foster authentic community where men can grow, be challenged, and support one another." },
+  { icon: Shield, title: "Service",        desc: "We lead by serving others, putting the needs of families and communities at the forefront of everything we do." },
+  { icon: Target, title: "Responsibility", desc: "We believe in accountability and taking ownership of our roles as fathers, husbands, and community leaders." },
+  { icon: Heart,  title: "Transformation",desc: "We are committed to long-term, lasting change that impacts generations to come." },
+  { icon: Users,  title: "Brotherhood",   desc: "We foster authentic community where men can grow, be challenged, and support one another." },
 ]
 
-const impactAreas = [
-  { icon: TrendingUp, title: "Measurable Results", description: "Every programme is tracked to ensure real transformation in families and communities." },
-  { icon: Award, title: "Proven Approach", description: "Our three-pillar model of Identity, Affirmation, and Purpose creates lasting change." },
-  { icon: Globe, title: "Growing Reach", description: "Expanding from local communities to national and international impact." },
-  { icon: HandHeart, title: "100% Committed", description: "Every donation directly supports programmes that transform lives." },
-]
+const chairman = {
+  name: "Carven J. Izaks",
+  initials: "CJI",
+  role: "Founder & Chairman",
+  image: "",
+  bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development. His public profile also identifies him as Director at Nexium Business Intelligence.",
+}
 
-const boardOfGovernors = [
-  {
-    name: "Carven J. Izaks",
-    role: "Founder & Chairman",
-    bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development.",
-    image: "",
-  },
+const governors = [
   {
     name: "Christo Nicholls",
+    initials: "CN",
     role: "Board of Governors",
-    bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
     image: "",
+    bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
   },
   {
     name: "Robert Burdett",
+    initials: "RB",
     role: "Board of Governors",
-    bio: "Robert Burdett is the Senior Pastor of PowerHouse Church in Katy, Texas, and a seasoned church leader with years of pastoral and executive ministry experience. He is known for his strong leadership, biblical teaching, and dedication to building a church culture marked by discipleship, outreach, and community impact.",
     image: "",
+    bio: "Robert Burdett brings extensive experience in business strategy and community leadership. He serves as a trusted advisor helping The Fatherhood Foundation navigate growth and governance with wisdom and integrity.",
   },
   {
     name: "Brandon Sanders",
+    initials: "BS",
     role: "Board of Governors",
-    bio: "Brandon Sanders is a transformational leader and ministry practitioner serving as Executive Director of Wings of Life in Mobile, Alabama. With a deep commitment to restoration, recovery, and youth mentorship, he works closely with schools, counselors, and families to support vulnerable young people.",
     image: "",
+    bio: "Brandon Sanders is a dedicated leader committed to empowering men and strengthening families through community-driven initiatives and mentorship programmes.",
   },
   {
     name: "Bruce Hansen",
+    initials: "BH",
     role: "Board of Governors",
-    bio: "Bruce Hansen serves as Managing Director of Simonis Storm Securities, bringing seasoned leadership and deep expertise in financial services, investment markets, and economic analysis. His work reflects a strong commitment to sound strategy, responsible stewardship, and long-term financial growth.",
     image: "/team/bruce-hansen.jpg",
+    bio: "Bruce Hansen brings a wealth of experience in leadership and community development. His commitment to building stronger families and communities makes him an invaluable member of The Fatherhood Foundation's Board of Governors.",
   },
 ]
 
-const managementTeam = [
-  {
-    name: "Carven Izaks",
-    role: "Founder & Executive Leader",
-    bio: "As founder of The Fatherhood Foundation, Carven Izaks leads the organization's vision, strategic direction, and core initiatives. He works closely with both governance and management structures to ensure the foundation remains mission-focused, impactful, and aligned with its calling to raise fathers, leaders, and communities of strength.",
-    image: "",
-  },
-  {
-    name: "Bianca Clarke",
-    role: "Management Team",
-    bio: "Bianca Clarke is a leadership and personal development professional serving through Africa B-Inspired (PTY) Ltd. With a focus on coaching, leadership facilitation, and empowering people and organizations, she brings insight, encouragement, and practical development expertise to the spaces she serves.",
-    image: "",
-  },
-  {
-    name: "Astrido Barth-Philander",
-    role: "Management Team",
-    bio: "Astrido Barth-Philander brings strong financial leadership and professional expertise in accounting, reporting, and business support. As Senior Manager: Finance at SanlamAllianz Namibia, he contributes strategic insight, governance discipline, and sound financial stewardship.",
-    image: "",
-  },
+const management = [
+  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    bio: "Visionary leader and founder driving the mission forward." },
+  { name: "Operations Lead",  initials: "OL",  role: "Head of Operations",    bio: "Ensuring seamless delivery of all programmes and initiatives." },
+  { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
 ]
 
-// ── Components ───────────────────────────────────────────────────────────────
+// ─── GovernorCard ─────────────────────────────────────────────────────────────
 
-function GovernorCard({ member, isChairman = false }: { member: typeof boardOfGovernors[0]; isChairman?: boolean }) {
-  const [hovered, setHovered] = useState(false)
-  const initials = member.name.split(" ").map(n => n[0]).join("")
+function GovernorCard({ member }: { member: typeof governors[0] }) {
+  const [open, setOpen] = useState(false)
 
   return (
     <Card
-      className={`border-0 transition-all duration-500 overflow-hidden cursor-pointer rounded-2xl ${hovered ? "shadow-2xl scale-[1.02]" : "shadow-lg"} bg-gradient-to-br from-[#FDF8F4] to-[#FEF3EB]`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="border-0 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer rounded-2xl"
+      style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)" }}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
     >
-      <CardContent className="p-6 py-8 flex flex-col items-center">
+      <CardContent className="p-8 text-center">
         {/* Avatar */}
-        <div className={`rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg transition-all duration-500 mb-4 ${hovered ? "w-24 h-24" : "w-20 h-20"}`}
-          style={member.image ? {} : { background: "linear-gradient(135deg, #D4956A 0%, #E8B896 50%, #D4956A 100%)" }}>
+        <div
+          className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center shadow-md"
+          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
+        >
           {member.image ? (
-            <Image src={member.image} alt={member.name} width={96} height={96} className="w-full h-full object-cover object-top" />
+            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
           ) : (
-            <span className="text-white font-bold text-xl">{initials}</span>
+            <span className="text-white font-bold text-2xl">{member.initials}</span>
           )}
         </div>
 
-        <h3 className={`font-bold text-[#5a3d2b] text-center mb-1 ${isChairman ? "text-xl" : "text-lg"}`}>{member.name}</h3>
-        <p className="text-sm font-semibold text-center mb-3" style={{ color: "#D4956A" }}>{member.role}</p>
+        <h3 className="text-lg font-bold text-[#3D1F0F] mb-1">{member.name}</h3>
+        <p className="text-sm font-semibold text-[#D4956A] mb-4">{member.role}</p>
 
-        <div className={`overflow-hidden transition-all duration-500 ease-out w-full ${hovered ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-          <div className="pt-4 border-t" style={{ borderColor: "#D4956A40" }}>
-            <p className="text-xs text-[#6b5344] leading-relaxed text-center">{member.bio}</p>
-          </div>
+        {/* Slide-open bio */}
+        <div
+          className="overflow-hidden transition-all duration-500 ease-in-out"
+          style={{ maxHeight: open ? "200px" : "0px", opacity: open ? 1 : 0 }}
+        >
+          <hr className="border-[#D4956A]/30 mb-4" />
+          <p className="text-sm text-[#5C3D2E] leading-relaxed">{member.bio}</p>
         </div>
       </CardContent>
     </Card>
   )
 }
 
-function TeamCard({ member }: { member: typeof managementTeam[0] }) {
-  const [hovered, setHovered] = useState(false)
-  const initials = member.name.split(" ").map(n => n[0]).join("")
+// ─── ChairmanCard ─────────────────────────────────────────────────────────────
 
+function ChairmanCard({ member }: { member: typeof chairman }) {
   return (
     <Card
-      className={`border-2 transition-all duration-300 cursor-pointer ${hovered ? "border-[#8B2B3E] shadow-xl" : "border-border hover:border-[#8B2B3E]/40"}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="border-0 shadow-lg rounded-2xl max-w-2xl mx-auto"
+      style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)" }}
     >
-      <CardContent className="p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-full bg-[#8B2B3E] flex items-center justify-center flex-shrink-0">
-            {member.image ? (
-              <Image src={member.image} alt={member.name} width={56} height={56} className="w-full h-full object-cover rounded-full" />
-            ) : (
-              <span className="text-white font-bold text-sm">{initials}</span>
-            )}
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-foreground">{member.name}</h3>
-            <p className="text-sm text-[#8B2B3E] font-medium mb-3">{member.role}</p>
-            <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
-          </div>
+      <CardContent className="p-10 text-center">
+        <div
+          className="w-32 h-32 rounded-full mx-auto mb-6 overflow-hidden flex items-center justify-center shadow-lg"
+          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
+        >
+          {member.image ? (
+            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+          ) : (
+            <span className="text-white font-bold text-4xl">{member.initials}</span>
+          )}
         </div>
+        <h3 className="text-2xl font-bold text-[#3D1F0F] mb-2">{member.name}</h3>
+        <p className="text-base font-semibold text-[#D4956A] mb-6">{member.role}</p>
+        <hr className="border-[#D4956A]/30 mb-6" />
+        <p className="text-[#5C3D2E] leading-relaxed">{member.bio}</p>
       </CardContent>
     </Card>
   )
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
+// ─── ManagementCard ───────────────────────────────────────────────────────────
+
+function ManagementCard({ member }: { member: typeof management[0] }) {
+  return (
+    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
+      <CardContent className="p-6 text-center">
+        <div
+          className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center shadow"
+          style={{ background: "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
+        >
+          <span className="text-white font-bold text-sm">{member.initials}</span>
+        </div>
+        <h3 className="font-bold text-[#1a1a1a] mb-1">{member.name}</h3>
+        <p className="text-sm text-[#8B2B3E] font-semibold mb-2">{member.role}</p>
+        <p className="text-sm text-gray-600">{member.bio}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="min-h-screen font-sans">
       <Header />
-      <main className="bg-white text-black min-h-screen">
 
-        {/* Hero */}
-        <section className="relative bg-gradient-to-b from-[#8B2B3E] to-[#6B1B2E] pt-32 pb-20 text-white">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8 text-center">
-            <p className="text-sm uppercase tracking-widest text-white/70 mb-4 font-medium">Know That Your Support Makes a Difference</p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
-              Transforming Lives, <span className="text-[#D4956A]">One Father at a Time</span>
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-3xl mx-auto mb-10">
-              The Fatherhood Foundation is a values-driven organization committed to raising strong men, strengthening families, and building healthier communities. Through mentoring, leadership development, youth engagement, school-based programmes, and community initiatives, we equip and empower men to flourish in life.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 font-semibold h-12 px-8">
-                <Link href="/donate">Donate Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
-                <Link href="/partnership">Get Involved</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section className="bg-[#8B2B3E] py-16">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map(stat => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-4xl sm:text-5xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-white/70 text-sm uppercase tracking-wider">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Why Partner With Us */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#8B2B3E] mb-4">Why Partner With Us</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">Your partnership creates measurable, lasting impact across Namibia and beyond.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {impactAreas.map(area => (
-                <Card key={area.title} className="border border-border/50 hover:shadow-lg transition-all duration-300 hover:border-[#8B2B3E]/30 text-center">
-                  <CardContent className="p-8">
-                    <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-4">
-                      <area.icon className="w-6 h-6 text-[#8B2B3E]" />
-                    </div>
-                    <h3 className="font-bold text-[#8B2B3E] mb-2">{area.title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{area.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Mission Statement */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#8B2B3E] mb-6">Our Mission</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-10">
-              To raise strong, responsible men who invest in their families and communities — creating a generational legacy of integrity, purpose, and servant leadership across Namibia and Africa.
-            </p>
-            <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6B1B2E] text-white h-12 px-10">
-              <Link href="/partnership">Support Our Mission</Link>
+      {/* Hero */}
+      <section className="relative pt-32 pb-20 overflow-hidden bg-[#1a1a1a]">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/10" />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">Know That Your Support Makes a Difference</p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
+            Transforming Lives,{" "}
+            <span className="text-[#D4956A]">One Father at a Time</span>
+          </h1>
+          <p className="text-lg text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
+            The Fatherhood Foundation is a values-driven organization committed to raising strong men, strengthening families, and building healthier communities. Through mentoring, leadership development, youth engagement, and community initiatives, we equip and empower men to go and train young people in character, values, and practical life tools.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold h-12 px-8">
+              <Link href="/partnership">Partner With Us</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
+              <Link href="/get-involved">Get Involved</Link>
             </Button>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Core Values */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#8B2B3E] mb-4">Our Core Values</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {values.map(value => (
-                <Card key={value.title} className="border border-border/50 hover:shadow-lg transition-all duration-300 hover:border-[#8B2B3E]/30 text-center">
-                  <CardContent className="p-8">
-                    <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-4">
-                      <value.icon className="w-6 h-6 text-[#8B2B3E]" />
-                    </div>
-                    <h3 className="font-bold text-[#8B2B3E] mb-2">{value.title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{value.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+      {/* Stats */}
+      <section className="py-16 bg-[#8B2B3E]">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {stats.map((s) => (
+              <div key={s.label}>
+                <p className="text-4xl font-bold text-white mb-2">{s.value}</p>
+                <p className="text-white/70 text-sm font-medium">{s.label}</p>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Board of Governors */}
-        <section className="py-20 bg-[#FDF8F4]">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#8B2B3E] mb-4">Board of Governors</h2>
-              <p className="text-gray-600 max-w-xl mx-auto">Hover over a card to learn more about each board member.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {boardOfGovernors.map((member, i) => (
-                <GovernorCard key={member.name} member={member} isChairman={i === 0} />
-              ))}
-            </div>
+      {/* Why Partner With Us */}
+      <section className="py-24 bg-[#f8f5f2]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">Why Partner With Us</p>
+            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4 text-balance">Your Investment Creates Lasting Change</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              When you support The Fatherhood Foundation, you are directly investing in the transformation of men, families, and entire communities.
+            </p>
           </div>
-        </section>
-
-        {/* Management Team */}
-        <section className="py-20 bg-white">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#8B2B3E] mb-4">Management Team</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {managementTeam.map(member => (
-                <TeamCard key={member.name} member={member} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {whyPartner.map((item) => (
+              <Card key={item.title} className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
+                <CardContent className="p-8 text-center">
+                  <div className="w-14 h-14 rounded-full bg-[#8B2B3E] flex items-center justify-center mx-auto mb-6">
+                    <item.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="font-bold text-[#1a1a1a] mb-3">{item.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed text-center">{item.desc}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA */}
-        <section className="py-20 bg-gradient-to-b from-[#8B2B3E] to-[#6B1B2E] text-white text-center">
-          <div className="max-w-3xl mx-auto px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Make a Difference?</h2>
-            <p className="text-white/80 text-lg mb-10">Join us in transforming lives, strengthening families, and building communities of lasting impact.</p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 font-semibold h-12 px-8">
-                <Link href="/donate">Donate Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
-                <Link href="/get-involved">Get Involved</Link>
-              </Button>
-            </div>
+      {/* Mission Statement */}
+      <section className="py-20 bg-[#8B2B3E]">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-white/60 mb-4">Our Mission</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance leading-relaxed">
+            "To empower men to become the fathers, husbands, and community leaders they were created to be — through mentoring, education, and transformation."
+          </h2>
+          <Button asChild size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 font-semibold h-12 px-8">
+            <Link href="/partnership">Support the Mission</Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">What Guides Us</p>
+            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4">Our Values</h2>
+            <p className="text-gray-600 max-w-xl mx-auto">Our work is built on these core principles that guide everything we do.</p>
           </div>
-        </section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((v) => (
+              <Card key={v.title} className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
+                <CardContent className="p-8 text-center">
+                  <div className="w-14 h-14 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-6">
+                    <v.icon className="w-7 h-7 text-[#8B2B3E]" />
+                  </div>
+                  <h3 className="font-bold text-[#1a1a1a] mb-3">{v.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed text-center">{v.desc}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      </main>
+      {/* Board of Governors */}
+      <section className="py-24 relative overflow-hidden" style={{ background: "#FAF0E8" }}>
+        {/* Decorative circles */}
+        <div className="absolute top-0 left-0 w-48 h-48 rounded-full opacity-40" style={{ background: "#E8B896", transform: "translate(-30%, -30%)" }} />
+        <div className="absolute bottom-20 left-16 w-20 h-20 rounded-full opacity-30" style={{ background: "#D4956A" }} />
+        <div className="absolute top-1/2 right-0 w-48 h-48 rounded-full opacity-20" style={{ background: "#E8B896", transform: "translate(40%, -50%)" }} />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#D4956A] mb-3">Leadership You Can Trust</p>
+            <h2 className="text-4xl font-bold text-[#3D1F0F] mb-6">The Board of Governors</h2>
+            <p className="text-[#5C3D2E] max-w-3xl mx-auto leading-relaxed">
+              The Board of Governors serves as a strategic advisory body to help strengthen the long-term vision, direction, and governance-minded thinking of The Fatherhood Foundation. This team brings leadership insight, wisdom, and counsel to support the growth and sustainability of the organization.
+            </p>
+          </div>
+
+          {/* Chairman — large centered card */}
+          <div className="mb-12">
+            <ChairmanCard member={chairman} />
+          </div>
+
+          {/* Other governors — hover to reveal bio */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {governors.map((g) => (
+              <GovernorCard key={g.name} member={g} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Management Team */}
+      <section className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">Dedicated Team</p>
+            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4">Management Team</h2>
+            <p className="text-gray-600 max-w-xl mx-auto">The team that drives the day-to-day work of the Foundation with passion and purpose.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {management.map((m) => (
+              <ManagementCard key={m.name} member={m} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 bg-[#1a1a1a]">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Ready to Make a Difference?</h2>
+          <p className="text-white/70 mb-8 leading-relaxed">Join hundreds of partners who are investing in the transformation of men, families, and communities across Namibia and beyond.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold h-12 px-8">
+              <Link href="/partnership">Become a Partner</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
+              <Link href="/get-involved">Get Involved</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <Footer />
-    </>
+    </div>
   )
 }
