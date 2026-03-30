@@ -72,9 +72,11 @@ const governors = [
 ]
 
 const management = [
-  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    bio: "Visionary leader and founder driving the mission forward." },
-  { name: "Operations Lead",  initials: "OL",  role: "Head of Operations",    bio: "Ensuring seamless delivery of all programmes and initiatives." },
-  { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
+  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    image: "/team/carven-izaks.jpg", bio: "Visionary leader and founder driving the mission forward." },
+  { name: "Bianca Clark",    initials: "BC",  role: "Organisation Secretary",  image: "/team/bianca-clark.jpg", bio: "Bianca Clark brings dedication and heart to the Fatherhood Foundation, supporting the team in delivering meaningful programmes that strengthen families and communities." },
+  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",             image: "", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
+  { name: "Operations Lead",  initials: "OL",  role: "Head of Operations",    image: "", bio: "Ensuring seamless delivery of all programmes and initiatives." },
+  { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    image: "", bio: "Developing and overseeing all training and development programmes." },
 ]
 
 // ─── BoardSection — click-to-flip card grid ──────────────────────────────────
@@ -87,14 +89,14 @@ function BoardMemberCard({ member }: { member: BoardMember }) {
   return (
     <div
       className="cursor-pointer"
-      style={{ perspective: "1000px", width: "200px" }}
+      style={{ perspective: "1000px", width: "210px" }}
       onClick={() => setFlipped(!flipped)}
     >
       <div
         style={{
           position: "relative",
-          width: "200px",
-          height: "260px",
+          width: "210px",
+          height: "300px",
           transformStyle: "preserve-3d",
           transition: "transform 0.55s ease",
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -109,22 +111,24 @@ function BoardMemberCard({ member }: { member: BoardMember }) {
             WebkitBackfaceVisibility: "hidden",
             borderRadius: "16px",
             overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
             background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
             border: "3px solid #E8D5C4",
             boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
           }}
         >
           {member.image ? (
-            <img src={member.image} alt={member.name} style={{ width: "100%", height: "75%", objectFit: "cover", objectPosition: "top" }} />
+            <img src={member.image} alt={member.name} style={{ width: "100%", height: "200px", objectFit: "cover", objectPosition: "top", flexShrink: 0 }} />
           ) : (
-            <div style={{ width: "100%", height: "75%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: "100%", height: "200px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <span style={{ color: "white", fontWeight: 700, fontSize: "2rem" }}>{member.initials}</span>
             </div>
           )}
-          <div style={{ padding: "10px 12px", background: "#FDF8F4" }}>
-            <p style={{ fontWeight: 700, fontSize: "0.85rem", color: "#3D1F0F", margin: 0 }}>{member.name}</p>
-            <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", margin: "2px 0 0" }}>{member.role}</p>
-            <p style={{ fontSize: "0.65rem", color: "#9A7B6A", margin: "4px 0 0" }}>Click to read bio</p>
+          <div style={{ padding: "10px 12px", background: "#FDF8F4", flex: 1 }}>
+            <p style={{ fontWeight: 700, fontSize: "0.85rem", color: "#3D1F0F", margin: 0, lineHeight: 1.3 }}>{member.name}</p>
+            <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", margin: "3px 0 0" }}>{member.role}</p>
+            <p style={{ fontSize: "0.65rem", color: "#9A7B6A", margin: "5px 0 0" }}>Click to read bio</p>
           </div>
         </div>
 
@@ -149,8 +153,8 @@ function BoardMemberCard({ member }: { member: BoardMember }) {
         >
           <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#3D1F0F", textAlign: "center", marginBottom: "4px" }}>{member.name}</p>
           <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", textAlign: "center", marginBottom: "12px" }}>{member.role}</p>
-          <p style={{ fontSize: "0.72rem", color: "#5C3D2E", lineHeight: 1.6, textAlign: "center" }}>{member.bio}</p>
-          <p style={{ fontSize: "0.62rem", color: "#9A7B6A", marginTop: "12px" }}>Click to flip back</p>
+          <p style={{ fontSize: "0.72rem", color: "#5C3D2E", lineHeight: 1.6, textAlign: "center", overflowY: "auto", maxHeight: "180px" }}>{member.bio}</p>
+          <p style={{ fontSize: "0.62rem", color: "#9A7B6A", marginTop: "10px", flexShrink: 0 }}>Click to flip back</p>
         </div>
       </div>
     </div>
@@ -174,10 +178,14 @@ function ManagementCard({ member }: { member: typeof management[0] }) {
     <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
       <CardContent className="p-6 text-center">
         <div
-          className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center shadow"
-          style={{ background: "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
+          className="w-20 h-20 rounded-2xl mx-auto mb-4 overflow-hidden flex items-center justify-center shadow"
+          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
         >
-          <span className="text-white font-bold text-sm">{member.initials}</span>
+          {member.image ? (
+            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+          ) : (
+            <span className="text-white font-bold text-sm">{member.initials}</span>
+          )}
         </div>
         <h3 className="font-bold text-[#1a1a1a] mb-1">{member.name}</h3>
         <p className="text-sm text-[#8B2B3E] font-semibold mb-2">{member.role}</p>
