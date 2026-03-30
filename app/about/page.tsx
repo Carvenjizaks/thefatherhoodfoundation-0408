@@ -52,7 +52,7 @@ const governors = [
     name: "Robert Burdett",
     initials: "RB",
     role: "Board of Governors",
-    image: "",
+    image: "/team/robert-burdett.jpg",
     bio: "Robert Burdett brings extensive experience in business strategy and community leadership. He serves as a trusted advisor helping The Fatherhood Foundation navigate growth and governance with wisdom and integrity.",
   },
   {
