@@ -87,20 +87,20 @@ function MemberCard({ member }: { member: { name: string; initials: string; role
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* Avatar */}
+      {/* Avatar — square with rounded corners, face-safe crop */}
       <div
-        className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300"
+        className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300"
         style={{
           borderColor: open ? "#8B2B3E" : "#E8D5C4",
           background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-          transform: open ? "scale(1.08)" : "scale(1)",
+          transform: open ? "scale(1.05)" : "scale(1)",
         }}
       >
         {member.image ? (
           <img
             src={member.image}
             alt={member.name}
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-top"
           />
         ) : (
           <span className="text-white font-bold text-2xl">{member.initials}</span>
