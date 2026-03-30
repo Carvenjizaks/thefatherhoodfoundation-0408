@@ -72,9 +72,9 @@ const governors = [
 ]
 
 const management = [
-  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    bio: "Visionary leader and founder driving the mission forward." },
-  { name: "Operations Lead",  initials: "OL",  role: "Head of Operations",    bio: "Ensuring seamless delivery of all programmes and initiatives." },
-  { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
+  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    image: "/team/carven-izaks.jpg", bio: "Visionary leader and founder driving the mission forward." },
+  { name: "Operations Lead",  initials: "OL",  role: "Head of Operations",    image: "", bio: "Ensuring seamless delivery of all programmes and initiatives." },
+  { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    image: "", bio: "Developing and overseeing all training and development programmes." },
 ]
 
 // ─── BoardSection — click-to-flip card grid ──────────────────────────────────
@@ -176,10 +176,14 @@ function ManagementCard({ member }: { member: typeof management[0] }) {
     <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
       <CardContent className="p-6 text-center">
         <div
-          className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center shadow"
-          style={{ background: "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
+          className="w-20 h-20 rounded-2xl mx-auto mb-4 overflow-hidden flex items-center justify-center shadow"
+          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
         >
-          <span className="text-white font-bold text-sm">{member.initials}</span>
+          {member.image ? (
+            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+          ) : (
+            <span className="text-white font-bold text-sm">{member.initials}</span>
+          )}
         </div>
         <h3 className="font-bold text-[#1a1a1a] mb-1">{member.name}</h3>
         <p className="text-sm text-[#8B2B3E] font-semibold mb-2">{member.role}</p>
