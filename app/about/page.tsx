@@ -77,83 +77,92 @@ const management = [
   { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
 ]
 
-// ─── BoardSection — avatars + full-width slide-in panel ──────────────────────
+// ─── BoardSection — click-to-flip card grid ──────────────────────────────────
 
 type BoardMember = { name: string; initials: string; role: string; image: string; bio: string }
 
-function BoardSection({ members }: { members: BoardMember[] }) {
-  const [active, setActive] = useState<BoardMember | null>(null)
+function BoardMemberCard({ member }: { member: BoardMember }) {
+  const [flipped, setFlipped] = useState(false)
 
   return (
-    <div>
-      {/* Avatar row */}
-      <div className="flex flex-wrap justify-center gap-8 mb-0">
-        {members.map((m) => {
-          const isActive = active?.name === m.name
-          return (
-            <div
-              key={m.name}
-              className="flex flex-col items-center cursor-pointer"
-              onMouseEnter={() => setActive(m)}
-              onMouseLeave={() => setActive(null)}
-            >
-              {/* Portrait tile */}
-              <div
-                className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-md border-4 transition-all duration-300"
-                style={{
-                  borderColor: isActive ? "#8B2B3E" : "#E8D5C4",
-                  background: m.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-                  transform: isActive ? "translateY(-4px)" : "translateY(0)",
-                }}
-              >
-                {m.image ? (
-                  <img src={m.image} alt={m.name} className="w-full h-full object-cover object-top" />
-                ) : (
-                  <span className="text-white font-bold text-2xl">{m.initials}</span>
-                )}
-              </div>
-              {/* Name tag */}
-              <div className="mt-2 text-center">
-                <p className="text-sm font-bold text-[#3D1F0F]">{m.name}</p>
-                <p className="text-xs font-semibold text-[#8B2B3E]">{m.role}</p>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Slide-in full-width profile panel */}
+    <div
+      className="cursor-pointer"
+      style={{ perspective: "1000px", width: "200px" }}
+      onClick={() => setFlipped(!flipped)}
+    >
       <div
-        className="overflow-hidden transition-all duration-500 ease-in-out"
-        style={{ maxHeight: active ? "260px" : "0px", opacity: active ? 1 : 0, marginTop: active ? "32px" : "0px" }}
+        style={{
+          position: "relative",
+          width: "200px",
+          height: "260px",
+          transformStyle: "preserve-3d",
+          transition: "transform 0.55s ease",
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+        }}
       >
-        {active && (
-          <div
-            className="rounded-3xl p-8 flex flex-col sm:flex-row items-center gap-6"
-            style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)", border: "1px solid #E8D5C4" }}
-          >
-            {/* Photo in panel */}
-            <div
-              className="w-24 h-28 rounded-2xl overflow-hidden flex-shrink-0 shadow-md"
-              style={{ background: active.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
-            >
-              {active.image ? (
-                <img src={active.image} alt={active.name} className="w-full h-full object-cover object-top" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">{active.initials}</span>
-                </div>
-              )}
+        {/* Front — photo + name */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            borderRadius: "16px",
+            overflow: "hidden",
+            background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
+            border: "3px solid #E8D5C4",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+          }}
+        >
+          {member.image ? (
+            <img src={member.image} alt={member.name} style={{ width: "100%", height: "75%", objectFit: "cover", objectPosition: "top" }} />
+          ) : (
+            <div style={{ width: "100%", height: "75%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ color: "white", fontWeight: 700, fontSize: "2rem" }}>{member.initials}</span>
             </div>
-            {/* Bio text */}
-            <div className="flex-1 text-left">
-              <h3 className="text-xl font-bold text-[#3D1F0F] mb-1">{active.name}</h3>
-              <p className="text-sm font-semibold text-[#8B2B3E] mb-3">{active.role}</p>
-              <p className="text-sm text-[#5C3D2E] leading-relaxed">{active.bio}</p>
-            </div>
+          )}
+          <div style={{ padding: "10px 12px", background: "#FDF8F4" }}>
+            <p style={{ fontWeight: 700, fontSize: "0.85rem", color: "#3D1F0F", margin: 0 }}>{member.name}</p>
+            <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", margin: "2px 0 0" }}>{member.role}</p>
+            <p style={{ fontSize: "0.65rem", color: "#9A7B6A", margin: "4px 0 0" }}>Click to read bio</p>
           </div>
-        )}
+        </div>
+
+        {/* Back — bio */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            borderRadius: "16px",
+            background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)",
+            border: "3px solid #8B2B3E",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px 16px",
+          }}
+        >
+          <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#3D1F0F", textAlign: "center", marginBottom: "4px" }}>{member.name}</p>
+          <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", textAlign: "center", marginBottom: "12px" }}>{member.role}</p>
+          <p style={{ fontSize: "0.72rem", color: "#5C3D2E", lineHeight: 1.6, textAlign: "center" }}>{member.bio}</p>
+          <p style={{ fontSize: "0.62rem", color: "#9A7B6A", marginTop: "12px" }}>Click to flip back</p>
+        </div>
       </div>
+    </div>
+  )
+}
+
+function BoardSection({ members }: { members: BoardMember[] }) {
+  return (
+    <div className="flex flex-wrap justify-center gap-6 py-4">
+      {members.map((m) => (
+        <BoardMemberCard key={m.name} member={m} />
+      ))}
     </div>
   )
 }
@@ -262,7 +271,21 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white overflow-hidden">
+        <style>{`
+          @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(48px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .value-card {
+            opacity: 0;
+            animation: slideUpFade 0.6s ease forwards;
+          }
+          .value-card:nth-child(1) { animation-delay: 0.1s; }
+          .value-card:nth-child(2) { animation-delay: 0.25s; }
+          .value-card:nth-child(3) { animation-delay: 0.4s; }
+          .value-card:nth-child(4) { animation-delay: 0.55s; }
+        `}</style>
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">What Guides Us</p>
@@ -271,15 +294,18 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => (
-              <Card key={v.title} className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
-                <CardContent className="p-8 text-center">
+              <div
+                key={v.title}
+                className="value-card border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white"
+              >
+                <div className="p-8 text-center">
                   <div className="w-14 h-14 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-6">
                     <v.icon className="w-7 h-7 text-[#8B2B3E]" />
                   </div>
                   <h3 className="font-bold text-[#1a1a1a] mb-3">{v.title}</h3>
                   <p className="text-sm text-gray-600 leading-relaxed text-center">{v.desc}</p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
