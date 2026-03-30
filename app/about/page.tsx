@@ -83,17 +83,16 @@ function MemberCard({ member }: { member: { name: string; initials: string; role
 
   return (
     <div
-      className="flex flex-col items-center cursor-pointer group relative"
+      className="flex flex-col items-center cursor-pointer w-36"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
       {/* Avatar — square with rounded corners, face-safe crop */}
       <div
-        className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300"
+        className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300 w-full"
         style={{
           borderColor: open ? "#8B2B3E" : "#E8D5C4",
           background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-          transform: open ? "scale(1.05)" : "scale(1)",
         }}
       >
         {member.image ? (
@@ -108,22 +107,20 @@ function MemberCard({ member }: { member: { name: string; initials: string; role
       </div>
 
       {/* Name & role — always visible */}
-      <div className="mt-3 text-center px-2">
-        <p className="text-sm font-bold text-[#3D1F0F]">{member.name}</p>
+      <div className="mt-3 text-center px-1 w-full">
+        <p className="text-sm font-bold text-[#3D1F0F] leading-tight">{member.name}</p>
         <p className="text-xs font-semibold text-[#8B2B3E] mt-0.5">{member.role}</p>
       </div>
 
-      {/* Bio tooltip — slides down from avatar on hover */}
+      {/* Bio — inline expand below name, no clipping */}
       <div
-        className="absolute top-full mt-3 w-60 rounded-2xl shadow-2xl p-4 text-center z-30 pointer-events-none transition-all duration-300 ease-out"
-        style={{
-          background: "#FDF8F4",
-          border: "1px solid #E8D5C4",
-          opacity: open ? 1 : 0,
-          transform: open ? "translateY(0)" : "translateY(-8px)",
-        }}
+        className="overflow-hidden transition-all duration-400 ease-in-out w-full text-center"
+        style={{ maxHeight: open ? "200px" : "0px", opacity: open ? 1 : 0 }}
       >
-        <p className="text-xs text-[#5C3D2E] leading-relaxed">{member.bio}</p>
+        <div className="mt-3 px-2 py-3 rounded-xl text-xs text-[#5C3D2E] leading-relaxed"
+          style={{ background: "#FDF8F4", border: "1px solid #E8D5C4" }}>
+          {member.bio}
+        </div>
       </div>
     </div>
   )
