@@ -5,8 +5,8 @@ import Link from "next/link"
 import { Shield, Target, Heart, Users, TrendingUp, Award, Globe, HandHeart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
