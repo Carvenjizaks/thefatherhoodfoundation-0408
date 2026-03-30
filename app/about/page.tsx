@@ -76,51 +76,82 @@ const management = [
   { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
 ]
 
-// ─── MemberCard (equal weight for all board members) ─────────────────────────
+// ─── BoardSection — avatars + full-width slide-in panel ──────────────────────
 
-function MemberCard({ member }: { member: { name: string; initials: string; role: string; image: string; bio: string } }) {
-  const [open, setOpen] = useState(false)
+type BoardMember = { name: string; initials: string; role: string; image: string; bio: string }
+
+function BoardSection({ members }: { members: BoardMember[] }) {
+  const [active, setActive] = useState<BoardMember | null>(null)
 
   return (
-    <div
-      className="flex flex-col items-center cursor-pointer w-36"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      {/* Avatar — square with rounded corners, face-safe crop */}
+    <div>
+      {/* Avatar row */}
+      <div className="flex flex-wrap justify-center gap-8 mb-0">
+        {members.map((m) => {
+          const isActive = active?.name === m.name
+          return (
+            <div
+              key={m.name}
+              className="flex flex-col items-center cursor-pointer"
+              onMouseEnter={() => setActive(m)}
+              onMouseLeave={() => setActive(null)}
+            >
+              {/* Portrait tile */}
+              <div
+                className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-md border-4 transition-all duration-300"
+                style={{
+                  borderColor: isActive ? "#8B2B3E" : "#E8D5C4",
+                  background: m.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
+                  transform: isActive ? "translateY(-4px)" : "translateY(0)",
+                }}
+              >
+                {m.image ? (
+                  <img src={m.image} alt={m.name} className="w-full h-full object-cover object-top" />
+                ) : (
+                  <span className="text-white font-bold text-2xl">{m.initials}</span>
+                )}
+              </div>
+              {/* Name tag */}
+              <div className="mt-2 text-center">
+                <p className="text-sm font-bold text-[#3D1F0F]">{m.name}</p>
+                <p className="text-xs font-semibold text-[#8B2B3E]">{m.role}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Slide-in full-width profile panel */}
       <div
-        className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300 w-full"
-        style={{
-          borderColor: open ? "#8B2B3E" : "#E8D5C4",
-          background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-        }}
+        className="overflow-hidden transition-all duration-500 ease-in-out"
+        style={{ maxHeight: active ? "260px" : "0px", opacity: active ? 1 : 0, marginTop: active ? "32px" : "0px" }}
       >
-        {member.image ? (
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-full h-full object-cover object-top"
-          />
-        ) : (
-          <span className="text-white font-bold text-2xl">{member.initials}</span>
+        {active && (
+          <div
+            className="rounded-3xl p-8 flex flex-col sm:flex-row items-center gap-6"
+            style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)", border: "1px solid #E8D5C4" }}
+          >
+            {/* Photo in panel */}
+            <div
+              className="w-24 h-28 rounded-2xl overflow-hidden flex-shrink-0 shadow-md"
+              style={{ background: active.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
+            >
+              {active.image ? (
+                <img src={active.image} alt={active.name} className="w-full h-full object-cover object-top" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">{active.initials}</span>
+                </div>
+              )}
+            </div>
+            {/* Bio text */}
+            <div className="flex-1 text-left">
+              <h3 className="text-xl font-bold text-[#3D1F0F] mb-1">{active.name}</h3>
+              <p className="text-sm font-semibold text-[#8B2B3E] mb-3">{active.role}</p>
+              <p className="text-sm text-[#5C3D2E] leading-relaxed">{active.bio}</p>
+            </div>
+          </div>
         )}
-      </div>
-
-      {/* Name & role — always visible */}
-      <div className="mt-3 text-center px-1 w-full">
-        <p className="text-sm font-bold text-[#3D1F0F] leading-tight">{member.name}</p>
-        <p className="text-xs font-semibold text-[#8B2B3E] mt-0.5">{member.role}</p>
-      </div>
-
-      {/* Bio — inline expand below name, no clipping */}
-      <div
-        className="overflow-hidden transition-all duration-400 ease-in-out w-full text-center"
-        style={{ maxHeight: open ? "200px" : "0px", opacity: open ? 1 : 0 }}
-      >
-        <div className="mt-3 px-2 py-3 rounded-xl text-xs text-[#5C3D2E] leading-relaxed"
-          style={{ background: "#FDF8F4", border: "1px solid #E8D5C4" }}>
-          {member.bio}
-        </div>
       </div>
     </div>
   )
@@ -269,12 +300,8 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* All board members — equal weight, hover to reveal bio */}
-          <div className="flex flex-wrap justify-center gap-12 pb-16 pt-4">
-            {[chairman, ...governors].map((m) => (
-              <MemberCard key={m.name} member={m} />
-            ))}
-          </div>
+          {/* All board members — hover avatar to slide in full profile */}
+          <BoardSection members={[chairman, ...governors]} />
         </div>
       </section>
 
