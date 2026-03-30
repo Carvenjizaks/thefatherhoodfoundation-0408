@@ -44,7 +44,7 @@ const governors = [
     name: "Christo Nicholls",
     initials: "CN",
     role: "Board of Governors",
-    image: "",
+    image: "/team/christo-nicholls.jpg",
     bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
   },
   {
@@ -76,72 +76,84 @@ const management = [
   { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
 ]
 
-// ─── GovernorCard ─────────────────────────────────────────────────────────────
+// ─── BoardSection — avatars + full-width slide-in panel ──────────────────────
 
-function GovernorCard({ member }: { member: typeof governors[0] }) {
-  const [open, setOpen] = useState(false)
+type BoardMember = { name: string; initials: string; role: string; image: string; bio: string }
+
+function BoardSection({ members }: { members: BoardMember[] }) {
+  const [active, setActive] = useState<BoardMember | null>(null)
 
   return (
-    <Card
-      className="border-0 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer rounded-2xl"
-      style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)" }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      <CardContent className="p-8 text-center">
-        {/* Avatar */}
-        <div
-          className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center shadow-md"
-          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
-          ) : (
-            <span className="text-white font-bold text-2xl">{member.initials}</span>
-          )}
-        </div>
+    <div>
+      {/* Avatar row */}
+      <div className="flex flex-wrap justify-center gap-8 mb-0">
+        {members.map((m) => {
+          const isActive = active?.name === m.name
+          return (
+            <div
+              key={m.name}
+              className="flex flex-col items-center cursor-pointer"
+              onMouseEnter={() => setActive(m)}
+              onMouseLeave={() => setActive(null)}
+            >
+              {/* Portrait tile */}
+              <div
+                className="w-32 h-36 rounded-2xl overflow-hidden flex items-center justify-center shadow-md border-4 transition-all duration-300"
+                style={{
+                  borderColor: isActive ? "#8B2B3E" : "#E8D5C4",
+                  background: m.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
+                  transform: isActive ? "translateY(-4px)" : "translateY(0)",
+                }}
+              >
+                {m.image ? (
+                  <img src={m.image} alt={m.name} className="w-full h-full object-cover object-top" />
+                ) : (
+                  <span className="text-white font-bold text-2xl">{m.initials}</span>
+                )}
+              </div>
+              {/* Name tag */}
+              <div className="mt-2 text-center">
+                <p className="text-sm font-bold text-[#3D1F0F]">{m.name}</p>
+                <p className="text-xs font-semibold text-[#8B2B3E]">{m.role}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
 
-        <h3 className="text-lg font-bold text-[#3D1F0F] mb-1">{member.name}</h3>
-        <p className="text-sm font-semibold text-[#D4956A] mb-4">{member.role}</p>
-
-        {/* Slide-open bio */}
-        <div
-          className="overflow-hidden transition-all duration-500 ease-in-out"
-          style={{ maxHeight: open ? "200px" : "0px", opacity: open ? 1 : 0 }}
-        >
-          <hr className="border-[#D4956A]/30 mb-4" />
-          <p className="text-sm text-[#5C3D2E] leading-relaxed">{member.bio}</p>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-// ─── ChairmanCard ─────────────────────────────────────────────────────────────
-
-function ChairmanCard({ member }: { member: typeof chairman }) {
-  return (
-    <Card
-      className="border-0 shadow-lg rounded-2xl max-w-2xl mx-auto"
-      style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)" }}
-    >
-      <CardContent className="p-10 text-center">
-        <div
-          className="w-32 h-32 rounded-full mx-auto mb-6 overflow-hidden flex items-center justify-center shadow-lg"
-          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
-          ) : (
-            <span className="text-white font-bold text-4xl">{member.initials}</span>
-          )}
-        </div>
-        <h3 className="text-2xl font-bold text-[#3D1F0F] mb-2">{member.name}</h3>
-        <p className="text-base font-semibold text-[#D4956A] mb-6">{member.role}</p>
-        <hr className="border-[#D4956A]/30 mb-6" />
-        <p className="text-[#5C3D2E] leading-relaxed">{member.bio}</p>
-      </CardContent>
-    </Card>
+      {/* Slide-in full-width profile panel */}
+      <div
+        className="overflow-hidden transition-all duration-500 ease-in-out"
+        style={{ maxHeight: active ? "260px" : "0px", opacity: active ? 1 : 0, marginTop: active ? "32px" : "0px" }}
+      >
+        {active && (
+          <div
+            className="rounded-3xl p-8 flex flex-col sm:flex-row items-center gap-6"
+            style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)", border: "1px solid #E8D5C4" }}
+          >
+            {/* Photo in panel */}
+            <div
+              className="w-24 h-28 rounded-2xl overflow-hidden flex-shrink-0 shadow-md"
+              style={{ background: active.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
+            >
+              {active.image ? (
+                <img src={active.image} alt={active.name} className="w-full h-full object-cover object-top" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">{active.initials}</span>
+                </div>
+              )}
+            </div>
+            {/* Bio text */}
+            <div className="flex-1 text-left">
+              <h3 className="text-xl font-bold text-[#3D1F0F] mb-1">{active.name}</h3>
+              <p className="text-sm font-semibold text-[#8B2B3E] mb-3">{active.role}</p>
+              <p className="text-sm text-[#5C3D2E] leading-relaxed">{active.bio}</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -288,17 +300,8 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Chairman — large centered card */}
-          <div className="mb-12">
-            <ChairmanCard member={chairman} />
-          </div>
-
-          {/* Other governors — hover to reveal bio */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {governors.map((g) => (
-              <GovernorCard key={g.name} member={g} />
-            ))}
-          </div>
+          {/* All board members — hover avatar to slide in full profile */}
+          <BoardSection members={[chairman, ...governors]} />
         </div>
       </section>
 
