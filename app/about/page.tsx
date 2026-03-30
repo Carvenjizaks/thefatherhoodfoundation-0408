@@ -271,7 +271,21 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white overflow-hidden">
+        <style>{`
+          @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(48px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .value-card {
+            opacity: 0;
+            animation: slideUpFade 0.6s ease forwards;
+          }
+          .value-card:nth-child(1) { animation-delay: 0.1s; }
+          .value-card:nth-child(2) { animation-delay: 0.25s; }
+          .value-card:nth-child(3) { animation-delay: 0.4s; }
+          .value-card:nth-child(4) { animation-delay: 0.55s; }
+        `}</style>
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">What Guides Us</p>
@@ -280,15 +294,18 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => (
-              <Card key={v.title} className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
-                <CardContent className="p-8 text-center">
+              <div
+                key={v.title}
+                className="value-card border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white"
+              >
+                <div className="p-8 text-center">
                   <div className="w-14 h-14 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-6">
                     <v.icon className="w-7 h-7 text-[#8B2B3E]" />
                   </div>
                   <h3 className="font-bold text-[#1a1a1a] mb-3">{v.title}</h3>
                   <p className="text-sm text-gray-600 leading-relaxed text-center">{v.desc}</p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
