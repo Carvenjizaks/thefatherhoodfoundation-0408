@@ -35,7 +35,7 @@ const chairman = {
   name: "Carven J. Izaks",
   initials: "CJI",
   role: "Founder & Chairman",
-  image: "",
+  image: "/team/carven-izaks.jpg",
   bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development. His public profile also identifies him as Director at Nexium Business Intelligence.",
 }
 
