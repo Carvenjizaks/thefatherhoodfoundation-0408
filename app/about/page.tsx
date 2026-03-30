@@ -76,97 +76,56 @@ const management = [
   { name: "Programmes Lead",  initials: "PL",  role: "Head of Programmes",    bio: "Developing and overseeing all training and development programmes." },
 ]
 
-// ─── GovernorCard ─────────────────────────────────────────────────────────────
+// ─── MemberCard (equal weight for all board members) ─────────────────────────
 
-function GovernorCard({ member, index, total }: { member: typeof governors[0]; index: number; total: number }) {
+function MemberCard({ member }: { member: { name: string; initials: string; role: string; image: string; bio: string } }) {
   const [open, setOpen] = useState(false)
-
-  // Arc positions: spread across a half-moon (180° arc), bottom center
-  const angleStart = -160
-  const angleEnd = -20
-  const angle = angleStart + (index / (total - 1)) * (angleEnd - angleStart)
-  const radius = 260
-  const rad = (angle * Math.PI) / 180
-  const x = Math.cos(rad) * radius
-  const y = Math.sin(rad) * radius
-
-  // Bio panel slides in from below the avatar toward center
-  const bioOffset = open ? 0 : 20
 
   return (
     <div
-      className="absolute"
-      style={{ left: "50%", bottom: "60px", transform: `translate(calc(-50% + ${x}px), calc(${y}px))` }}
+      className="flex flex-col items-center cursor-pointer group relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
     >
+      {/* Avatar */}
       <div
-        className="relative flex flex-col items-center cursor-pointer group"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 transition-all duration-300"
+        style={{
+          borderColor: open ? "#8B2B3E" : "#E8D5C4",
+          background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
+          transform: open ? "scale(1.08)" : "scale(1)",
+        }}
       >
-        {/* Avatar circle */}
-        <div
-          className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center shadow-xl border-4 transition-all duration-300"
-          style={{
-            borderColor: open ? "#D4956A" : "#fff",
-            background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-            transform: open ? "scale(1.12)" : "scale(1)",
-          }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
-          ) : (
-            <span className="text-white font-bold text-xl">{member.initials}</span>
-          )}
-        </div>
+        {member.image ? (
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover object-center"
+          />
+        ) : (
+          <span className="text-white font-bold text-2xl">{member.initials}</span>
+        )}
+      </div>
 
-        {/* Name tag always visible */}
-        <div className="mt-2 text-center">
-          <p className="text-sm font-bold text-[#3D1F0F] whitespace-nowrap">{member.name}</p>
-          <p className="text-xs text-[#D4956A] font-semibold">{member.role}</p>
-        </div>
+      {/* Name & role — always visible */}
+      <div className="mt-3 text-center px-2">
+        <p className="text-sm font-bold text-[#3D1F0F]">{member.name}</p>
+        <p className="text-xs font-semibold text-[#8B2B3E] mt-0.5">{member.role}</p>
+      </div>
 
-        {/* Bio card slides up on hover */}
-        <div
-          className="absolute bottom-full mb-3 w-56 rounded-2xl shadow-2xl p-4 text-center pointer-events-none transition-all duration-400 ease-out"
-          style={{
-            background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)",
-            opacity: open ? 1 : 0,
-            transform: open ? `translateY(${bioOffset}px)` : `translateY(${bioOffset + 12}px)`,
-            zIndex: 20,
-          }}
-        >
-          <p className="text-xs text-[#5C3D2E] leading-relaxed">{member.bio}</p>
-        </div>
+      {/* Bio tooltip — slides down from avatar on hover */}
+      <div
+        className="absolute top-full mt-3 w-60 rounded-2xl shadow-2xl p-4 text-center z-30 pointer-events-none transition-all duration-300 ease-out"
+        style={{
+          background: "#FDF8F4",
+          border: "1px solid #E8D5C4",
+          opacity: open ? 1 : 0,
+          transform: open ? "translateY(0)" : "translateY(-8px)",
+        }}
+      >
+        <p className="text-xs text-[#5C3D2E] leading-relaxed">{member.bio}</p>
       </div>
     </div>
-  )
-}
-
-// ─── ChairmanCard ─────────────────────────────────────────────────────────────
-
-function ChairmanCard({ member }: { member: typeof chairman }) {
-  return (
-    <Card
-      className="border-0 shadow-lg rounded-2xl max-w-2xl mx-auto"
-      style={{ background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)" }}
-    >
-      <CardContent className="p-10 text-center">
-        <div
-          className="w-32 h-32 rounded-full mx-auto mb-6 overflow-hidden flex items-center justify-center shadow-lg"
-          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)" }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
-          ) : (
-            <span className="text-white font-bold text-4xl">{member.initials}</span>
-          )}
-        </div>
-        <h3 className="text-2xl font-bold text-[#3D1F0F] mb-2">{member.name}</h3>
-        <p className="text-base font-semibold text-[#D4956A] mb-6">{member.role}</p>
-        <hr className="border-[#D4956A]/30 mb-6" />
-        <p className="text-[#5C3D2E] leading-relaxed">{member.bio}</p>
-      </CardContent>
-    </Card>
   )
 }
 
@@ -313,15 +272,10 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Chairman — large centered card */}
-          <div className="mb-12">
-            <ChairmanCard member={chairman} />
-          </div>
-
-          {/* Governors — arc / half-moon layout */}
-          <div className="relative w-full mx-auto" style={{ height: "420px", maxWidth: "720px" }}>
-            {governors.map((g, i) => (
-              <GovernorCard key={g.name} member={g} index={i} total={governors.length} />
+          {/* All board members — equal weight, hover to reveal bio */}
+          <div className="flex flex-wrap justify-center gap-12 pb-16 pt-4">
+            {[chairman, ...governors].map((m) => (
+              <MemberCard key={m.name} member={m} />
             ))}
           </div>
         </div>
