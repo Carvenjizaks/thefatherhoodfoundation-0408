@@ -20,41 +20,41 @@ export default function MyGreatMarriagePage() {
 
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#FDF8F3] via-white to-[#F5E6DC]">
-          {/* Animated background elements */}
-          <div className="absolute inset-0 opacity-40 pointer-events-none">
-            <div className="absolute top-20 right-20 w-72 h-72 bg-[#D4A574]/20 rounded-full filter blur-3xl animate-pulse" />
-            <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#8B2B3E]/10 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-[#FDF8F3] via-white to-[#F5E6DC]">
+          <style>{`
+            @keyframes mgmDrift {
+              0%   { transform: translate(0px, 0px) rotate(0deg); }
+              25%  { transform: translate(18px, -14px) rotate(2deg); }
+              50%  { transform: translate(-12px, 16px) rotate(-2deg); }
+              75%  { transform: translate(14px, 10px) rotate(1.5deg); }
+              100% { transform: translate(0px, 0px) rotate(0deg); }
+            }
+            .mgm-logo-float {
+              animation: mgmDrift 7s ease-in-out infinite;
+              filter: drop-shadow(0 8px 24px rgba(139,43,62,0.28));
+            }
+          `}</style>
+
+          {/* Subtle background blobs */}
+          <div className="absolute inset-0 pointer-events-none opacity-40">
+            <div className="absolute top-20 left-20 w-80 h-80 bg-[#D4A574]/20 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#8B2B3E]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1.2s" }} />
           </div>
 
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10">
-            <div className="flex justify-center">
-              {/* Content */}
-              <div className="text-center max-w-3xl space-y-6">
-                {/* MGM Logo */}
-                <div className="flex justify-center mb-4">
-                  <Image 
-                    src="/images/mgm-logo.jpg" 
-                    alt="My Great Marriage Logo" 
-                    width={280} 
-                    height={280} 
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-                
-                <div className="inline-block lg:block">
-                  <span className="inline-block px-5 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-bold tracking-widest uppercase mb-6">
-                    Two Unique Prints, One Heart
-                  </span>
-                </div>
-                
-                <p className="text-lg lg:text-xl text-foreground/70 text-balance leading-relaxed max-w-lg">
-                  Build the marriage you've always dreamed of. Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 relative z-10 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+              {/* Left — text content */}
+              <div className="space-y-6">
+                <span className="inline-block px-5 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-bold tracking-widest uppercase">
+                  Two Unique Prints, One Heart
+                </span>
+
+                <p className="text-lg lg:text-xl text-foreground/70 text-balance leading-relaxed">
+                  Build the marriage you&apos;ve always dreamed of. Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
                 </p>
 
-                {/* Stats or highlights */}
-                <div className="flex flex-col sm:flex-row gap-6 py-4 text-sm font-medium">
+                <div className="flex flex-col sm:flex-row gap-6 py-2 text-sm font-medium">
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-[#8B2B3E] rounded-full" />
                     <span>Expert Guidance</span>
@@ -69,8 +69,7 @@ export default function MyGreatMarriagePage() {
                   </div>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white shadow-lg hover:shadow-xl transition-all duration-300" asChild>
                     <Link href="/get-involved" className="flex items-center gap-2">
                       Register Now <ArrowRight className="w-5 h-5" />
@@ -81,6 +80,37 @@ export default function MyGreatMarriagePage() {
                   </Button>
                 </div>
               </div>
+
+              {/* Right — couple image with animated MGM logo floating on top */}
+              <div className="relative flex items-center justify-center">
+                {/* Couple background image */}
+                <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: "4/5" }}>
+                  <Image
+                    src="/images/couples/couple-together-1.jpg"
+                    alt="Happy couple"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                  />
+                  {/* Dark overlay so logo pops */}
+                  <div className="absolute inset-0 bg-black/20 rounded-3xl" />
+                </div>
+
+                {/* MGM logo drifting over the image */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="mgm-logo-float">
+                    <Image
+                      src="/images/mgm-logo.jpg"
+                      alt="My Great Marriage Logo"
+                      width={220}
+                      height={220}
+                      className="object-contain rounded-2xl"
+                      priority
+                    />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
