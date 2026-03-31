@@ -23,7 +23,7 @@ const events = [
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/mgm26-banner.jpg",
-    banner: "/images/mgm-banner-2026.png",
+    banner: "/images/mgm-banner-2026.jpg",
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",

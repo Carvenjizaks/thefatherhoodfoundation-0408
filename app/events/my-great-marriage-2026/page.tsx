@@ -277,7 +277,7 @@ export default function MyGreatMarriageEventPage() {
             {/* Logo */}
             <div className="mb-8 animate-fade-in-up">
               <Image
-                src="/images/mgm-banner-2026.png"
+                src="/images/mgm-banner-2026.jpg"
                 alt="MyGreatMarriage Conference 2026"
                 width={450}
                 height={450}
