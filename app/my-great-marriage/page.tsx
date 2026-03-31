@@ -121,7 +121,7 @@ export default function MyGreatMarriagePage() {
                 className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
                 asChild
               >
-                <Link href="/get-involved" className="flex items-center gap-2">
+                <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
                   Register Now <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>

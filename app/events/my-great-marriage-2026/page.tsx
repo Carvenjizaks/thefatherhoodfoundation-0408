@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -105,6 +106,7 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
 }
 
 export default function MyGreatMarriageEventPage() {
+  const searchParams = useSearchParams()
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
@@ -112,6 +114,13 @@ export default function MyGreatMarriageEventPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
+
+  // Auto-open registration dialog when ?register=true is in the URL
+  useEffect(() => {
+    if (searchParams.get("register") === "true") {
+      setIsOpen(true)
+    }
+  }, [searchParams])
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
