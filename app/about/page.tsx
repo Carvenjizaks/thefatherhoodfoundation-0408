@@ -67,7 +67,7 @@ const governors = [
     initials: "BH",
     role: "Board of Governors",
     image: "/team/bruce-hansen.jpg",
-    bio: "Bruce Hansen brings a wealth of experience in leadership and community development. His commitment to building stronger families and communities makes him an invaluable member of The Fatherhood Foundation's Board of Governors.",
+    bio: "Bruce Hansen is Managing Director of Simonis Storm Securities, with deep expertise in financial services, investment markets, and economic strategy. His leadership and commitment to community make him a valued member of The Fatherhood Foundation's Board of Governors.",
   },
 ]
 
