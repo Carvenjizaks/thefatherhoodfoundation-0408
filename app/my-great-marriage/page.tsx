@@ -99,9 +99,16 @@ export default function MyGreatMarriagePage() {
 
           {/* Centered text overlay */}
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 lg:px-8">
-            <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574] border border-[#D4A574]/40 px-4 py-2 rounded-full mb-6">
-              Two Unique Prints, One Heart
-            </span>
+            <div className="flex flex-col items-center gap-3 mb-6">
+              <img
+                src="/images/fingerprints.jpg"
+                alt="Two maroon fingerprints representing two unique individuals united as one"
+                className="w-28 h-28 object-contain rounded-xl bg-white/10 p-2"
+              />
+              <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574] border border-[#D4A574]/40 px-4 py-2 rounded-full">
+                Two Unique Prints, One Heart
+              </span>
+            </div>
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
               Build the Marriage You&apos;ve Always Dreamed Of
             </h1>
