@@ -206,7 +206,7 @@ export default function MyGreatMarriagePage() {
                   size="lg"
                   className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8"
                 >
-                  <Link href="/get-involved" className="flex items-center gap-2">
+                  <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
                     Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
@@ -301,7 +301,7 @@ export default function MyGreatMarriagePage() {
                     variant="outline"
                     className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full mt-2 bg-transparent"
                   >
-                    <Link href="/get-involved">Learn More</Link>
+                    <Link href="/events/my-great-marriage">Learn More</Link>
                   </Button>
                 </div>
               ))}
