@@ -19,7 +19,7 @@ const events = [
     slug: "mgm-may-2026",
     title: "MyGreatMarriage Conference",
     subtitle: "Marriage Enrichment Event for Couples",
-    dates: "28 April – 2 May 2026",
+    dates: "7, 8 & 9 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/mgm26-banner.jpg",

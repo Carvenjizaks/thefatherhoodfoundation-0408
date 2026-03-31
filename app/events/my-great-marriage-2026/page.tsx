@@ -298,7 +298,7 @@ export default function MyGreatMarriageEventPage() {
             <div className="flex flex-wrap gap-4 justify-center mb-10 animate-fade-in-up animation-delay-600">
               <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm text-white border border-white/30">
                 <Calendar className="w-5 h-5" />
-                <span className="font-semibold">28 April – 2 May 2026</span>
+                <span className="font-semibold">7, 8 & 9 May 2026</span>
               </div>
               <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm text-white border border-white/30">
                 <MapPin className="w-5 h-5" />
@@ -326,7 +326,7 @@ export default function MyGreatMarriageEventPage() {
                       MyGreatMarriage Conference Registration
                     </DialogTitle>
                     <DialogDescription>
-                      Register for the conference on 28 April – 2 May 2026.
+                      Register for the conference on 7, 8 & 9 May 2026.
                     </DialogDescription>
                   </DialogHeader>
 
