@@ -60,7 +60,7 @@ const governors = [
     initials: "BS",
     role: "Board of Governors",
     image: "/team/brandon-sanders.jpg",
-    bio: "Brandon Sanders is a dedicated leader committed to empowering men and strengthening families through community-driven initiatives and mentorship programmes.",
+    bio: "Brandon Sanders is a leader with Wings of Life, committed to empowering men and strengthening families through mentorship and community-driven initiatives.",
   },
   {
     name: "Bruce Hansen",
