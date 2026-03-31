@@ -104,7 +104,7 @@ export default function MyGreatMarriagePage() {
                       alt="My Great Marriage Logo"
                       width={220}
                       height={220}
-                      className="object-contain rounded-2xl"
+                      className="object-contain rounded-2xl mix-blend-multiply"
                       priority
                     />
                   </div>
