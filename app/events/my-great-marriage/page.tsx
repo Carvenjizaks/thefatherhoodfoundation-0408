@@ -431,6 +431,19 @@ export default function MyGreatMarriagePage() {
             <Badge className="bg-green-600 text-white px-3 py-1 text-sm w-fit mb-4 shadow-lg">
               Registration Open
             </Badge>
+
+            {/* Animated MGM Logo */}
+            <div className="mgm-logo-float mb-4">
+              <Image
+                src="/images/mgm-logo.jpg"
+                alt="My Great Marriage Logo"
+                width={160}
+                height={160}
+                className="object-contain rounded-2xl shadow-2xl"
+                priority
+              />
+            </div>
+
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">{eventDetails.title}</h1>
             <p className="text-xl lg:text-2xl text-white/90 italic">{eventDetails.theme}</p>
             <p className="text-lg text-white/80 mt-4">{eventDetails.dates}</p>
@@ -444,6 +457,17 @@ export default function MyGreatMarriagePage() {
           }
           .animate-slide-hero {
             animation: slide-hero 25s linear infinite;
+          }
+          @keyframes mgmDrift {
+            0%   { transform: translate(0px, 0px) rotate(0deg); }
+            25%  { transform: translate(10px, -8px) rotate(2deg); }
+            50%  { transform: translate(-8px, 10px) rotate(-2deg); }
+            75%  { transform: translate(8px, 6px) rotate(1.5deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+          }
+          .mgm-logo-float {
+            animation: mgmDrift 7s ease-in-out infinite;
+            filter: drop-shadow(0 6px 20px rgba(0,0,0,0.4));
           }
         `}</style>
       </section>
