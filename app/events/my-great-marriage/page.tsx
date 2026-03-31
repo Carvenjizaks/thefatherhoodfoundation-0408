@@ -450,7 +450,7 @@ export default function MyGreatMarriagePage() {
           </div>
         </div>
         
-        <style jsx>{`
+        <style>{`
           @keyframes slide-hero {
             0% { transform: translateX(0); }
             100% { transform: translateX(-33.33%); }
