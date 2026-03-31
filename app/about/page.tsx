@@ -59,7 +59,7 @@ const governors = [
     name: "Brandon Sanders",
     initials: "BS",
     role: "Board of Governors",
-    image: "",
+    image: "/team/brandon-sanders.jpg",
     bio: "Brandon Sanders is a dedicated leader committed to empowering men and strengthening families through community-driven initiatives and mentorship programmes.",
   },
   {
@@ -72,9 +72,8 @@ const governors = [
 ]
 
 const management = [
-  { name: "Carven J. Izaks", initials: "CJI", role: "Founder & Director",    image: "/team/carven-izaks.jpg", bio: "Visionary leader and founder driving the mission forward." },
-  { name: "Bianca Clark",    initials: "BC",  role: "Organisation Secretary",  image: "/team/bianca-clark.jpg", bio: "Bianca Clark brings dedication and heart to the Fatherhood Foundation, supporting the team in delivering meaningful programmes that strengthen families and communities." },
-  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",             image: "", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
+  { name: "Bianca Clark",      initials: "BC",  role: "Organisation Secretary", image: "/team/bianca-clark.jpg", bio: "Bianca Clark brings dedication and heart to the Fatherhood Foundation, supporting the team in delivering meaningful programmes that strengthen families and communities." },
+  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
 ]
 
 // ─── BoardSection — click-to-flip card grid ──────────────────────────────────
