@@ -73,7 +73,7 @@ const governors = [
 
 const management = [
   { name: "Bianca Clark",      initials: "BC",  role: "Organisation Secretary", image: "/team/bianca-clark.jpg", bio: "Bianca Clark brings dedication and heart to the Fatherhood Foundation, supporting the team in delivering meaningful programmes that strengthen families and communities." },
-  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
+  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "/team/astrido-philander.jpg", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
 ]
 
 // ─── BoardSection — click-to-flip card grid ──────────────────────────────────
@@ -175,18 +175,18 @@ function ManagementCard({ member }: { member: typeof management[0] }) {
     <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
       <CardContent className="p-6 text-center">
         <div
-          className="w-20 h-20 rounded-2xl mx-auto mb-4 overflow-hidden flex items-center justify-center shadow"
+          className="w-40 h-48 rounded-2xl mx-auto mb-5 overflow-hidden flex items-center justify-center shadow-md"
           style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
         >
           {member.image ? (
             <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
           ) : (
-            <span className="text-white font-bold text-sm">{member.initials}</span>
+            <span className="text-white font-bold text-2xl">{member.initials}</span>
           )}
         </div>
-        <h3 className="font-bold text-[#1a1a1a] mb-1">{member.name}</h3>
-        <p className="text-sm text-[#8B2B3E] font-semibold mb-2">{member.role}</p>
-        <p className="text-sm text-gray-600">{member.bio}</p>
+        <h3 className="font-bold text-[#1a1a1a] text-lg mb-1">{member.name}</h3>
+        <p className="text-sm text-[#8B2B3E] font-semibold mb-3">{member.role}</p>
+        <p className="text-sm text-gray-600 leading-relaxed">{member.bio}</p>
       </CardContent>
     </Card>
   )
@@ -345,9 +345,11 @@ export default function AboutPage() {
             <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4">Management Team</h2>
             <p className="text-gray-600 max-w-xl mx-auto">The team that drives the day-to-day work of the Foundation with passion and purpose.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="flex flex-wrap justify-center gap-8">
             {management.map((m) => (
-              <ManagementCard key={m.name} member={m} />
+              <div key={m.name} className="w-full sm:w-72">
+                <ManagementCard member={m} />
+              </div>
             ))}
           </div>
         </div>
