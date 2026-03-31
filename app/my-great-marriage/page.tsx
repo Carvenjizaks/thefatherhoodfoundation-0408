@@ -68,16 +68,13 @@ export default function MyGreatMarriagePage() {
               </div>
 
               {/* Right — couple image */}
-              <div className="relative flex items-center justify-center">
-                <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl" style={{ height: "520px" }}>
-                  <Image
-                    src="/images/couples/couple-together-1.jpg"
-                    alt="Happy couple"
-                    fill
-                    className="object-cover object-center"
-                    priority
-                  />
-                </div>
+              <div className="flex items-center justify-center">
+                <img
+                  src="/images/couples/couple-together-1.jpg"
+                  alt="Happy couple"
+                  className="w-full max-w-lg rounded-3xl shadow-2xl object-cover object-center"
+                  style={{ height: "520px" }}
+                />
               </div>
 
             </div>
