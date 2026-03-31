@@ -1,16 +1,21 @@
+"use client"
+
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, MessageSquare, Shield, Heart, Sparkles } from "lucide-react"
-import type { Metadata } from "next"
+import { ArrowRight, MessageSquare, Shield, Heart, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
+import { useEffect, useState, useCallback } from "react"
 
-export const metadata: Metadata = {
-  title: "MyGreatMarriage | The Fatherhood Foundation",
-  description:
-    "Build a thriving marriage through proven principles, practical tools, and supportive community for couples.",
-}
+const bannerSlides = [
+  { src: "/images/couples/couple-together-1.jpg", alt: "Happy couple sharing an intimate moment" },
+  { src: "/images/couples/couple-1.jpg", alt: "Couple celebrating together" },
+  { src: "/images/couples/couple-2.jpg", alt: "Couple sharing a tender moment" },
+  { src: "/images/couples/couple-3.jpg", alt: "Loving couple smiling" },
+  { src: "/images/couples/couple-4.jpg", alt: "Couple embracing warmly" },
+  { src: "/images/couples/couple-5.jpg", alt: "Joyful couple laughing together" },
+]
 
 const focusAreas = [
   {
@@ -51,78 +56,105 @@ const offerings = [
 ]
 
 export default function MyGreatMarriagePage() {
+  const [current, setCurrent] = useState(0)
+
+  const next = useCallback(() => {
+    setCurrent((c) => (c + 1) % bannerSlides.length)
+  }, [])
+
+  const prev = useCallback(() => {
+    setCurrent((c) => (c - 1 + bannerSlides.length) % bannerSlides.length)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(next, 5000)
+    return () => clearInterval(timer)
+  }, [next])
+
   return (
     <>
       <Header />
 
       <main className="pt-20">
 
-        {/* Hero */}
-        <section className="bg-[#FDF8F3] border-b border-[#e8d8c8]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-7">
-                <div className="flex items-center gap-3">
-                  <img
-                    src="/images/fingerprints.jpg"
-                    alt="Two fingerprints symbolising two unique individuals united as one"
-                    className="w-12 h-12 object-contain opacity-80"
-                  />
-                  <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#8B2B3E] border border-[#8B2B3E]/30 px-4 py-2 rounded-full">
-                    Two Unique Prints, One Heart
-                  </span>
-                </div>
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-[#1a0a0e] leading-tight text-balance">
-                  Build the Marriage You&apos;ve Always Dreamed Of
-                </h1>
-                <p className="text-lg text-[#6b4c52] leading-relaxed">
-                  Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
-                </p>
-                <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium text-[#4a2830]">
-                  <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#8B2B3E] inline-block" />
-                    Expert Guidance
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#D4A574] inline-block" />
-                    Proven Results
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#8B2B3E] inline-block" />
-                    Community Support
-                  </span>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                  <Button
-                    size="lg"
-                    className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
-                    asChild
-                  >
-                    <Link href="/get-involved" className="flex items-center gap-2">
-                      Register Now <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full px-8 font-semibold bg-transparent"
-                    asChild
-                  >
-                    <Link href="#overview">Learn More</Link>
-                  </Button>
-                </div>
-              </div>
-
-              <div className="relative h-[460px] lg:h-[520px] rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="/images/couples/couple-together-1.jpg"
-                  alt="Happy couple"
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
-              </div>
+        {/* Hero Banner Slider */}
+        <section className="relative h-[70vh] min-h-[520px] overflow-hidden">
+          {/* Slides */}
+          {bannerSlides.map((slide, i) => (
+            <div
+              key={slide.src}
+              className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100" : "opacity-0"}`}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                className="object-cover object-center"
+                priority={i === 0}
+              />
+              {/* Dark overlay for text legibility */}
+              <div className="absolute inset-0 bg-black/50" />
             </div>
+          ))}
+
+          {/* Centered text overlay */}
+          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 lg:px-8">
+            <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574] border border-[#D4A574]/40 px-4 py-2 rounded-full mb-6">
+              Two Unique Prints, One Heart
+            </span>
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
+              Build the Marriage You&apos;ve Always Dreamed Of
+            </h1>
+            <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
+              Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                size="lg"
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
+                asChild
+              >
+                <Link href="/get-involved" className="flex items-center gap-2">
+                  Register Now <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white/10 rounded-full px-8 font-semibold bg-transparent"
+                asChild
+              >
+                <Link href="#overview">Learn More</Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Prev / Next arrows */}
+          <button
+            onClick={prev}
+            aria-label="Previous slide"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={next}
+            aria-label="Next slide"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Dot indicators */}
+          <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-2">
+            {bannerSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${i === current ? "bg-white w-6" : "bg-white/50"}`}
+              />
+            ))}
           </div>
         </section>
 
