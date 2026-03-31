@@ -37,7 +37,7 @@ const events = [
     slug: "mgm-sept-2026",
     title: "MyGreatMarriage Follow-Up",
     subtitle: "Marriage Enrichment Continuation",
-    dates: "2 September 2026",
+    dates: "3, 4 & 5 September 2026",
     time: "Evening Session: 6:00pm - 9:00pm",
     location: "Venue: To be Announced",
     banner: "/images/banners/mgm-sept-banner.jpg",
