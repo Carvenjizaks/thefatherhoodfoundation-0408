@@ -21,20 +21,6 @@ export default function MyGreatMarriagePage() {
       <main className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-[#FDF8F3] via-white to-[#F5E6DC]">
-          <style>{`
-            @keyframes mgmDrift {
-              0%   { transform: translate(0px, 0px) rotate(0deg); }
-              25%  { transform: translate(18px, -14px) rotate(2deg); }
-              50%  { transform: translate(-12px, 16px) rotate(-2deg); }
-              75%  { transform: translate(14px, 10px) rotate(1.5deg); }
-              100% { transform: translate(0px, 0px) rotate(0deg); }
-            }
-            .mgm-logo-float {
-              animation: mgmDrift 7s ease-in-out infinite;
-              filter: drop-shadow(0 8px 24px rgba(139,43,62,0.28));
-            }
-          `}</style>
-
           {/* Subtle background blobs */}
           <div className="absolute inset-0 pointer-events-none opacity-40">
             <div className="absolute top-20 left-20 w-80 h-80 bg-[#D4A574]/20 rounded-full blur-3xl animate-pulse" />
@@ -81,34 +67,14 @@ export default function MyGreatMarriagePage() {
                 </div>
               </div>
 
-              {/* Right — couple image with animated MGM logo floating on top */}
-              <div className="relative flex items-center justify-center">
-                {/* Couple background image */}
-                <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl" style={{ aspectRatio: "4/5" }}>
-                  <Image
-                    src="/images/couples/couple-together-1.jpg"
-                    alt="Happy couple"
-                    fill
-                    className="object-cover object-center"
-                    priority
-                  />
-                  {/* Dark overlay so logo pops */}
-                  <div className="absolute inset-0 bg-black/20 rounded-3xl" />
-                </div>
-
-                {/* MGM logo drifting over the image */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="mgm-logo-float">
-                    <Image
-                      src="/images/mgm-logo.jpg"
-                      alt="My Great Marriage Logo"
-                      width={220}
-                      height={220}
-                      className="object-contain rounded-2xl"
-                      priority
-                    />
-                  </div>
-                </div>
+              {/* Right — couple image */}
+              <div className="flex items-center justify-center">
+                <img
+                  src="/images/couples/couple-together-1.jpg"
+                  alt="Happy couple"
+                  className="w-full max-w-lg rounded-3xl shadow-2xl object-cover object-center"
+                  style={{ height: "520px" }}
+                />
               </div>
 
             </div>
