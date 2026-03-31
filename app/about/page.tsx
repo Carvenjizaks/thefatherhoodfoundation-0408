@@ -53,7 +53,7 @@ const governors = [
     initials: "RB",
     role: "Board of Governors",
     image: "/team/robert-burdett.jpg",
-    bio: "Robert Burdett brings extensive experience in business strategy and community leadership. He serves as a trusted advisor helping The Fatherhood Foundation navigate growth and governance with wisdom and integrity.",
+    bio: "Robert Burdett is Senior Pastor of PowerHouse Church, Katy TX, with 22 years of corporate management experience. He leads Intense Men, consults through GenesisTeam.org, and oversees international church plants in Peru and Sri Lanka — bringing deep commitment to fatherhood and manhood to The Fatherhood Foundation's Board of Governors.",
   },
   {
     name: "Brandon Sanders",
