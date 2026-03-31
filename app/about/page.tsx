@@ -73,7 +73,7 @@ const governors = [
 
 const management = [
   { name: "Bianca Clark",      initials: "BC",  role: "Organisation Secretary", image: "/team/bianca-clark.jpg", bio: "Bianca Clark is a leadership and personal development professional serving through Africa B-Inspired (PTY) Ltd. As Organisation Secretary, she brings coaching expertise and practical development insight to strengthen families and communities through The Fatherhood Foundation." },
-  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "/team/astrido-philander.jpg", bio: "Astrido Philander oversees the financial stewardship of The Fatherhood Foundation, ensuring responsible management of resources to sustain and grow the organisation's impact." },
+  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "/team/astrido-philander.jpg", bio: "Astrido Barth-Philander is a Chartered Accountant and Senior Manager: Finance at SanlamAllianz Namibia. Trained through UCT and ICAN, he brings sound financial governance and strategic insight to his role as Treasurer of The Fatherhood Foundation." },
 ]
 
 // ─── BoardSection — click-to-flip card grid ──────────────────────────────────
