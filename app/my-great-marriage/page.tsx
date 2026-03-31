@@ -62,9 +62,16 @@ export default function MyGreatMarriagePage() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-7">
-                <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#8B2B3E] border border-[#8B2B3E]/30 px-4 py-2 rounded-full">
-                  Two Unique Prints, One Heart
-                </span>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="/images/fingerprints.jpg"
+                    alt="Two fingerprints symbolising two unique individuals united as one"
+                    className="w-12 h-12 object-contain opacity-80"
+                  />
+                  <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#8B2B3E] border border-[#8B2B3E]/30 px-4 py-2 rounded-full">
+                    Two Unique Prints, One Heart
+                  </span>
+                </div>
                 <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-[#1a0a0e] leading-tight text-balance">
                   Build the Marriage You&apos;ve Always Dreamed Of
                 </h1>
