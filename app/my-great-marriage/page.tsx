@@ -301,7 +301,7 @@ export default function MyGreatMarriagePage() {
                     variant="outline"
                     className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full mt-2 bg-transparent"
                   >
-                    <Link href="/events/my-great-marriage">Learn More</Link>
+                    <Link href="/events/my-great-marriage-2026">Learn More</Link>
                   </Button>
                 </div>
               ))}
