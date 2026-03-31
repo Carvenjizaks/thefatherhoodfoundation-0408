@@ -17,6 +17,16 @@ const bannerSlides = [
   { src: "/images/couples/couple-5.jpg", alt: "Joyful couple laughing together" },
 ]
 
+const flipCardStyle = `
+  .flip-card { perspective: 1000px; }
+  .flip-card-inner { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; position: relative; width: 100%; height: 100%; }
+  .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card-front, .flip-card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 1rem; }
+  .flip-card-back { transform: rotateY(180deg); }
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-slide-up { animation: fadeSlideUp 0.55s ease both; }
+`
+
 const focusAreas = [
   {
     icon: MessageSquare,
@@ -206,29 +216,55 @@ export default function MyGreatMarriagePage() {
         </section>
 
         {/* Key Focus Areas */}
-        <section className="py-20 lg:py-28 bg-[#FDF8F3]">
+        <section className="py-20 lg:py-28 bg-[#FDF8F3] overflow-hidden">
+          <style dangerouslySetInnerHTML={{ __html: flipCardStyle }} />
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">What You&apos;ll Learn</span>
               <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Proven Strategies for a Strong Marriage</h2>
               <p className="mt-4 text-[#6b4c52] max-w-xl mx-auto">
-                Practical tools and timeless principles that work at every stage of your marriage.
+                Practical tools and timeless principles that work at every stage of your marriage. Hover each card to learn more.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {focusAreas.map((area) => (
+              {focusAreas.map((area, i) => (
                 <div
                   key={area.title}
-                  className="bg-white border border-[#e8d8c8] rounded-2xl p-8 flex flex-col items-start gap-5 hover:shadow-md transition-shadow"
+                  className="flip-card h-56 fade-slide-up cursor-pointer"
+                  style={{ animationDelay: `${i * 0.12}s` }}
                 >
-                  <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                    <area.icon className="w-6 h-6 text-[#8B2B3E]" />
+                  <div className="flip-card-inner h-full">
+                    {/* Front */}
+                    <div className="flip-card-front bg-white border border-[#e8d8c8] flex flex-col items-center justify-center gap-5 p-8 shadow-sm">
+                      <div className="w-16 h-16 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center ring-4 ring-[#8B2B3E]/5">
+                        <area.icon className="w-7 h-7 text-[#8B2B3E]" />
+                      </div>
+                      <h3 className="text-lg font-bold text-[#1a0a0e] text-center">{area.title}</h3>
+                      <span className="text-[10px] font-semibold tracking-widest uppercase text-[#D4A574]">Hover to explore</span>
+                    </div>
+                    {/* Back */}
+                    <div className="flip-card-back bg-[#8B2B3E] flex flex-col items-center justify-center gap-4 p-8">
+                      <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center">
+                        <area.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-base font-bold text-white text-center">{area.title}</h3>
+                      <p className="text-white/85 text-sm leading-relaxed text-center">{area.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#1a0a0e] mb-2">{area.title}</h3>
-                    <p className="text-[#6b4c52] text-sm leading-relaxed">{area.desc}</p>
-                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Progress dots */}
+            <div className="flex justify-center gap-3 mt-10">
+              {focusAreas.map((area, i) => (
+                <div
+                  key={area.title}
+                  className="flex flex-col items-center gap-1 group cursor-default"
+                >
+                  <div className="w-2 h-2 rounded-full bg-[#8B2B3E]/30 group-hover:bg-[#8B2B3E] transition-colors duration-300" />
+                  <span className="text-[10px] text-[#6b4c52] opacity-0 group-hover:opacity-100 transition-opacity font-medium">{area.title}</span>
                 </div>
               ))}
             </div>
