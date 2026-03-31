@@ -96,19 +96,7 @@ export default function MyGreatMarriagePage() {
                   <div className="absolute inset-0 bg-black/20 rounded-3xl" />
                 </div>
 
-                {/* MGM logo drifting over the image */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="mgm-logo-float">
-                    <Image
-                      src="/images/mgm-logo.jpg"
-                      alt="My Great Marriage Logo"
-                      width={220}
-                      height={220}
-                      className="object-contain rounded-2xl mix-blend-multiply"
-                      priority
-                    />
-                  </div>
-                </div>
+
               </div>
 
             </div>
