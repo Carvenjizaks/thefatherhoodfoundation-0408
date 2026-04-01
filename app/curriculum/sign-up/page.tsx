@@ -149,7 +149,7 @@ export default function CurriculumSignUpPage() {
             {studyType && (
               <Card>
                 <CardContent className="pt-6 space-y-4">
-                  <h2 className="font-semibold text-foreground text-lg">Are you from an organisation or company?</h2>
+                  <h2 className="font-semibold text-foreground text-lg">Are you from an organisation?</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <button
                       type="button"
