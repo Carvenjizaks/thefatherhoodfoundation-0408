@@ -225,7 +225,7 @@ export default function MyGreatMarriageEventPage() {
                 alt="MyGreatMarriage Conference 2026"
                 width={400}
                 height={400}
-                className="mx-auto drop-shadow-2xl"
+                className="mx-auto shadow-lg rounded-lg"
                 priority
               />
             </div>
