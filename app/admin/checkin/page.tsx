@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
+
+export const dynamic = "force-dynamic"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
