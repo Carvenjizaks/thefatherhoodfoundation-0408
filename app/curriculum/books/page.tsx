@@ -93,11 +93,11 @@ export default function BooksPage() {
     <>
       <Header />
 
-      <main className="pt-20 min-h-screen bg-[#FDF8F4]">
+      <main className="pt-20 min-h-screen bg-gradient-to-b from-[#FDF8F4] to-white">
         {/* Hero Section */}
-        <section className="relative py-16 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1E3A5F] to-[#8B2B3E]" />
-          <div className="absolute inset-0 opacity-10">
+        <section className="relative py-20 lg:py-32 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F] via-[#2D4A6F] to-[#8B2B3E]" />
+          <div className="absolute inset-0 opacity-15">
             <Image
               src="/books-on-wooden-table--learning--education.jpg"
               alt="Books background"
@@ -106,25 +106,45 @@ export default function BooksPage() {
               priority
             />
           </div>
+          {/* Decorative elements */}
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#D4A574]/20 blur-3xl" />
+          <div className="absolute bottom-10 right-10 w-48 h-48 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
           
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <Link href="/curriculum" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
+            <Link href="/curriculum" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-colors group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Back to Curriculum
             </Link>
-            <BookOpen className="w-14 h-14 text-[#D4A574] mx-auto mb-4" />
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+            <div className="w-20 h-20 rounded-2xl bg-[#D4A574]/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-[#D4A574]/30">
+              <BookOpen className="w-10 h-10 text-[#D4A574]" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
               Book Library
             </h1>
-            <p className="text-lg lg:text-xl text-white/80 max-w-2xl mx-auto">
-              Explore our collection of transformational books. Click on any book to read more about its content and message.
+            <p className="text-lg lg:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+              Explore our collection of transformational books by Edwin Louis Cole. Click on any book to discover its powerful message.
             </p>
+            
+            {/* Book count badge */}
+            <div className="mt-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+              <span className="text-[#D4A574] font-bold text-2xl">{books.length}</span>
+              <span className="text-white/80">Books Available</span>
+            </div>
           </div>
         </section>
 
         {/* Books Accordion Section */}
         <section className="py-16 lg:py-24">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            {/* Section Header */}
+            <div className="text-center mb-14">
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Our Collection</span>
+              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1E3A5F]">Discover Each Book</h2>
+              <p className="mt-4 text-[#5C3D2E] max-w-2xl mx-auto">
+                Each book offers unique insights for personal growth, leadership and spiritual development. Expand any book below to learn more.
+              </p>
+            </div>
+            
             <div className="space-y-6">
               {books.map((book, index) => {
                 const colors = bookColors[index % bookColors.length]
@@ -274,25 +294,40 @@ export default function BooksPage() {
                     </div>
                   </div>
                 </div>
-              )})}
+              )
+              })}
             </div>
           </div>
         </section>
 
         {/* Bottom CTA */}
-        <section className="py-16 bg-[#1E3A5F]">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+        <section className="py-20 lg:py-28 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F] via-[#2D4A6F] to-[#8B2B3E]" />
+          <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-[#D4A574]/10 blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
+          
+          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-white/20">
+              <BookOpen className="w-8 h-8 text-[#D4A574]" />
+            </div>
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6">
               Start Your Transformation Today
             </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of men who are discovering their true potential through our curriculum.
+            <p className="text-white/80 text-lg lg:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+              Join thousands of men who are discovering their true potential through our curriculum. Take the first step towards becoming the man God created you to be.
             </p>
-            <Link href="/curriculum/sign-up">
-              <Button size="lg" className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] px-10 py-6 text-lg rounded-full font-bold">
-                Get Started Now
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/curriculum/sign-up">
+                <Button size="lg" className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] px-10 py-6 text-lg rounded-full font-bold shadow-xl hover:scale-105 transition-transform">
+                  Sign Up for Curriculum
+                </Button>
+              </Link>
+              <Link href="/curriculum">
+                <Button size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 px-10 py-6 text-lg rounded-full font-bold">
+                  View All Books
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
