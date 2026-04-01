@@ -239,51 +239,59 @@ export default function GetInvolvedPage() {
               </CardHeader>
               <CardContent className="p-8">
                 {/* Round Table Circles */}
-                <div className="flex flex-wrap justify-center gap-6 mb-10">
-                  {/* Table 1 - Maroon */}
-                  <div className="w-28 h-28 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-lg border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center px-2">
-                      <span className="text-white text-[10px] font-bold block">25 April</span>
-                      <span className="text-white text-xs font-bold">2026</span>
+                <div className="flex flex-wrap justify-center gap-8 mb-6">
+                  {/* Table 1 - Maroon - With Date */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-xl border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">25 April</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
+                    <Button 
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-04-25")}
+                    >
+                      REGISTER NOW
+                    </Button>
                   </div>
                   {/* Table 2 - Navy */}
-                  <div className="w-28 h-28 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-lg border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-xl border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
                     <div className="text-center">
-                      <span className="text-white text-xs font-bold">TBA</span>
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
                     </div>
                   </div>
                   {/* Table 3 - Terracotta */}
-                  <div className="w-28 h-28 rounded-full bg-[#D4A574] flex items-center justify-center shadow-lg border-4 border-[#D4A574]/30 hover:scale-105 transition-transform cursor-pointer">
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#D4A574] flex items-center justify-center shadow-xl border-4 border-[#D4A574]/30 hover:scale-105 transition-transform cursor-pointer">
                     <div className="text-center">
-                      <span className="text-white text-xs font-bold">TBA</span>
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
                     </div>
                   </div>
                   {/* Table 4 - Dark Brown */}
-                  <div className="w-28 h-28 rounded-full bg-[#3D1F0F] flex items-center justify-center shadow-lg border-4 border-[#3D1F0F]/30 hover:scale-105 transition-transform cursor-pointer">
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#3D1F0F] flex items-center justify-center shadow-xl border-4 border-[#3D1F0F]/30 hover:scale-105 transition-transform cursor-pointer">
                     <div className="text-center">
-                      <span className="text-white text-xs font-bold">TBA</span>
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
                     </div>
                   </div>
                   {/* Table 5 - Warm Brown */}
-                  <div className="w-28 h-28 rounded-full bg-[#5C3D2E] flex items-center justify-center shadow-lg border-4 border-[#5C3D2E]/30 hover:scale-105 transition-transform cursor-pointer">
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#5C3D2E] flex items-center justify-center shadow-xl border-4 border-[#5C3D2E]/30 hover:scale-105 transition-transform cursor-pointer">
                     <div className="text-center">
-                      <span className="text-white text-xs font-bold">TBA</span>
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Dates to be Announced */}
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-[#1E3A5F] mb-2">Dates to be Announced</h3>
-                  <p className="text-muted-foreground">New session dates are coming soon. Sign up to be notified!</p>
+                  <h3 className="text-2xl font-bold text-[#1E3A5F] mb-2">More Dates to be Announced</h3>
+                  <p className="text-muted-foreground">Additional session dates are coming soon. Sign up to be notified!</p>
                 </div>
 
                 {/* Sign Up Button */}
                 <div className="text-center">
                   <Button 
                     size="lg"
-                    className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    className="bg-[#1E3A5F] hover:bg-[#152d4a] text-white px-8 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                     onClick={() => setSelectedSession("")}
                   >
                     Sign Up and Get Notified Ahead of Time
