@@ -251,6 +251,9 @@ export default function MyGreatMarriageEventPage() {
 
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+            <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
+              MGM: CONFERENCE FOCUS
+            </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance">
               MyGreatMarriage Conference 2026
             </h1>
