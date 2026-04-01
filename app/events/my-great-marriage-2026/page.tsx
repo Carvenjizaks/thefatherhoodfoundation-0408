@@ -250,13 +250,14 @@ export default function MyGreatMarriageEventPage() {
           ))}
 
           {/* Logo - positioned top left */}
-          <div className="absolute top-24 left-6 lg:left-12 z-20 bg-white rounded-full p-2 shadow-xl">
+          <div className="absolute top-24 left-6 lg:left-12 z-20">
             <Image
               src="/images/mgm-logo.jpg"
               alt="My Great Marriage Logo"
               width={160}
               height={160}
-              className="w-24 h-24 lg:w-36 lg:h-36 object-contain"
+              className="w-28 h-28 lg:w-40 lg:h-40 object-contain rounded-full"
+              style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }}
             />
           </div>
 
