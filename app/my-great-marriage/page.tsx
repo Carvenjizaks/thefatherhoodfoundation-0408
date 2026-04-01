@@ -113,7 +113,7 @@ export default function MyGreatMarriagePage() {
               <img
                 src="/images/fingerprints.jpg"
                 alt="Two maroon fingerprints representing two unique individuals united as one"
-                className="w-28 h-28 object-contain rounded-xl bg-white/10 p-2"
+                className="w-28 h-28 object-contain"
               />
               <span className="inline-block text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574] border border-[#D4A574]/40 px-4 py-2 rounded-full">
                 Two Unique Prints, One Heart
