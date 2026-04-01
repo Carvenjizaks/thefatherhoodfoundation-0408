@@ -93,11 +93,11 @@ export default function BooksPage() {
     <>
       <Header />
 
-      <main className="pt-20 min-h-screen bg-[#FDF8F4]">
+      <main className="pt-20 min-h-screen bg-gradient-to-b from-[#FDF8F4] to-white">
         {/* Hero Section */}
-        <section className="relative py-16 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1E3A5F] to-[#8B2B3E]" />
-          <div className="absolute inset-0 opacity-10">
+        <section className="relative py-20 lg:py-32 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F] via-[#2D4A6F] to-[#8B2B3E]" />
+          <div className="absolute inset-0 opacity-15">
             <Image
               src="/books-on-wooden-table--learning--education.jpg"
               alt="Books background"
@@ -106,25 +106,45 @@ export default function BooksPage() {
               priority
             />
           </div>
+          {/* Decorative elements */}
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#D4A574]/20 blur-3xl" />
+          <div className="absolute bottom-10 right-10 w-48 h-48 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
           
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <Link href="/curriculum" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
+            <Link href="/curriculum" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-colors group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Back to Curriculum
             </Link>
-            <BookOpen className="w-14 h-14 text-[#D4A574] mx-auto mb-4" />
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+            <div className="w-20 h-20 rounded-2xl bg-[#D4A574]/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-[#D4A574]/30">
+              <BookOpen className="w-10 h-10 text-[#D4A574]" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
               Book Library
             </h1>
-            <p className="text-lg lg:text-xl text-white/80 max-w-2xl mx-auto">
-              Explore our collection of transformational books. Click on any book to read more about its content and message.
+            <p className="text-lg lg:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+              Explore our collection of transformational books by Edwin Louis Cole. Click on any book to discover its powerful message.
             </p>
+            
+            {/* Book count badge */}
+            <div className="mt-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+              <span className="text-[#D4A574] font-bold text-2xl">{books.length}</span>
+              <span className="text-white/80">Books Available</span>
+            </div>
           </div>
         </section>
 
         {/* Books Accordion Section */}
         <section className="py-16 lg:py-24">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            {/* Section Header */}
+            <div className="text-center mb-14">
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Our Collection</span>
+              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1E3A5F]">Discover Each Book</h2>
+              <p className="mt-4 text-[#5C3D2E] max-w-2xl mx-auto">
+                Each book offers unique insights for personal growth, leadership and spiritual development. Expand any book below to learn more.
+              </p>
+            </div>
+            
             <div className="space-y-6">
               {books.map((book, index) => {
                 const colors = bookColors[index % bookColors.length]
@@ -136,31 +156,23 @@ export default function BooksPage() {
                   style={{ borderLeft: `6px solid ${colors.primary}` }}
                 >
                   {/* Book Header - Always Visible */}
-                  <div className="relative">
+                  <div className="relative min-h-[180px]">
                     {/* Colored Top Bar */}
                     <div 
-                      className="absolute top-0 left-0 right-0 h-1"
+                      className="absolute top-0 left-0 right-0 h-2 z-10"
                       style={{ background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})` }}
                     />
-                    {/* Faded Book Image Background */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <Image
-                        src={book.image}
-                        alt={book.title}
-                        fill
-                        className="object-cover opacity-10"
-                      />
-                      <div 
-                        className="absolute inset-0"
-                        style={{ background: `linear-gradient(135deg, ${colors.accent} 0%, white 50%, ${colors.accent}50 100%)` }}
-                      />
-                    </div>
+                    {/* Background Color */}
+                    <div 
+                      className="absolute inset-0"
+                      style={{ backgroundColor: colors.accent }}
+                    />
                     
                     {/* Content */}
-                    <div className="relative p-6 lg:p-8">
+                    <div className="relative z-10 p-6 lg:p-8">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                         {/* Book Cover Thumbnail */}
-                        <div className="relative w-24 h-32 lg:w-28 lg:h-36 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+                        <div className="relative w-28 h-36 lg:w-32 lg:h-44 rounded-xl overflow-hidden shadow-xl flex-shrink-0 border-4 border-white">
                           <Image
                             src={book.image}
                             alt={book.title}
@@ -170,29 +182,26 @@ export default function BooksPage() {
                         </div>
                         
                         {/* Book Info */}
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p 
-                            className="text-xs font-semibold uppercase tracking-widest mb-2"
-                            style={{ color: colors.secondary }}
+                            className="text-xs font-bold uppercase tracking-widest mb-2"
+                            style={{ color: colors.primary }}
                           >
                             {book.author}
                           </p>
-                          <h2 
-                            className="text-xl lg:text-2xl font-bold mb-3"
-                            style={{ color: colors.primary }}
-                          >
+                          <h2 className="text-xl lg:text-2xl font-bold mb-3 text-[#1a0a0e]">
                             {book.title}
                           </h2>
                           
                           {/* Topics */}
-                          <div className="flex flex-wrap gap-2 mb-4">
+                          <div className="flex flex-wrap gap-2">
                             {book.topics.map((topic, topicIndex) => (
                               <span
                                 key={topicIndex}
-                                className="px-3 py-1 text-xs font-medium rounded-full"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-full shadow-sm"
                                 style={{ 
-                                  backgroundColor: `${colors.primary}15`,
-                                  color: colors.primary 
+                                  backgroundColor: colors.primary,
+                                  color: "white" 
                                 }}
                               >
                                 {topic}
@@ -204,10 +213,11 @@ export default function BooksPage() {
                         {/* Read More Button */}
                         <Button
                           onClick={() => toggleBook(index)}
-                          className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 text-white hover:scale-105 shadow-lg"
-                          style={{ 
-                            backgroundColor: expandedBook === index ? colors.secondary : colors.primary,
-                          }}
+                          className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all duration-300 hover:scale-105 shadow-xl ${
+                            expandedBook === index 
+                              ? "bg-[#1E3A5F] text-white" 
+                              : "bg-[#8B2B3E] text-white hover:bg-[#6d2230]"
+                          }`}
                         >
                           {expandedBook === index ? (
                             <>
@@ -231,41 +241,26 @@ export default function BooksPage() {
                       expandedBook === index ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="px-6 lg:px-8 pb-8 pt-2">
-                      <div 
-                        className="pt-6"
-                        style={{ borderTop: `2px solid ${colors.primary}20` }}
-                      >
-                        <h3 
-                          className="text-lg font-bold mb-4"
-                          style={{ color: colors.primary }}
-                        >
+                    <div className="px-6 lg:px-8 pb-8 pt-4 bg-white">
+                      <div className="border-t-2 border-[#e8d8c8] pt-6">
+                        <h3 className="text-xl font-bold mb-4 text-[#1E3A5F]">
                           About This Book
                         </h3>
                         <div className="prose prose-lg max-w-none">
                           {book.writeUp.split('\n\n').map((paragraph, pIndex) => (
-                            <p key={pIndex} className="text-[#5C3D2E] leading-relaxed mb-4">
+                            <p key={pIndex} className="text-[#5C3D2E] leading-relaxed mb-4 text-base">
                               {paragraph}
                             </p>
                           ))}
                         </div>
                         
                         {/* Sign Up CTA */}
-                        <div 
-                          className="mt-8 p-6 rounded-xl"
-                          style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.primary}10)` }}
-                        >
-                          <p 
-                            className="font-semibold mb-3"
-                            style={{ color: colors.primary }}
-                          >
+                        <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[#8B2B3E]/5 to-[#1E3A5F]/5 border border-[#e8d8c8]">
+                          <p className="font-bold mb-3 text-[#1E3A5F]">
                             Ready to start this journey?
                           </p>
                           <Link href="/curriculum/sign-up">
-                            <Button 
-                              className="text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg"
-                              style={{ backgroundColor: colors.primary }}
-                            >
+                            <Button className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg">
                               Sign Up for Curriculum
                             </Button>
                           </Link>
@@ -274,25 +269,40 @@ export default function BooksPage() {
                     </div>
                   </div>
                 </div>
-              )})}
+              )
+            })}
             </div>
           </div>
         </section>
 
         {/* Bottom CTA */}
-        <section className="py-16 bg-[#1E3A5F]">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+        <section className="py-20 lg:py-28 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1E3A5F] via-[#2D4A6F] to-[#8B2B3E]" />
+          <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-[#D4A574]/10 blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
+          
+          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 border border-white/20">
+              <BookOpen className="w-8 h-8 text-[#D4A574]" />
+            </div>
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6">
               Start Your Transformation Today
             </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of men who are discovering their true potential through our curriculum.
+            <p className="text-white/80 text-lg lg:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+              Join thousands of men who are discovering their true potential through our curriculum. Take the first step towards becoming the man God created you to be.
             </p>
-            <Link href="/curriculum/sign-up">
-              <Button size="lg" className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] px-10 py-6 text-lg rounded-full font-bold">
-                Get Started Now
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/curriculum/sign-up">
+                <Button size="lg" className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] px-10 py-6 text-lg rounded-full font-bold shadow-xl hover:scale-105 transition-transform">
+                  Sign Up for Curriculum
+                </Button>
+              </Link>
+              <Link href="/curriculum">
+                <Button size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 px-10 py-6 text-lg rounded-full font-bold">
+                  View All Books
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>

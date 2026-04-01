@@ -114,15 +114,15 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <Image
                   src="/images/logo.png"
                   alt="The Fatherhood Foundation Logo"
-                  width={56}
-                  height={56}
-                  className="w-14 h-14 rounded-full bg-white p-1 transition-transform duration-300 group-hover:scale-110"
+                  width={120}
+                  height={60}
+                  className="h-14 w-auto object-contain bg-white rounded-lg p-1.5 transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 rounded-full bg-white/20 scale-0 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-lg bg-white/20 scale-0 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
               </div>
               <span className="font-bold text-lg">The Fatherhood Foundation</span>
             </Link>
@@ -191,6 +191,30 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* International */}
+          <div>
+            <h3 className="font-semibold text-lg mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-white/60" />
+              International
+            </h3>
+            <div className="space-y-3">
+              <a 
+                href="https://thefatherfoundation.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/70 hover:text-white transition-colors duration-200 flex items-center gap-2 group"
+              >
+                <span className="group-hover:translate-x-1 transition-transform duration-200">
+                  The Father Foundation
+                </span>
+                <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              </a>
+              <p className="text-white/50 text-sm">
+                Roberts Burdett leading the charge
+              </p>
+            </div>
           </div>
 
           {/* Contact Info */}

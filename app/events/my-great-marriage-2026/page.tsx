@@ -85,7 +85,7 @@ const investmentPackages = [
     title: "Early Bird",
     price: "N$ 400",
     perCouple: false,
-    features: ["Full conference access", "Conference materials", "Refreshments included", "Certificate of attendance"],
+    features: ["Full conference access", "Conference materials", "Meals and Drinks"],
     highlight: true,
     badge: "Best Value",
   },
@@ -93,7 +93,7 @@ const investmentPackages = [
     title: "Conference Package",
     price: "N$ 550",
     perCouple: false,
-    features: ["Full conference access", "Conference materials", "Refreshments included", "Certificate of attendance", "Follow-up resources"],
+    features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
     highlight: false,
     badge: "Standard",
   },
@@ -473,120 +473,87 @@ export default function MyGreatMarriageEventPage() {
           </div>
         </section>
 
-        {/* Investment Packages - Animated Slider */}
-        <section className="py-24 bg-white overflow-hidden">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-14">
+        {/* Investment Packages - Side by Side */}
+        <section className="py-24 bg-gradient-to-br from-[#FDF8F3] via-white to-[#FDF8F3] overflow-hidden">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Your Investment</span>
-              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Conference Packages</h2>
-              <p className="mt-3 text-[#6b4c52] max-w-xl mx-auto">
-                Choose the package that best fits your needs. All packages include full conference access.
+              <h2 className="mt-3 text-3xl lg:text-5xl font-bold text-[#1a0a0e]">Conference Packages</h2>
+              <p className="mt-4 text-lg text-[#6b4c52] max-w-2xl mx-auto">
+                Seating is limited! Register early to secure your spot and avoid disappointment. Don&apos;t miss this life-changing opportunity.
               </p>
             </div>
 
-            {/* Mobile Slider */}
-            <div className="lg:hidden">
-              <div className="relative">
-                <div className="overflow-hidden">
-                  <div 
-                    className="flex transition-transform duration-500 ease-out"
-                    style={{ transform: `translateX(-${currentInvestmentIndex * 100}%)` }}
-                  >
-                    {investmentPackages.map((pkg, idx) => (
-                      <div key={idx} className="w-full flex-shrink-0 px-2">
-                        <div className={`relative rounded-2xl p-8 h-full ${pkg.highlight ? 'bg-[#8B2B3E] text-white' : 'bg-[#FDF8F3] border border-[#e8d8c8]'}`}>
-                          {pkg.badge && (
-                            <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-4 py-1 rounded-full ${pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#8B2B3E] text-white'}`}>
-                              {pkg.badge}
-                            </span>
-                          )}
-                          <h3 className={`text-xl font-bold mb-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>{pkg.title}</h3>
-                          <div className="mb-6">
-                            <span className={`text-4xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
-                            <span className={`text-sm ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}> / couple</span>
-                          </div>
-                          <ul className="space-y-3 mb-8">
-                            {pkg.features.map((feature, fIdx) => (
-                              <li key={fIdx} className={`flex items-start gap-2 text-sm ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
-                                <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pkg.highlight ? 'text-[#D4A574]' : 'text-[#8B2B3E]'}`} />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-                          <Button 
-                            onClick={() => setIsOpen(true)}
-                            className={`w-full rounded-full font-semibold ${pkg.highlight ? 'bg-white text-[#8B2B3E] hover:bg-white/90' : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230]'}`}
-                          >
-                            Register Now
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Navigation dots */}
-                <div className="flex justify-center gap-2 mt-8">
-                  {investmentPackages.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentInvestmentIndex(idx)}
-                      className={`transition-all duration-300 rounded-full ${idx === currentInvestmentIndex ? 'w-8 h-2 bg-[#8B2B3E]' : 'w-2 h-2 bg-[#8B2B3E]/25'}`}
-                      aria-label={`Package ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-                {/* Arrow buttons */}
-                <button
-                  onClick={() => setCurrentInvestmentIndex((prev) => (prev - 1 + investmentPackages.length) % investmentPackages.length)}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-[#8B2B3E] hover:bg-[#FDF8F3] transition-colors"
-                  aria-label="Previous package"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setCurrentInvestmentIndex((prev) => (prev + 1) % investmentPackages.length)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-[#8B2B3E] hover:bg-[#FDF8F3] transition-colors"
-                  aria-label="Next package"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Desktop Grid with hover animations */}
-            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
+            {/* Two Cards Side by Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {investmentPackages.map((pkg, idx) => (
                 <div 
                   key={idx} 
-                  className={`relative rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl ${pkg.highlight ? 'bg-[#8B2B3E] text-white scale-105 shadow-xl' : 'bg-[#FDF8F3] border border-[#e8d8c8] hover:border-[#8B2B3E]/30'}`}
-                  style={{ animationDelay: `${idx * 100}ms` }}
+                  className={`relative rounded-3xl p-10 transition-all duration-500 hover:scale-[1.03] ${
+                    pkg.highlight 
+                      ? 'bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] text-white shadow-2xl shadow-[#8B2B3E]/30 border-2 border-[#D4A574]/30' 
+                      : 'bg-white border-2 border-[#e8d8c8] hover:border-[#8B2B3E]/40 hover:shadow-xl'
+                  }`}
                 >
+                  {/* Badge */}
                   {pkg.badge && (
-                    <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-4 py-1 rounded-full ${pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#8B2B3E] text-white'}`}>
+                    <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-6 py-2 rounded-full shadow-lg ${
+                      pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#1E3A5F] text-white'
+                    }`}>
                       {pkg.badge}
                     </span>
                   )}
-                  <h3 className={`text-xl font-bold mb-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>{pkg.title}</h3>
-                  <div className="mb-6">
-                    <span className={`text-3xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
-                    <span className={`text-sm ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}> / couple</span>
+                  
+                  {/* Title */}
+                  <h3 className={`text-2xl font-bold mb-4 mt-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>
+                    {pkg.title}
+                  </h3>
+                  
+                  {/* Price */}
+                  <div className="mb-8">
+                    <span className={`text-5xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
+                    <span className={`text-base ml-2 ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}>per person</span>
                   </div>
-                  <ul className="space-y-3 mb-8">
+                  
+                  {/* Divider */}
+                  <div className={`w-full h-px mb-8 ${pkg.highlight ? 'bg-white/20' : 'bg-[#e8d8c8]'}`} />
+                  
+                  {/* Features */}
+                  <ul className="space-y-4 mb-10">
                     {pkg.features.map((feature, fIdx) => (
-                      <li key={fIdx} className={`flex items-start gap-2 text-sm ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
-                        <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pkg.highlight ? 'text-[#D4A574]' : 'text-[#8B2B3E]'}`} />
+                      <li key={fIdx} className={`flex items-start gap-3 text-base ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          pkg.highlight ? 'bg-[#D4A574]' : 'bg-[#8B2B3E]/10'
+                        }`}>
+                          <Check className={`w-4 h-4 ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`} />
+                        </div>
                         {feature}
                       </li>
                     ))}
                   </ul>
+                  
+                  {/* Button */}
                   <Button 
                     onClick={() => setIsOpen(true)}
-                    className={`w-full rounded-full font-semibold ${pkg.highlight ? 'bg-white text-[#8B2B3E] hover:bg-white/90' : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230]'}`}
+                    size="lg"
+                    className={`w-full rounded-full font-bold text-lg py-6 transition-all duration-300 hover:scale-105 ${
+                      pkg.highlight 
+                        ? 'bg-white text-[#8B2B3E] hover:bg-[#FDF8F3] shadow-lg' 
+                        : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230] shadow-lg shadow-[#8B2B3E]/20'
+                    }`}
                   >
                     Register Now
                   </Button>
                 </div>
               ))}
+            </div>
+            
+            {/* Closing Date Notice */}
+            <div className="mt-12 text-center">
+              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#1E3A5F] text-white shadow-lg">
+                <span className="font-semibold">Closing Date for Registration:</span>
+                <span className="text-[#D4A574] font-bold text-lg">1 May 2026</span>
+              </div>
             </div>
           </div>
         </section>
