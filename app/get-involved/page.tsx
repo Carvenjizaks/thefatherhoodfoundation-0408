@@ -242,8 +242,9 @@ export default function GetInvolvedPage() {
                 <div className="flex flex-wrap justify-center gap-6 mb-10">
                   {/* Table 1 - Maroon */}
                   <div className="w-28 h-28 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-lg border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center">
-                      <span className="text-white text-xs font-bold">TBA</span>
+                    <div className="text-center px-2">
+                      <span className="text-white text-[10px] font-bold block">25 April</span>
+                      <span className="text-white text-xs font-bold">2026</span>
                     </div>
                   </div>
                   {/* Table 2 - Navy */}
