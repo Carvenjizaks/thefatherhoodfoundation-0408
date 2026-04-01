@@ -118,7 +118,7 @@ export default function MyGreatMarriagePage() {
                     alt="My Great Marriage Logo"
                     width={200}
                     height={200}
-                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain"
+                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain mix-blend-multiply"
                   />
                 </div>
                 
