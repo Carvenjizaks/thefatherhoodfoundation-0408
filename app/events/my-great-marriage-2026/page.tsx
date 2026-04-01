@@ -1,8 +1,10 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+
+export const dynamic = "force-dynamic"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -105,8 +107,19 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
   return <span ref={ref}>{count}{suffix}</span>
 }
 
-export default function MyGreatMarriageEventPage() {
+function SearchParamsHandler({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
   const searchParams = useSearchParams()
+  
+  useEffect(() => {
+    if (searchParams.get("register") === "true") {
+      setIsOpen(true)
+    }
+  }, [searchParams, setIsOpen])
+  
+  return null
+}
+
+export default function MyGreatMarriageEventPage() {
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
@@ -114,13 +127,6 @@ export default function MyGreatMarriageEventPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
-
-  // Auto-open registration dialog when ?register=true is in the URL
-  useEffect(() => {
-    if (searchParams.get("register") === "true") {
-      setIsOpen(true)
-    }
-  }, [searchParams])
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
@@ -203,6 +209,9 @@ export default function MyGreatMarriageEventPage() {
   return (
     <>
       <Header />
+      <Suspense fallback={null}>
+        <SearchParamsHandler setIsOpen={setIsOpen} />
+      </Suspense>
       <div className="min-h-screen pt-16">
 
         {/* Hero — full-screen photo crossfade */}
@@ -216,9 +225,6 @@ export default function MyGreatMarriageEventPage() {
               <Image src={img.src} alt={img.alt} fill className="object-cover" priority={idx === 0} />
             </div>
           ))}
-          {/* Strong dark overlay for legibility */}
-          <div className="absolute inset-0 bg-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -228,7 +234,7 @@ export default function MyGreatMarriageEventPage() {
                 alt="MyGreatMarriage Conference 2026"
                 width={400}
                 height={400}
-                className="mx-auto drop-shadow-2xl"
+                className="mx-auto shadow-lg rounded-lg"
                 priority
               />
             </div>
