@@ -12,7 +12,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -25,13 +24,13 @@ import {
   MapPin,
   Users,
   Sparkles,
-  Star,
   MessageCircle,
   ArrowRight,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Check,
+  Clock,
+  Coffee,
+  BookOpen,
+  Utensils,
 } from "lucide-react"
 
 type RegistrationFormData = {
@@ -42,60 +41,55 @@ type RegistrationFormData = {
   spouseName: string
   spouseEmail: string
   spouseCellphone: string
+  ticketType: string
 }
 
 const carouselImages = [
   { src: "/images/couples/couple-together-1.jpg", alt: "Happy couple sharing an intimate moment" },
   { src: "/images/couples/couple-1.jpg", alt: "Happy couple together" },
   { src: "/images/couples/couple-2.jpg", alt: "Couple sharing a moment" },
-  { src: "/images/couples/couple-3.jpg", alt: "Loving couple" },
-  { src: "/images/couples/couple-4.jpg", alt: "Couple embracing" },
-  { src: "/images/couples/couple-5.jpg", alt: "Joyful couple" },
 ]
 
-const marriageQuotes = [
-  { quote: "Friendship, not romance, holds the marriage together.", author: "Jane Smiley" },
-  { quote: "A great marriage is not when the perfect couple comes together. It is when an imperfect couple learns to enjoy their differences.", author: "Dave Meurer" },
-  { quote: "The greatest marriages are built on teamwork, mutual respect, and a healthy dose of grace.", author: "Fawn Weaver" },
-  { quote: "Marriage is not about finding a person you can live with, it's about finding the person you can't live without.", author: "Unknown" },
-]
+const schedule = {
+  thursday: [
+    { time: "18:30 - 19:00", title: "Registration & Welcome", icon: Coffee },
+    { time: "19:00 - 21:00", title: "Opening Session: Building Your Foundation", icon: BookOpen },
+  ],
+  friday: [
+    { time: "18:30 - 19:00", title: "Arrival & Fellowship", icon: Coffee },
+    { time: "19:00 - 21:00", title: "Session: Communication That Connects", icon: MessageCircle },
+  ],
+  saturday: [
+    { time: "08:30 - 09:00", title: "Registration & Breakfast", icon: Coffee },
+    { time: "09:00 - 10:30", title: "Session: Conflict Resolution", icon: BookOpen },
+    { time: "10:30 - 11:00", title: "Tea Break", icon: Utensils },
+    { time: "11:00 - 13:00", title: "Closing Session: Renewed Commitment", icon: Heart },
+  ],
+}
 
 const conferenceHighlights = [
-  { icon: MessageCircle, title: "Communication Mastery", desc: "Learn the secrets to deeper, more meaningful conversations" },
-  { icon: Heart, title: "Rekindling Romance", desc: "Discover new ways to keep the spark alive in your marriage" },
-  { icon: Users, title: "Community Building", desc: "Connect with other couples on the same journey" },
-  { icon: Sparkles, title: "Spiritual Growth", desc: "Strengthen your marriage through shared faith and values" },
+  { icon: MessageCircle, title: "Communication Mastery", desc: "Learn secrets to deeper conversations" },
+  { icon: Heart, title: "Rekindling Romance", desc: "Keep the spark alive in your marriage" },
+  { icon: Users, title: "Community Building", desc: "Connect with other couples" },
+  { icon: Sparkles, title: "Spiritual Growth", desc: "Strengthen through shared values" },
 ]
 
-const testimonials = [
-  { name: "John & Mary K.", text: "This conference transformed our 15-year marriage. We fell in love all over again!", years: "Married 15 years" },
-  { name: "David & Sarah M.", text: "The tools we learned here saved our marriage. We're now closer than ever.", years: "Married 8 years" },
-  { name: "Peter & Grace L.", text: "We came as strangers to each other and left as best friends. Truly life-changing!", years: "Married 22 years" },
-]
-
-const stats = [
-  { value: 500, suffix: "+", label: "Marriages Strengthened" },
-  { value: 10, suffix: "+", label: "Years of Impact" },
-  { value: 98, suffix: "%", label: "Recommend to Friends" },
-  { value: 3, suffix: "", label: "Days of Transformation" },
-]
-
-const investmentPackages = [
+const ticketOptions = [
   {
+    id: "early-bird",
     title: "Early Bird",
-    price: "N$ 400",
-    perCouple: false,
+    price: 400,
+    priceDisplay: "N$ 400",
     features: ["Full conference access", "Conference materials", "Meals and Drinks"],
-    highlight: true,
-    badge: "Best Value",
+    popular: true,
   },
   {
+    id: "standard",
     title: "Conference Package",
-    price: "N$ 550",
-    perCouple: false,
+    price: 550,
+    priceDisplay: "N$ 550",
     features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
-    highlight: false,
-    badge: "Standard",
+    popular: false,
   },
 ]
 
@@ -147,9 +141,8 @@ export default function MyGreatMarriageEventPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
-  const [currentInvestmentIndex, setCurrentInvestmentIndex] = useState(0)
+  const [activeDay, setActiveDay] = useState<"thursday" | "friday" | "saturday">("thursday")
+  const [selectedTicket, setSelectedTicket] = useState("early-bird")
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
@@ -159,14 +152,13 @@ export default function MyGreatMarriageEventPage() {
     spouseName: "",
     spouseEmail: "",
     spouseCellphone: "",
+    ticketType: "early-bird",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    const imageInterval = setInterval(() => setCurrentImageIndex((prev) => (prev + 1) % carouselImages.length), 4000)
-    const quoteInterval = setInterval(() => setCurrentQuoteIndex((prev) => (prev + 1) % marriageQuotes.length), 6000)
-    const testimonialInterval = setInterval(() => setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length), 5000)
-    return () => { clearInterval(imageInterval); clearInterval(quoteInterval); clearInterval(testimonialInterval) }
+    const imageInterval = setInterval(() => setCurrentImageIndex((prev) => (prev + 1) % carouselImages.length), 5000)
+    return () => clearInterval(imageInterval)
   }, [])
 
   const validateEmail = (email: string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
@@ -204,7 +196,7 @@ export default function MyGreatMarriageEventPage() {
           email: formData.email,
           cellphone: formData.cellphone,
           source: "event_registration",
-          sourceDetails: "MyGreatMarriage Conference 2026",
+          sourceDetails: `MyGreatMarriage Conference 2026 - ${formData.ticketType}`,
           spouseFirstName: formData.spouseName,
           spouseEmail: formData.spouseEmail,
           spouseCellphone: formData.spouseCellphone,
@@ -215,7 +207,7 @@ export default function MyGreatMarriageEventPage() {
         throw new Error(errorData.error || "Registration failed")
       }
       setSubmitSuccess(true)
-      setFormData({ firstName: "", lastName: "", email: "", cellphone: "", spouseName: "", spouseEmail: "", spouseCellphone: "" })
+      setFormData({ firstName: "", lastName: "", email: "", cellphone: "", spouseName: "", spouseEmail: "", spouseCellphone: "", ticketType: "early-bird" })
       setTimeout(() => { setIsOpen(false); setSubmitSuccess(false) }, 2000)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Failed to submit registration.")
@@ -229,404 +221,504 @@ export default function MyGreatMarriageEventPage() {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }))
   }
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+  }
+
   return (
     <>
       <Header />
       <Suspense fallback={null}>
         <SearchParamsHandler setIsOpen={setIsOpen} />
       </Suspense>
-      <div className="min-h-screen pt-16">
+      
+      <div className="min-h-screen">
+        {/* Sticky Sub-navigation */}
+        <nav className="fixed top-16 left-0 right-0 z-40 bg-[#1E3A5F] border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between h-12">
+              <div className="flex items-center gap-6">
+                <button onClick={() => scrollToSection("schedule")} className="text-white/70 hover:text-white text-sm font-medium transition-colors">
+                  SCHEDULE
+                </button>
+                <button onClick={() => scrollToSection("highlights")} className="text-white/70 hover:text-white text-sm font-medium transition-colors">
+                  HIGHLIGHTS
+                </button>
+                <button onClick={() => scrollToSection("tickets")} className="text-white/70 hover:text-white text-sm font-medium transition-colors">
+                  TICKETS
+                </button>
+              </div>
+              <Button 
+                onClick={() => setIsOpen(true)}
+                size="sm" 
+                className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full px-6"
+              >
+                GET TICKETS
+              </Button>
+            </div>
+          </div>
+        </nav>
 
-        {/* Hero — full-screen photo crossfade */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1a0a0e]">
+        {/* Hero Section - Full Screen with Bottom Info Bar */}
+        <section className="relative min-h-screen bg-[#0a0a0a] pt-28">
+          {/* Background Images */}
           {carouselImages.map((img, idx) => (
             <div
               key={idx}
               className="absolute inset-0 transition-opacity duration-1000"
-              style={{ opacity: idx === currentImageIndex ? 1 : 0 }}
+              style={{ opacity: idx === currentImageIndex ? 0.4 : 0 }}
             >
               <Image src={img.src} alt={img.alt} fill className="object-cover" priority={idx === 0} />
             </div>
           ))}
+          
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50" />
 
-          {/* Logo - positioned top left */}
-          <div className="absolute top-24 left-6 lg:left-12 z-20">
+          {/* Logo */}
+          <div className="absolute top-32 left-8 lg:left-16 z-10">
             <Image
               src="/images/mgm-logo.jpg"
               alt="My Great Marriage Logo"
-              width={160}
-              height={160}
-              className="w-28 h-28 lg:w-40 lg:h-40 object-contain mix-blend-screen"
+              width={140}
+              height={140}
+              className="w-24 h-24 lg:w-32 lg:h-32 object-contain mix-blend-screen"
             />
           </div>
 
-          {/* Content */}
-          <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
-              CONFERENCE 2026
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance" style={{ fontFamily: 'Georgia, serif' }}>
-              My Great Marriage
-            </h1>
-            <p className="text-xl text-white/85 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Join hundreds of couples for a transformative weekend of connection, growth, and renewed love.
-            </p>
-
-            {/* Event info pills */}
-            <div className="flex flex-wrap gap-3 justify-center mb-10">
-              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm text-white border border-white/25 text-sm font-medium">
-                <Calendar className="w-4 h-4" />
-                7, 8 &amp; 9 May 2026
-              </div>
-              <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 backdrop-blur-sm text-white border border-white/25 text-sm font-medium">
-                <MapPin className="w-4 h-4" />
-                Windhoek, Namibia
-              </div>
-            </div>
-
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size="lg"
-                  className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-10 py-6 text-lg font-bold shadow-2xl transition-all hover:scale-105"
-                >
-                  <Heart className="w-5 h-5 mr-2" />
-                  Register Now
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="text-xl text-[#8B2B3E]">MyGreatMarriage Conference Registration</DialogTitle>
-                  <DialogDescription>Register for the conference on 7, 8 &amp; 9 May 2026.</DialogDescription>
-                </DialogHeader>
-                {submitSuccess ? (
-                  <div className="py-8 text-center">
-                    <div className="w-16 h-16 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Heart className="w-8 h-8 text-[#8B2B3E]" />
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2 text-[#8B2B3E]">Registration Successful!</h3>
-                    <p className="text-[#6b4c52]">We will send confirmation details to your email.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5 mt-2">
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold text-[#8B2B3E] border-b border-[#e8d8c8] pb-2">Your Details</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName">First Name <span className="text-red-500">*</span></Label>
-                          <Input id="firstName" value={formData.firstName} onChange={(e) => handleInputChange("firstName", e.target.value)} className="mt-1" />
-                          {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>}
-                        </div>
-                        <div>
-                          <Label htmlFor="lastName">Last Name <span className="text-red-500">*</span></Label>
-                          <Input id="lastName" value={formData.lastName} onChange={(e) => handleInputChange("lastName", e.target.value)} className="mt-1" />
-                          {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName}</p>}
-                        </div>
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-                        <Input id="email" type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} className="mt-1" />
-                        {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-                      </div>
-                      <div>
-                        <Label htmlFor="cellphone">Cellphone <span className="text-red-500">*</span></Label>
-                        <Input id="cellphone" type="tel" value={formData.cellphone} onChange={(e) => handleInputChange("cellphone", e.target.value)} placeholder="+264 81 234 5678" className="mt-1" />
-                        {errors.cellphone && <p className="text-xs text-red-500 mt-1">{errors.cellphone}</p>}
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 p-4 rounded-xl bg-[#FDF8F3] border border-[#e8d8c8]">
-                      <h3 className="text-sm font-semibold text-[#8B2B3E]">Spouse/Partner Details</h3>
-                      <div>
-                        <Label htmlFor="spouseName">Name <span className="text-red-500">*</span></Label>
-                        <Input id="spouseName" value={formData.spouseName} onChange={(e) => handleInputChange("spouseName", e.target.value)} className="mt-1" />
-                        {errors.spouseName && <p className="text-xs text-red-500 mt-1">{errors.spouseName}</p>}
-                      </div>
-                      <div>
-                        <Label htmlFor="spouseEmail">Email <span className="text-red-500">*</span></Label>
-                        <Input id="spouseEmail" type="email" value={formData.spouseEmail} onChange={(e) => handleInputChange("spouseEmail", e.target.value)} className="mt-1" />
-                        {errors.spouseEmail && <p className="text-xs text-red-500 mt-1">{errors.spouseEmail}</p>}
-                      </div>
-                      <div>
-                        <Label htmlFor="spouseCellphone">Cellphone <span className="text-red-500">*</span></Label>
-                        <Input id="spouseCellphone" type="tel" value={formData.spouseCellphone} onChange={(e) => handleInputChange("spouseCellphone", e.target.value)} placeholder="+264 81 234 5678" className="mt-1" />
-                        {errors.spouseCellphone && <p className="text-xs text-red-500 mt-1">{errors.spouseCellphone}</p>}
-                      </div>
-                    </div>
-
-                    {submitError && (
-                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-sm text-red-600">{submitError}</p>
-                      </div>
-                    )}
-
-                    <div className="flex gap-3 pt-2">
-                      <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="flex-1 rounded-full">Cancel</Button>
-                      <Button type="submit" disabled={isSubmitting} className="flex-1 bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full">
-                        {isSubmitting ? "Submitting..." : "Complete Registration"}
-                      </Button>
-                    </div>
-                  </form>
-                )}
-              </DialogContent>
-            </Dialog>
-
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-              <ChevronDown className="w-7 h-7 text-white/50" />
-            </div>
-          </div>
-        </section>
-
-        {/* Rotating Quote */}
-        <section className="py-20 bg-[#8B2B3E]">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <div className="text-6xl text-white/15 font-serif leading-none mb-2">&ldquo;</div>
-            <div className="min-h-[130px] flex items-center justify-center">
-              <div key={currentQuoteIndex} className="animate-fade-in">
-                <p className="text-2xl lg:text-3xl text-white italic leading-relaxed mb-5 text-balance">
-                  {marriageQuotes[currentQuoteIndex].quote}
-                </p>
-                <p className="text-white/60 font-medium text-sm tracking-wide">
-                  — {marriageQuotes[currentQuoteIndex].author}
-                </p>
-              </div>
-            </div>
-            <div className="flex justify-center gap-2 mt-8">
-              {marriageQuotes.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentQuoteIndex(idx)}
-                  className={`transition-all duration-300 rounded-full ${idx === currentQuoteIndex ? "w-7 h-2 bg-white" : "w-2 h-2 bg-white/30"}`}
-                  aria-label={`Quote ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Communication Formula */}
-        <section className="py-24 bg-[#FDF8F3]">
-          <div className="max-w-5xl mx-auto px-6 text-center">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">The Formula</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#8B2B3E] leading-tight mb-10 text-balance">
-              The formula for a successful marriage is:
-            </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {["communication", "communication", "communication"].map((word, idx) => (
-                <span
-                  key={idx}
-                  className="text-xl sm:text-2xl lg:text-3xl font-bold px-8 py-4 rounded-full text-white bg-[#8B2B3E] hover:scale-105 transition-transform shadow-md"
-                  style={{ opacity: 0.65 + idx * 0.17 }}
-                >
-                  {word}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Conference Highlights */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-14">
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Conference Highlights</span>
-              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">What You&apos;ll Experience</h2>
-              <p className="mt-3 text-[#6b4c52] max-w-xl mx-auto">
-                Three days of transformative sessions designed to strengthen every aspect of your marriage.
+          {/* Main Content */}
+          <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
+            <div className="max-w-4xl">
+              <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'Georgia, serif' }}>
+                My Great<br />Marriage
+              </h1>
+              <p className="text-xl lg:text-2xl text-white/70 max-w-xl leading-relaxed">
+                A transformative conference for couples seeking deeper connection and renewed love.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          </div>
+
+          {/* Bottom Info Bar */}
+          <div className="absolute bottom-0 left-0 right-0 bg-[#0a0a0a]/90 backdrop-blur-sm border-t border-white/10">
+            <div className="max-w-7xl mx-auto px-8 lg:px-16 py-6">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div className="flex flex-wrap items-center gap-8 lg:gap-16">
+                  <div>
+                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">LOCATION</p>
+                    <p className="text-white font-medium">Windhoek, Namibia</p>
+                  </div>
+                  <div>
+                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
+                    <p className="text-white font-medium">7, 8 & 9 May 2026</p>
+                  </div>
+                  <div>
+                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD</p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-white font-bold text-xl">N$ 400</span>
+                      <span className="text-white/40 line-through text-sm">N$ 550</span>
+                    </div>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setIsOpen(true)}
+                  size="lg" 
+                  className="bg-white text-[#0a0a0a] hover:bg-white/90 font-bold rounded-full px-8 group"
+                >
+                  GET TICKETS
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Schedule Section */}
+        <section id="schedule" className="py-24 bg-[#0a0a0a]">
+          <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-12" style={{ fontFamily: 'Georgia, serif' }}>
+              Schedule
+            </h2>
+
+            {/* Day Tabs */}
+            <div className="flex gap-2 mb-8 border-b border-white/10">
+              {(["thursday", "friday", "saturday"] as const).map((day) => (
+                <button
+                  key={day}
+                  onClick={() => setActiveDay(day)}
+                  className={`px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all ${
+                    activeDay === day 
+                      ? "text-white border-b-2 border-[#D4A574]" 
+                      : "text-white/40 hover:text-white/70"
+                  }`}
+                >
+                  {day === "thursday" ? "Day 1 - Thu" : day === "friday" ? "Day 2 - Fri" : "Day 3 - Sat"}
+                </button>
+              ))}
+            </div>
+
+            {/* Schedule Items */}
+            <div className="space-y-1">
+              {schedule[activeDay].map((item, idx) => (
+                <div 
+                  key={idx}
+                  className={`flex items-center gap-6 p-5 rounded-lg transition-colors ${
+                    idx % 2 === 0 ? "bg-white/5" : ""
+                  }`}
+                >
+                  <div className="w-40 flex-shrink-0">
+                    <span className="text-white/50 text-sm font-mono">{item.time}</span>
+                  </div>
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/20 flex items-center justify-center">
+                      <item.icon className="w-5 h-5 text-[#D4A574]" />
+                    </div>
+                    <span className="text-white font-medium">{item.title}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Highlights Section */}
+        <section id="highlights" className="py-24 bg-[#FDF8F3]">
+          <div className="max-w-6xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">What You&apos;ll Experience</span>
+              <h2 className="mt-4 text-4xl lg:text-5xl font-bold text-[#1a0a0e]" style={{ fontFamily: 'Georgia, serif' }}>
+                Conference Highlights
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {conferenceHighlights.map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#FDF8F3] border border-[#e8d8c8] rounded-2xl p-7 text-center hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                  className="bg-white rounded-2xl p-8 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-[#e8d8c8]"
                 >
-                  <div className="w-14 h-14 bg-[#8B2B3E] rounded-full flex items-center justify-center mx-auto mb-5">
-                    <item.icon className="w-7 h-7 text-white" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <item.icon className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-base font-bold text-[#1a0a0e] mb-2">{item.title}</h3>
-                  <p className="text-[#6b4c52] text-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="text-lg font-bold text-[#1a0a0e] mb-2">{item.title}</h3>
+                  <p className="text-[#6b4c52] text-sm">{item.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-20 bg-[#FDF8F3]">
-          <div className="max-w-3xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Success Stories</span>
-              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Couples Like You</h2>
-            </div>
-            <div className="min-h-[220px] flex items-center justify-center">
-              <div key={currentTestimonialIndex} className="text-center animate-fade-in">
-                <div className="flex justify-center gap-1 mb-5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-[#D4A574] text-[#D4A574]" />
-                  ))}
+        {/* Stats Banner */}
+        <section className="py-16 bg-[#8B2B3E]">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+              <div className="text-white">
+                <div className="text-4xl lg:text-5xl font-bold mb-2">
+                  <AnimatedNumber value={500} suffix="+" />
                 </div>
-                <p className="text-xl lg:text-2xl italic text-[#4a2830] mb-5 leading-relaxed text-balance">
-                  &ldquo;{testimonials[currentTestimonialIndex].text}&rdquo;
-                </p>
-                <p className="font-bold text-[#8B2B3E]">{testimonials[currentTestimonialIndex].name}</p>
-                <p className="text-sm text-[#6b4c52]">{testimonials[currentTestimonialIndex].years}</p>
+                <p className="text-white/60 text-sm">Marriages Strengthened</p>
+              </div>
+              <div className="text-white">
+                <div className="text-4xl lg:text-5xl font-bold mb-2">
+                  <AnimatedNumber value={10} suffix="+" />
+                </div>
+                <p className="text-white/60 text-sm">Years of Impact</p>
+              </div>
+              <div className="text-white">
+                <div className="text-4xl lg:text-5xl font-bold mb-2">
+                  <AnimatedNumber value={98} suffix="%" />
+                </div>
+                <p className="text-white/60 text-sm">Recommend to Friends</p>
+              </div>
+              <div className="text-white">
+                <div className="text-4xl lg:text-5xl font-bold mb-2">
+                  <AnimatedNumber value={3} suffix="" />
+                </div>
+                <p className="text-white/60 text-sm">Days of Transformation</p>
               </div>
             </div>
-            <div className="flex justify-center gap-2 mt-8">
-              {testimonials.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentTestimonialIndex(idx)}
-                  className={`transition-all duration-300 rounded-full ${idx === currentTestimonialIndex ? "w-7 h-2 bg-[#8B2B3E]" : "w-2 h-2 bg-[#8B2B3E]/25"}`}
-                  aria-label={`Testimonial ${idx + 1}`}
-                />
-              ))}
-            </div>
           </div>
         </section>
 
-        {/* Investment Packages - Side by Side */}
-        <section className="py-24 bg-gradient-to-br from-[#FDF8F3] via-white to-[#FDF8F3] overflow-hidden">
-          <div className="max-w-5xl mx-auto px-6">
+        {/* Tickets Section */}
+        <section id="tickets" className="py-24 bg-[#0a0a0a]">
+          <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Your Investment</span>
-              <h2 className="mt-3 text-3xl lg:text-5xl font-bold text-[#1a0a0e]">Conference Packages</h2>
-              <p className="mt-4 text-lg text-[#6b4c52] max-w-2xl mx-auto">
-                Seating is limited! Register early to secure your spot and avoid disappointment. Don&apos;t miss this life-changing opportunity.
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                Select Your Ticket
+              </h2>
+              <p className="text-white/60 text-lg">
+                Seating is limited. Register early to secure your spot.
               </p>
             </div>
 
-            {/* Two Cards Side by Side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {investmentPackages.map((pkg, idx) => (
-                <div 
-                  key={idx} 
-                  className={`relative rounded-3xl p-10 transition-all duration-500 hover:scale-[1.03] ${
-                    pkg.highlight 
-                      ? 'bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] text-white shadow-2xl shadow-[#8B2B3E]/30 border-2 border-[#D4A574]/30' 
-                      : 'bg-white border-2 border-[#e8d8c8] hover:border-[#8B2B3E]/40 hover:shadow-xl'
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {ticketOptions.map((ticket) => (
+                <button
+                  key={ticket.id}
+                  onClick={() => {
+                    setSelectedTicket(ticket.id)
+                    setFormData(prev => ({ ...prev, ticketType: ticket.id }))
+                    setIsOpen(true)
+                  }}
+                  className={`relative text-left p-8 rounded-2xl border-2 transition-all duration-300 ${
+                    ticket.popular
+                      ? "bg-white border-[#D4A574] shadow-xl"
+                      : "bg-white/5 border-white/10 hover:border-white/30"
                   }`}
                 >
-                  {/* Badge */}
-                  {pkg.badge && (
-                    <span className={`absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-6 py-2 rounded-full shadow-lg ${
-                      pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#1E3A5F] text-white'
-                    }`}>
-                      {pkg.badge}
+                  {ticket.popular && (
+                    <span className="absolute -top-3 left-6 bg-[#D4A574] text-white text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full">
+                      Best Value
                     </span>
                   )}
                   
-                  {/* Title */}
-                  <h3 className={`text-2xl font-bold mb-4 mt-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>
-                    {pkg.title}
+                  <h3 className={`text-xl font-bold mb-2 ${ticket.popular ? "text-[#1a0a0e]" : "text-white"}`}>
+                    {ticket.title}
                   </h3>
                   
-                  {/* Price */}
-                  <div className="mb-8">
-                    <span className={`text-5xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
-                    <span className={`text-base ml-2 ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}>per person</span>
+                  <div className="mb-6">
+                    <span className={`text-4xl font-bold ${ticket.popular ? "text-[#8B2B3E]" : "text-white"}`}>
+                      {ticket.priceDisplay}
+                    </span>
+                    <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-white/50"}`}>
+                      per person
+                    </span>
                   </div>
                   
-                  {/* Divider */}
-                  <div className={`w-full h-px mb-8 ${pkg.highlight ? 'bg-white/20' : 'bg-[#e8d8c8]'}`} />
-                  
-                  {/* Features */}
-                  <ul className="space-y-4 mb-10">
-                    {pkg.features.map((feature, fIdx) => (
-                      <li key={fIdx} className={`flex items-start gap-3 text-base ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          pkg.highlight ? 'bg-[#D4A574]' : 'bg-[#8B2B3E]/10'
-                        }`}>
-                          <Check className={`w-4 h-4 ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`} />
-                        </div>
+                  <ul className="space-y-3">
+                    {ticket.features.map((feature, idx) => (
+                      <li key={idx} className={`flex items-center gap-3 text-sm ${ticket.popular ? "text-[#6b4c52]" : "text-white/70"}`}>
+                        <Check className={`w-4 h-4 ${ticket.popular ? "text-[#8B2B3E]" : "text-[#D4A574]"}`} />
                         {feature}
                       </li>
                     ))}
                   </ul>
                   
-                  {/* Button */}
-                  <Button 
-                    onClick={() => setIsOpen(true)}
-                    size="lg"
-                    className={`w-full rounded-full font-bold text-lg py-6 transition-all duration-300 hover:scale-105 ${
-                      pkg.highlight 
-                        ? 'bg-white text-[#8B2B3E] hover:bg-[#FDF8F3] shadow-lg' 
-                        : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230] shadow-lg shadow-[#8B2B3E]/20'
-                    }`}
-                  >
-                    Register Now
-                  </Button>
-                </div>
+                  <div className={`mt-6 py-3 px-6 rounded-full text-center font-bold transition-colors ${
+                    ticket.popular 
+                      ? "bg-[#8B2B3E] text-white" 
+                      : "bg-white/10 text-white hover:bg-white/20"
+                  }`}>
+                    Select & Register
+                  </div>
+                </button>
               ))}
             </div>
-            
-            {/* Closing Date Notice */}
+
+            {/* Closing Date */}
             <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#1E3A5F] text-white shadow-lg">
-                <span className="font-semibold">Closing Date for Registration:</span>
-                <span className="text-[#D4A574] font-bold text-lg">1 May 2026</span>
+              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10">
+                <Clock className="w-4 h-4 text-[#D4A574]" />
+                <span className="text-white/70 text-sm">Registration closes:</span>
+                <span className="text-[#D4A574] font-bold">1 May 2026</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="py-20 bg-[#8B2B3E]">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-white">
-                  <div className="text-4xl lg:text-5xl font-bold mb-2">
-                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-white/65 text-sm">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Final CTA */}
-        <section className="py-24 bg-[#1a0a0e]">
+        <section className="py-24 bg-gradient-to-br from-[#8B2B3E] to-[#6d2230]">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Don&apos;t Miss Out</span>
-            <h2 className="mt-4 text-3xl lg:text-5xl font-bold text-white mb-5 text-balance">
+            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Georgia, serif' }}>
               Ready to Transform Your Marriage?
             </h2>
-            <p className="text-white/70 text-lg mb-10 leading-relaxed">
-              Don&apos;t miss this opportunity to invest in the most important relationship of your life.
+            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
+              Join hundreds of couples who have discovered the secret to a thriving marriage.
             </p>
-
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size="lg"
-                  className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-10 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105"
-                >
-                  <Heart className="w-5 h-5 mr-2" />
-                  Secure Your Spot Today
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </DialogTrigger>
-            </Dialog>
-
-            <p className="text-white/40 mt-6 text-sm">Limited spaces available. Register early to avoid disappointment.</p>
+            <Button
+              onClick={() => setIsOpen(true)}
+              size="lg"
+              className="bg-white text-[#8B2B3E] hover:bg-white/90 rounded-full px-10 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105 group"
+            >
+              <Heart className="w-5 h-5 mr-2" />
+              Secure Your Spot
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
         </section>
-
       </div>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out forwards;
-        }
-      `}</style>
+      {/* Registration Dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-white">Register for MGM26 Conference</DialogTitle>
+            <DialogDescription className="text-white/60">
+              Complete your registration for the MyGreatMarriage Conference 2026.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {submitSuccess ? (
+            <div className="py-12 text-center">
+              <div className="w-20 h-20 bg-[#8B2B3E] rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2 text-white">Registration Successful!</h3>
+              <p className="text-white/60">Confirmation details will be sent to your email.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+              {/* Ticket Selection */}
+              <div className="space-y-3">
+                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  {ticketOptions.map((ticket) => (
+                    <button
+                      key={ticket.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedTicket(ticket.id)
+                        setFormData(prev => ({ ...prev, ticketType: ticket.id }))
+                      }}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+                        selectedTicket === ticket.id
+                          ? "border-[#D4A574] bg-[#D4A574]/10"
+                          : "border-white/10 hover:border-white/30"
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="text-white font-medium">{ticket.title}</span>
+                        {ticket.popular && (
+                          <span className="text-[10px] bg-[#D4A574] text-white px-2 py-0.5 rounded-full">SAVE</span>
+                        )}
+                      </div>
+                      <span className="text-[#D4A574] font-bold">{ticket.priceDisplay}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Your Details */}
+              <div className="space-y-4">
+                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">2. Your Details</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName" className="text-white/80 text-sm">First Name</Label>
+                    <Input 
+                      id="firstName" 
+                      value={formData.firstName} 
+                      onChange={(e) => handleInputChange("firstName", e.target.value)} 
+                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    />
+                    {errors.firstName && <p className="text-xs text-red-400 mt-1">{errors.firstName}</p>}
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="text-white/80 text-sm">Last Name</Label>
+                    <Input 
+                      id="lastName" 
+                      value={formData.lastName} 
+                      onChange={(e) => handleInputChange("lastName", e.target.value)} 
+                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    />
+                    {errors.lastName && <p className="text-xs text-red-400 mt-1">{errors.lastName}</p>}
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="email" className="text-white/80 text-sm">Email</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    value={formData.email} 
+                    onChange={(e) => handleInputChange("email", e.target.value)} 
+                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                  />
+                  {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="cellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Input 
+                    id="cellphone" 
+                    type="tel" 
+                    value={formData.cellphone} 
+                    onChange={(e) => handleInputChange("cellphone", e.target.value)} 
+                    placeholder="+264 81 234 5678" 
+                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                  />
+                  {errors.cellphone && <p className="text-xs text-red-400 mt-1">{errors.cellphone}</p>}
+                </div>
+              </div>
+
+              {/* Spouse Details */}
+              <div className="space-y-4 p-5 rounded-xl bg-white/5 border border-white/10">
+                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">3. Spouse/Partner Details</Label>
+                <div>
+                  <Label htmlFor="spouseName" className="text-white/80 text-sm">Full Name</Label>
+                  <Input 
+                    id="spouseName" 
+                    value={formData.spouseName} 
+                    onChange={(e) => handleInputChange("spouseName", e.target.value)} 
+                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                  />
+                  {errors.spouseName && <p className="text-xs text-red-400 mt-1">{errors.spouseName}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="spouseEmail" className="text-white/80 text-sm">Email</Label>
+                  <Input 
+                    id="spouseEmail" 
+                    type="email" 
+                    value={formData.spouseEmail} 
+                    onChange={(e) => handleInputChange("spouseEmail", e.target.value)} 
+                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                  />
+                  {errors.spouseEmail && <p className="text-xs text-red-400 mt-1">{errors.spouseEmail}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="spouseCellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Input 
+                    id="spouseCellphone" 
+                    type="tel" 
+                    value={formData.spouseCellphone} 
+                    onChange={(e) => handleInputChange("spouseCellphone", e.target.value)} 
+                    placeholder="+264 81 234 5678" 
+                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                  />
+                  {errors.spouseCellphone && <p className="text-xs text-red-400 mt-1">{errors.spouseCellphone}</p>}
+                </div>
+              </div>
+
+              {submitError && (
+                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <p className="text-sm text-red-400">{submitError}</p>
+                </div>
+              )}
+
+              {/* Order Summary */}
+              <div className="p-5 rounded-xl bg-[#8B2B3E]/20 border border-[#8B2B3E]/30">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-white/70 text-sm">Selected Package</span>
+                  <span className="text-white font-medium">
+                    {ticketOptions.find(t => t.id === selectedTicket)?.title}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-white/70 text-sm">Total (per person)</span>
+                  <span className="text-[#D4A574] font-bold text-xl">
+                    {ticketOptions.find(t => t.id === selectedTicket)?.priceDisplay}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsOpen(false)} 
+                  className="flex-1 rounded-full border-white/20 text-white hover:bg-white/10"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  className="flex-1 bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full"
+                >
+                  {isSubmitting ? "Processing..." : "Complete Registration"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </>
