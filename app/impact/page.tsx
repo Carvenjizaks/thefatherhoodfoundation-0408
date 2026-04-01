@@ -450,10 +450,10 @@ export default function ImpactPage() {
               </div>
             </div>
 
-            <Link href="/donate">
-              <Button size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 px-12 py-7 text-lg rounded-full font-semibold">
-                Donate Now
-                <Heart className="ml-2 w-5 h-5" />
+            <Link href="/get-involved">
+              <Button size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 px-10 py-8 text-lg lg:text-xl rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                Come, Bring Your Time, Talent &amp; Resources - Let&apos;s Do It Together
+                <Heart className="ml-3 w-6 h-6" />
               </Button>
             </Link>
           </div>
