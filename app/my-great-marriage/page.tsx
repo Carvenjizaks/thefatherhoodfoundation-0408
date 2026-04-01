@@ -118,7 +118,8 @@ export default function MyGreatMarriagePage() {
                     alt="My Great Marriage Logo"
                     width={200}
                     height={200}
-                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain mix-blend-multiply"
+                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain rounded-full"
+                    style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }}
                   />
                 </div>
                 
