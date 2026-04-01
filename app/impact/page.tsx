@@ -219,7 +219,7 @@ export default function ImpactPage() {
               <div>
                 <p className="text-[#D4956A] uppercase tracking-widest text-sm font-semibold mb-4">The Challenge</p>
                 <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-                  Fatherlessness is a Crisis We Can Solve
+                  Fatherlessness is a Crisis We Can Solve, One Man at a Time
                 </h2>
                 <div className="space-y-6 text-white/80 text-lg leading-relaxed">
                   <p>
