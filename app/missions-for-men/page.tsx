@@ -134,9 +134,9 @@ export default function MissionsForMenPage() {
                 <h3 className="text-2xl lg:text-4xl font-bold text-white mt-2">The Father Foundation</h3>
                 
                 {/* Leaders */}
-                <div className="flex flex-col sm:flex-row gap-6 mt-8">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-[#D4A574]">
+                <div className="flex flex-col sm:flex-row gap-8 mt-8">
+                  <div className="flex items-center gap-5">
+                    <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[#D4A574] shadow-xl">
                       <Image
                         src="/images/leaders/robert-burdett.jpg"
                         alt="Robert Burdett"
@@ -145,13 +145,13 @@ export default function MissionsForMenPage() {
                       />
                     </div>
                     <div>
-                      <p className="text-white font-bold">Robert Burdett</p>
+                      <p className="text-white font-bold text-lg">Robert Burdett</p>
                       <p className="text-[#D4A574] text-sm">Director</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-[#D4A574]">
+                  <div className="flex items-center gap-5">
+                    <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[#D4A574] shadow-xl">
                       <Image
                         src="/images/leaders/brandon-sanders.jpg"
                         alt="Brandon Sanders"
@@ -160,7 +160,7 @@ export default function MissionsForMenPage() {
                       />
                     </div>
                     <div>
-                      <p className="text-white font-bold">Brandon Sanders</p>
+                      <p className="text-white font-bold text-lg">Brandon Sanders</p>
                       <p className="text-[#D4A574] text-sm">Leader</p>
                     </div>
                   </div>
