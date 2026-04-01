@@ -342,13 +342,26 @@ export default function MissionsForMenPage() {
                   International
                 </div>
                 <div className="p-6 pt-14">
+                  {/* Blue Logo */}
+                  <div className="flex justify-center mb-4">
+                    <div className="bg-white rounded-full p-2 shadow-lg">
+                      <Image
+                        src="/images/ff-blue-logo.png"
+                        alt="Fatherhood Foundation International Logo"
+                        width={60}
+                        height={60}
+                        className="w-14 h-14 object-contain"
+                      />
+                    </div>
+                  </div>
+                  
                   <a 
                     href="https://thefatherfoundation.com/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"
                   >
-                    <h3 className="text-xl font-bold mb-4 text-white group-hover:text-[#D4A574] transition-colors">
+                    <h3 className="text-xl font-bold mb-4 text-white group-hover:text-[#D4A574] transition-colors text-center">
                       The Father Foundation
                     </h3>
                   </a>
