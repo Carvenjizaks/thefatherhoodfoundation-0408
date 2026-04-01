@@ -375,6 +375,13 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+          
+          {/* Team structure description */}
+          <div className="mt-14 text-center">
+            <p className="text-[#5C3D2E] text-lg leading-relaxed max-w-2xl mx-auto italic">
+              This team manages team leaders, leading teams, who are active in communities.
+            </p>
+          </div>
         </div>
       </section>
 
