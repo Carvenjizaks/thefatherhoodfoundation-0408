@@ -487,15 +487,14 @@ export default function PartnershipPage() {
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group">
                 <Image 
                   src="/images/partnership/fellowship-gathering.jpg" 
-                  alt="Fellowship gathering - men connecting over dinner" 
+                  alt="Community gathering - building authentic relationships" 
                   fill 
                   className="object-cover transition-transform duration-500 group-hover:scale-105" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <Users className="w-6 h-6 mb-2" />
-                  <p className="font-bold text-lg">Fellowship Gatherings</p>
-                  <p className="text-sm text-white/80">Build lasting brotherhood</p>
+                  <p className="font-bold text-lg">Building Solid Authentic Relationships</p>
                 </div>
               </div>
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group">
