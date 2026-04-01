@@ -9,6 +9,29 @@ import { Heart, Users, GraduationCap, Home, ArrowRight, Quote, Play } from "luci
 import Link from "next/link"
 import Image from "next/image"
 
+const slideAnimationStyles = `
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-60px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(60px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide-in-left { animation: slideInLeft 0.7s ease-out forwards; }
+  .slide-in-right { animation: slideInRight 0.7s ease-out forwards; }
+  .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+  .animation-delay-100 { animation-delay: 0.1s; }
+  .animation-delay-200 { animation-delay: 0.2s; }
+  .animation-delay-300 { animation-delay: 0.3s; }
+  .animation-delay-400 { animation-delay: 0.4s; }
+  .animation-delay-500 { animation-delay: 0.5s; }
+`
+
 // Animated counter that counts up when in view
 function AnimatedCounter({ end, suffix = "", duration = 2000 }: { end: number; suffix?: string; duration?: number }) {
   const [count, setCount] = useState(0)
@@ -122,6 +145,7 @@ export default function ImpactPage() {
   return (
     <>
       <Header />
+      <style dangerouslySetInnerHTML={{ __html: slideAnimationStyles }} />
 
       <main className="min-h-screen">
         {/* Hero - Emotional Opening */}
@@ -254,6 +278,59 @@ export default function ImpactPage() {
                 <div className="absolute -bottom-6 -left-6 bg-[#D4956A] text-white p-6 rounded-2xl shadow-xl">
                   <p className="text-4xl font-bold">85%</p>
                   <p className="text-sm opacity-90">of youth in prison grew up without a father</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Multicultural Unity Section - Animated */}
+        <section className="py-20 lg:py-28 bg-gradient-to-br from-[#FDF8F4] via-white to-[#FDEEE3] overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              {/* Text content - slides in from left */}
+              <div className="opacity-0 slide-in-left">
+                <p className="text-[#D4956A] uppercase tracking-widest text-sm font-semibold mb-4">United in Purpose</p>
+                <h2 className="text-3xl lg:text-5xl font-bold text-[#5a3d2b] mb-6 leading-tight">
+                  Men From All Walks of Life, Standing Together
+                </h2>
+                <p className="text-[#7a6455] text-lg leading-relaxed mb-8">
+                  Our community brings together men from diverse backgrounds, cultures, and experiences. 
+                  When men unite across boundaries, they discover strength in brotherhood and shared purpose.
+                </p>
+                
+                {/* Animated stat placeholders */}
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="opacity-0 fade-in-up animation-delay-200 text-center p-4 rounded-2xl bg-white shadow-md">
+                    <p className="text-3xl font-bold text-[#8B2B3E]">15+</p>
+                    <p className="text-sm text-[#7a6455]">Communities</p>
+                  </div>
+                  <div className="opacity-0 fade-in-up animation-delay-300 text-center p-4 rounded-2xl bg-white shadow-md">
+                    <p className="text-3xl font-bold text-[#D4956A]">50+</p>
+                    <p className="text-sm text-[#7a6455]">Mentors</p>
+                  </div>
+                  <div className="opacity-0 fade-in-up animation-delay-400 text-center p-4 rounded-2xl bg-white shadow-md">
+                    <p className="text-3xl font-bold text-[#8B2B3E]">100%</p>
+                    <p className="text-sm text-[#7a6455]">Commitment</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Image - slides in from right */}
+              <div className="relative opacity-0 slide-in-right animation-delay-200">
+                <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/images/impact/multicultural-men.jpg"
+                    alt="Diverse group of men standing together in unity"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                </div>
+                {/* Floating badge */}
+                <div className="absolute -bottom-4 -right-4 bg-[#8B2B3E] text-white px-6 py-4 rounded-2xl shadow-xl opacity-0 fade-in-up animation-delay-500">
+                  <p className="text-lg font-bold">Brotherhood</p>
+                  <p className="text-sm opacity-90">Across All Cultures</p>
                 </div>
               </div>
             </div>
