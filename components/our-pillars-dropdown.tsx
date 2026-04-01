@@ -17,6 +17,7 @@ const pillars: PillarLink[] = [
   { label: "Missions for Men", href: "/missions-for-men" },
   { label: "MGM26Conference", href: "/events/my-great-marriage-2026" },
   { label: "Social Impact", href: "/community-development" },
+  { label: "Admin", href: "/admin" },
 ]
 
 export function OurPillarsDropdown() {

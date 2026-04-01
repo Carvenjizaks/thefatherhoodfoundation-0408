@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { Menu, X, Lock } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { OurPillarsDropdown } from "./our-pillars-dropdown"
 
@@ -71,14 +71,6 @@ export function Header() {
               </Link>
             ))}
             <OurPillarsDropdown />
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 text-sm text-foreground/50 hover:text-[#8B2B3E] transition-colors"
-              title="Admin Access"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Admin</span>
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -119,16 +111,6 @@ export function Header() {
                     {link.label}
                   </Link>
                 ))}
-              </div>
-              <div className="border-t border-border pt-2 mt-2">
-                <Link
-                  href="/admin"
-                  className="flex items-center gap-2 px-4 py-3 text-base text-foreground/50 hover:text-[#8B2B3E] hover:bg-muted transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Lock className="w-4 h-4" />
-                  <span>Admin Access</span>
-                </Link>
               </div>
             </div>
           </div>
