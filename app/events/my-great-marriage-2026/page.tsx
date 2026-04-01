@@ -82,36 +82,20 @@ const stats = [
 
 const investmentPackages = [
   {
-    title: "Early Bird Special",
-    price: "N$ 2,500",
-    perCouple: true,
-    features: ["Full 3-day conference access", "Conference materials", "Refreshments included", "Certificate of attendance"],
+    title: "Early Bird",
+    price: "N$ 400",
+    perCouple: false,
+    features: ["Full conference access", "Conference materials", "Refreshments included", "Certificate of attendance"],
     highlight: true,
     badge: "Best Value",
   },
   {
-    title: "Standard Package",
-    price: "N$ 3,200",
-    perCouple: true,
-    features: ["Full 3-day conference access", "Conference materials", "Refreshments included", "Certificate of attendance", "Follow-up resources"],
+    title: "Conference Package",
+    price: "N$ 550",
+    perCouple: false,
+    features: ["Full conference access", "Conference materials", "Refreshments included", "Certificate of attendance", "Follow-up resources"],
     highlight: false,
-    badge: null,
-  },
-  {
-    title: "Premium Experience",
-    price: "N$ 4,500",
-    perCouple: true,
-    features: ["Full 3-day conference access", "VIP seating", "Private Q&A session", "Couples photography session", "Accommodation assistance", "Exclusive dinner event"],
-    highlight: false,
-    badge: "Most Popular",
-  },
-  {
-    title: "Group Booking",
-    price: "N$ 2,000",
-    perCouple: true,
-    features: ["Minimum 5 couples", "Full 3-day access", "Conference materials", "Group discussion facilitation", "Bulk discount savings"],
-    highlight: false,
-    badge: "Groups",
+    badge: "Standard",
   },
 ]
 
