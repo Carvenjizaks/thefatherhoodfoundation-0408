@@ -3,173 +3,338 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { Globe, Heart, Users, MapPin, Calendar, ArrowRight, Shield, Flame } from "lucide-react"
+import { Globe, Heart, Users, MapPin, ArrowRight, Shield, Flame, ChevronRight, Quote } from "lucide-react"
+import { useState } from "react"
+
+const missionAreas = [
+  {
+    id: "international",
+    title: "International Missions",
+    description: "Travel to communities around the world where fathers and families need support the most. Build, teach, and serve alongside local partners.",
+    icon: Globe,
+    image: "/images/goc/goc-group-beach.jpg",
+  },
+  {
+    id: "domestic",
+    title: "Domestic Outreach",
+    description: "Make an impact closer to home. Serve in local communities, support fatherless families, and mentor young men seeking guidance.",
+    icon: MapPin,
+    image: "/images/goc/goc-training-1.jpg",
+  },
+  {
+    id: "team",
+    title: "Team Building",
+    description: "Every mission is a brotherhood experience. Train together, serve together, and forge bonds that last a lifetime.",
+    icon: Users,
+    image: "/images/goc/goc-men-learning.jpg",
+  },
+]
+
+const impactStats = [
+  { number: "500+", label: "Men Served" },
+  { number: "12", label: "Mission Trips" },
+  { number: "5", label: "Countries Reached" },
+  { number: "1000+", label: "Lives Impacted" },
+]
 
 export default function MissionsForMenPage() {
+  const [activeArea, setActiveArea] = useState("international")
+  const activeData = missionAreas.find(a => a.id === activeArea) || missionAreas[0]
+
   return (
     <>
       <Header />
-      <main className="bg-white text-black min-h-screen">
-        {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#8B2B3E] via-[#6B1B2E] to-[#4A1020]">
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center pt-32 pb-20">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <Globe className="w-5 h-5 text-white" />
-              <span className="text-white/90 text-sm font-medium">Go. Serve. Transform.</span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
-              Missions for Men
-            </h1>
-            
-            <p className="text-lg lg:text-xl text-white/90 mb-10 max-w-3xl mx-auto text-balance leading-relaxed">
-              Step beyond your comfort zone and into your calling. Join fellow men on transformative mission trips that change communities and change you.
-            </p>
+      <main className="bg-[#0a0a0a] text-white min-h-screen">
+        {/* Hero Section - Full Screen with Split Layout */}
+        <section className="relative min-h-screen flex items-center">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/goc/goc-group-beach.jpg"
+              alt="Men on mission"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="text-base px-8 py-6 bg-white text-[#8B2B3E] hover:bg-gray-100">
-                <Link href="/get-involved">
-                  Join a Mission <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-base px-8 py-6 border-white text-white hover:bg-white/10">
-                <Link href="#upcoming">View Upcoming Trips</Link>
-              </Button>
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-12 h-[2px] bg-[#D4A574]" />
+                <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">Go. Serve. Transform.</span>
+              </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 leading-[1.1]">
+                Missions<br />
+                <span className="text-[#D4A574]">for Men</span>
+              </h1>
+              
+              <p className="text-xl text-white/70 mb-12 leading-relaxed max-w-xl">
+                Step beyond your comfort zone and into your calling. Join fellow men on transformative mission trips that change communities and change you.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="text-base px-8 py-6 bg-[#D4A574] text-black hover:bg-[#c4956a] rounded-none font-semibold">
+                  <Link href="/get-involved">
+                    Join a Mission <ArrowRight className="ml-2 w-5 h-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="text-base px-8 py-6 border-white/30 text-white hover:bg-white/10 rounded-none bg-transparent">
+                  <Link href="#upcoming">View Upcoming Trips</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
+            <span className="text-xs tracking-widest uppercase">Scroll</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
+          </div>
+        </section>
+
+        {/* Impact Stats Bar */}
+        <section className="bg-[#8B2B3E] py-8">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {impactStats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.number}</div>
+                  <div className="text-white/70 text-sm uppercase tracking-wider">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Mission Statement */}
-        <section className="py-20 lg:py-28 bg-white">
+        <section className="py-24 lg:py-32 bg-[#0a0a0a]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-6">
-              Called to Serve
+            <div className="flex items-center justify-center gap-8 text-[#D4A574] mb-12">
+              <div className="flex items-center gap-3">
+                <Shield className="w-5 h-5" />
+                <span className="text-sm font-semibold tracking-wider uppercase">Brotherhood</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-[#D4A574]" />
+              <div className="flex items-center gap-3">
+                <Flame className="w-5 h-5" />
+                <span className="text-sm font-semibold tracking-wider uppercase">Purpose</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-[#D4A574]" />
+              <div className="flex items-center gap-3">
+                <Heart className="w-5 h-5" />
+                <span className="text-sm font-semibold tracking-wider uppercase">Service</span>
+              </div>
+            </div>
+
+            <h2 className="text-3xl lg:text-5xl font-bold mb-8">
+              Called to <span className="text-[#D4A574]">Serve</span>
             </h2>
-            <p className="text-lg text-black leading-relaxed mb-8">
+            <p className="text-lg lg:text-xl text-white/70 leading-relaxed">
               Missions for Men is more than a trip — it is a transformational experience. We believe that men discover their deepest purpose when they step out in faith to serve others. Whether building homes, mentoring youth, or providing essential support to underserved communities, every mission is an opportunity to grow as a man of character and impact.
             </p>
-            <div className="flex items-center justify-center gap-8 text-[#8B2B3E]">
-              <div className="flex items-center gap-2">
-                <Shield className="w-6 h-6" />
-                <span className="font-semibold">Brotherhood</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Flame className="w-6 h-6" />
-                <span className="font-semibold">Purpose</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Heart className="w-6 h-6" />
-                <span className="font-semibold">Service</span>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* What We Do */}
-        <section className="py-20 lg:py-28 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-4">What We Do</h2>
-              <p className="text-lg text-black max-w-2xl mx-auto">
-                Our missions combine hands-on service with spiritual growth and brotherhood.
-              </p>
+        {/* What We Do - Interactive Section */}
+        <section className="py-24 lg:py-32 bg-[#111]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-[2px] bg-[#D4A574]" />
+              <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">What We Do</span>
             </div>
+            
+            <h2 className="text-3xl lg:text-5xl font-bold mb-16 max-w-2xl">
+              Our missions combine hands-on service with spiritual growth
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="bg-white border-2 hover:border-[#8B2B3E]/50 transition-colors">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Globe className="w-8 h-8 text-[#8B2B3E]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#8B2B3E] mb-3">International Missions</h3>
-                  <p className="text-black leading-relaxed">
-                    Travel to communities around the world where fathers and families need support the most. Build, teach, and serve alongside local partners.
-                  </p>
-                </CardContent>
-              </Card>
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+              {/* Left - Navigation */}
+              <div className="space-y-4">
+                {missionAreas.map((area) => {
+                  const Icon = area.icon
+                  const isActive = activeArea === area.id
+                  return (
+                    <button
+                      key={area.id}
+                      onClick={() => setActiveArea(area.id)}
+                      className={`w-full text-left p-6 border transition-all duration-300 ${
+                        isActive 
+                          ? 'border-[#D4A574] bg-[#D4A574]/10' 
+                          : 'border-white/10 hover:border-white/30 bg-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <Icon className={`w-6 h-6 ${isActive ? 'text-[#D4A574]' : 'text-white/50'}`} />
+                          <span className={`text-xl font-semibold ${isActive ? 'text-white' : 'text-white/70'}`}>
+                            {area.title}
+                          </span>
+                        </div>
+                        <ChevronRight className={`w-5 h-5 transition-transform ${isActive ? 'rotate-90 text-[#D4A574]' : 'text-white/30'}`} />
+                      </div>
+                      {isActive && (
+                        <p className="mt-4 text-white/60 leading-relaxed pl-10">
+                          {area.description}
+                        </p>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
 
-              <Card className="bg-white border-2 hover:border-[#8B2B3E]/50 transition-colors">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <MapPin className="w-8 h-8 text-[#8B2B3E]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#8B2B3E] mb-3">Domestic Outreach</h3>
-                  <p className="text-black leading-relaxed">
-                    Make an impact closer to home. Serve in local communities, support fatherless families, and mentor young men seeking guidance.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white border-2 hover:border-[#8B2B3E]/50 transition-colors">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[#8B2B3E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Users className="w-8 h-8 text-[#8B2B3E]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#8B2B3E] mb-3">Team Building</h3>
-                  <p className="text-black leading-relaxed">
-                    Every mission is a brotherhood experience. Train together, serve together, and forge bonds that last a lifetime.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Upcoming Missions */}
-        <section id="upcoming" className="py-20 lg:py-28 bg-white">
-          <div className="max-w-6xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-4">Upcoming Missions</h2>
-              <p className="text-lg text-black max-w-2xl mx-auto">
-                Join us on an upcoming mission trip and discover the transformative power of service.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 rounded-2xl p-8 lg:p-12 text-center">
-              <Calendar className="w-12 h-12 text-[#8B2B3E] mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4">Mission Trips Coming Soon</h3>
-              <p className="text-black mb-8 max-w-xl mx-auto">
-                We are currently planning our next mission trips for 2026. Register your interest below to be the first to know when dates are announced.
-              </p>
-              <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6B1B2E]">
-                <Link href="/get-involved">
-                  Register Interest <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-              </Button>
+              {/* Right - Image */}
+              <div className="relative h-[400px] lg:h-auto">
+                <Image
+                  src={activeData.image}
+                  alt={activeData.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              </div>
             </div>
           </div>
         </section>
 
         {/* Testimonial */}
-        <section className="py-20 lg:py-28 bg-[#8B2B3E]">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <p className="text-2xl lg:text-3xl text-white font-medium italic mb-8 leading-relaxed">
-              "Going on a mission trip with the Foundation changed my perspective on what it means to be a man. Serving others showed me my true purpose."
+        <section className="py-24 lg:py-32 bg-[#0a0a0a] relative overflow-hidden">
+          <div className="absolute top-20 left-10 text-[#D4A574]/10">
+            <Quote className="w-40 h-40" />
+          </div>
+          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            <p className="text-2xl lg:text-4xl text-white font-light italic mb-10 leading-relaxed">
+              &ldquo;Going on a mission trip with the Foundation changed my perspective on what it means to be a man. Serving others showed me my true purpose.&rdquo;
             </p>
-            <p className="text-white/80">— Mission Trip Participant</p>
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-[#8B2B3E] flex items-center justify-center text-white font-bold">
+                M
+              </div>
+              <div className="text-left">
+                <p className="text-white font-semibold">Mission Trip Participant</p>
+                <p className="text-white/50 text-sm">GOC 2024</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Upcoming Missions */}
+        <section id="upcoming" className="py-24 lg:py-32 bg-[#111]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-[2px] bg-[#D4A574]" />
+              <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">Upcoming</span>
+            </div>
+            
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16">
+              <h2 className="text-3xl lg:text-5xl font-bold max-w-xl">
+                Mission trips coming soon
+              </h2>
+              <Button asChild variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-none bg-transparent w-fit">
+                <Link href="/get-involved">
+                  Register Interest <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+              </Button>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Mission Card 1 */}
+              <div className="group relative bg-[#1a1a1a] border border-white/10 hover:border-[#D4A574]/50 transition-all duration-300">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/images/goc/goc-training-1.jpg"
+                    alt="Local Outreach"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-[#D4A574] text-black text-xs font-bold uppercase tracking-wider">
+                    Coming Soon
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">Local Community Outreach</h3>
+                  <p className="text-white/60 text-sm mb-4">Namibia - Q2 2026</p>
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    Serve local communities through mentorship and support programs.
+                  </p>
+                </div>
+              </div>
+
+              {/* Mission Card 2 */}
+              <div className="group relative bg-[#1a1a1a] border border-white/10 hover:border-[#D4A574]/50 transition-all duration-300">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/images/goc/goc-group-beach.jpg"
+                    alt="Regional Mission"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider">
+                    Planning
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">Regional Brotherhood Trip</h3>
+                  <p className="text-white/60 text-sm mb-4">Southern Africa - Q3 2026</p>
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    Connect with men across the region for service and fellowship.
+                  </p>
+                </div>
+              </div>
+
+              {/* Mission Card 3 */}
+              <div className="group relative bg-[#1a1a1a] border border-white/10 hover:border-[#D4A574]/50 transition-all duration-300">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/images/goc/goc-speaker.jpg"
+                    alt="Leadership Summit"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider">
+                    Planning
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">Leadership Development</h3>
+                  <p className="text-white/60 text-sm mb-4">Location TBA - Q4 2026</p>
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    Intensive leadership training combined with community service.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 lg:py-28 bg-white">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-6">
+        <section className="py-24 lg:py-32 bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E] relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <Image
+              src="/images/goc/goc-men-learning.jpg"
+              alt="Background"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            <h2 className="text-3xl lg:text-5xl font-bold mb-6">
               Ready to Answer the Call?
             </h2>
-            <p className="text-lg text-black mb-10 max-w-2xl mx-auto">
+            <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
               Take the next step in your journey. Join Missions for Men and discover the impact you can make.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6B1B2E]">
+              <Button asChild size="lg" className="text-base px-10 py-6 bg-white text-[#8B2B3E] hover:bg-white/90 rounded-none font-semibold">
                 <Link href="/get-involved">
                   Get Involved <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/10">
+              <Button asChild variant="outline" size="lg" className="text-base px-10 py-6 border-white text-white hover:bg-white/10 rounded-none bg-transparent">
                 <Link href="/partnership">Support Our Missions</Link>
               </Button>
             </div>
