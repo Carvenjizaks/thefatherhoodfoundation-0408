@@ -249,20 +249,19 @@ export default function MyGreatMarriageEventPage() {
             </div>
           ))}
 
+          {/* Logo - positioned top left */}
+          <div className="absolute top-24 left-6 lg:left-12 z-20">
+            <Image
+              src="/images/mgm-logo.jpg"
+              alt="My Great Marriage Logo"
+              width={160}
+              height={160}
+              className="w-28 h-28 lg:w-40 lg:h-40 object-contain"
+            />
+          </div>
+
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            {/* MGM Logo */}
-            <div className="flex justify-center mb-6">
-              <div className="relative w-40 h-40 lg:w-52 lg:h-52">
-                <Image
-                  src="/images/mgm-logo.jpg"
-                  alt="My Great Marriage Logo"
-                  width={208}
-                  height={208}
-                  className="w-full h-full object-contain rounded-full bg-white p-2 shadow-xl"
-                />
-              </div>
-            </div>
             <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
               CONFERENCE 2026
             </span>
