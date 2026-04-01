@@ -96,7 +96,7 @@ export default function CurriculumSignUpPage() {
                     <Users className={`h-8 w-8 ${studyType === "group" ? "text-primary" : "text-muted-foreground"}`} />
                     <span className="font-semibold text-foreground">As a Group</span>
                     <span className="text-sm text-muted-foreground leading-snug">
-                      I will be studying with others — a small group, church, or team.
+                      I will be studying with others — a small group or team.
                     </span>
                   </button>
                 </div>
@@ -162,7 +162,7 @@ export default function CurriculumSignUpPage() {
                     >
                       <Building2 className={`h-7 w-7 ${isOrg === true ? "text-primary" : "text-muted-foreground"}`} />
                       <span className="font-semibold text-foreground">Yes</span>
-                      <span className="text-sm text-muted-foreground">I represent a church, company, or organisation.</span>
+                      <span className="text-sm text-muted-foreground">I am from an organisation.</span>
                     </button>
 
                     <button
@@ -184,7 +184,7 @@ export default function CurriculumSignUpPage() {
                     <div className="space-y-5 pt-2">
                       <div className="space-y-2">
                         <Label htmlFor="orgName">Organisation / Company Name <span className="text-destructive">*</span></Label>
-                        <Input id="orgName" name="orgName" placeholder="e.g. Grace Community Church" required />
+                        <Input id="orgName" name="orgName" placeholder="e.g. Fatherhood Foundation" required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="orgRole">Your Role</Label>
