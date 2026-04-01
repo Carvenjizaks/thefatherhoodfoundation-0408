@@ -109,16 +109,18 @@ export default function MyGreatMarriagePage() {
 
           {/* Centered text overlay */}
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 lg:px-8">
-            <div className="flex flex-col items-center gap-4 mb-6">
-              <div className="relative w-44 h-44 lg:w-56 lg:h-56">
-                <img
-                  src="/images/mgm-logo.jpg"
-                  alt="MyGreatMarriage logo"
-                  className="w-full h-full object-contain brightness-0 invert opacity-90"
-                />
+            <div className="flex flex-col items-center gap-4 mb-8">
+              {/* Terracotta ring */}
+              <div className="relative w-48 h-48 lg:w-64 lg:h-64 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full border-[6px] lg:border-[8px] border-[#D4A574] opacity-90" />
+                <div className="absolute inset-2 rounded-full border-[3px] lg:border-[4px] border-[#D4A574]/50" />
+                <div className="text-center z-10">
+                  <span className="block text-4xl lg:text-5xl font-bold text-white tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>MGM</span>
+                  <span className="block text-[10px] lg:text-xs font-semibold tracking-[0.25em] uppercase text-white/90 mt-1">My Great Marriage</span>
+                </div>
               </div>
             </div>
-            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
               Build the Marriage You&apos;ve Always Dreamed Of
             </h1>
             <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
