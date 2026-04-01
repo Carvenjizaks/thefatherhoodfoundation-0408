@@ -114,7 +114,10 @@ export default function MissionsForMenPage() {
         {/* International Section */}
         <section className="py-16 lg:py-24 bg-[#1E3A5F]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="flex flex-col items-center text-center gap-6">
+              {/* Label */}
+              <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">International</span>
+              
               {/* Logo */}
               <div className="flex-shrink-0">
                 <div className="bg-white rounded-full p-4 shadow-xl">
@@ -129,13 +132,12 @@ export default function MissionsForMenPage() {
               </div>
               
               {/* Content */}
-              <div className="flex-1 text-center lg:text-left">
-                <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">International</span>
-                <h3 className="text-2xl lg:text-4xl font-bold text-white mt-2">The Father Foundation</h3>
+              <div className="flex flex-col items-center">
+                <h3 className="text-2xl lg:text-4xl font-bold text-white">The Father Foundation</h3>
                 
                 {/* Leaders */}
-                <div className="flex flex-col sm:flex-row gap-8 mt-8">
-                  <div className="flex items-center gap-5">
+                <div className="flex flex-col sm:flex-row gap-8 mt-8 justify-center">
+                  <div className="flex flex-col items-center gap-4">
                     <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[#D4A574] shadow-xl">
                       <Image
                         src="/images/leaders/robert-burdett.jpg"
@@ -150,7 +152,7 @@ export default function MissionsForMenPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-5">
+                  <div className="flex flex-col items-center gap-4">
                     <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-full overflow-hidden border-4 border-[#D4A574] shadow-xl">
                       <Image
                         src="/images/leaders/brandon-sanders.jpg"
@@ -165,18 +167,18 @@ export default function MissionsForMenPage() {
                     </div>
                   </div>
                 </div>
+                
+                {/* CTA */}
+                <a 
+                  href="https://thefatherfoundation.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#D4A574] text-[#1E3A5F] font-bold rounded-none hover:bg-[#c4956a] transition-colors shadow-lg mt-8"
+                >
+                  Visit Website
+                  <ArrowRight className="w-5 h-5" />
+                </a>
               </div>
-              
-              {/* CTA */}
-              <a 
-                href="https://thefatherfoundation.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-[#D4A574] text-[#1E3A5F] font-bold rounded-none hover:bg-[#c4956a] transition-colors shadow-lg"
-              >
-                Visit International Site
-                <Globe className="w-5 h-5" />
-              </a>
             </div>
           </div>
         </section>
