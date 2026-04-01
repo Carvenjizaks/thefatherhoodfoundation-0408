@@ -29,6 +29,9 @@ import {
   MessageCircle,
   ArrowRight,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Check,
 } from "lucide-react"
 
 type RegistrationFormData = {
@@ -75,6 +78,41 @@ const stats = [
   { value: 10, suffix: "+", label: "Years of Impact" },
   { value: 98, suffix: "%", label: "Recommend to Friends" },
   { value: 3, suffix: "", label: "Days of Transformation" },
+]
+
+const investmentPackages = [
+  {
+    title: "Early Bird Special",
+    price: "N$ 2,500",
+    perCouple: true,
+    features: ["Full 3-day conference access", "Conference materials", "Refreshments included", "Certificate of attendance"],
+    highlight: true,
+    badge: "Best Value",
+  },
+  {
+    title: "Standard Package",
+    price: "N$ 3,200",
+    perCouple: true,
+    features: ["Full 3-day conference access", "Conference materials", "Refreshments included", "Certificate of attendance", "Follow-up resources"],
+    highlight: false,
+    badge: null,
+  },
+  {
+    title: "Premium Experience",
+    price: "N$ 4,500",
+    perCouple: true,
+    features: ["Full 3-day conference access", "VIP seating", "Private Q&A session", "Couples photography session", "Accommodation assistance", "Exclusive dinner event"],
+    highlight: false,
+    badge: "Most Popular",
+  },
+  {
+    title: "Group Booking",
+    price: "N$ 2,000",
+    perCouple: true,
+    features: ["Minimum 5 couples", "Full 3-day access", "Conference materials", "Group discussion facilitation", "Bulk discount savings"],
+    highlight: false,
+    badge: "Groups",
+  },
 ]
 
 function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
@@ -127,6 +165,7 @@ export default function MyGreatMarriageEventPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
+  const [currentInvestmentIndex, setCurrentInvestmentIndex] = useState(0)
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     firstName: "",
@@ -445,6 +484,124 @@ export default function MyGreatMarriageEventPage() {
                   className={`transition-all duration-300 rounded-full ${idx === currentTestimonialIndex ? "w-7 h-2 bg-[#8B2B3E]" : "w-2 h-2 bg-[#8B2B3E]/25"}`}
                   aria-label={`Testimonial ${idx + 1}`}
                 />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Investment Packages - Animated Slider */}
+        <section className="py-24 bg-white overflow-hidden">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-14">
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Your Investment</span>
+              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Conference Packages</h2>
+              <p className="mt-3 text-[#6b4c52] max-w-xl mx-auto">
+                Choose the package that best fits your needs. All packages include full conference access.
+              </p>
+            </div>
+
+            {/* Mobile Slider */}
+            <div className="lg:hidden">
+              <div className="relative">
+                <div className="overflow-hidden">
+                  <div 
+                    className="flex transition-transform duration-500 ease-out"
+                    style={{ transform: `translateX(-${currentInvestmentIndex * 100}%)` }}
+                  >
+                    {investmentPackages.map((pkg, idx) => (
+                      <div key={idx} className="w-full flex-shrink-0 px-2">
+                        <div className={`relative rounded-2xl p-8 h-full ${pkg.highlight ? 'bg-[#8B2B3E] text-white' : 'bg-[#FDF8F3] border border-[#e8d8c8]'}`}>
+                          {pkg.badge && (
+                            <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-4 py-1 rounded-full ${pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#8B2B3E] text-white'}`}>
+                              {pkg.badge}
+                            </span>
+                          )}
+                          <h3 className={`text-xl font-bold mb-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>{pkg.title}</h3>
+                          <div className="mb-6">
+                            <span className={`text-4xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
+                            <span className={`text-sm ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}> / couple</span>
+                          </div>
+                          <ul className="space-y-3 mb-8">
+                            {pkg.features.map((feature, fIdx) => (
+                              <li key={fIdx} className={`flex items-start gap-2 text-sm ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
+                                <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pkg.highlight ? 'text-[#D4A574]' : 'text-[#8B2B3E]'}`} />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                          <Button 
+                            onClick={() => setIsOpen(true)}
+                            className={`w-full rounded-full font-semibold ${pkg.highlight ? 'bg-white text-[#8B2B3E] hover:bg-white/90' : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230]'}`}
+                          >
+                            Register Now
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Navigation dots */}
+                <div className="flex justify-center gap-2 mt-8">
+                  {investmentPackages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentInvestmentIndex(idx)}
+                      className={`transition-all duration-300 rounded-full ${idx === currentInvestmentIndex ? 'w-8 h-2 bg-[#8B2B3E]' : 'w-2 h-2 bg-[#8B2B3E]/25'}`}
+                      aria-label={`Package ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+                {/* Arrow buttons */}
+                <button
+                  onClick={() => setCurrentInvestmentIndex((prev) => (prev - 1 + investmentPackages.length) % investmentPackages.length)}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-[#8B2B3E] hover:bg-[#FDF8F3] transition-colors"
+                  aria-label="Previous package"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setCurrentInvestmentIndex((prev) => (prev + 1) % investmentPackages.length)}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-[#8B2B3E] hover:bg-[#FDF8F3] transition-colors"
+                  aria-label="Next package"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Desktop Grid with hover animations */}
+            <div className="hidden lg:grid lg:grid-cols-4 gap-6">
+              {investmentPackages.map((pkg, idx) => (
+                <div 
+                  key={idx} 
+                  className={`relative rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl ${pkg.highlight ? 'bg-[#8B2B3E] text-white scale-105 shadow-xl' : 'bg-[#FDF8F3] border border-[#e8d8c8] hover:border-[#8B2B3E]/30'}`}
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
+                  {pkg.badge && (
+                    <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold tracking-wider uppercase px-4 py-1 rounded-full ${pkg.highlight ? 'bg-[#D4A574] text-white' : 'bg-[#8B2B3E] text-white'}`}>
+                      {pkg.badge}
+                    </span>
+                  )}
+                  <h3 className={`text-xl font-bold mb-2 ${pkg.highlight ? 'text-white' : 'text-[#1a0a0e]'}`}>{pkg.title}</h3>
+                  <div className="mb-6">
+                    <span className={`text-3xl font-bold ${pkg.highlight ? 'text-white' : 'text-[#8B2B3E]'}`}>{pkg.price}</span>
+                    <span className={`text-sm ${pkg.highlight ? 'text-white/70' : 'text-[#6b4c52]'}`}> / couple</span>
+                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {pkg.features.map((feature, fIdx) => (
+                      <li key={fIdx} className={`flex items-start gap-2 text-sm ${pkg.highlight ? 'text-white/90' : 'text-[#6b4c52]'}`}>
+                        <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${pkg.highlight ? 'text-[#D4A574]' : 'text-[#8B2B3E]'}`} />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button 
+                    onClick={() => setIsOpen(true)}
+                    className={`w-full rounded-full font-semibold ${pkg.highlight ? 'bg-white text-[#8B2B3E] hover:bg-white/90' : 'bg-[#8B2B3E] text-white hover:bg-[#6d2230]'}`}
+                  >
+                    Register Now
+                  </Button>
+                </div>
               ))}
             </div>
           </div>
