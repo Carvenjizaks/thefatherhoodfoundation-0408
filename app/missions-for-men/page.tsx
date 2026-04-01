@@ -112,30 +112,67 @@ export default function MissionsForMenPage() {
         </section>
 
         {/* International Section */}
-        <section className="py-16 lg:py-20 bg-[#1E3A5F]">
+        <section className="py-16 lg:py-24 bg-[#1E3A5F]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-              <div className="flex items-center gap-6">
-                <div className="bg-white rounded-lg p-3 shadow-xl">
+            <div className="flex flex-col lg:flex-row items-center gap-12">
+              {/* Logo */}
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-full p-4 shadow-xl">
                   <Image
-                    src="/images/logo.png"
-                    alt="Fatherhood Foundation Logo"
-                    width={80}
-                    height={80}
-                    className="w-16 h-16 lg:w-20 lg:h-20 object-contain"
+                    src="/images/ff-blue-logo.png"
+                    alt="Fatherhood Foundation International Logo"
+                    width={120}
+                    height={120}
+                    className="w-24 h-24 lg:w-32 lg:h-32 object-contain"
                   />
                 </div>
-                <div>
-                  <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">International</span>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-white mt-1">The Father Foundation</h3>
-                  <p className="text-white/70 mt-2">Roberts Burdett leading the charge</p>
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 text-center lg:text-left">
+                <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">International</span>
+                <h3 className="text-2xl lg:text-4xl font-bold text-white mt-2">The Father Foundation</h3>
+                
+                {/* Leaders */}
+                <div className="flex flex-col sm:flex-row gap-6 mt-8">
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-[#D4A574]">
+                      <Image
+                        src="/images/leaders/robert-burdett.jpg"
+                        alt="Robert Burdett"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold">Robert Burdett</p>
+                      <p className="text-[#D4A574] text-sm">Director</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-3 border-[#D4A574]">
+                      <Image
+                        src="/images/leaders/brandon-sanders.jpg"
+                        alt="Brandon Sanders"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold">Brandon Sanders</p>
+                      <p className="text-[#D4A574] text-sm">Leader</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+              
+              {/* CTA */}
               <a 
                 href="https://thefatherfoundation.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-[#D4A574] text-[#1E3A5F] font-bold rounded-none hover:bg-[#c4956a] transition-colors"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-[#D4A574] text-[#1E3A5F] font-bold rounded-none hover:bg-[#c4956a] transition-colors shadow-lg"
               >
                 Visit International Site
                 <Globe className="w-5 h-5" />
