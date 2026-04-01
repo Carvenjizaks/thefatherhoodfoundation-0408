@@ -437,23 +437,23 @@ export default function ImpactPage() {
 
             <div className="grid sm:grid-cols-3 gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$500</p>
-                <p className="text-white/70 text-sm">Sponsors one youth through character programme</p>
+                <p className="text-xl font-bold text-white mb-2">Get Involved</p>
+                <p className="text-white/70 text-sm">Donate your time, resources - Get involved in a school</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$2,000</p>
-                <p className="text-white/70 text-sm">Supports a father through mentorship</p>
+                <p className="text-xl font-bold text-white mb-2">Reaching Men</p>
+                <p className="text-white/70 text-sm">Get involved in reaching men in your community</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$10,000</p>
-                <p className="text-white/70 text-sm">Brings a programme to a new school</p>
+                <p className="text-xl font-bold text-white mb-2">Community Impact</p>
+                <p className="text-white/70 text-sm">Let&apos;s solve a problem in a community</p>
               </div>
             </div>
 
-            <Link href="/donate">
-              <Button size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 px-12 py-7 text-lg rounded-full font-semibold">
-                Donate Now
-                <Heart className="ml-2 w-5 h-5" />
+            <Link href="/get-involved">
+              <Button size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 px-10 py-8 text-lg lg:text-xl rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                Come, Bring Your Time, Talent &amp; Resources - Let&apos;s Do It Together
+                <Heart className="ml-3 w-6 h-6" />
               </Button>
             </Link>
           </div>

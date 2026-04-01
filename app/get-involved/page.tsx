@@ -209,6 +209,14 @@ export default function GetInvolvedPage() {
         {/* Monthly Table Talk */}
         <section className="py-20 lg:py-32 bg-[#F5F0E8]">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
+            {/* Sign Up Button */}
+            <div className="text-center mb-10">
+              <a href="#signup-form">
+                <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-10 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  Sign Up Today
+                </Button>
+              </a>
+            </div>
             <div className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
