@@ -15,7 +15,7 @@ const pillars: PillarLink[] = [
   // { label: "ActiveParenting", href: "/active-parenting" }, // Hidden - activate later
   { label: "MyGreatMarriage", href: "/my-great-marriage" },
   { label: "Missions for Men", href: "/missions-for-men" },
-  { label: "MyGreatMarriage", href: "/events/my-great-marriage-2026" },
+  { label: "MGM26Conference", href: "/events/my-great-marriage-2026" },
   { label: "Social Impact", href: "/community-development" },
 ]
 
