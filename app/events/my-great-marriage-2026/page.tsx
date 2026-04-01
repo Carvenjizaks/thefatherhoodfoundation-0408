@@ -479,8 +479,8 @@ export default function MyGreatMarriageEventPage() {
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Your Investment</span>
               <h2 className="mt-3 text-3xl lg:text-5xl font-bold text-[#1a0a0e]">Conference Packages</h2>
-              <p className="mt-4 text-lg text-[#6b4c52] max-w-xl mx-auto">
-                Choose the package that best fits your needs. All packages include full conference access.
+              <p className="mt-4 text-lg text-[#6b4c52] max-w-2xl mx-auto">
+                Seating is limited! Register early to secure your spot and avoid disappointment. Don&apos;t miss this life-changing opportunity.
               </p>
             </div>
 
