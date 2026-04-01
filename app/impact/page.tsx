@@ -437,16 +437,16 @@ export default function ImpactPage() {
 
             <div className="grid sm:grid-cols-3 gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$500</p>
-                <p className="text-white/70 text-sm">Sponsors one youth through character programme</p>
+                <p className="text-xl font-bold text-white mb-2">Get Involved</p>
+                <p className="text-white/70 text-sm">Donate your time, resources - Get involved in a school</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$2,000</p>
-                <p className="text-white/70 text-sm">Supports a father through mentorship</p>
+                <p className="text-xl font-bold text-white mb-2">Reaching Men</p>
+                <p className="text-white/70 text-sm">Get involved in reaching men in your community</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-3xl font-bold text-white mb-2">N$10,000</p>
-                <p className="text-white/70 text-sm">Brings a programme to a new school</p>
+                <p className="text-xl font-bold text-white mb-2">Community Impact</p>
+                <p className="text-white/70 text-sm">Let&apos;s solve a problem in a community</p>
               </div>
             </div>
 
