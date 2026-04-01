@@ -29,11 +29,11 @@ This is not simply a book about avoiding sexual sin; it is about recovering what
     author: "Ed Cole",
     image: "/images/books/power-of-potential.webp",
     topics: ["Potential", "Dreams", "Leadership", "Growth"],
-    writeUp: `Every man has untapped potential waiting to be released. God has placed within you the seeds of greatness, but it takes intentional effort to cultivate them.
+    writeUp: `The Power of Potential is a faith-filled guide to discovering, developing and releasing the purpose God has placed inside you. Using the life of Joseph as a central model, Edwin Louis Cole shows that dreams are not fantasies to admire from a distance, but seeds of calling that must be nurtured through faith, character, discipline and obedience.
 
-This book shows you how to maximize God's principles to fulfill your dreams and become everything you were created to be. Discover how to unlock your God-given potential and fulfill your dreams.
+The book explores how God develops people through patterns and principles, not shortcuts, and how setbacks, suffering, guilt, priorities, prosperity and even delayed dreams can all become part of God's process of growth. Cole challenges readers to move beyond mere positive thinking into what he calls "reality thinking" — a life built on truth, biblical principle and wholehearted trust in God.
 
-Learn the principles that turn ordinary men into extraordinary leaders.`,
+At its core, this book is about potential becoming reality: God-given dreams, rightly pursued, can shape lives, bless others and bring glory to God. It speaks to men and women who sense there is more in them than what is currently visible and who are ready to align vision, values and action. This is a book for builders, dreamers and leaders who want to live intentionally and finish strong.`,
   },
   {
     title: "Communication, Sex and Money: Overcoming the Three Common Challenges in Relationships",
