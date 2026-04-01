@@ -216,9 +216,6 @@ export default function MyGreatMarriageEventPage() {
               <Image src={img.src} alt={img.alt} fill className="object-cover" priority={idx === 0} />
             </div>
           ))}
-          {/* Strong dark overlay for legibility */}
-          <div className="absolute inset-0 bg-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
