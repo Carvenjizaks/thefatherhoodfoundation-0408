@@ -65,11 +65,11 @@ Cole's message is deeply practical: trials are not pointless, failure does not h
     author: "Ed Cole",
     image: "/images/books/courage.webp",
     topics: ["Overcoming Fear", "Building Character", "Leadership", "Faith"],
-    writeUp: `True courage is not the absence of fear, but the mastery of it. Every man faces battles that test his resolve—whether in his career, relationships, or personal struggles.
+    writeUp: `Courage is a stirring call to champion-level manhood, conviction and spiritual strength. Edwin Louis Cole writes to those who are tired of weakness, passivity and compromise and who want to become the kind of men who face life's hardest battles with resolve.
 
-This book equips you with the spiritual weapons and practical wisdom to stand firm when everything around you is shaking. A powerful guide to developing the courage needed to face life's greatest challenges.
+The book presents courage not as mere bravado, but as visible strength rooted in character, discipline and commitment to God. It speaks especially to young men, challenging them not to waste their youth but to live with purpose, maturity and responsibility. Through themes such as warfare, temptation, work, identity, discipline, persistence and becoming a champion, Cole trains readers to think beyond comfort and to embrace the cost of real growth.
 
-Learn how to stand firm in adversity, overcome fear, and lead with strength and conviction.`,
+His central message is clear: champions are not born by chance; they are formed through decisions, determination and courage made visible in action. This book is both a challenge and an invitation — to reject mediocrity, resist fear of failure and rise into the manhood God intended. It is highly suited for personal growth, men's discipleship and leadership development, especially where courage, spiritual grit and purpose-driven living are needed most.`,
   },
 ]
 
