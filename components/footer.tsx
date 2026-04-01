@@ -193,6 +193,30 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* International */}
+          <div>
+            <h3 className="font-semibold text-lg mb-5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-white/60" />
+              International
+            </h3>
+            <div className="space-y-3">
+              <a 
+                href="https://thefatherfoundation.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/70 hover:text-white transition-colors duration-200 flex items-center gap-2 group"
+              >
+                <span className="group-hover:translate-x-1 transition-transform duration-200">
+                  The Father Foundation
+                </span>
+                <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              </a>
+              <p className="text-white/50 text-sm">
+                Roberts Burdett leading the charge
+              </p>
+            </div>
+          </div>
+
           {/* Contact Info */}
           <div>
             <h3 className="font-semibold text-lg mb-5 flex items-center gap-2">
