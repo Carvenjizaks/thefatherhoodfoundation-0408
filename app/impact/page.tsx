@@ -329,7 +329,7 @@ export default function ImpactPage() {
                 </div>
                 {/* Floating badge */}
                 <div className="absolute -bottom-4 -right-4 bg-[#8B2B3E] text-white px-6 py-4 rounded-2xl shadow-xl opacity-0 fade-in-up animation-delay-500">
-                  <p className="text-lg font-bold">Brotherhood</p>
+                  <p className="text-lg font-bold">Manhood</p>
                   <p className="text-sm opacity-90">Across All Cultures</p>
                 </div>
               </div>
