@@ -156,31 +156,23 @@ export default function BooksPage() {
                   style={{ borderLeft: `6px solid ${colors.primary}` }}
                 >
                   {/* Book Header - Always Visible */}
-                  <div className="relative">
+                  <div className="relative min-h-[180px]">
                     {/* Colored Top Bar */}
                     <div 
-                      className="absolute top-0 left-0 right-0 h-1"
+                      className="absolute top-0 left-0 right-0 h-2 z-10"
                       style={{ background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})` }}
                     />
-                    {/* Faded Book Image Background */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <Image
-                        src={book.image}
-                        alt={book.title}
-                        fill
-                        className="object-cover opacity-10"
-                      />
-                      <div 
-                        className="absolute inset-0"
-                        style={{ background: `linear-gradient(135deg, ${colors.accent} 0%, white 50%, ${colors.accent}50 100%)` }}
-                      />
-                    </div>
+                    {/* Background Color */}
+                    <div 
+                      className="absolute inset-0"
+                      style={{ backgroundColor: colors.accent }}
+                    />
                     
                     {/* Content */}
-                    <div className="relative p-6 lg:p-8">
+                    <div className="relative z-10 p-6 lg:p-8">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                         {/* Book Cover Thumbnail */}
-                        <div className="relative w-24 h-32 lg:w-28 lg:h-36 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+                        <div className="relative w-28 h-36 lg:w-32 lg:h-44 rounded-xl overflow-hidden shadow-xl flex-shrink-0 border-4 border-white">
                           <Image
                             src={book.image}
                             alt={book.title}
@@ -190,29 +182,26 @@ export default function BooksPage() {
                         </div>
                         
                         {/* Book Info */}
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p 
-                            className="text-xs font-semibold uppercase tracking-widest mb-2"
-                            style={{ color: colors.secondary }}
+                            className="text-xs font-bold uppercase tracking-widest mb-2"
+                            style={{ color: colors.primary }}
                           >
                             {book.author}
                           </p>
-                          <h2 
-                            className="text-xl lg:text-2xl font-bold mb-3"
-                            style={{ color: colors.primary }}
-                          >
+                          <h2 className="text-xl lg:text-2xl font-bold mb-3 text-[#1a0a0e]">
                             {book.title}
                           </h2>
                           
                           {/* Topics */}
-                          <div className="flex flex-wrap gap-2 mb-4">
+                          <div className="flex flex-wrap gap-2">
                             {book.topics.map((topic, topicIndex) => (
                               <span
                                 key={topicIndex}
-                                className="px-3 py-1 text-xs font-medium rounded-full"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-full shadow-sm"
                                 style={{ 
-                                  backgroundColor: `${colors.primary}15`,
-                                  color: colors.primary 
+                                  backgroundColor: colors.primary,
+                                  color: "white" 
                                 }}
                               >
                                 {topic}
@@ -224,10 +213,11 @@ export default function BooksPage() {
                         {/* Read More Button */}
                         <Button
                           onClick={() => toggleBook(index)}
-                          className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 text-white hover:scale-105 shadow-lg"
-                          style={{ 
-                            backgroundColor: expandedBook === index ? colors.secondary : colors.primary,
-                          }}
+                          className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all duration-300 hover:scale-105 shadow-xl ${
+                            expandedBook === index 
+                              ? "bg-[#1E3A5F] text-white" 
+                              : "bg-[#8B2B3E] text-white hover:bg-[#6d2230]"
+                          }`}
                         >
                           {expandedBook === index ? (
                             <>
@@ -251,41 +241,26 @@ export default function BooksPage() {
                       expandedBook === index ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="px-6 lg:px-8 pb-8 pt-2">
-                      <div 
-                        className="pt-6"
-                        style={{ borderTop: `2px solid ${colors.primary}20` }}
-                      >
-                        <h3 
-                          className="text-lg font-bold mb-4"
-                          style={{ color: colors.primary }}
-                        >
+                    <div className="px-6 lg:px-8 pb-8 pt-4 bg-white">
+                      <div className="border-t-2 border-[#e8d8c8] pt-6">
+                        <h3 className="text-xl font-bold mb-4 text-[#1E3A5F]">
                           About This Book
                         </h3>
                         <div className="prose prose-lg max-w-none">
                           {book.writeUp.split('\n\n').map((paragraph, pIndex) => (
-                            <p key={pIndex} className="text-[#5C3D2E] leading-relaxed mb-4">
+                            <p key={pIndex} className="text-[#5C3D2E] leading-relaxed mb-4 text-base">
                               {paragraph}
                             </p>
                           ))}
                         </div>
                         
                         {/* Sign Up CTA */}
-                        <div 
-                          className="mt-8 p-6 rounded-xl"
-                          style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.primary}10)` }}
-                        >
-                          <p 
-                            className="font-semibold mb-3"
-                            style={{ color: colors.primary }}
-                          >
+                        <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-[#8B2B3E]/5 to-[#1E3A5F]/5 border border-[#e8d8c8]">
+                          <p className="font-bold mb-3 text-[#1E3A5F]">
                             Ready to start this journey?
                           </p>
                           <Link href="/curriculum/sign-up">
-                            <Button 
-                              className="text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg"
-                              style={{ backgroundColor: colors.primary }}
-                            >
+                            <Button className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg">
                               Sign Up for Curriculum
                             </Button>
                           </Link>
@@ -295,7 +270,7 @@ export default function BooksPage() {
                   </div>
                 </div>
               )
-              })}
+            })}
             </div>
           </div>
         </section>
