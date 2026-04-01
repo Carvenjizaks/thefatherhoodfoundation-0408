@@ -297,25 +297,64 @@ export default function MissionsForMenPage() {
                 </div>
               </div>
 
-              {/* Mission Card 2 */}
-              <div className="group relative bg-[#1a1a1a] border border-white/10 hover:border-[#D4A574]/50 transition-all duration-300">
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src="/images/goc/goc-group-beach.jpg"
-                    alt="Regional Mission"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider">
-                    Planning
-                  </div>
+              {/* International Card */}
+              <div className="group relative bg-[#1E3A5F] border border-[#D4A574]/30 hover:border-[#D4A574] transition-all duration-300">
+                <div className="absolute top-4 left-4 px-3 py-1 bg-[#D4A574] text-black text-xs font-bold uppercase tracking-wider z-10">
+                  International
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Regional Brotherhood Trip</h3>
-                  <p className="text-white/60 text-sm mb-4">Southern Africa - Q3 2026</p>
-                  <p className="text-white/70 text-sm leading-relaxed">
-                    Connect with men across the region for service and fellowship.
-                  </p>
+                <div className="p-6 pt-14">
+                  <a 
+                    href="https://thefatherfoundation.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <h3 className="text-xl font-bold mb-4 text-white group-hover:text-[#D4A574] transition-colors">
+                      The Father Foundation
+                    </h3>
+                  </a>
+                  
+                  {/* Leaders */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#D4A574]">
+                        <Image
+                          src="/images/leaders/robert-burdett.jpg"
+                          alt="Robert Burdett"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold">Robert Burdett</p>
+                        <p className="text-[#D4A574] text-sm">Director</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#D4A574]">
+                        <Image
+                          src="/images/leaders/brandon-sanders.jpg"
+                          alt="Brandon Sanders"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-white font-semibold">Brandon Sanders</p>
+                        <p className="text-[#D4A574] text-sm">Leader</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <a 
+                    href="https://thefatherfoundation.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-6 text-sm text-white/70 hover:text-[#D4A574] transition-colors"
+                  >
+                    Visit Website <ArrowRight className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
 
