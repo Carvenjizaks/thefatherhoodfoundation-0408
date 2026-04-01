@@ -322,14 +322,16 @@ export default function AboutPage() {
             {values.map((v) => (
               <div
                 key={v.title}
-                className="value-card border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white"
+                className="value-card border border-[#3D1F0F]/10 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white overflow-hidden"
               >
+                {/* Dark brown header bar */}
+                <div className="h-2 bg-[#3D1F0F]" />
                 <div className="p-8 text-center">
-                  <div className="w-14 h-14 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center mx-auto mb-6">
-                    <v.icon className="w-7 h-7 text-[#8B2B3E]" />
+                  <div className="w-14 h-14 rounded-full bg-[#3D1F0F] flex items-center justify-center mx-auto mb-6">
+                    <v.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="font-bold text-[#1a1a1a] mb-3">{v.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed text-center">{v.desc}</p>
+                  <h3 className="font-bold text-[#3D1F0F] mb-3">{v.title}</h3>
+                  <p className="text-sm text-[#5C3D2E] leading-relaxed text-center">{v.desc}</p>
                 </div>
               </div>
             ))}
