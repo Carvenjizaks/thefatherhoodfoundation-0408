@@ -237,7 +237,28 @@ export default function AboutPage() {
       </section>
 
       {/* Why Partner With Us */}
-      <section className="py-24 bg-[#f8f5f2]">
+      <section className="py-24 bg-[#f8f5f2] overflow-hidden">
+        <style>{`
+          @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(139, 43, 62, 0.2); }
+            50% { box-shadow: 0 0 20px 5px rgba(139, 43, 62, 0.15); }
+          }
+          .partner-card {
+            opacity: 0;
+            animation: slideInFromLeft 0.7s ease forwards;
+          }
+          .partner-card:nth-child(1) { animation-delay: 0.1s; }
+          .partner-card:nth-child(2) { animation-delay: 0.25s; }
+          .partner-card:nth-child(3) { animation-delay: 0.4s; }
+          .partner-card:nth-child(4) { animation-delay: 0.55s; }
+          .partner-card:hover .partner-icon {
+            animation: pulseGlow 1.5s ease-in-out infinite;
+          }
+        `}</style>
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">Why Partner With Us</p>
@@ -248,9 +269,9 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyPartner.map((item) => (
-              <Card key={item.title} className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
+              <Card key={item.title} className="partner-card border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white cursor-pointer">
                 <CardContent className="p-8 text-center">
-                  <div className="w-14 h-14 rounded-full bg-[#8B2B3E] flex items-center justify-center mx-auto mb-6">
+                  <div className="partner-icon w-14 h-14 rounded-full bg-[#8B2B3E] flex items-center justify-center mx-auto mb-6 transition-all duration-300">
                     <item.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="font-bold text-[#1a1a1a] mb-3">{item.title}</h3>
