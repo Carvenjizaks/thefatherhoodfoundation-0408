@@ -111,6 +111,39 @@ export default function MissionsForMenPage() {
           </div>
         </section>
 
+        {/* International Section */}
+        <section className="py-16 lg:py-20 bg-[#1E3A5F]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+              <div className="flex items-center gap-6">
+                <div className="bg-white rounded-lg p-3 shadow-xl">
+                  <Image
+                    src="/images/logo.png"
+                    alt="Fatherhood Foundation Logo"
+                    width={80}
+                    height={80}
+                    className="w-16 h-16 lg:w-20 lg:h-20 object-contain"
+                  />
+                </div>
+                <div>
+                  <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">International</span>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-white mt-1">The Father Foundation</h3>
+                  <p className="text-white/70 mt-2">Roberts Burdett leading the charge</p>
+                </div>
+              </div>
+              <a 
+                href="https://thefatherfoundation.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-[#D4A574] text-[#1E3A5F] font-bold rounded-none hover:bg-[#c4956a] transition-colors"
+              >
+                Visit International Site
+                <Globe className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Mission Statement */}
         <section className="py-24 lg:py-32 bg-[#0a0a0a]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
