@@ -485,69 +485,134 @@ export default function AdminDashboardPage() {
               </Card>
             </TabsContent>
 
-            {/* Event Registrations */}
+            {/* Event Registrations - Segmented by Event */}
             <TabsContent value="events">
-              <Card className="border-[#e8d8c8]">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-[#3D1F0F]">Event Registrations</CardTitle>
-                    <CardDescription>MyGreatMarriage and other event sign-ups</CardDescription>
-                  </div>
+              <div className="space-y-6">
+                {/* Event Overview Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {(() => {
+                    const eventCounts = filterData(eventRegistrations, searchTerm).reduce((acc, reg) => {
+                      const eventName = reg.event_name || 'Unknown Event'
+                      acc[eventName] = (acc[eventName] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                    
+                    return Object.entries(eventCounts).map(([eventName, count]) => (
+                      <Card key={eventName} className="border-[#e8d8c8] bg-gradient-to-br from-white to-[#f5f0eb]">
+                        <CardContent className="p-4 text-center">
+                          <p className="text-2xl font-bold text-[#8B2B3E]">{count}</p>
+                          <p className="text-xs text-[#5C3D2E] font-medium">{eventName}</p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  })()}
+                </div>
+
+                {/* Export All Button */}
+                <div className="flex justify-end">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => exportToCSV(filterData(eventRegistrations, searchTerm), "event-registrations")}
+                    onClick={() => exportToCSV(filterData(eventRegistrations, searchTerm), "all-event-registrations")}
                     className="border-[#8B2B3E] text-[#8B2B3E]"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    Export CSV
+                    Export All Events CSV
                   </Button>
-                </CardHeader>
-                <CardContent>
-                  {isLoading ? (
-                    <div className="text-center py-12">
-                      <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                      <p className="mt-2 text-[#5C3D2E]">Loading...</p>
-                    </div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Spouse</TableHead>
-                            <TableHead>Event</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Code</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Registered</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filterData(eventRegistrations, searchTerm).map((reg) => (
-                            <TableRow key={reg.id}>
-                              <TableCell className="font-medium">{reg.first_name} {reg.last_name}</TableCell>
-                              <TableCell>{reg.email}</TableCell>
-                              <TableCell>{reg.phone}</TableCell>
-                              <TableCell>{reg.spouse_name || "-"}</TableCell>
-                              <TableCell><Badge variant="outline">{reg.event_name}</Badge></TableCell>
-                              <TableCell>{reg.session_date ? formatDate(reg.session_date) : "-"}</TableCell>
-                              <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
-                              <TableCell>{getStatusBadge(reg.payment_status)}</TableCell>
-                              <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      {filterData(eventRegistrations, searchTerm).length === 0 && (
-                        <p className="text-center py-8 text-[#5C3D2E]">No event registrations found</p>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                </div>
+
+                {/* Segmented Event Cards */}
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
+                    <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                  </div>
+                ) : (
+                  (() => {
+                    const filteredEvents = filterData(eventRegistrations, searchTerm)
+                    const groupedEvents = filteredEvents.reduce((acc, reg) => {
+                      const eventName = reg.event_name || 'Unknown Event'
+                      if (!acc[eventName]) acc[eventName] = []
+                      acc[eventName].push(reg)
+                      return acc
+                    }, {} as Record<string, typeof eventRegistrations>)
+
+                    const eventOrder = ['MyGreatMarriage 2026', 'Gathering of Champions 2026', 'Table Talk']
+                    const sortedEventNames = Object.keys(groupedEvents).sort((a, b) => {
+                      const indexA = eventOrder.findIndex(e => a.includes(e)) 
+                      const indexB = eventOrder.findIndex(e => b.includes(e))
+                      if (indexA === -1 && indexB === -1) return a.localeCompare(b)
+                      if (indexA === -1) return 1
+                      if (indexB === -1) return -1
+                      return indexA - indexB
+                    })
+
+                    if (sortedEventNames.length === 0) {
+                      return <p className="text-center py-8 text-[#5C3D2E]">No event registrations found</p>
+                    }
+
+                    return sortedEventNames.map((eventName) => {
+                      const regs = groupedEvents[eventName]
+                      const eventColor = eventName.includes('Marriage') ? 'bg-pink-100 text-pink-800' 
+                        : eventName.includes('Champion') || eventName.includes('GOC') ? 'bg-blue-100 text-blue-800'
+                        : eventName.includes('Table') ? 'bg-amber-100 text-amber-800'
+                        : 'bg-gray-100 text-gray-800'
+
+                      return (
+                        <Card key={eventName} className="border-[#e8d8c8]">
+                          <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#f5f0eb] to-white">
+                            <div className="flex items-center gap-3">
+                              <Badge className={eventColor}>{eventName}</Badge>
+                              <span className="text-sm text-[#5C3D2E]">{regs.length} registration{regs.length !== 1 ? 's' : ''}</span>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, '-')}-registrations`)}
+                              className="border-[#8B2B3E] text-[#8B2B3E]"
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Export
+                            </Button>
+                          </CardHeader>
+                          <CardContent className="pt-4">
+                            <div className="overflow-x-auto">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Phone</TableHead>
+                                    <TableHead>Spouse</TableHead>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead>Code</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead>Registered</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {regs.map((reg) => (
+                                    <TableRow key={reg.id}>
+                                      <TableCell className="font-medium">{reg.first_name} {reg.last_name}</TableCell>
+                                      <TableCell>{reg.email}</TableCell>
+                                      <TableCell>{reg.phone}</TableCell>
+                                      <TableCell>{reg.spouse_name || "-"}</TableCell>
+                                      <TableCell>{reg.session_date ? formatDate(reg.session_date) : "-"}</TableCell>
+                                      <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
+                                      <TableCell>{getStatusBadge(reg.payment_status)}</TableCell>
+                                      <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )
+                    })
+                  })()
+                )}
+              </div>
             </TabsContent>
 
             {/* Contacts */}
