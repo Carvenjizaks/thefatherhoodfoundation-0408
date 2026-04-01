@@ -53,11 +53,11 @@ With Cole's direct style, the message is both confronting and constructive, chal
     author: "Ed Cole",
     image: "/images/books/never-quit.webp",
     topics: ["Perseverance", "Resilience", "Victory", "Determination"],
-    writeUp: `Champions are not those who never fail, but those who never quit. Life will knock you down—that's guaranteed. What matters is whether you get back up.
+    writeUp: `Never Quit is a powerful message of endurance, faith and resilience for people walking through crisis, disappointment or personal failure. Edwin Louis Cole makes the case that crisis is a normal part of life and that the real difference between winners and losers is not the absence of failure, but the refusal to surrender.
 
-This book ignites the fire of perseverance and teaches you how to finish strong no matter what obstacles you face. An inspiring call to perseverance and resilience.
+Through biblical examples such as Elijah, David and Joseph, the book shows how God works in the middle of stress, fear, transition and loss to produce maturity, restoration and victory. It addresses themes such as handling change, overcoming despair, moving from failure to success, living with perseverance and speaking faith instead of fear.
 
-Learn how to overcome setbacks, push through adversity, and develop the unshakeable determination that defines true champions.`,
+Cole's message is deeply practical: trials are not pointless, failure does not have to be final, and success is sustained by spiritual discipline, purified character and steadfast trust in God. This is a book for anyone who feels pressure to give up, who is facing a difficult season, or who needs courage to keep going. More than motivation, Never Quit offers a biblical framework for enduring hardship without losing heart and for emerging stronger, wiser and more grounded in God's purpose.`,
   },
   {
     title: "Courage: Winning Life's Toughest Battles",
