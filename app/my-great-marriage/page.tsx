@@ -120,6 +120,9 @@ export default function MyGreatMarriagePage() {
                 </div>
               </div>
             </div>
+            <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
+              KEY FOCUS OF WHY MGM
+            </span>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
               Build the Marriage You&apos;ve Always Dreamed Of
             </h1>
