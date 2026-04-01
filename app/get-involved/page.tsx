@@ -237,51 +237,66 @@ export default function GetInvolvedPage() {
                   All sessions at Scouts Hall, Suiderhof, Windhoek | 8:30am - 10:30am
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-0">
-                {tableTalkSessions.map((monthGroup, groupIndex) => (
-                  <div key={monthGroup.month}>
-                    <div className="bg-[#8B2B3E] text-white px-6 py-3 font-bold text-lg">
-                      {monthGroup.month}
+              <CardContent className="p-8">
+                {/* Round Table Circles */}
+                <div className="flex flex-wrap justify-center gap-8 mb-6">
+                  {/* Table 1 - Maroon - With Date */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-xl border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">25 April</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
-                    <div className="divide-y">
-                      {monthGroup.sessions.map((session, index) => (
-                        <div
-                          key={index}
-                          className={`p-6 transition-colors ${session.isOpen ? 'hover:bg-muted/50' : 'bg-muted/30'}`}
-                        >
-                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                            <div className="flex items-start gap-4">
-                              <Calendar className={`w-6 h-6 flex-shrink-0 mt-1 ${session.isOpen ? 'text-[#8B2B3E]' : 'text-muted-foreground'}`} />
-                              <div>
-                                <p className={`font-bold text-lg ${session.isOpen ? 'text-foreground' : 'text-muted-foreground'}`}>{session.date}</p>
-                                <p className="text-muted-foreground text-sm">
-                                  <span className="font-medium">TIME: {session.time}</span> (Includes Drinks & Light Meal)
-                                </p>
-                              </div>
-                            </div>
-                            {session.isOpen ? (
-                              <Button 
-                                className="bg-[#8B2B3E] hover:bg-[#6d2230] flex-shrink-0"
-                                onClick={() => setSelectedSession(session.dateValue)}
-                              >
-                                Register Now
-                              </Button>
-                            ) : (
-                              <span className="inline-flex items-center px-4 py-2 rounded-md bg-muted text-muted-foreground font-medium text-sm flex-shrink-0">
-                                NOT OPEN YET
-                              </span>
-                            )}
-                          </div>
-                          {session.description && (
-                            <div className="mt-4 ml-10 p-4 bg-[#8B2B3E]/5 border-l-4 border-[#8B2B3E] rounded-r-lg">
-                              <p className="text-sm text-foreground/80 leading-relaxed">{session.description}</p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                    <Button 
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-04-25")}
+                    >
+                      REGISTER NOW
+                    </Button>
+                  </div>
+                  {/* Table 2 - Navy */}
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-xl border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
+                    <div className="text-center">
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
                     </div>
                   </div>
-                ))}
+                  {/* Table 3 - Terracotta */}
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#D4A574] flex items-center justify-center shadow-xl border-4 border-[#D4A574]/30 hover:scale-105 transition-transform cursor-pointer">
+                    <div className="text-center">
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                    </div>
+                  </div>
+                  {/* Table 4 - Dark Brown */}
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#3D1F0F] flex items-center justify-center shadow-xl border-4 border-[#3D1F0F]/30 hover:scale-105 transition-transform cursor-pointer">
+                    <div className="text-center">
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                    </div>
+                  </div>
+                  {/* Table 5 - Warm Brown */}
+                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#5C3D2E] flex items-center justify-center shadow-xl border-4 border-[#5C3D2E]/30 hover:scale-105 transition-transform cursor-pointer">
+                    <div className="text-center">
+                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates to be Announced */}
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-[#1E3A5F] mb-2">More Dates to be Announced</h3>
+                  <p className="text-muted-foreground">Additional session dates are coming soon. Sign up to be notified!</p>
+                </div>
+
+                {/* Sign Up Button */}
+                <div className="text-center">
+                  <Button 
+                    size="lg"
+                    className="bg-[#1E3A5F] hover:bg-[#152d4a] text-white px-8 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    onClick={() => setSelectedSession("")}
+                  >
+                    Sign Up and Get Notified Ahead of Time
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
