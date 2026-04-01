@@ -547,6 +547,14 @@ export default function MyGreatMarriageEventPage() {
                 </div>
               ))}
             </div>
+            
+            {/* Closing Date Notice */}
+            <div className="mt-12 text-center">
+              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#1E3A5F] text-white shadow-lg">
+                <span className="font-semibold">Closing Date for Registration:</span>
+                <span className="text-[#D4A574] font-bold text-lg">1 May 2026</span>
+              </div>
+            </div>
           </div>
         </section>
 
