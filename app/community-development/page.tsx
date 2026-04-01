@@ -7,8 +7,38 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Building2, Handshake, Users2, Target, Heart, CheckCircle2 } from "lucide-react"
+import { ArrowRight, Building2, Handshake, Users2, Target, Heart, CheckCircle2, Calendar, MapPin, GraduationCap, Briefcase, Crown } from "lucide-react"
 import { ScrollingImageCarousel } from "@/components/scrolling-image-carousel"
+
+// Animation styles
+const animationStyles = `
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-80px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(80px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .slide-left { animation: slideInLeft 0.8s ease-out forwards; }
+  .slide-right { animation: slideInRight 0.8s ease-out forwards; }
+  .fade-up { animation: fadeInUp 0.7s ease-out forwards; }
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
+  .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+`
 
 // Warm color palette matching the brand
 const warmColors = {
@@ -111,6 +141,7 @@ export default function CommunityDevelopmentPage() {
   return (
     <>
       <Header />
+      <style dangerouslySetInnerHTML={{ __html: animationStyles }} />
       <main className="pt-20">
         {/* Scrolling Image Carousel */}
         <ScrollingImageCarousel images={communityImages} />
@@ -195,6 +226,99 @@ export default function CommunityDevelopmentPage() {
           </div>
         </section>
 
+        {/* Babylon Community Section - Heart of Our Work */}
+        <section className="py-20 lg:py-32 overflow-hidden" style={{ background: `linear-gradient(180deg, white 0%, ${warmColors.warmBg} 100%)` }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest mb-4 opacity-0 fade-up" style={{ color: warmColors.accent }}>
+                The Heart of What We Do
+              </p>
+              <h2 className="text-3xl lg:text-5xl font-bold mb-6 opacity-0 fade-up delay-100" style={{ color: warmColors.textDark }}>
+                Babylon Community
+              </h2>
+              <p className="text-lg max-w-3xl mx-auto opacity-0 fade-up delay-200" style={{ color: warmColors.textMuted }}>
+                Located in Katutura, our weekly engagement brings together men from all walks of life for mentorship, growth, and leadership development.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+              {/* Image - slides from left */}
+              <div className="relative h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-2xl opacity-0 slide-left">
+                <Image 
+                  src="/images/impact/babylon-community.jpg" 
+                  alt="Babylon Community weekly mentorship gathering in Katutura" 
+                  fill 
+                  className="object-cover" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <div className="flex items-center gap-2 text-white/90 mb-2">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm font-medium">Katutura, Windhoek</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/90">
+                    <Calendar className="w-4 h-4" />
+                    <span className="text-sm font-medium">Weekly Engagements</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content - slides from right */}
+              <div className="opacity-0 slide-right delay-200">
+                <h3 className="text-2xl lg:text-3xl font-bold mb-6" style={{ color: warmColors.textDark }}>
+                  Training Leaders Who Transform Communities
+                </h3>
+                <p className="text-lg mb-6 leading-relaxed" style={{ color: warmColors.textMuted }}>
+                  This team manages team leaders, leading teams, who are active in communities. Every week, we gather to pour into the lives of men who are called to lead — in their homes, workplaces, and neighbourhoods.
+                </p>
+                <p className="text-lg mb-8 leading-relaxed" style={{ color: warmColors.textMuted }}>
+                  Our mentorship model creates a ripple effect: we train leaders who train other leaders, multiplying our impact across Namibia.
+                </p>
+                
+                {/* Leader Types */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="bg-white rounded-2xl p-6 shadow-lg hover-lift opacity-0 fade-up delay-300">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
+                      <Briefcase className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-bold mb-1" style={{ color: warmColors.textDark }}>Corporate Leaders</h4>
+                    <p className="text-sm" style={{ color: warmColors.textMuted }}>Business professionals leading with purpose</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-2xl p-6 shadow-lg hover-lift opacity-0 fade-up delay-400">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `linear-gradient(135deg, ${warmColors.accent}, #a83850)` }}>
+                      <Crown className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-bold mb-1" style={{ color: warmColors.textDark }}>Community Leaders</h4>
+                    <p className="text-sm" style={{ color: warmColors.textMuted }}>Pillars of strength in their neighbourhoods</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-2xl p-6 shadow-lg hover-lift opacity-0 fade-up delay-500">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
+                      <GraduationCap className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-bold mb-1" style={{ color: warmColors.textDark }}>Headmasters</h4>
+                    <p className="text-sm" style={{ color: warmColors.textMuted }}>Shaping the next generation</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quote/Testimony Block */}
+            <div className="max-w-4xl mx-auto text-center opacity-0 fade-up delay-300">
+              <div className="bg-white rounded-3xl p-10 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-2" style={{ background: `linear-gradient(90deg, ${warmColors.accent}, ${warmColors.primary})` }} />
+                <blockquote className="text-xl lg:text-2xl italic leading-relaxed mb-6" style={{ color: warmColors.textDark }}>
+                  &ldquo;When men gather with intention, transformation happens. In Babylon, we don&apos;t just meet — we build each other up, challenge each other to grow, and send each other out to lead.&rdquo;
+                </blockquote>
+                <p className="font-semibold" style={{ color: warmColors.primary }}>
+                  — The Fatherhood Foundation
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Impact Areas - Warm Cards */}
         <section className="py-20 lg:py-32" style={{ background: `linear-gradient(180deg, ${warmColors.warmBg} 0%, ${warmColors.cream} 100%)` }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -209,7 +333,7 @@ export default function CommunityDevelopmentPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden" style={{ background: "white" }}>
+              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden hover-lift opacity-0 fade-up" style={{ background: "white" }}>
                 <CardContent className="p-8">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
                     <Users2 className="w-8 h-8 text-white" />
@@ -222,7 +346,7 @@ export default function CommunityDevelopmentPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden" style={{ background: "white" }}>
+              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden hover-lift opacity-0 fade-up delay-100" style={{ background: "white" }}>
                 <CardContent className="p-8">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
                     <Building2 className="w-8 h-8 text-white" />
@@ -234,7 +358,7 @@ export default function CommunityDevelopmentPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden" style={{ background: "white" }}>
+              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden hover-lift opacity-0 fade-up delay-200" style={{ background: "white" }}>
                 <CardContent className="p-8">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
                     <Handshake className="w-8 h-8 text-white" />
@@ -246,7 +370,7 @@ export default function CommunityDevelopmentPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden" style={{ background: "white" }}>
+              <Card className="border-0 shadow-lg rounded-2xl overflow-hidden hover-lift opacity-0 fade-up delay-300" style={{ background: "white" }}>
                 <CardContent className="p-8">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
                     <Target className="w-8 h-8 text-white" />
