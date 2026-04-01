@@ -107,46 +107,53 @@ export default function MyGreatMarriagePage() {
             </div>
           ))}
 
-          {/* Centered text overlay */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 lg:px-8">
-            <div className="flex flex-col items-center gap-4 mb-8">
-              {/* Terracotta ring */}
-              <div className="relative w-48 h-48 lg:w-64 lg:h-64 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border-[6px] lg:border-[8px] border-[#D4A574] opacity-90" />
-                <div className="absolute inset-2 rounded-full border-[3px] lg:border-[4px] border-[#D4A574]/50" />
-                <div className="text-center z-10">
-                  <span className="block text-4xl lg:text-5xl font-bold text-white tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>MGM</span>
-                  <span className="block text-[10px] lg:text-xs font-semibold tracking-[0.25em] uppercase text-white/90 mt-1">My Great Marriage</span>
+          {/* Content overlay */}
+          <div className="relative z-10 h-full flex flex-col justify-center px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto w-full">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-8">
+                {/* Logo - positioned left */}
+                <div className="flex-shrink-0">
+                  <Image
+                    src="/images/mgm-logo.jpg"
+                    alt="My Great Marriage Logo"
+                    width={200}
+                    height={200}
+                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain"
+                  />
+                </div>
+                
+                {/* Text content */}
+                <div className="flex-1 text-center lg:text-left">
+                  <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
+                    KEY FOCUS OF WHY MGM
+                  </span>
+                  <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight text-balance max-w-3xl mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                    Build the Marriage You&apos;ve Always Dreamed Of
+                  </h1>
+                  <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
+                    Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <Button
+                      size="lg"
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
+                      asChild
+                    >
+                      <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                        Register Now <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-white text-white hover:bg-white/10 rounded-full px-8 font-semibold bg-transparent"
+                      asChild
+                    >
+                      <Link href="#overview">Learn More</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
-              KEY FOCUS OF WHY MGM
-            </span>
-            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
-              Build the Marriage You&apos;ve Always Dreamed Of
-            </h1>
-            <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
-              Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                size="lg"
-                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
-                asChild
-              >
-                <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
-                  Register Now <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10 rounded-full px-8 font-semibold bg-transparent"
-                asChild
-              >
-                <Link href="#overview">Learn More</Link>
-              </Button>
             </div>
           </div>
 
