@@ -114,15 +114,15 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <Image
                   src="/images/logo.png"
                   alt="The Fatherhood Foundation Logo"
-                  width={56}
-                  height={56}
-                  className="w-14 h-14 rounded-full bg-white p-1 transition-transform duration-300 group-hover:scale-110"
+                  width={120}
+                  height={60}
+                  className="h-14 w-auto object-contain bg-white rounded-lg p-1.5 transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 rounded-full bg-white/20 scale-0 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-lg bg-white/20 scale-0 group-hover:scale-150 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
               </div>
               <span className="font-bold text-lg">The Fatherhood Foundation</span>
             </Link>
