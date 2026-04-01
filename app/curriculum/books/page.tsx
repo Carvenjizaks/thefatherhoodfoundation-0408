@@ -41,11 +41,11 @@ At its core, this book is about potential becoming reality: God-given dreams, ri
     author: "Ed Cole",
     image: "/images/books/communication-sex-money.webp",
     topics: ["Marriage", "Communication", "Intimacy", "Finances"],
-    writeUp: `The three greatest areas of conflict in marriage are communication, sex, and money. Yet these same areas, when handled God's way, become the greatest sources of intimacy and blessing.
+    writeUp: `Communication, Sex and Money speaks to three of the most defining and often most difficult areas in relationships. Edwin Louis Cole addresses the practical tensions that arise when couples or families struggle to connect honestly, handle intimacy with maturity and steward finances with wisdom.
 
-Learn how to transform potential battlegrounds into foundations for a thriving marriage. A practical guide to navigating the most challenging areas of marriage.
+Rather than treating these topics as isolated problems, the book points to the deeper issues underneath them: trust, value, responsibility, priorities, love, respect and spiritual alignment. It is written to help readers move beyond conflict, misunderstanding and emotional distance into stronger, healthier and more honest relationships.
 
-Build deeper connection with your spouse through biblical principles for communication, intimacy, and finances.`,
+With Cole's direct style, the message is both confronting and constructive, challenging men in particular to grow in leadership, integrity and relational responsibility. This book is not about managing surface issues; it is about dealing with the roots that affect the home, marriage and personal life. It offers practical insight for couples, individuals preparing for marriage, and leaders who want to build families on truth rather than confusion. The result is a message that is deeply relevant for anyone seeking healthier communication, greater relational wholeness and a more God-honoring approach to love, intimacy and financial stewardship.`,
   },
   {
     title: "Never Quit: Winners Are Not Those Who Never Fail But Those Who Never Quit",
