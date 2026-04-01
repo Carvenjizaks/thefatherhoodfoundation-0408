@@ -8,6 +8,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { BookOpen, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react"
 
+// Color palette for each book
+const bookColors = [
+  { primary: "#8B2B3E", secondary: "#D4A574", accent: "#FDF0E6" }, // Maroon/Gold
+  { primary: "#1E3A5F", secondary: "#5B8FB9", accent: "#E8F0F8" }, // Navy/Blue  
+  { primary: "#3D1F0F", secondary: "#8B5A2B", accent: "#F5EBE0" }, // Dark Brown/Tan
+  { primary: "#2D5A4A", secondary: "#6B9B8A", accent: "#E6F2EE" }, // Forest Green/Sage
+  { primary: "#5C3D6E", secondary: "#9B7BB0", accent: "#F3EBF7" }, // Purple/Lavender
+]
+
 const books = [
   {
     title: "Sexual Integrity: A Sexual Revolution Called Purity",
@@ -117,22 +126,34 @@ export default function BooksPage() {
         <section className="py-16 lg:py-24">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="space-y-6">
-              {books.map((book, index) => (
+              {books.map((book, index) => {
+                const colors = bookColors[index % bookColors.length]
+                return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden border border-[#e8d8c8] transition-all duration-300 hover:shadow-xl"
+                  id={`book-${index}`}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                  style={{ borderLeft: `6px solid ${colors.primary}` }}
                 >
                   {/* Book Header - Always Visible */}
                   <div className="relative">
+                    {/* Colored Top Bar */}
+                    <div 
+                      className="absolute top-0 left-0 right-0 h-1"
+                      style={{ background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})` }}
+                    />
                     {/* Faded Book Image Background */}
                     <div className="absolute inset-0 overflow-hidden">
                       <Image
                         src={book.image}
                         alt={book.title}
                         fill
-                        className="object-cover opacity-15"
+                        className="object-cover opacity-10"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/80" />
+                      <div 
+                        className="absolute inset-0"
+                        style={{ background: `linear-gradient(135deg, ${colors.accent} 0%, white 50%, ${colors.accent}50 100%)` }}
+                      />
                     </div>
                     
                     {/* Content */}
@@ -150,10 +171,16 @@ export default function BooksPage() {
                         
                         {/* Book Info */}
                         <div className="flex-1">
-                          <p className="text-xs font-semibold uppercase tracking-widest text-[#8B2B3E] mb-2">
+                          <p 
+                            className="text-xs font-semibold uppercase tracking-widest mb-2"
+                            style={{ color: colors.secondary }}
+                          >
                             {book.author}
                           </p>
-                          <h2 className="text-xl lg:text-2xl font-bold text-[#1E3A5F] mb-3">
+                          <h2 
+                            className="text-xl lg:text-2xl font-bold mb-3"
+                            style={{ color: colors.primary }}
+                          >
                             {book.title}
                           </h2>
                           
@@ -162,7 +189,11 @@ export default function BooksPage() {
                             {book.topics.map((topic, topicIndex) => (
                               <span
                                 key={topicIndex}
-                                className="px-3 py-1 text-xs font-medium bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full"
+                                className="px-3 py-1 text-xs font-medium rounded-full"
+                                style={{ 
+                                  backgroundColor: `${colors.primary}15`,
+                                  color: colors.primary 
+                                }}
                               >
                                 {topic}
                               </span>
@@ -173,11 +204,10 @@ export default function BooksPage() {
                         {/* Read More Button */}
                         <Button
                           onClick={() => toggleBook(index)}
-                          className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                            expandedBook === index
-                              ? "bg-[#1E3A5F] hover:bg-[#152d4a] text-white"
-                              : "bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
-                          }`}
+                          className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 text-white hover:scale-105 shadow-lg"
+                          style={{ 
+                            backgroundColor: expandedBook === index ? colors.secondary : colors.primary,
+                          }}
                         >
                           {expandedBook === index ? (
                             <>
@@ -202,8 +232,16 @@ export default function BooksPage() {
                     }`}
                   >
                     <div className="px-6 lg:px-8 pb-8 pt-2">
-                      <div className="border-t border-[#e8d8c8] pt-6">
-                        <h3 className="text-lg font-bold text-[#1E3A5F] mb-4">About This Book</h3>
+                      <div 
+                        className="pt-6"
+                        style={{ borderTop: `2px solid ${colors.primary}20` }}
+                      >
+                        <h3 
+                          className="text-lg font-bold mb-4"
+                          style={{ color: colors.primary }}
+                        >
+                          About This Book
+                        </h3>
                         <div className="prose prose-lg max-w-none">
                           {book.writeUp.split('\n\n').map((paragraph, pIndex) => (
                             <p key={pIndex} className="text-[#5C3D2E] leading-relaxed mb-4">
@@ -213,12 +251,21 @@ export default function BooksPage() {
                         </div>
                         
                         {/* Sign Up CTA */}
-                        <div className="mt-8 p-6 bg-gradient-to-r from-[#8B2B3E]/5 to-[#1E3A5F]/5 rounded-xl">
-                          <p className="text-[#1E3A5F] font-semibold mb-3">
+                        <div 
+                          className="mt-8 p-6 rounded-xl"
+                          style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.primary}10)` }}
+                        >
+                          <p 
+                            className="font-semibold mb-3"
+                            style={{ color: colors.primary }}
+                          >
                             Ready to start this journey?
                           </p>
                           <Link href="/curriculum/sign-up">
-                            <Button className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-8 py-3 rounded-full font-semibold">
+                            <Button 
+                              className="text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg"
+                              style={{ backgroundColor: colors.primary }}
+                            >
                               Sign Up for Curriculum
                             </Button>
                           </Link>
@@ -227,7 +274,7 @@ export default function BooksPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </section>
