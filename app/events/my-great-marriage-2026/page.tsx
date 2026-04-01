@@ -251,11 +251,23 @@ export default function MyGreatMarriageEventPage() {
 
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+            {/* MGM Logo */}
+            <div className="flex justify-center mb-6">
+              <div className="relative w-40 h-40 lg:w-52 lg:h-52">
+                <Image
+                  src="/images/mgm-logo.jpg"
+                  alt="My Great Marriage Logo"
+                  width={208}
+                  height={208}
+                  className="w-full h-full object-contain rounded-full bg-white p-2 shadow-xl"
+                />
+              </div>
+            </div>
             <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
-              MGM: CONFERENCE FOCUS
+              CONFERENCE 2026
             </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance">
-              MyGreatMarriage Conference 2026
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance" style={{ fontFamily: 'Georgia, serif' }}>
+              My Great Marriage
             </h1>
             <p className="text-xl text-white/85 mb-8 max-w-2xl mx-auto leading-relaxed">
               Join hundreds of couples for a transformative weekend of connection, growth, and renewed love.
