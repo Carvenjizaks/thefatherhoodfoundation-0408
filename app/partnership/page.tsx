@@ -534,7 +534,7 @@ export default function PartnershipPage() {
                       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-2 font-semibold text-[#8B2B3E]">
                           <Shield className="w-4 h-4 text-[#8B2B3E]" />
-                          $197/month commitment
+                          $97/month commitment
                         </span>
                         <span className="flex items-center gap-2">
                           <Flame className="w-4 h-4 text-[#8B2B3E]" />
