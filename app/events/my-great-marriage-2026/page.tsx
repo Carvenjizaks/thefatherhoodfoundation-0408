@@ -228,19 +228,8 @@ export default function MyGreatMarriageEventPage() {
 
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            <div className="mb-8">
-              <Image
-                src="/images/mgm-banner-2026.jpg"
-                alt="MyGreatMarriage Conference 2026"
-                width={400}
-                height={400}
-                className="mx-auto shadow-lg rounded-lg"
-                priority
-              />
-            </div>
-
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance">
-              Transform Your Marriage
+              MyGreatMarriage Conference 2026
             </h1>
             <p className="text-xl text-white/85 mb-8 max-w-2xl mx-auto leading-relaxed">
               Join hundreds of couples for a transformative weekend of connection, growth, and renewed love.
