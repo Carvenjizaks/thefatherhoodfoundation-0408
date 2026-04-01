@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { NewsletterPopup } from "@/components/newsletter-popup"
+import { Analytics } from "@vercel/analytics/next"
 
 // Cache bust v8 - Force complete rebuild and clear invalid URL cache
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className={`${inter.className} font-sans antialiased`}>
         {children}
         <NewsletterPopup />
+        <Analytics />
       </body>
     </html>
   )
