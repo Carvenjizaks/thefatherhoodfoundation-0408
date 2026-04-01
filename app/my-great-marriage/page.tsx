@@ -110,11 +110,13 @@ export default function MyGreatMarriagePage() {
           {/* Centered text overlay */}
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 lg:px-8">
             <div className="flex flex-col items-center gap-4 mb-6">
-              <img
-                src="/images/mgm-logo.jpg"
-                alt="MyGreatMarriage logo"
-                className="w-44 h-44 lg:w-56 lg:h-56 object-contain mix-blend-screen"
-              />
+              <div className="relative w-44 h-44 lg:w-56 lg:h-56">
+                <img
+                  src="/images/mgm-logo.jpg"
+                  alt="MyGreatMarriage logo"
+                  className="w-full h-full object-contain brightness-0 invert opacity-90"
+                />
+              </div>
             </div>
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight text-balance max-w-3xl mb-6">
               Build the Marriage You&apos;ve Always Dreamed Of
