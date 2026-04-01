@@ -226,17 +226,25 @@ export default function MyGreatMarriageEventPage() {
             </div>
           ))}
 
+          {/* Subtle dark gradient for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
           {/* Content */}
           <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            <div className="mb-8">
-              <Image
-                src="/images/mgm-banner-2026.jpg"
-                alt="MyGreatMarriage Conference 2026"
-                width={400}
-                height={400}
-                className="mx-auto shadow-lg rounded-lg"
-                priority
-              />
+            {/* Clean MGM Branding */}
+            <div className="mb-10">
+              <div className="inline-flex flex-col items-center">
+                <div className="w-16 h-16 mb-4 relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-[60%] w-10 h-10 rounded-full border-[3px] border-[#D4A574]" />
+                  <div className="absolute top-0 left-1/2 -translate-x-[40%] w-10 h-10 rounded-full border-[3px] border-[#D4A574]" />
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-wide mb-1">MyGreatMarriage</h2>
+                <div className="flex items-center gap-3">
+                  <div className="h-[1px] w-12 bg-[#D4A574]" />
+                  <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">Conference 2026</span>
+                  <div className="h-[1px] w-12 bg-[#D4A574]" />
+                </div>
+              </div>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg text-balance">
