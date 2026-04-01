@@ -89,6 +89,10 @@ interface Donation {
   created_at: string
 }
 
+// Simple hardcoded admin credentials - FOR YOUR EYES ONLY
+const ADMIN_USERNAME = "admin"
+const ADMIN_PASSWORD = "FatherhoodAdmin2026!"
+
 export default function AdminDashboardPage() {
   const [tableTalkRegistrations, setTableTalkRegistrations] = useState<TableTalkRegistration[]>([])
   const [eventRegistrations, setEventRegistrations] = useState<EventRegistration[]>([])
@@ -97,7 +101,7 @@ export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
@@ -108,13 +112,10 @@ export default function AdminDashboardPage() {
     checkAuth()
   }, [])
 
-  const checkAuth = async () => {
-    if (!supabase) {
-      setIsLoading(false)
-      return
-    }
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
+  const checkAuth = () => {
+    // Check if admin is authenticated via sessionStorage
+    const isAdmin = sessionStorage.getItem("ff_admin_auth")
+    if (isAdmin === "authenticated") {
       setIsAuthenticated(true)
       fetchAllData()
     } else {
@@ -122,27 +123,21 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!supabase) return
     setLoginError("")
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      setLoginError("Invalid credentials. Please try again.")
-    } else {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      sessionStorage.setItem("ff_admin_auth", "authenticated")
       setIsAuthenticated(true)
       fetchAllData()
+    } else {
+      setLoginError("Invalid username or password. Please try again.")
     }
   }
 
-  const handleLogout = async () => {
-    if (!supabase) return
-    await supabase.auth.signOut()
+  const handleLogout = () => {
+    sessionStorage.removeItem("ff_admin_auth")
     setIsAuthenticated(false)
     setTableTalkRegistrations([])
     setEventRegistrations([])
@@ -260,12 +255,12 @@ export default function AdminDashboardPage() {
               <CardContent>
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#5C3D2E] mb-1">Email</label>
+                    <label className="block text-sm font-medium text-[#5C3D2E] mb-1">Username</label>
                     <Input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@example.com"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter username"
                       className="border-[#e8d8c8]"
                       required
                     />
@@ -291,6 +286,9 @@ export default function AdminDashboardPage() {
                     Sign In
                   </Button>
                 </form>
+                <p className="text-xs text-center text-[#5C3D2E]/60 mt-4">
+                  Admin access only. Contact administrator if you need credentials.
+                </p>
               </CardContent>
             </Card>
           </div>
