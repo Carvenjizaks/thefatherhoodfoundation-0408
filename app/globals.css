@@ -312,3 +312,63 @@ html {
   background-size: 400% 400%; 
   animation: gradientShift 15s ease infinite; 
 }
+
+/* ===== CINEMATIC HERO BACKGROUND ANIMATIONS ===== */
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  25% { transform: translate(50px, -30px) scale(1.1); opacity: 0.7; }
+  50% { transform: translate(20px, -60px) scale(1.05); opacity: 0.6; }
+  75% { transform: translate(-30px, -20px) scale(0.95); opacity: 0.5; }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  33% { transform: translate(-40px, 30px) scale(1.15); opacity: 0.8; }
+  66% { transform: translate(30px, -40px) scale(0.9); opacity: 0.5; }
+}
+
+@keyframes raySlide1 {
+  0%, 100% { opacity: 0.3; transform: rotate(15deg) translateX(0); }
+  50% { opacity: 0.6; transform: rotate(15deg) translateX(20px); }
+}
+
+@keyframes raySlide2 {
+  0%, 100% { opacity: 0.2; transform: rotate(10deg) translateX(0); }
+  50% { opacity: 0.5; transform: rotate(10deg) translateX(-15px); }
+}
+
+@keyframes raySlide3 {
+  0%, 100% { opacity: 0.25; transform: rotate(-12deg) translateX(0); }
+  50% { opacity: 0.55; transform: rotate(-12deg) translateX(25px); }
+}
+
+@keyframes raySlide4 {
+  0%, 100% { opacity: 0.2; transform: rotate(-8deg) translateX(0); }
+  50% { opacity: 0.4; transform: rotate(-8deg) translateX(-20px); }
+}
+
+.animate-orb-float-1 { animation: orbFloat1 25s ease-in-out infinite; }
+.animate-orb-float-2 { animation: orbFloat2 20s ease-in-out infinite; }
+.animate-ray-1 { animation: raySlide1 12s ease-in-out infinite; }
+.animate-ray-2 { animation: raySlide2 15s ease-in-out infinite 2s; }
+.animate-ray-3 { animation: raySlide3 18s ease-in-out infinite 4s; }
+.animate-ray-4 { animation: raySlide4 14s ease-in-out infinite 1s; }
+
+/* Ambient floating particles */
+@keyframes ambientFloat {
+  0%, 100% { 
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { 
+    transform: translateY(-100vh) translateX(50px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-ambient-particle {
+  animation: ambientFloat 20s linear infinite;
+}
