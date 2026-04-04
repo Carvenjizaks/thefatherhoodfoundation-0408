@@ -357,12 +357,12 @@ export default function ImpactPage() {
 
               {/* Image - slides in from right */}
               <div className="relative opacity-0 slide-in-right animation-delay-200">
-                <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl group">
                   <Image
                     src="/images/impact/multicultural-men.jpg"
-                    alt="Diverse group of men standing together in unity"
+                    alt="Diverse group of men from all backgrounds standing together in brotherhood"
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                 </div>
