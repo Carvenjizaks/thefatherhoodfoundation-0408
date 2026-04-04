@@ -66,11 +66,8 @@ export function CinematicImageCarousel() {
         )
       })}
 
-      {/* Minimal gradient for text readability only at the bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-30" />
-
       {/* Progress indicators */}
-      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-40 flex gap-2">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex gap-2">
         {heroImages.map((_, index) => (
           <button
             key={index}
