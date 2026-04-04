@@ -10,6 +10,7 @@ import { QuotesTicker } from "@/components/quotes-ticker"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
+import { BookOpen, TrendingUp, Heart } from "lucide-react"
 
 const ArrowRightIcon = () => (
   <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,14 +165,64 @@ export default function HomePage() {
         {/* Journey to Authentic Manhood */}
         <JourneySection />
 
-        <section className="py-16 lg:py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-              Empowering men to Learn, Grow and Contribute through serving
-            </h2>
-            <p className="text-lg lg:text-xl text-black leading-relaxed text-balance font-medium">
-              The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
-            </p>
+        <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+          <Parallax speed={0.2} className="absolute top-20 right-0 w-72 h-72 bg-[#D4A574]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.3} className="absolute bottom-20 left-0 w-64 h-64 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+          
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <FadeIn direction="up" className="text-center mb-16">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#D4A574] mb-4">Our Mission</p>
+              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
+                Empowering men to{" "}
+                <span className="relative inline-block">
+                  Learn, Grow
+                  <span className="absolute -bottom-1 left-0 w-full h-2 bg-[#D4A574]/30 -z-10" />
+                </span>{" "}
+                and Contribute through serving
+              </h2>
+            </FadeIn>
+            
+            {/* Three pillars of empowerment */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-16">
+              <FadeIn delay={0.1} direction="up">
+                <div className="text-center group">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
+                    <BookOpen className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Learn</h3>
+                  <p className="text-black/70 leading-relaxed">Practical resources and training to develop character, values, and life skills.</p>
+                </div>
+              </FadeIn>
+              
+              <FadeIn delay={0.2} direction="up">
+                <div className="text-center group">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#D4A574]/10 flex items-center justify-center group-hover:bg-[#D4A574] group-hover:scale-110 transition-all duration-500">
+                    <TrendingUp className="w-10 h-10 text-[#D4A574] group-hover:text-white transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Grow</h3>
+                  <p className="text-black/70 leading-relaxed">Active engagement and mentorship to become intentional fathers and committed husbands.</p>
+                </div>
+              </FadeIn>
+              
+              <FadeIn delay={0.3} direction="up">
+                <div className="text-center group">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
+                    <Heart className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Contribute</h3>
+                  <p className="text-black/70 leading-relaxed">Serving communities as impactful leaders who build healthier families and neighborhoods.</p>
+                </div>
+              </FadeIn>
+            </div>
+            
+            {/* Summary statement */}
+            <FadeIn delay={0.4} direction="up">
+              <div className="max-w-3xl mx-auto text-center bg-white rounded-2xl p-8 lg:p-10 shadow-lg border border-gray-100">
+                <p className="text-lg lg:text-xl text-black leading-relaxed font-medium">
+                  The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
+                </p>
+              </div>
+            </FadeIn>
           </div>
         </section>
 
