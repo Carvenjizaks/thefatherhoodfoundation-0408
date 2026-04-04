@@ -165,63 +165,24 @@ export default function HomePage() {
         {/* Journey to Authentic Manhood */}
         <JourneySection />
 
-        {/* Empowering Men Section - Three Column Layout */}
-        <section id="empowering-section" className="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-          <Parallax speed={0.2} className="absolute top-20 right-0 w-72 h-72 bg-[#D4A574]/10 rounded-full blur-3xl" />
-          <Parallax speed={0.3} className="absolute bottom-20 left-0 w-64 h-64 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+        {/* Empowering Men Section */}
+        <section id="empowering-section" className="py-20 lg:py-28 bg-[#8B2B3E] relative overflow-hidden">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+          </div>
           
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up" className="text-center mb-16">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-                Empowering men to{" "}
-                <span className="relative inline-block">
-                  Learn, Grow
-                  <span className="absolute -bottom-1 left-0 w-full h-2 bg-[#D4A574]/30 -z-10" />
-                </span>{" "}
-                and Contribute through serving
+          <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <FadeIn direction="up">
+              <h2 className="text-3xl lg:text-5xl font-bold text-white mb-8 text-balance leading-tight">
+                Empowering men to Learn, Grow and Contribute through serving
               </h2>
             </FadeIn>
             
-            {/* Three pillars of empowerment */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-16">
-              <FadeIn delay={0.1} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
-                    <BookOpen className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Learn</h3>
-                  <p className="text-black/70 leading-relaxed">Practical resources and training to develop character, values, and life skills.</p>
-                </div>
-              </FadeIn>
-              
-              <FadeIn delay={0.2} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#D4A574]/10 flex items-center justify-center group-hover:bg-[#D4A574] group-hover:scale-110 transition-all duration-500">
-                    <TrendingUp className="w-10 h-10 text-[#D4A574] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Grow</h3>
-                  <p className="text-black/70 leading-relaxed">Active engagement and mentorship to become intentional fathers and committed husbands.</p>
-                </div>
-              </FadeIn>
-              
-              <FadeIn delay={0.3} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
-                    <Heart className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Contribute</h3>
-                  <p className="text-black/70 leading-relaxed">Serving communities as impactful leaders who build healthier families and neighborhoods.</p>
-                </div>
-              </FadeIn>
-            </div>
-            
-            {/* Summary statement */}
-            <FadeIn delay={0.4} direction="up">
-              <div className="max-w-3xl mx-auto text-center bg-white rounded-2xl p-8 lg:p-10 shadow-lg border border-gray-100">
-                <p className="text-lg lg:text-xl text-black leading-relaxed font-medium">
-                  The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
-                </p>
-              </div>
+            <FadeIn direction="up" delay={0.2}>
+              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto">
+                The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
+              </p>
             </FadeIn>
           </div>
         </section>
