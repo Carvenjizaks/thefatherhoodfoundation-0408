@@ -43,6 +43,7 @@ export function Footer() {
 
   const quickLinks = [
     { label: "Home", href: "/" },
+    { label: "Testimonials", href: "/testimonials" },
     { label: "Get Involved", href: "/get-involved" },
     { label: "Curriculum", href: "/curriculum" },
     { label: "Events", href: "/events" },

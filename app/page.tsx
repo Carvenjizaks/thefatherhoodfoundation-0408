@@ -60,7 +60,7 @@ export default function HomePage() {
                     <Button 
                       asChild 
                       size="lg" 
-                      className="text-base px-8 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] text-white transition-all duration-300 rounded-full shadow-lg hover:shadow-xl"
+                      className="text-base px-8 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] text-white transition-all duration-300 rounded-full shadow-lg hover:shadow-xl btn-shine hover:scale-105"
                     >
                       <Link href="/get-involved">
                         Get Involved <ArrowRightIcon />
@@ -431,6 +431,117 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Testimonials Preview Section */}
+        <section className="py-20 lg:py-28 bg-[#FAF8F5] relative overflow-hidden">
+          <Parallax speed={-0.1} className="absolute top-0 right-0 w-80 h-80 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <FadeIn direction="up" className="text-center mb-12">
+              <span className="inline-block px-4 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-semibold mb-4">
+                Success Stories
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-4 text-balance">
+                Hear From Our Community
+              </h2>
+              <p className="text-lg text-black/70 max-w-2xl mx-auto">
+                Real stories from real men whose lives have been transformed.
+              </p>
+            </FadeIn>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              <FadeIn delay={0.1} direction="up">
+                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
+                      {`"The Fatherhood Foundation transformed my perspective on being a father. I am now a more intentional father and husband."`}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
+                        <span className="text-[#8B2B3E] font-semibold">D</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">David N.</p>
+                        <p className="text-xs text-black/60">Table Talk Graduate</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </FadeIn>
+
+              <FadeIn delay={0.2} direction="up">
+                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
+                      {`"The marriage enrichment program gave us tools to communicate better. Our marriage has never been stronger."`}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
+                        <span className="text-[#8B2B3E] font-semibold">M</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Michael & Sarah A.</p>
+                        <p className="text-xs text-black/60">MyGreatMarriage Couple</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </FadeIn>
+
+              <FadeIn delay={0.3} direction="up">
+                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 md:col-span-2 lg:col-span-1">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
+                      {`"Being part of the community development initiatives opened my eyes to the power of men supporting each other."`}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
+                        <span className="text-[#8B2B3E] font-semibold">J</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Johannes S.</p>
+                        <p className="text-xs text-black/60">Community Leader</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </FadeIn>
+            </div>
+
+            <FadeIn delay={0.4} direction="up" className="text-center">
+              <Button 
+                asChild 
+                variant="outline"
+                size="lg" 
+                className="text-base px-8 py-6 border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white transition-all duration-300 rounded-full"
+              >
+                <Link href="/testimonials">
+                  Read More Stories <ArrowRightIcon />
+                </Link>
+              </Button>
+            </FadeIn>
+          </div>
+        </section>
+
         {/* Call to Action with cinematic effects */}
         <section className="py-20 lg:py-32 bg-white relative overflow-hidden">
           <Parallax speed={0.2} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#8B2B3E]/5 to-transparent rounded-full" />
@@ -447,7 +558,7 @@ export default function HomePage() {
               </p>
             </FadeIn>
             <FadeIn direction="up" delay={0.4}>
-              <Button asChild size="lg" className="text-base px-10 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+              <Button asChild size="lg" className="text-base px-10 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl rounded-full">
                 <Link href="/get-involved">
                   Get Involved Today <ArrowRightIcon />
                 </Link>
