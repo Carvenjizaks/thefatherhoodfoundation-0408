@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -469,22 +470,45 @@ export default function PartnershipPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-amber-100/80 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <Flame className="w-12 h-12 text-[#8B2B3E]/40 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground font-medium">Mission Trip Image</p>
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group">
+                <Image 
+                  src="/images/partnership/mission-trip.jpg" 
+                  alt="Mission trip - men serving communities together" 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <Flame className="w-6 h-6 mb-2" />
+                  <p className="font-bold text-lg">Mission Trips</p>
+                  <p className="text-sm text-white/80">Serve communities together</p>
                 </div>
               </div>
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-amber-100/80 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <Users className="w-12 h-12 text-[#8B2B3E]/40 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground font-medium">Fellowship Gathering</p>
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group">
+                <Image 
+                  src="/images/partnership/fellowship-gathering.jpg" 
+                  alt="Community gathering - building authentic relationships" 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <Users className="w-6 h-6 mb-2" />
+                  <p className="font-bold text-lg">Building Solid Authentic Relationships</p>
                 </div>
               </div>
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-amber-100/80 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background border-2 border-dashed border-[#8B2B3E]/30 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <Crown className="w-12 h-12 text-[#8B2B3E]/40 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground font-medium">VIP Event Access</p>
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg group">
+                <Image 
+                  src="/images/partnership/vip-event.jpg" 
+                  alt="VIP event - exclusive leadership networking" 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <Crown className="w-6 h-6 mb-2" />
+                  <p className="font-bold text-lg">VIP Event Access</p>
+                  <p className="text-sm text-white/80">Exclusive leadership experiences</p>
                 </div>
               </div>
             </div>
@@ -510,7 +534,7 @@ export default function PartnershipPage() {
                       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-2 font-semibold text-[#8B2B3E]">
                           <Shield className="w-4 h-4 text-[#8B2B3E]" />
-                          $197/month commitment
+                          $97/month commitment
                         </span>
                         <span className="flex items-center gap-2">
                           <Flame className="w-4 h-4 text-[#8B2B3E]" />

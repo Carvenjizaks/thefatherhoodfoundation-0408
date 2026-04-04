@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,10 +19,10 @@ const events = [
     slug: "mgm-may-2026",
     title: "MyGreatMarriage Conference",
     subtitle: "Marriage Enrichment Event for Couples",
-    dates: "30 April - 2 May 2026",
+    dates: "7, 8 & 9 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "Venue: To be Announced",
-    banner: "/images/mgm-banner-2026.png",
+    banner: "/images/couples/couple-together-1.jpg",
     registrationOpen: true,
     requiresSpouse: true,
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
@@ -36,10 +36,10 @@ const events = [
     slug: "mgm-sept-2026",
     title: "MyGreatMarriage Follow-Up",
     subtitle: "Marriage Enrichment Continuation",
-    dates: "2 September 2026",
+    dates: "3, 4 & 5 September 2026",
     time: "Evening Session: 6:00pm - 9:00pm",
     location: "Venue: To be Announced",
-    banner: "/images/banners/mgm-sept-banner.jpg",
+    banner: "/images/couples/couple-1.jpg",
     registrationOpen: false,
     requiresSpouse: true,
     description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
@@ -54,7 +54,14 @@ const events = [
     dates: "17-19 July 2026",
     time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
     location: "Venue: To be Announced",
-    banner: "",
+    banner: "/images/hero/men-gathering.jpg",
+    bannerSlides: [
+      "/images/hero/men-gathering.jpg",
+      "/images/goc/goc-training-1.jpg",
+      "/images/goc/goc-group-beach.jpg",
+      "/images/goc/goc-men-learning.jpg",
+      "/images/goc/goc-speaker.jpg",
+    ],
     registrationOpen: false,
     requiresSpouse: false,
     description: "The annual gathering for men seeking to become champions in their families and communities.",
@@ -392,25 +399,58 @@ function EventRegistrationModal({
 }
 
 function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister: () => void }) {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const slides = (event as typeof events[0] & { bannerSlides?: string[] }).bannerSlides || [event.banner]
+  
+  useEffect(() => {
+    if (slides.length <= 1) return
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [slides.length])
+
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-      {/* Banner Image */}
-      <div className="relative w-full h-[200px] md:h-[280px] lg:h-[320px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
-        {event.banner ? (
-          <Image
-            src={event.banner}
-            alt={event.title}
-            fill
-            priority
-            className="object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-white/80 text-6xl font-bold tracking-wider">{event.id.toUpperCase()}</span>
+      {/* Banner Image with Slider */}
+      <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <Image
+              src={slide}
+              alt={`${event.title} - Image ${index + 1}`}
+              fill
+              priority={index === 0}
+              className="object-cover object-center"
+            />
+          </div>
+        ))}
+        {/* Gradient overlay for better text visibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+        
+        {/* Slide indicators */}
+        {slides.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentSlide ? 'w-6 bg-white' : 'bg-white/50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         )}
-        <div className="absolute top-4 right-4">
-          <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm`}>
+        
+        <div className="absolute top-4 right-4 z-10">
+          <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
             {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
           </Badge>
         </div>

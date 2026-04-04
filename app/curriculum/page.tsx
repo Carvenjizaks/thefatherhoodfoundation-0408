@@ -174,7 +174,7 @@ export default function CurriculumPage() {
                     {/* CTA */}
                     <div className="border-t pt-4">
                       <Button asChild size="sm" className="w-full gap-1.5">
-                        <Link href="/curriculum/sign-up">
+                        <Link href={`/curriculum/books#book-${index}`}>
                           Read More
                           <ArrowRight className="h-4 w-4" />
                         </Link>

@@ -32,7 +32,7 @@ export function Header() {
   const mobilePillarLinks = [
     { href: "/mentoring-men", label: "Monthly Table Talk for Men" },
     // { href: "/active-parenting", label: "ActiveParenting" }, // Hidden - activate later
-    { href: "/events/my-great-marriage-2026", label: "MyGreatMarriage" },
+    { href: "/events/my-great-marriage-2026", label: "MGM26Conference" },
     { href: "/community-development", label: "Social Impact" },
   ]
 
@@ -119,3 +119,5 @@ export function Header() {
     </header>
   )
 }
+
+export default Header

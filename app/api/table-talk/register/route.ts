@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail } from "@/lib/email-service"
 import { generateRegistrationCode } from "@/lib/registration-code"
 
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

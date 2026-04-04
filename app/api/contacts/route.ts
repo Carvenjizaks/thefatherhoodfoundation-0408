@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, type ContactSource } from "@/lib/email-service"
 
+
 export async function POST(request: Request) {
   try {
     console.log("[v0] Contacts API called - Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
