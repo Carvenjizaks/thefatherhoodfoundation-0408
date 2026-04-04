@@ -23,7 +23,6 @@ export function FacesParade({ images }: FacesParadeProps) {
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10 pointer-events-none" />
             </div>
           </div>
         ))}

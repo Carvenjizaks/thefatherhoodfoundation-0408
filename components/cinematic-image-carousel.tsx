@@ -66,23 +66,8 @@ export function CinematicImageCarousel() {
         )
       })}
 
-      {/* Layered gradient overlays for cinematic effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 z-30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#8B2B3E]/40 via-transparent to-transparent z-30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent z-30" />
-      
-      {/* Subtle vignette */}
-      <div className="absolute inset-0 z-30" style={{
-        background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)"
-      }} />
-
-      {/* Floating overlay particles for depth */}
-      <div className="absolute inset-0 z-30 overflow-hidden pointer-events-none">
-        <div className="absolute top-[20%] left-[10%] w-2 h-2 bg-[#D4A574]/30 rounded-full animate-float-slow" />
-        <div className="absolute top-[40%] right-[15%] w-1.5 h-1.5 bg-white/20 rounded-full animate-float-medium" />
-        <div className="absolute bottom-[30%] left-[20%] w-1 h-1 bg-[#D4A574]/40 rounded-full animate-float-fast" />
-        <div className="absolute top-[60%] right-[25%] w-2 h-2 bg-white/15 rounded-full animate-float-slow" />
-      </div>
+      {/* Minimal gradient for text readability only at the bottom */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-30" />
 
       {/* Progress indicators */}
       <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-40 flex gap-2">

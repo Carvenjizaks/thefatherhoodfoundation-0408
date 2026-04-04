@@ -84,8 +84,8 @@ export function BooksCarousel({ books }: BooksCarouselProps) {
                   sizes="(max-width: 640px) 176px, (max-width: 1024px) 208px, 240px"
                   className="object-cover"
                 />
-                {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                {/* Subtle gradient for title readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                 {/* Title overlay */}
                 <div className="absolute inset-0 flex items-end p-4">
                   <h3
