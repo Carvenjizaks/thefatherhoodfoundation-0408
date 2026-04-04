@@ -171,7 +171,6 @@ export default function HomePage() {
           
           <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <FadeIn direction="up" className="text-center mb-16">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#D4A574] mb-4">Our Mission</p>
               <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
                 Empowering men to{" "}
                 <span className="relative inline-block">
