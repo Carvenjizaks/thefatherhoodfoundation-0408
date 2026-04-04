@@ -1,12 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { NewsletterPopup } from "@/components/newsletter-popup"
 import { Analytics } from "@vercel/analytics/next"
 
-// Cache bust v8 - Force complete rebuild and clear invalid URL cache
+// Cache bust v9 - Added serif font for cinematic hero
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefatherhoodfoundation.org"),
@@ -53,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} font-sans antialiased`}>
+      <body className={`${inter.className} ${playfair.variable} font-sans antialiased`}>
         {children}
         <NewsletterPopup />
         <Analytics />

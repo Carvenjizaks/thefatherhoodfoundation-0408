@@ -1,17 +1,16 @@
 "use client"
 
-// v6 - Cinematic motion background hero
+// v7 - Cinematic image hero with warm tones
 import Link from "next/link"
 import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { JourneySection } from "@/components/journey-section"
 import { QuotesTicker } from "@/components/quotes-ticker"
-import { CinematicHeroBackground } from "@/components/cinematic-hero-background"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
-import { BookOpen, TrendingUp, Heart, Users, GraduationCap, HandHeart } from "lucide-react"
+import { BookOpen, TrendingUp, Heart, Users } from "lucide-react"
 
 const ArrowRightIcon = () => (
   <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,146 +25,85 @@ export default function HomePage() {
       <Header />
 
       <main className="bg-white text-black min-h-screen overflow-hidden">
-        {/* Hero Section - Cinematic Motion Background */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          {/* Cinematic animated background */}
-          <CinematicHeroBackground />
-          
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-28 pb-20">
-            {/* Top Badge */}
-            <FadeIn delay={0.1} direction="down">
-              <div className="flex justify-center mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#8B2B3E]/10 rounded-full border border-[#8B2B3E]/20 backdrop-blur-sm">
-                  <span className="w-2 h-2 bg-[#8B2B3E] rounded-full animate-pulse" />
-                  <span className="text-sm font-medium text-[#8B2B3E]">Building Stronger Families Since 1999</span>
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Left Column - Main Message */}
-              <div className="text-center lg:text-left">
-                <ScaleIn duration={0.8}>
-                  <Image
-                    src="/images/logo.png"
-                    alt="The Fatherhood Foundation"
-                    width={100}
-                    height={100}
-                    loading="eager"
-                    priority
-                    className="mx-auto lg:mx-0 mb-6 rounded-full shadow-2xl ring-4 ring-white/50"
-                  />
-                </ScaleIn>
-
-                <FadeIn delay={0.2} direction="up">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-black mb-6 text-balance leading-[1.1]">
-                    Empowering men to{" "}
-                    <span className="relative inline-block">
-                      <span className="text-[#8B2B3E]">Learn</span>
-                      <GraduationCap className="absolute -top-3 -right-5 w-5 h-5 text-[#D4A574] animate-bounce" />
-                    </span>
-                    ,{" "}
-                    <span className="relative inline-block">
-                      <span className="text-[#8B2B3E]">Grow</span>
-                      <TrendingUp className="absolute -top-3 -right-5 w-5 h-5 text-[#D4A574] animate-pulse" />
-                    </span>{" "}
-                    and{" "}
-                    <span className="relative inline-block">
-                      <span className="bg-gradient-to-r from-[#8B2B3E] to-[#6B1B2E] bg-clip-text text-transparent">Contribute</span>
-                      <div className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-[#D4A574] to-[#8B2B3E] rounded-full" />
-                    </span>{" "}
-                    through serving
-                  </h1>
-                </FadeIn>
-
-                <FadeIn delay={0.4} direction="up">
-                  <p className="text-lg lg:text-xl text-black/80 mb-8 max-w-xl mx-auto lg:mx-0 text-balance leading-relaxed">
-                    The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop <span className="font-semibold text-[#8B2B3E]">intentional fathers</span>, <span className="font-semibold text-[#8B2B3E]">committed husbands</span>, and <span className="font-semibold text-[#8B2B3E]">impactful leaders</span>.
-                  </p>
-                </FadeIn>
-
-                <FadeIn delay={0.6} direction="up">
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <Button asChild size="lg" className="text-base px-8 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl group">
-                      <Link href="/get-involved">
-                        Get Involved 
-                        <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="lg"
-                      className="text-base px-8 py-6 bg-white/80 backdrop-blur-sm border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-white hover:scale-105 transition-all duration-300"
-                    >
-                      <Link href="#pillars">Explore Our Programs</Link>
-                    </Button>
-                  </div>
-                </FadeIn>
-              </div>
-
-              {/* Right Column - Purpose & Values */}
-              <div className="space-y-6">
-                <FadeIn delay={0.3} direction="up">
-                  <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-shadow duration-500">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 bg-[#8B2B3E]/10 rounded-xl">
-                        <Heart className="w-6 h-6 text-[#8B2B3E]" />
-                      </div>
-                      <h2 className="text-2xl font-bold text-[#8B2B3E]">Our Purpose</h2>
-                    </div>
-                    <p className="text-base text-black/80 leading-relaxed">
-                      The Fatherhood Foundation exists to address the challenges of fatherlessness through diverse teachings and trainings. We partner with organizations to tackle societal issues stemming from absent fathers, the misunderstanding of masculinity and its purpose, and to empower men to live fulfilled lives.
-                    </p>
-                  </div>
-                </FadeIn>
-
-                <FadeIn delay={0.5} direction="up">
-                  <div className="bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E] rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-500">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 bg-white/20 rounded-xl">
-                        <Users className="w-6 h-6 text-white" />
-                      </div>
-                      <h2 className="text-2xl font-bold text-white">The Journey</h2>
-                    </div>
-                    <p className="text-base text-white/90 leading-relaxed">
-                      The pursuit of authentic manhood is a journey of discovery—one that unfolds within the context of community, where men connect, learn, and grow together. Through this shared experience, we develop programs designed to build and sustain strong, healthy communities.
-                    </p>
-                  </div>
-                </FadeIn>
-
-                {/* Quick Stats Row */}
-                <FadeIn delay={0.7} direction="up">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50 hover:bg-white/80 transition-colors">
-                      <p className="text-2xl lg:text-3xl font-bold text-[#8B2B3E]">
-                        <CountUp end={20} suffix="k+" duration={2} />
-                      </p>
-                      <p className="text-xs text-black/60 font-medium">Men Mentored</p>
-                    </div>
-                    <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50 hover:bg-white/80 transition-colors">
-                      <p className="text-2xl lg:text-3xl font-bold text-[#8B2B3E]">
-                        <CountUp end={25} suffix="+" duration={2} />
-                      </p>
-                      <p className="text-xs text-black/60 font-medium">Years Impact</p>
-                    </div>
-                    <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50 hover:bg-white/80 transition-colors">
-                      <p className="text-2xl lg:text-3xl font-bold text-[#8B2B3E]">
-                        <CountUp end={1000} suffix="+" duration={2} />
-                      </p>
-                      <p className="text-xs text-black/60 font-medium">Families Helped</p>
-                    </div>
-                  </div>
-                </FadeIn>
-              </div>
-            </div>
+        {/* Hero Section - Full-screen cinematic image */}
+        <section className="relative min-h-screen flex items-end overflow-hidden">
+          {/* Full-screen background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/hero-father-child.jpg"
+              alt="Father lifting child against sunset"
+              fill
+              priority
+              className="object-cover object-center"
+            />
+            {/* Warm gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#8B2B3E]/30 to-transparent" />
           </div>
           
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10">
-            <div className="w-6 h-10 border-2 border-[#8B2B3E]/30 rounded-full flex justify-center pt-2 bg-white/30 backdrop-blur-sm">
-              <div className="w-1.5 h-3 bg-[#8B2B3E]/50 rounded-full animate-pulse" />
+          {/* Content positioned at bottom-right, inspired by the design */}
+          <div className="relative z-10 w-full">
+            {/* Main headline - large elegant serif-style typography */}
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-8">
+              <FadeIn delay={0.2} direction="up">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white mb-6 leading-[1.05] tracking-tight">
+                  <span className="italic text-white/90">Empowering men</span>
+                  <br />
+                  <span className="font-normal">to <span className="text-[#D4A574]">LEARN</span>, <span className="text-[#D4A574]">GROW</span></span>
+                  <br />
+                  <span className="font-normal">& <span className="text-[#D4A574]">CONTRIBUTE</span></span>
+                </h1>
+              </FadeIn>
+              
+              <FadeIn delay={0.4} direction="up">
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    className="text-base px-8 py-6 bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white hover:text-[#8B2B3E] transition-all duration-300 rounded-full"
+                  >
+                    <Link href="/get-involved">
+                      How we do it <ArrowRightIcon />
+                    </Link>
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
+            
+            {/* Bottom info bar */}
+            <div className="bg-[#FAF8F5] border-t-4 border-[#8B2B3E]">
+              <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-12">
+                <div className="grid md:grid-cols-2 gap-8 items-start">
+                  <FadeIn delay={0.5} direction="up">
+                    <p className="text-base lg:text-lg text-black/80 leading-relaxed max-w-xl">
+                      The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop <span className="font-semibold text-[#8B2B3E]">intentional fathers</span>, <span className="font-semibold text-[#8B2B3E]">committed husbands</span>, and <span className="font-semibold text-[#8B2B3E]">impactful leaders</span>.
+                    </p>
+                  </FadeIn>
+                  
+                  <FadeIn delay={0.6} direction="up">
+                    <div className="flex flex-wrap gap-8 md:justify-end">
+                      <div className="text-center">
+                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
+                          <CountUp end={20} suffix="k+" duration={2} />
+                        </p>
+                        <p className="text-sm text-black/60 font-medium mt-1">Men Mentored</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
+                          <CountUp end={25} suffix="+" duration={2} />
+                        </p>
+                        <p className="text-sm text-black/60 font-medium mt-1">Years Impact</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
+                          <CountUp end={1000} suffix="+" duration={2} />
+                        </p>
+                        <p className="text-sm text-black/60 font-medium mt-1">Families Helped</p>
+                      </div>
+                    </div>
+                  </FadeIn>
+                </div>
+              </div>
             </div>
           </div>
         </section>
