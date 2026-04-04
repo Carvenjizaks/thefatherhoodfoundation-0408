@@ -140,7 +140,7 @@ export default function HomePage() {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50 hover:bg-white/80 transition-colors">
                       <p className="text-2xl lg:text-3xl font-bold text-[#8B2B3E]">
-                        <CountUp end={500} suffix="+" duration={2} />
+                        <CountUp end={20} suffix="k+" duration={2} />
                       </p>
                       <p className="text-xs text-black/60 font-medium">Men Mentored</p>
                     </div>
@@ -195,7 +195,7 @@ export default function HomePage() {
               <FadeIn delay={0.1} direction="up">
                 <div className="text-center">
                   <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                    <CountUp end={500} suffix="+" duration={2.5} />
+                    <CountUp end={20} suffix="k+" duration={2.5} />
                   </p>
                   <p className="text-sm text-black/70 mt-2 font-medium">Men Mentored</p>
                 </div>
