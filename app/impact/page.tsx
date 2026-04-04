@@ -274,19 +274,49 @@ export default function ImpactPage() {
               </div>
 
               <div className="relative">
-                <div className="relative h-[500px] rounded-3xl overflow-hidden">
+                {/* Main image with cinematic effect */}
+                <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl group">
                   <Image
                     src="/images/impact/men-mentorship.jpg"
-                    alt="Men in mentorship programme"
+                    alt="Men in mentorship programme - diverse group supporting each other"
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 </div>
+                
+                {/* Secondary images grid */}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="relative h-[180px] rounded-2xl overflow-hidden shadow-lg group">
+                    <Image
+                      src="/images/impact/father-son-connection.jpg"
+                      alt="Father and son sharing a heartfelt moment"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  </div>
+                  <div className="relative h-[180px] rounded-2xl overflow-hidden shadow-lg group">
+                    <Image
+                      src="/images/impact/men-community-strength.jpg"
+                      alt="Diverse men united in community and purpose"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  </div>
+                </div>
+                
                 {/* Stats overlay */}
-                <div className="absolute -bottom-6 -left-6 bg-[#D4956A] text-white p-6 rounded-2xl shadow-xl">
+                <div className="absolute -bottom-6 -left-6 bg-[#D4956A] text-white p-6 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-300">
                   <p className="text-4xl font-bold">85%</p>
                   <p className="text-sm opacity-90">of youth in prison grew up without a father</p>
+                </div>
+                
+                {/* Additional stat */}
+                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-[#8B2B3E] p-4 rounded-xl shadow-lg">
+                  <p className="text-2xl font-bold">1 in 3</p>
+                  <p className="text-xs text-[#5a3d2b]">children live without their father</p>
                 </div>
               </div>
             </div>
