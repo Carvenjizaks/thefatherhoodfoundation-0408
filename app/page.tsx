@@ -165,7 +165,8 @@ export default function HomePage() {
         {/* Journey to Authentic Manhood */}
         <JourneySection />
 
-        <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+        {/* Empowering Men Section - Three Column Layout */}
+        <section id="empowering-section" className="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
           <Parallax speed={0.2} className="absolute top-20 right-0 w-72 h-72 bg-[#D4A574]/10 rounded-full blur-3xl" />
           <Parallax speed={0.3} className="absolute bottom-20 left-0 w-64 h-64 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
           
