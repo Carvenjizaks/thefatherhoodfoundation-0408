@@ -159,10 +159,12 @@ function DonateContent() {
               {paymentMethod === "paytoday" && (
                 <div className="mb-6">
                   <p className="text-sm mb-4" style={{ color: "#7a6455" }}>Click below to complete your payment via PayToday:</p>
-                  <Button className="text-white font-semibold flex items-center gap-3 px-6 py-3 h-auto" style={{ background: "#00C8C8" }}>
-                    <Image src="/images/paytoday-logo.jpg" alt="PayToday" width={28} height={28} className="rounded-md" />
-                    Pay with PayToday
-                  </Button>
+                  <a href="https://site.paytoday.com.na" target="_blank" rel="noopener noreferrer">
+                    <Button className="text-white font-semibold flex items-center gap-3 px-6 py-3 h-auto" style={{ background: "#00C8C8" }}>
+                      <Image src="/images/paytoday-logo.jpg" alt="PayToday" width={28} height={28} className="rounded-md" />
+                      Pay with PayToday
+                    </Button>
+                  </a>
                 </div>
               )}
 

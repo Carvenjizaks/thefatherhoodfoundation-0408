@@ -188,8 +188,66 @@ export default function Gideon300Page() {
           </div>
         </section>
 
+        {/* Experience Gallery */}
+        <section className="py-16 lg:py-24 bg-background">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                Exclusive Experiences
+              </p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                What Awaits You as a Gideon300 Partner
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/gideon/mission-trip.jpg"
+                  alt="Mission Trip"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-xl font-bold text-white mb-1">Mission Trips</h3>
+                  <p className="text-white/80 text-sm">Travel with us to communities in need</p>
+                </div>
+              </div>
+              
+              <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/gideon/fellowship-gathering.jpg"
+                  alt="Fellowship Gathering"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-xl font-bold text-white mb-1">Fellowship Gatherings</h3>
+                  <p className="text-white/80 text-sm">Connect with like-minded men of purpose</p>
+                </div>
+              </div>
+              
+              <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/gideon/vip-event.jpg"
+                  alt="VIP Event Access"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-xl font-bold text-white mb-1">VIP Event Access</h3>
+                  <p className="text-white/80 text-sm">Exclusive access to premier events</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Benefits Section */}
-        <section id="benefits" className="py-20 lg:py-28 bg-background">
+        <section id="benefits" className="py-20 lg:py-28 bg-muted/30">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
               <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">

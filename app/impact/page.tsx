@@ -70,8 +70,8 @@ function AnimatedCounter({ end, suffix = "", duration = 2000 }: { end: number; s
     requestAnimationFrame(animate)
   }, [isVisible, end, duration])
 
-  return (
-    <div ref={ref} className="text-5xl sm:text-6xl lg:text-7xl font-bold">
+return (
+    <div ref={ref} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
       {count.toLocaleString()}{suffix}
     </div>
   )
@@ -207,16 +207,16 @@ export default function ImpactPage() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <p className="text-[#D4956A] uppercase tracking-widest text-sm font-semibold mb-4">Our Impact</p>
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#5a3d2b] mb-4">
+              <h2 className="text-3xl lg:text-5xl font-bold text-[#5a3d2b] mb-4 tracking-tight">
                 Numbers That Tell a Story
               </h2>
-              <p className="text-[#7a6455] text-lg max-w-2xl mx-auto">
+              <p className="text-[#7a6455] text-lg max-w-2xl mx-auto leading-relaxed tracking-normal">
                 Behind every number is a father restored, a marriage healed, a young person empowered.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {impactStats.map((stat, index) => (
+              {impactStats.map((stat) => (
                 <div 
                   key={stat.label}
                   className="text-center p-8 rounded-3xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
@@ -224,8 +224,8 @@ export default function ImpactPage() {
                   <div className="text-[#D4956A]">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
-                  <h3 className="text-xl font-bold text-[#5a3d2b] mt-4 mb-2">{stat.label}</h3>
-                  <p className="text-[#7a6455] text-sm">{stat.description}</p>
+                  <h3 className="text-xl font-bold text-[#5a3d2b] mt-4 mb-2 tracking-normal">{stat.label}</h3>
+                  <p className="text-[#7a6455] text-sm leading-relaxed tracking-normal">{stat.description}</p>
                 </div>
               ))}
             </div>
