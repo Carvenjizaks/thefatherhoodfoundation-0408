@@ -165,64 +165,96 @@ export default function HomePage() {
         {/* Journey to Authentic Manhood */}
         <JourneySection />
 
-        <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
-          <Parallax speed={0.2} className="absolute top-20 right-0 w-72 h-72 bg-[#D4A574]/10 rounded-full blur-3xl" />
-          <Parallax speed={0.3} className="absolute bottom-20 left-0 w-64 h-64 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+        {/* Empowering Men Section */}
+        <section id="empowering-section" className="py-24 lg:py-32 bg-[#8B2B3E] relative overflow-hidden">
+          {/* Animated gradient background */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E] via-[#6d2230] to-[#8B2B3E] animate-gradient-shift" 
+                 style={{ backgroundSize: '400% 400%', animation: 'gradientShift 15s ease infinite' }} />
+          </div>
           
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up" className="text-center mb-16">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-                Empowering men to{" "}
-                <span className="relative inline-block">
-                  Learn, Grow
-                  <span className="absolute -bottom-1 left-0 w-full h-2 bg-[#D4A574]/30 -z-10" />
-                </span>{" "}
-                and Contribute through serving
+          {/* Floating orbs with motion */}
+          <div className="absolute top-10 left-10 w-64 h-64 bg-[#D4A574]/20 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-float-medium" />
+          <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-[#D4A574]/15 rounded-full blur-2xl animate-float-fast" />
+          <div className="absolute bottom-1/3 right-1/3 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse-slow" />
+          
+          {/* Moving light streaks */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 -left-full w-full h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent animate-streak-1" />
+            <div className="absolute top-1/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4A574]/30 to-transparent animate-streak-2" />
+            <div className="absolute top-2/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent animate-streak-3" />
+          </div>
+          
+          {/* Particle dots */}
+          <div className="absolute inset-0">
+            <div className="absolute top-[20%] left-[15%] w-1 h-1 bg-white/40 rounded-full animate-twinkle" />
+            <div className="absolute top-[40%] right-[20%] w-1.5 h-1.5 bg-[#D4A574]/50 rounded-full animate-twinkle-delay-1" />
+            <div className="absolute bottom-[30%] left-[25%] w-1 h-1 bg-white/30 rounded-full animate-twinkle-delay-2" />
+            <div className="absolute top-[60%] right-[35%] w-2 h-2 bg-white/20 rounded-full animate-twinkle-delay-3" />
+            <div className="absolute bottom-[20%] right-[15%] w-1 h-1 bg-[#D4A574]/40 rounded-full animate-twinkle" />
+            <div className="absolute top-[15%] right-[40%] w-1.5 h-1.5 bg-white/25 rounded-full animate-twinkle-delay-2" />
+          </div>
+          
+          <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <FadeIn direction="up">
+              <h2 className="text-3xl lg:text-5xl font-bold text-white mb-8 text-balance leading-tight drop-shadow-lg">
+                Empowering men to Learn, Grow and Contribute through serving
               </h2>
             </FadeIn>
             
-            {/* Three pillars of empowerment */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-16">
-              <FadeIn delay={0.1} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
-                    <BookOpen className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Learn</h3>
-                  <p className="text-black/70 leading-relaxed">Practical resources and training to develop character, values, and life skills.</p>
-                </div>
-              </FadeIn>
-              
-              <FadeIn delay={0.2} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#D4A574]/10 flex items-center justify-center group-hover:bg-[#D4A574] group-hover:scale-110 transition-all duration-500">
-                    <TrendingUp className="w-10 h-10 text-[#D4A574] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Grow</h3>
-                  <p className="text-black/70 leading-relaxed">Active engagement and mentorship to become intentional fathers and committed husbands.</p>
-                </div>
-              </FadeIn>
-              
-              <FadeIn delay={0.3} direction="up">
-                <div className="text-center group">
-                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] group-hover:scale-110 transition-all duration-500">
-                    <Heart className="w-10 h-10 text-[#8B2B3E] group-hover:text-white transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">Contribute</h3>
-                  <p className="text-black/70 leading-relaxed">Serving communities as impactful leaders who build healthier families and neighborhoods.</p>
-                </div>
-              </FadeIn>
-            </div>
-            
-            {/* Summary statement */}
-            <FadeIn delay={0.4} direction="up">
-              <div className="max-w-3xl mx-auto text-center bg-white rounded-2xl p-8 lg:p-10 shadow-lg border border-gray-100">
-                <p className="text-lg lg:text-xl text-black leading-relaxed font-medium">
-                  The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
-                </p>
-              </div>
+            <FadeIn direction="up" delay={0.2}>
+              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto drop-shadow-md">
+                The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
+              </p>
             </FadeIn>
           </div>
+          
+          {/* CSS Animations */}
+          <style jsx>{`
+            @keyframes gradientShift {
+              0%, 100% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+            }
+            @keyframes float-slow {
+              0%, 100% { transform: translate(0, 0) scale(1); }
+              33% { transform: translate(30px, -30px) scale(1.1); }
+              66% { transform: translate(-20px, 20px) scale(0.9); }
+            }
+            @keyframes float-medium {
+              0%, 100% { transform: translate(0, 0) scale(1); }
+              50% { transform: translate(-40px, -20px) scale(1.05); }
+            }
+            @keyframes float-fast {
+              0%, 100% { transform: translate(0, 0); }
+              25% { transform: translate(20px, -15px); }
+              50% { transform: translate(-10px, -25px); }
+              75% { transform: translate(-25px, 10px); }
+            }
+            @keyframes pulse-slow {
+              0%, 100% { opacity: 0.3; transform: scale(1); }
+              50% { opacity: 0.6; transform: scale(1.2); }
+            }
+            @keyframes streak {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(200%); }
+            }
+            @keyframes twinkle {
+              0%, 100% { opacity: 0.2; transform: scale(1); }
+              50% { opacity: 1; transform: scale(1.5); }
+            }
+            .animate-float-slow { animation: float-slow 20s ease-in-out infinite; }
+            .animate-float-medium { animation: float-medium 15s ease-in-out infinite; }
+            .animate-float-fast { animation: float-fast 10s ease-in-out infinite; }
+            .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+            .animate-streak-1 { animation: streak 8s linear infinite; }
+            .animate-streak-2 { animation: streak 12s linear infinite 2s; }
+            .animate-streak-3 { animation: streak 10s linear infinite 4s; }
+            .animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
+            .animate-twinkle-delay-1 { animation: twinkle 3s ease-in-out infinite 0.5s; }
+            .animate-twinkle-delay-2 { animation: twinkle 3s ease-in-out infinite 1s; }
+            .animate-twinkle-delay-3 { animation: twinkle 3s ease-in-out infinite 1.5s; }
+          `}</style>
         </section>
 
         {/* Four Pillars with staggered animations */}
