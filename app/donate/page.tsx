@@ -12,6 +12,7 @@ import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { createClient } from "@/lib/supabase-client"
+import { FadeIn, Parallax } from "@/components/ui/motion"
 
 const predefinedAmounts = [100, 250, 500, 1000, 2500, 5000]
 
@@ -185,18 +186,24 @@ function DonateContent() {
   }
 
   return (
-    <main className="min-h-screen pt-32 pb-16" style={{ background: "linear-gradient(180deg, #FDF8F4 0%, #FDEEE3 100%)" }}>
-      <div className="max-w-3xl mx-auto px-4 md:px-8">
-        <Link
-          href="/about"
-          className="inline-flex items-center gap-2 hover:opacity-80 mb-8 transition-colors font-semibold"
-          style={{ color: "#D4956A" }}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Link>
+    <main className="min-h-screen pt-32 pb-16 relative overflow-hidden" style={{ background: "linear-gradient(180deg, #FDF8F4 0%, #FDEEE3 100%)" }}>
+      <Parallax speed={0.3} className="absolute top-20 right-10 w-72 h-72 bg-[#D4956A]/10 rounded-full blur-3xl" />
+      <Parallax speed={0.2} className="absolute bottom-20 left-10 w-64 h-64 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+      
+      <div className="max-w-3xl mx-auto px-4 md:px-8 relative z-10">
+        <FadeIn direction="left">
+          <Link
+            href="/about"
+            className="inline-flex items-center gap-2 hover:opacity-80 mb-8 transition-colors font-semibold"
+            style={{ color: "#D4956A" }}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Link>
+        </FadeIn>
 
-        <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden" style={{ background: "#fff" }}>
+        <FadeIn direction="up" delay={0.1}>
+        <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-500" style={{ background: "#fff" }}>
           <CardHeader className="pb-4" style={{ background: "linear-gradient(135deg, #D4956A, #E8B896)" }}>
             <div className="flex items-center gap-3 mb-2">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -446,6 +453,7 @@ function DonateContent() {
             </p>
           </CardContent>
         </Card>
+        </FadeIn>
       </div>
     </main>
   )

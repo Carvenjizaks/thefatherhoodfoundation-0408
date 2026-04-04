@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Heart, Users, GraduationCap, Home, ArrowRight, Quote, Play } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
 
 const slideAnimationStyles = `
   @keyframes slideInLeft {
@@ -162,36 +163,44 @@ export default function ImpactPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
           </div>
 
-          {/* Floating decorative elements */}
-          <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#D4956A]/20 blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-48 h-48 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
+          {/* Floating decorative elements with parallax */}
+          <Parallax speed={0.3} className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#D4956A]/20 blur-3xl" />
+          <Parallax speed={0.5} className="absolute bottom-20 right-10 w-48 h-48 rounded-full bg-[#8B2B3E]/20 blur-3xl" />
 
           <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-            <p className="text-[#D4956A] uppercase tracking-[0.3em] text-sm font-medium mb-6">
-              Committed to Transformation
-            </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-8">
-              Every Father Matters.
-              <br />
-              <span className="text-[#D4956A]">Every Family Counts.</span>
-            </h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Join us in building a generation of strong fathers, healthy marriages, and thriving communities. 
-              Your support transforms lives.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/donate">
-                <Button size="lg" className="bg-[#D4956A] hover:bg-[#c4855a] text-white px-10 py-7 text-lg rounded-full">
-                  Give Today
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link href="#our-impact">
-                <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 px-10 py-7 text-lg rounded-full">
-                  See Our Impact
-                </Button>
-              </Link>
-            </div>
+            <FadeIn direction="up" delay={0.1}>
+              <p className="text-[#D4956A] uppercase tracking-[0.3em] text-sm font-medium mb-6">
+                Committed to Transformation
+              </p>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.2}>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-8">
+                Every Father Matters.
+                <br />
+                <span className="text-[#D4956A]">Every Family Counts.</span>
+              </h1>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.3}>
+              <p className="text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Join us in building a generation of strong fathers, healthy marriages, and thriving communities. 
+                Your support transforms lives.
+              </p>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.4}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/donate">
+                  <Button size="lg" className="bg-[#D4956A] hover:bg-[#c4855a] hover:scale-105 transition-all duration-300 text-white px-10 py-7 text-lg rounded-full shadow-lg hover:shadow-xl">
+                    Give Today
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+                <Link href="#our-impact">
+                  <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 hover:scale-105 transition-all duration-300 px-10 py-7 text-lg rounded-full">
+                    See Our Impact
+                  </Button>
+                </Link>
+              </div>
+            </FadeIn>
           </div>
 
           {/* Scroll indicator */}

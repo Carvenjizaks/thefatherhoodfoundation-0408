@@ -7,6 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, MessageSquare, Shield, Heart, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect, useState, useCallback } from "react"
+import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
 
 const bannerSlides = [
   { src: "/images/couples/couple-together-1.jpg", alt: "Happy couple sharing an intimate moment" },
@@ -187,40 +188,53 @@ export default function MyGreatMarriagePage() {
         </section>
 
         {/* Overview */}
-        <section id="overview" className="py-20 lg:py-32 bg-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section id="overview" className="py-20 lg:py-32 bg-white relative overflow-hidden">
+          <Parallax speed={0.2} className="absolute top-20 right-0 w-72 h-72 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="relative h-[400px] lg:h-[480px] rounded-2xl overflow-hidden shadow-lg order-2 lg:order-1">
-                <Image
-                  src="/images/couples/couple-together-1.jpg"
-                  alt="Couple connecting"
-                  fill
-                  className="object-cover"
-                />
-              </div>
+              <FadeIn direction="right" className="order-2 lg:order-1">
+                <div className="relative h-[400px] lg:h-[480px] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500">
+                  <Image
+                    src="/images/couples/couple-together-1.jpg"
+                    alt="Couple connecting"
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </FadeIn>
               <div className="order-1 lg:order-2 space-y-6">
-                <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">The Programme</span>
-                <h2 className="text-3xl lg:text-4xl font-bold text-[#1a0a0e] leading-snug text-balance">
-                  Invest in Your Most Important Relationship
-                </h2>
-                <p className="text-[#6b4c52] leading-relaxed">
-                  MyGreatMarriage provides couples with the tools, principles, and support needed to build a thriving
-                  relationship. Through workshops, retreats, and couple&apos;s groups, you&apos;ll learn effective communication,
-                  conflict resolution, and how to maintain romance and intimacy throughout your marriage.
-                </p>
-                <p className="text-[#6b4c52] leading-relaxed">
-                  Whether you&apos;re engaged, newlyweds, or have been married for decades, this program will help you
-                  strengthen your bond and create the marriage you&apos;ve always desired.
-                </p>
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8"
-                >
-                  <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
-                    Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
+                <FadeIn direction="left" delay={0.1}>
+                  <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">The Programme</span>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.2}>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-[#1a0a0e] leading-snug text-balance">
+                    Invest in Your Most Important Relationship
+                  </h2>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.3}>
+                  <p className="text-[#6b4c52] leading-relaxed">
+                    MyGreatMarriage provides couples with the tools, principles, and support needed to build a thriving
+                    relationship. Through workshops, retreats, and couple&apos;s groups, you&apos;ll learn effective communication,
+                    conflict resolution, and how to maintain romance and intimacy throughout your marriage.
+                  </p>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.4}>
+                  <p className="text-[#6b4c52] leading-relaxed">
+                    Whether you&apos;re engaged, newlyweds, or have been married for decades, this program will help you
+                    strengthen your bond and create the marriage you&apos;ve always desired.
+                  </p>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.5}>
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white rounded-full px-8 shadow-lg hover:shadow-xl"
+                  >
+                    <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                      Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                </FadeIn>
               </div>
             </div>
           </div>

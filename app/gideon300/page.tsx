@@ -22,6 +22,7 @@ import {
   Milestone,
   Medal,
 } from "lucide-react"
+import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
 
 const benefits = [
   {
@@ -99,50 +100,67 @@ export default function Gideon300Page() {
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/10 via-background to-[#8B2B3E]/5" />
-          <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+          <Parallax speed={0.3} className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#8B2B3E]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.2} className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#D4A574]/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-5 py-2.5 rounded-full text-sm font-semibold mb-8">
-                <Crown className="w-5 h-5" />
-                Limited to 300 Partners
-              </div>
+              <FadeIn delay={0.1} direction="up">
+                <div className="inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-5 py-2.5 rounded-full text-sm font-semibold mb-8">
+                  <Crown className="w-5 h-5" />
+                  Limited to 300 Partners
+                </div>
+              </FadeIn>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
-                The <span className="text-[#8B2B3E]">Gideon300</span>
-              </h1>
+              <FadeIn delay={0.2} direction="up">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
+                  The <span className="text-[#8B2B3E]">Gideon300</span>
+                </h1>
+              </FadeIn>
 
-              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed mb-4 font-medium">
-                The Foundation. The Voice. The Feet.
-              </p>
+              <FadeIn delay={0.3} direction="up">
+                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed mb-4 font-medium">
+                  The Foundation. The Voice. The Feet.
+                </p>
+              </FadeIn>
 
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-10">
-                Gideon300 Partners are not just donors — they are the heartbeat of our mission. They give, go, and grow
-                with us. Like Gideon&apos;s 300, this select group of committed partners will help us achieve what seems
-                impossible: ending fatherlessness in our generation.
-              </p>
+              <FadeIn delay={0.4} direction="up">
+                <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-10">
+                  Gideon300 Partners are not just donors — they are the heartbeat of our mission. They give, go, and grow
+                  with us. Like Gideon&apos;s 300, this select group of committed partners will help us achieve what seems
+                  impossible: ending fatherlessness in our generation.
+                </p>
+              </FadeIn>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  asChild
-                  size="lg"
-                  className="h-14 px-10 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E]"
-                >
-                  <a href="#apply">
-                    Apply Now
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-14 px-10 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5"
-                >
-                  <a href="#benefits">See Benefits</a>
-                </Button>
-              </div>
+              <FadeIn delay={0.5} direction="up">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-14 px-10 text-base font-semibold bg-[#8B2B3E] hover:bg-[#6B1B2E] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    <a href="#apply">
+                      Apply Now
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-14 px-10 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 hover:scale-105 transition-all duration-300"
+                  >
+                    <a href="#benefits">See Benefits</a>
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 border-2 border-foreground/30 rounded-full flex justify-center pt-2">
+              <div className="w-1.5 h-3 bg-foreground/50 rounded-full animate-pulse" />
             </div>
           </div>
         </section>

@@ -9,6 +9,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Building2, Handshake, Users2, Target, Heart, CheckCircle2, Calendar, MapPin, GraduationCap, Briefcase, Crown } from "lucide-react"
 import { ScrollingImageCarousel } from "@/components/scrolling-image-carousel"
+import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
 
 // Animation styles
 const animationStyles = `
@@ -148,33 +149,48 @@ export default function CommunityDevelopmentPage() {
         
         {/* Hero Section - Warm Styling */}
         <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden" style={{ background: `linear-gradient(135deg, ${warmColors.cream} 0%, ${warmColors.warmBg} 100%)` }}>
-          {/* Decorative circles */}
-          <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-30" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }} />
-          <div className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-20" style={{ background: `linear-gradient(135deg, ${warmColors.primaryLight}, ${warmColors.primary})` }} />
-          <div className="absolute top-1/2 right-1/4 w-20 h-20 rounded-full opacity-20" style={{ background: warmColors.primary }} />
+          {/* Decorative circles with parallax */}
+          <Parallax speed={0.3} className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-30" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }} />
+          <Parallax speed={0.5} className="absolute bottom-20 right-10 w-64 h-64 rounded-full opacity-20" style={{ background: `linear-gradient(135deg, ${warmColors.primaryLight}, ${warmColors.primary})` }} />
+          <Parallax speed={0.2} className="absolute top-1/2 right-1/4 w-20 h-20 rounded-full opacity-20" style={{ background: warmColors.primary }} />
           
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
-            <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: warmColors.primary }}>
-              Building Stronger Communities
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-balance" style={{ color: warmColors.textDark }}>
-              Social Impact
-            </h1>
-            <p className="text-lg lg:text-xl text-balance leading-relaxed mb-8" style={{ color: warmColors.textMuted }}>
-              Strong communities are built by engaged men who serve, lead, and make a difference. Discover how you can
-              create lasting impact in your neighborhood and beyond.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="text-white font-semibold shadow-lg" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
-                <Link href="/donate">
-                  <Heart className="mr-2 h-5 w-5" /> Support Our Work
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="font-semibold" style={{ borderColor: warmColors.primary, color: warmColors.textDark }}>
-                <Link href="/get-involved">
-                  Get Involved <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+            <FadeIn direction="up" delay={0.1}>
+              <p className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: warmColors.primary }}>
+                Building Stronger Communities
+              </p>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.2}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-balance" style={{ color: warmColors.textDark }}>
+                Social Impact
+              </h1>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.3}>
+              <p className="text-lg lg:text-xl text-balance leading-relaxed mb-8" style={{ color: warmColors.textMuted }}>
+                Strong communities are built by engaged men who serve, lead, and make a difference. Discover how you can
+                create lasting impact in your neighborhood and beyond.
+              </p>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.4}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="text-white font-semibold shadow-lg hover:scale-105 transition-all duration-300 hover:shadow-xl" style={{ background: `linear-gradient(135deg, ${warmColors.primary}, ${warmColors.primaryLight})` }}>
+                  <Link href="/donate">
+                    <Heart className="mr-2 h-5 w-5" /> Support Our Work
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="font-semibold hover:scale-105 transition-all duration-300" style={{ borderColor: warmColors.primary, color: warmColors.textDark }}>
+                  <Link href="/get-involved">
+                    Get Involved <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            </FadeIn>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 border-2 rounded-full flex justify-center pt-2" style={{ borderColor: `${warmColors.primary}50` }}>
+              <div className="w-1.5 h-3 rounded-full animate-pulse" style={{ background: `${warmColors.primary}80` }} />
             </div>
           </div>
         </section>

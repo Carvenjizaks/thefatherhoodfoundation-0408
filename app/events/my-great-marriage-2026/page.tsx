@@ -32,6 +32,7 @@ import {
   BookOpen,
   Utensils,
 } from "lucide-react"
+import { FadeIn, Parallax } from "@/components/ui/motion"
 
 type RegistrationFormData = {
   firstName: string
@@ -274,27 +275,37 @@ export default function MyGreatMarriageEventPage() {
           
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50" />
+          
+          {/* Cinematic floating elements */}
+          <Parallax speed={0.3} className="absolute top-40 right-20 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.5} className="absolute bottom-40 left-20 w-96 h-96 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
 
           {/* Logo */}
-          <div className="absolute top-32 left-8 lg:left-16 z-10">
-            <Image
-              src="/images/mgm-logo.jpg"
-              alt="My Great Marriage Logo"
-              width={140}
-              height={140}
-              className="w-24 h-24 lg:w-32 lg:h-32 object-contain mix-blend-screen"
-            />
-          </div>
+          <FadeIn direction="left" delay={0.1}>
+            <div className="absolute top-32 left-8 lg:left-16 z-10">
+              <Image
+                src="/images/mgm-logo.jpg"
+                alt="My Great Marriage Logo"
+                width={140}
+                height={140}
+                className="w-24 h-24 lg:w-32 lg:h-32 object-contain mix-blend-screen hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </FadeIn>
 
           {/* Main Content */}
           <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
             <div className="max-w-4xl">
-              <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'Georgia, serif' }}>
-                My Great<br />Marriage
-              </h1>
-              <p className="text-xl lg:text-2xl text-white/70 max-w-xl leading-relaxed">
-                A transformative conference for couples seeking deeper connection and renewed love.
-              </p>
+              <FadeIn direction="up" delay={0.2}>
+                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'Georgia, serif' }}>
+                  My Great<br />Marriage
+                </h1>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.3}>
+                <p className="text-xl lg:text-2xl text-white/70 max-w-xl leading-relaxed">
+                  A transformative conference for couples seeking deeper connection and renewed love.
+                </p>
+              </FadeIn>
             </div>
           </div>
 
