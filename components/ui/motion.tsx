@@ -14,30 +14,32 @@ interface FadeInProps {
 export function FadeIn({ 
   children, 
   delay = 0, 
-  duration = 0.6, 
+  duration = 0.8, 
   direction = "up",
   className = "",
   once = true
 }: FadeInProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true)
+          setHasAnimated(true)
           if (once) observer.disconnect()
-        } else if (!once) {
+        } else if (!once && !entry.isIntersecting) {
           setIsVisible(false)
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
     )
 
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
-  }, [once])
+  }, [once, hasAnimated])
 
   const getTransform = () => {
     switch (direction) {
@@ -49,13 +51,16 @@ export function FadeIn({
     }
   }
 
+  // Once animated, always keep content visible (never fade out)
+  const shouldShow = isVisible || hasAnimated
+
   return (
     <div
       ref={ref}
       className={className}
       style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "none" : getTransform(),
+        opacity: shouldShow ? 1 : 0,
+        transform: shouldShow ? "none" : getTransform(),
         transition: `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
       }}
     >
@@ -105,12 +110,14 @@ interface ScaleInProps {
 export function ScaleIn({ children, delay = 0, duration = 0.5, className = "" }: ScaleInProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true)
+          setHasAnimated(true)
           observer.disconnect()
         }
       },
@@ -119,15 +126,17 @@ export function ScaleIn({ children, delay = 0, duration = 0.5, className = "" }:
 
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
-  }, [])
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
 
   return (
     <div
       ref={ref}
       className={className}
       style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "scale(1)" : "scale(0.9)",
+        opacity: shouldShow ? 1 : 0,
+        transform: shouldShow ? "scale(1)" : "scale(0.9)",
         transition: `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
       }}
     >
@@ -145,12 +154,14 @@ interface StaggerContainerProps {
 export function StaggerContainer({ children, staggerDelay = 0.1, className = "" }: StaggerContainerProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true)
+          setHasAnimated(true)
           observer.disconnect()
         }
       },
@@ -159,7 +170,9 @@ export function StaggerContainer({ children, staggerDelay = 0.1, className = "" 
 
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
-  }, [])
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
 
   return (
     <div ref={ref} className={className}>
@@ -168,8 +181,8 @@ export function StaggerContainer({ children, staggerDelay = 0.1, className = "" 
             <div
               key={i}
               style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "none" : "translateY(30px)",
+                opacity: shouldShow ? 1 : 0,
+                transform: shouldShow ? "none" : "translateY(30px)",
                 transition: `opacity 0.5s ease-out ${i * staggerDelay}s, transform 0.5s ease-out ${i * staggerDelay}s`,
               }}
             >
@@ -236,12 +249,14 @@ interface TextRevealProps {
 export function TextReveal({ text, delay = 0, className = "" }: TextRevealProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true)
+          setHasAnimated(true)
           observer.disconnect()
         }
       },
@@ -250,7 +265,9 @@ export function TextReveal({ text, delay = 0, className = "" }: TextRevealProps)
 
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
-  }, [])
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
 
   return (
     <span ref={ref} className={className}>
@@ -259,8 +276,8 @@ export function TextReveal({ text, delay = 0, className = "" }: TextRevealProps)
           key={i}
           style={{
             display: "inline-block",
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? "none" : "translateY(20px)",
+            opacity: shouldShow ? 1 : 0,
+            transform: shouldShow ? "none" : "translateY(20px)",
             transition: `opacity 0.3s ease-out ${delay + i * 0.03}s, transform 0.3s ease-out ${delay + i * 0.03}s`,
           }}
         >
