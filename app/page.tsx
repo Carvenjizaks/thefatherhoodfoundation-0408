@@ -210,51 +210,6 @@ export default function HomePage() {
             </FadeIn>
           </div>
           
-          {/* CSS Animations */}
-          <style jsx>{`
-            @keyframes gradientShift {
-              0%, 100% { background-position: 0% 50%; }
-              50% { background-position: 100% 50%; }
-            }
-            @keyframes float-slow {
-              0%, 100% { transform: translate(0, 0) scale(1); }
-              33% { transform: translate(30px, -30px) scale(1.1); }
-              66% { transform: translate(-20px, 20px) scale(0.9); }
-            }
-            @keyframes float-medium {
-              0%, 100% { transform: translate(0, 0) scale(1); }
-              50% { transform: translate(-40px, -20px) scale(1.05); }
-            }
-            @keyframes float-fast {
-              0%, 100% { transform: translate(0, 0); }
-              25% { transform: translate(20px, -15px); }
-              50% { transform: translate(-10px, -25px); }
-              75% { transform: translate(-25px, 10px); }
-            }
-            @keyframes pulse-slow {
-              0%, 100% { opacity: 0.3; transform: scale(1); }
-              50% { opacity: 0.6; transform: scale(1.2); }
-            }
-            @keyframes streak {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(200%); }
-            }
-            @keyframes twinkle {
-              0%, 100% { opacity: 0.2; transform: scale(1); }
-              50% { opacity: 1; transform: scale(1.5); }
-            }
-            .animate-float-slow { animation: float-slow 20s ease-in-out infinite; }
-            .animate-float-medium { animation: float-medium 15s ease-in-out infinite; }
-            .animate-float-fast { animation: float-fast 10s ease-in-out infinite; }
-            .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
-            .animate-streak-1 { animation: streak 8s linear infinite; }
-            .animate-streak-2 { animation: streak 12s linear infinite 2s; }
-            .animate-streak-3 { animation: streak 10s linear infinite 4s; }
-            .animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
-            .animate-twinkle-delay-1 { animation: twinkle 3s ease-in-out infinite 0.5s; }
-            .animate-twinkle-delay-2 { animation: twinkle 3s ease-in-out infinite 1s; }
-            .animate-twinkle-delay-3 { animation: twinkle 3s ease-in-out infinite 1.5s; }
-          `}</style>
         </section>
 
         {/* Four Pillars with staggered animations */}
