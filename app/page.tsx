@@ -26,89 +26,92 @@ export default function HomePage() {
       <Header />
 
       <main className="bg-white text-black min-h-screen overflow-hidden">
-        {/* Hero Section - Cinematic multi-image carousel */}
-        <section className="relative min-h-screen flex items-end overflow-hidden">
-          {/* Cinematic image carousel with overlapping motion */}
-          <CinematicImageCarousel />
+        {/* Hero Section - Images on top, text below */}
+        <section className="relative">
+          {/* Image Carousel - Full width, no overlays */}
+          <div className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+            <CinematicImageCarousel />
+          </div>
           
-          {/* Content positioned at bottom with clear readable text */}
-          <div className="relative z-10 w-full">
-            {/* Bottom text overlay on image */}
-            <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-32 pb-8">
-              <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                {/* Main headline */}
-                <FadeIn delay={0.2} direction="up">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight text-balance">
-                    Empowering men to{" "}
-                    <span className="text-[#D4A574]">Learn</span>,{" "}
-                    <span className="text-[#D4A574]">Grow</span> and{" "}
-                    <span className="text-[#D4A574]">Contribute</span>{" "}
-                    through serving
-                  </h1>
-                </FadeIn>
-                
-                {/* Mission statement - clear and readable */}
-                <FadeIn delay={0.4} direction="up">
-                  <p className="text-lg lg:text-xl text-white/95 leading-relaxed max-w-4xl mb-8">
-                    The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop <span className="font-semibold text-[#D4A574]">intentional fathers</span>, <span className="font-semibold text-[#D4A574]">committed husbands</span>, and <span className="font-semibold text-[#D4A574]">impactful leaders</span>.
-                  </p>
-                </FadeIn>
-                
-                {/* CTA Button */}
-                <FadeIn delay={0.5} direction="up">
-                  <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                    <Button 
-                      asChild 
-                      size="lg" 
-                      className="text-base px-8 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] text-white transition-all duration-300 rounded-full shadow-lg hover:shadow-xl btn-shine hover:scale-105"
-                    >
-                      <Link href="/get-involved">
-                        Get Involved <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                    <Button 
-                      asChild 
-                      size="lg" 
-                      variant="outline"
-                      className="text-base px-8 py-6 bg-transparent border-2 border-white/50 text-white hover:bg-white hover:text-[#8B2B3E] transition-all duration-300 rounded-full"
-                    >
-                      <Link href="#pillars">
-                        Explore Programs
-                      </Link>
-                    </Button>
-                  </div>
-                </FadeIn>
-              </div>
-            </div>
+          {/* Hero Text Section - Below images, stands out */}
+          <div className="relative bg-[#8B2B3E]">
+            {/* Decorative top border */}
+            <div className="absolute top-0 left-0 right-0 h-2 bg-[#D4A574]" />
             
-            {/* Bottom stats bar */}
-            <div className="bg-[#FAF8F5] border-t-4 border-[#8B2B3E]">
-              <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 lg:py-8">
-                <div className="flex flex-wrap justify-center lg:justify-between items-center gap-8">
-                  <FadeIn delay={0.6} direction="up">
-                    <div className="flex flex-wrap justify-center gap-8 lg:gap-12">
-                      <div className="text-center">
-                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
-                          <CountUp end={20} suffix="k+" duration={2} />
-                        </p>
-                        <p className="text-sm text-black/60 font-medium mt-1">Men Mentored</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
-                          <CountUp end={25} suffix="+" duration={2} />
-                        </p>
-                        <p className="text-sm text-black/60 font-medium mt-1">Years Impact</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-3xl lg:text-4xl font-bold text-[#8B2B3E]">
-                          <CountUp end={1000} suffix="+" duration={2} />
-                        </p>
-                        <p className="text-sm text-black/60 font-medium mt-1">Families Helped</p>
-                      </div>
-                    </div>
-                  </FadeIn>
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
+              {/* Main headline */}
+              <FadeIn delay={0.2} direction="up">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-8 leading-tight text-balance text-center">
+                  Empowering men to{" "}
+                  <span className="text-[#D4A574] inline-block">Learn</span>,{" "}
+                  <span className="text-[#D4A574] inline-block">Grow</span> and{" "}
+                  <span className="text-[#D4A574] inline-block">Contribute</span>{" "}
+                  through serving
+                </h1>
+              </FadeIn>
+              
+              {/* Mission statement */}
+              <FadeIn delay={0.4} direction="up">
+                <p className="text-lg lg:text-xl xl:text-2xl text-white/95 leading-relaxed max-w-5xl mx-auto mb-10 text-center text-pretty">
+                  The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop{" "}
+                  <span className="font-bold text-[#D4A574]">intentional fathers</span>,{" "}
+                  <span className="font-bold text-[#D4A574]">committed husbands</span>, and{" "}
+                  <span className="font-bold text-[#D4A574]">impactful leaders</span>.
+                </p>
+              </FadeIn>
+              
+              {/* CTA Buttons */}
+              <FadeIn delay={0.5} direction="up">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    className="text-lg px-10 py-7 bg-white text-[#8B2B3E] hover:bg-[#D4A574] hover:text-white transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl btn-shine hover:scale-105 font-semibold"
+                  >
+                    <Link href="/get-involved">
+                      Get Involved <ArrowRightIcon />
+                    </Link>
+                  </Button>
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    variant="outline"
+                    className="text-lg px-10 py-7 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#8B2B3E] transition-all duration-300 rounded-full font-semibold"
+                  >
+                    <Link href="#pillars">
+                      Explore Programs
+                    </Link>
+                  </Button>
                 </div>
-              </div>
+              </FadeIn>
+            </div>
+          </div>
+          
+          {/* Stats bar */}
+          <div className="bg-[#FAF8F5] border-b-4 border-[#D4A574]">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-10">
+              <FadeIn delay={0.6} direction="up">
+                <div className="flex flex-wrap justify-center gap-8 lg:gap-16">
+                  <div className="text-center">
+                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
+                      <CountUp end={20} suffix="k+" duration={2} />
+                    </p>
+                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Men Mentored</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
+                      <CountUp end={25} suffix="+" duration={2} />
+                    </p>
+                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Years Impact</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
+                      <CountUp end={1000} suffix="+" duration={2} />
+                    </p>
+                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Families Helped</p>
+                  </div>
+                </div>
+              </FadeIn>
             </div>
           </div>
         </section>

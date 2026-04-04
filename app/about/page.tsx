@@ -14,7 +14,7 @@ import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
 
 const stats = [
   { value: "20,000+", label: "Men Impacted" },
-  { value: "500+",    label: "Marriages Strengthened" },
+  { value: "1,500+",  label: "Marriages Strengthened" },
   { value: "15,000+", label: "Youth Reached" },
   { value: "10+",     label: "Years of Service" },
 ]

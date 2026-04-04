@@ -80,7 +80,7 @@ return (
 
 const impactStats = [
   { value: 20000, suffix: "+", label: "Men Transformed", description: "Fathers equipped with purpose and identity" },
-  { value: 500, suffix: "+", label: "Marriages Strengthened", description: "Couples restored and thriving" },
+  { value: 1500, suffix: "+", label: "Marriages Strengthened", description: "Couples restored and thriving" },
   { value: 15000, suffix: "+", label: "Youth Reached", description: "Young people mentored in character" },
   { value: 10, suffix: "+", label: "Years of Impact", description: "A decade of transformation" },
 ]
