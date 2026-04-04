@@ -1,6 +1,6 @@
 "use client"
 
-// v4 - Force rebuild to fix hydration and Supabase URL
+// v5 - Added cinematic animations
 import type React from "react"
 
 import { useState } from "react"
@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Calendar, CheckCircle, Copy } from "lucide-react"
+import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
 
 export default function GetInvolvedPage() {
   const [formData, setFormData] = useState({
@@ -194,41 +195,60 @@ export default function GetInvolvedPage() {
             />
           </div>
 
+          <Parallax speed={0.3} className="absolute top-20 left-10 w-64 h-64 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.5} className="absolute bottom-20 right-10 w-96 h-96 bg-[#D4A574]/10 rounded-full blur-3xl" />
+          
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center py-20">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
-              Get Involved
-            </h1>
-            <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
-              Real change begins when men step forward — for themselves, their families, and their communities. Whether
-              you join a Table Talk, volunteer your time, or simply sign up to stay connected, your involvement helps
-              break the cycle of fatherlessness and empowers the next generation.
-            </p>
+            <FadeIn direction="up" delay={0.1}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
+                Get Involved
+              </h1>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.2}>
+              <p className="text-lg lg:text-xl text-muted-foreground text-balance leading-relaxed">
+                Real change begins when men step forward — for themselves, their families, and their communities. Whether
+                you join a Table Talk, volunteer your time, or simply sign up to stay connected, your involvement helps
+                break the cycle of fatherlessness and empowers the next generation.
+              </p>
+            </FadeIn>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 border-2 border-foreground/30 rounded-full flex justify-center pt-2">
+              <div className="w-1.5 h-3 bg-foreground/50 rounded-full animate-pulse" />
+            </div>
           </div>
         </section>
 
         {/* Monthly Table Talk */}
-        <section className="py-20 lg:py-32 bg-[#F5F0E8]">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
+        <section className="py-20 lg:py-32 bg-[#F5F0E8] relative overflow-hidden">
+          <Parallax speed={0.2} className="absolute top-0 right-0 w-72 h-72 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
+          <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10">
             {/* Sign Up Button */}
-            <div className="text-center mb-10">
-              <a href="#signup-form">
-                <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-10 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  Sign Up Today
-                </Button>
-              </a>
-            </div>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-                Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
-                and shared meals. No agenda, no pressure—just authentic fellowship.
-              </p>
-              <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
-                <span className="font-semibold">NAD 65</span>
-                <span className="text-white/80">|</span>
-                <span>Includes Drinks & Light Meal</span>
+            <FadeIn direction="up">
+              <div className="text-center mb-10">
+                <a href="#signup-form">
+                  <Button size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-10 py-6 text-lg rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    Sign Up Today
+                  </Button>
+                </a>
               </div>
-            </div>
+            </FadeIn>
+            <FadeIn direction="up" delay={0.1}>
+              <div className="text-center mb-16">
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+                  Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
+                  and shared meals. No agenda, no pressure—just authentic fellowship.
+                </p>
+                <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
+                  <span className="font-semibold">NAD 65</span>
+                  <span className="text-white/80">|</span>
+                  <span>Includes Drinks & Light Meal</span>
+                </div>
+              </div>
+            </FadeIn>
 
             <Card className="mb-8 border-2 overflow-hidden">
               <CardHeader className="bg-[#1E3A5F] text-white py-6 px-6">

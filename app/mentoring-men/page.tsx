@@ -1,6 +1,6 @@
 "use client"
 
-// v4 - Force rebuild to fix hydration and Supabase URL
+// v5 - Added cinematic animations
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, MessageCircle, Heart, Trophy, Users } from "lucide-react"
 import { useEffect, useRef, useState, useCallback } from "react"
+import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
 
 const journeySteps = [
   {
@@ -259,6 +260,10 @@ export default function MentoringMenPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#16213e] via-transparent to-transparent" />
           </div>
+          
+          {/* Cinematic floating elements */}
+          <Parallax speed={0.3} className="absolute top-20 left-10 w-64 h-64 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.5} className="absolute bottom-20 right-10 w-96 h-96 bg-[#D4A574]/10 rounded-full blur-3xl" />
 
           <div
             ref={heroRef}
@@ -266,22 +271,30 @@ export default function MentoringMenPage() {
               heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
-              Monthly Table Talk for Men
-            </h1>
+            <FadeIn delay={0.1} direction="up">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
+                Monthly Table Talk for Men
+              </h1>
+            </FadeIn>
+            <FadeIn delay={0.2} direction="up">
             <p className="text-lg lg:text-xl text-white/80 text-balance leading-relaxed max-w-2xl mx-auto">
               A gathering space where men from all walks of life come together for real conversation about everyday life.
             </p>
-            <p className="mt-6 text-white font-semibold text-lg">
-              Include these dates in your calendar
-            </p>
-            <div className="mt-10">
-              <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold">
-                <Link href="/get-involved">
-                  Join the Table <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
+            </FadeIn>
+            <FadeIn delay={0.3} direction="up">
+              <p className="mt-6 text-white font-semibold text-lg">
+                Include these dates in your calendar
+              </p>
+            </FadeIn>
+            <FadeIn delay={0.4} direction="up">
+              <div className="mt-10">
+                <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] hover:scale-105 transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-xl">
+                  <Link href="/get-involved">
+                    Join the Table <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            </FadeIn>
           </div>
 
           {/* Animated scroll indicator */}

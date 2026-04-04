@@ -11,6 +11,7 @@ import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-reac
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { FadeIn, Parallax } from "@/components/ui/motion"
 
 // Event configuration with open/closed status
 const events = [
@@ -519,23 +520,30 @@ export default function EventsPage() {
       <Header />
       <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-[#8B2B3E] py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">Upcoming Events</h1>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
-            Join us for transformative events designed to strengthen men, marriages, and families.
-          </p>
+      <section className="bg-[#8B2B3E] py-16 lg:py-20 relative overflow-hidden">
+        <Parallax speed={0.3} className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+        <Parallax speed={0.2} className="absolute bottom-10 left-10 w-96 h-96 bg-[#D4A574]/10 rounded-full blur-3xl" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
+          <FadeIn direction="up" delay={0.1}>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">Upcoming Events</h1>
+          </FadeIn>
+          <FadeIn direction="up" delay={0.2}>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">
+              Join us for transformative events designed to strengthen men, marriages, and families.
+            </p>
+          </FadeIn>
         </div>
       </section>
 
       {/* Events List */}
       <section className="max-w-5xl mx-auto px-6 lg:px-8 py-12 space-y-12">
-        {events.map((event) => (
-          <EventCard 
-            key={event.id} 
-            event={event} 
-            onRegister={() => setSelectedEvent(event)}
-          />
+        {events.map((event, index) => (
+          <FadeIn key={event.id} direction="up" delay={index * 0.1}>
+            <EventCard 
+              event={event} 
+              onRegister={() => setSelectedEvent(event)}
+            />
+          </FadeIn>
         ))}
       </section>
 

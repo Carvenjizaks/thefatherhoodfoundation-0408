@@ -24,6 +24,7 @@ import {
   Medal,
   CalendarCheck,
 } from "lucide-react"
+import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
 
 type DonationTier = {
   amount: number
@@ -112,22 +113,36 @@ export default function PartnershipPage() {
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pb-28 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/5 via-background to-[#8B2B3E]/10" />
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#8B2B3E]/5 to-transparent" />
+          <Parallax speed={0.3} className="absolute top-20 right-10 w-72 h-72 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
+          <Parallax speed={0.2} className="absolute bottom-10 left-10 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <div className="max-w-4xl">
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
-                Join the Movement
-              </p>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
-                Be Part of Something{" "}
-                <span className="text-[#8B2B3E]">Greater Than Yourself</span>
-              </h1>
-              <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl">
-                Every father reached, every family strengthened, every community transformed — it starts with people
-                like you who believe that fatherlessness can end in our generation. Your involvement changes
-                everything.
-              </p>
+              <FadeIn direction="up" delay={0.1}>
+                <p className="text-sm font-semibold uppercase tracking-widest text-[#8B2B3E] mb-4">
+                  Join the Movement
+                </p>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.2}>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
+                  Be Part of Something{" "}
+                  <span className="text-[#8B2B3E]">Greater Than Yourself</span>
+                </h1>
+              </FadeIn>
+              <FadeIn direction="up" delay={0.3}>
+                <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-3xl">
+                  Every father reached, every family strengthened, every community transformed — it starts with people
+                  like you who believe that fatherlessness can end in our generation. Your involvement changes
+                  everything.
+                </p>
+              </FadeIn>
+            </div>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 border-2 border-[#8B2B3E]/30 rounded-full flex justify-center pt-2">
+              <div className="w-1.5 h-3 bg-[#8B2B3E]/50 rounded-full animate-pulse" />
             </div>
           </div>
         </section>

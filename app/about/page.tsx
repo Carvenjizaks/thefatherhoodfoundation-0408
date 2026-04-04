@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
 // named imports — header.tsx and footer.tsx use named exports only
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -202,35 +203,47 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="relative pt-32 pb-20 overflow-hidden bg-[#1a1a1a]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/10" />
+        <Parallax speed={0.3} className="absolute top-20 right-10 w-96 h-96 bg-[#D4956A]/10 rounded-full blur-3xl" />
+        <Parallax speed={0.2} className="absolute bottom-10 left-10 w-64 h-64 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">Know That Your Support Makes a Difference</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
-            Transforming Lives,{" "}
-            <span className="text-[#D4956A]">One Father at a Time</span>
-          </h1>
-          <p className="text-lg text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
-            The Fatherhood Foundation is a values-driven organization committed to raising strong men, strengthening families, and building healthier communities. Through mentoring, leadership development, youth engagement, and community initiatives, we equip and empower men to go and train young people in character, values, and practical life tools.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold h-12 px-8">
-              <Link href="/partnership">Partner With Us</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
-              <Link href="/get-involved">Get Involved</Link>
-            </Button>
-          </div>
+          <FadeIn delay={0.1} direction="up">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">Know That Your Support Makes a Difference</p>
+          </FadeIn>
+          <FadeIn delay={0.2} direction="up">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
+              Transforming Lives,{" "}
+              <span className="text-[#D4956A]">One Father at a Time</span>
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.3} direction="up">
+            <p className="text-lg text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
+              The Fatherhood Foundation is a values-driven organization committed to raising strong men, strengthening families, and building healthier communities. Through mentoring, leadership development, youth engagement, and community initiatives, we equip and empower men to go and train young people in character, values, and practical life tools.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.4} direction="up">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white font-semibold h-12 px-8 shadow-lg hover:shadow-xl">
+                <Link href="/partnership">Partner With Us</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 hover:scale-105 transition-all duration-300 font-semibold h-12 px-8">
+                <Link href="/get-involved">Get Involved</Link>
+              </Button>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-[#8B2B3E]">
+      <section className="py-16 bg-[#8B2B3E] overflow-hidden">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <p className="text-4xl font-bold text-white mb-2">{s.value}</p>
-                <p className="text-white/70 text-sm font-medium">{s.label}</p>
-              </div>
+            {stats.map((s, i) => (
+              <FadeIn key={s.label} delay={i * 0.1} direction="up">
+                <div>
+                  <p className="text-4xl font-bold text-white mb-2">{s.value}</p>
+                  <p className="text-white/70 text-sm font-medium">{s.label}</p>
+                </div>
+              </FadeIn>
             ))}
           </div>
         </div>

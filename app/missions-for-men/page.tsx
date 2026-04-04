@@ -7,6 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Globe, Heart, Users, MapPin, ArrowRight, Shield, Flame, ChevronRight, Quote } from "lucide-react"
 import { useState } from "react"
+import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
 
 const missionAreas = [
   {
@@ -63,20 +64,27 @@ export default function MissionsForMenPage() {
 
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-[2px] bg-[#D4A574]" />
-                <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">Go. Serve. Transform.</span>
-              </div>
+              <FadeIn delay={0.1} direction="up">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-[2px] bg-[#D4A574]" />
+                  <span className="text-[#D4A574] text-sm font-semibold tracking-widest uppercase">Go. Serve. Transform.</span>
+                </div>
+              </FadeIn>
               
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 leading-[1.1]">
-                Missions<br />
-                <span className="text-[#D4A574]">for Men</span>
-              </h1>
+              <FadeIn delay={0.2} direction="up">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 leading-[1.1]">
+                  Missions<br />
+                  <span className="text-[#D4A574]">for Men</span>
+                </h1>
+              </FadeIn>
               
-              <p className="text-xl text-white/70 mb-12 leading-relaxed max-w-xl">
-                Step beyond your comfort zone and into your calling. Join fellow men on transformative mission trips that change communities and change you.
-              </p>
+              <FadeIn delay={0.3} direction="up">
+                <p className="text-xl text-white/70 mb-12 leading-relaxed max-w-xl">
+                  Step beyond your comfort zone and into your calling. Join fellow men on transformative mission trips that change communities and change you.
+                </p>
+              </FadeIn>
 
+              <FadeIn delay={0.4} direction="up">
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="text-base px-8 py-6 bg-[#D4A574] text-black hover:bg-[#c4956a] rounded-none font-semibold">
                   <Link href="/get-involved">
@@ -87,25 +95,28 @@ export default function MissionsForMenPage() {
                   <Link href="#upcoming">View Upcoming Trips</Link>
                 </Button>
               </div>
+              </FadeIn>
             </div>
           </div>
 
           {/* Scroll indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50">
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce">
             <span className="text-xs tracking-widest uppercase">Scroll</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
           </div>
         </section>
 
         {/* Impact Stats Bar */}
-        <section className="bg-[#8B2B3E] py-8">
+        <section className="bg-[#8B2B3E] py-8 overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {impactStats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.number}</div>
-                  <div className="text-white/70 text-sm uppercase tracking-wider">{stat.label}</div>
-                </div>
+                <FadeIn key={index} delay={index * 0.1} direction="up">
+                  <div className="text-center">
+                    <div className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.number}</div>
+                    <div className="text-white/70 text-sm uppercase tracking-wider">{stat.label}</div>
+                  </div>
+                </FadeIn>
               ))}
             </div>
           </div>
