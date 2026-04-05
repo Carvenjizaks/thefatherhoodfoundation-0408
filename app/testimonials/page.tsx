@@ -18,25 +18,25 @@ const ArrowRightIcon = () => (
 const testimonials = [
   {
     id: 1,
-    name: "David Nangolo",
+    name: "Pieter Kruger",
     role: "Program Graduate",
     program: "Table Talk for Men",
     quote: "The Fatherhood Foundation transformed my perspective on being a father. Through the mentoring program, I learned practical skills that have strengthened my relationship with my children and wife. I am now a more intentional father and husband.",
-    image: "/testimonials/david.jpg",
+    image: "/testimonials/pieter.jpg",
     featured: true,
   },
   {
     id: 2,
-    name: "Johannes Shikongo",
+    name: "Ricardo Beukes",
     role: "Community Leader",
     program: "Social Impact",
     quote: "Being part of the community development initiatives opened my eyes to the power of men supporting each other. Together, we are building a stronger community for our families.",
-    image: "/testimonials/johannes.jpg",
+    image: "/testimonials/ricardo.jpg",
     featured: false,
   },
   {
     id: 3,
-    name: "Michael & Sarah Amupolo",
+    name: "Johan & Mariska Van Rensburg",
     role: "Married Couple",
     program: "MyGreatMarriage",
     quote: "The marriage enrichment program gave us tools to communicate better and resolve conflicts with grace. Our marriage has never been stronger, and we are grateful for this foundation.",
@@ -45,16 +45,16 @@ const testimonials = [
   },
   {
     id: 4,
-    name: "Peter Shilongo",
+    name: "Brandon Van Wyk",
     role: "Young Father",
     program: "Table Talk for Men",
     quote: "As a young father, I had no role model growing up. The mentoring program connected me with experienced fathers who showed me what intentional fatherhood looks like.",
-    image: "/testimonials/peter.jpg",
+    image: "/testimonials/brandon.jpg",
     featured: false,
   },
   {
     id: 5,
-    name: "Thomas & Grace Katjivena",
+    name: "Willem & Chantal Jansen",
     role: "Married 15 Years",
     program: "MyGreatMarriage",
     quote: "After 15 years of marriage, we thought we knew everything. This program showed us there is always room for growth. We learned new ways to love and support each other.",
@@ -63,11 +63,11 @@ const testimonials = [
   },
   {
     id: 6,
-    name: "Simon Hamutenya",
+    name: "Hendrik Van Rensburg",
     role: "Mentor",
     program: "Missions for Men",
     quote: "Serving on mission trips has been life-changing. I have seen firsthand how men can make a difference when they step up and lead with purpose.",
-    image: "/testimonials/simon.jpg",
+    image: "/testimonials/hendrik.jpg",
     featured: false,
   },
 ]
@@ -273,7 +273,7 @@ export default function TestimonialsPage() {
                         {video === 1 ? "A Father's Journey" : "Marriage Transformed"}
                       </p>
                       <p className="text-white/70 text-sm">
-                        {video === 1 ? "David shares his transformation story" : "The Amupolos share their story"}
+                        {video === 1 ? "Pieter Kruger shares his transformation story" : "The Van Rensburgs share their story"}
                       </p>
                     </div>
                   </div>

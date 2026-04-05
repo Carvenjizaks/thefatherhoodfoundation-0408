@@ -466,10 +466,10 @@ export default function HomePage() {
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">D</span>
+                        <span className="text-[#8B2B3E] font-semibold">P</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">David N.</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Pieter Kruger</p>
                         <p className="text-xs text-black/60">Table Talk Graduate</p>
                       </div>
                     </div>
@@ -492,10 +492,10 @@ export default function HomePage() {
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">M</span>
+                        <span className="text-[#8B2B3E] font-semibold">J</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Michael & Sarah A.</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Johan & Mariska Van Rensburg</p>
                         <p className="text-xs text-black/60">MyGreatMarriage Couple</p>
                       </div>
                     </div>
@@ -518,10 +518,10 @@ export default function HomePage() {
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">J</span>
+                        <span className="text-[#8B2B3E] font-semibold">R</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Johannes S.</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Ricardo Beukes</p>
                         <p className="text-xs text-black/60">Community Leader</p>
                       </div>
                     </div>
