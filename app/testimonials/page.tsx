@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn, ScaleIn, StaggerContainer, CountUp, Parallax } from "@/components/ui/motion"
-import { Quote, Play, ArrowRight, Heart, Star } from "lucide-react"
+import { Quote, ArrowRight, Heart, Star } from "lucide-react"
 
 const ArrowRightIcon = () => (
   <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,46 +239,80 @@ export default function TestimonialsPage() {
           </div>
         </section>
 
-        {/* Video Testimonials Section */}
+        {/* Global Community Section */}
         <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
           <Parallax speed={0.2} className="absolute top-0 right-0 w-96 h-96 bg-[#D4A574]/5 rounded-full blur-3xl" />
           
           <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <FadeIn direction="up" className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-[#1a1a1a] mb-4">
-                Watch Their Stories
+                Our Global Community
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
-                Hear directly from the men and families whose lives have been transformed.
+                Men and families across South Africa, Germany, and Namibia are transforming their lives together.
               </p>
             </FadeIn>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {[1, 2].map((video, index) => (
-                <FadeIn key={video} delay={index * 0.2} direction="up">
-                  <div className="group relative aspect-video bg-gradient-to-br from-[#1a1a1a] to-[#333] rounded-2xl overflow-hidden cursor-pointer">
-                    {/* Video thumbnail placeholder */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Play button */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-lg">
-                        <Play className="w-8 h-8 text-[#8B2B3E] ml-1" fill="currentColor" />
-                      </div>
-                    </div>
-                    
-                    {/* Video info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <p className="text-white font-semibold mb-1">
-                        {video === 1 ? "A Father's Journey" : "Marriage Transformed"}
-                      </p>
-                      <p className="text-white/70 text-sm">
-                        {video === 1 ? "Pieter Kruger shares his transformation story" : "The Van Rensburgs share their story"}
-                      </p>
-                    </div>
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+              <FadeIn delay={0.1} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/south-africa-fathers.jpg"
+                    alt="Fathers gathering in South Africa"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                    <p className="text-white font-semibold text-lg">South Africa</p>
+                    <p className="text-white/80 text-sm">Building brotherhood in the Cape</p>
                   </div>
-                </FadeIn>
-              ))}
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.2} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/germany-mentorship.jpg"
+                    alt="Mentorship gathering in Germany"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                    <p className="text-white font-semibold text-lg">Germany</p>
+                    <p className="text-white/80 text-sm">Mentoring the next generation</p>
+                  </div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.3} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/namibia-community.jpg"
+                    alt="Community event in Namibia"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                    <p className="text-white font-semibold text-lg">Namibia</p>
+                    <p className="text-white/80 text-sm">Strengthening communities in Windhoek</p>
+                  </div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.4} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/cape-town-family.jpg"
+                    alt="Family in Cape Town"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                    <p className="text-white font-semibold text-lg">Family Life</p>
+                    <p className="text-white/80 text-sm">Strengthening families across borders</p>
+                  </div>
+                </div>
+              </FadeIn>
             </div>
           </div>
         </section>
