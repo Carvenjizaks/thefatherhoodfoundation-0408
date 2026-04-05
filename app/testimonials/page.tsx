@@ -1,13 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn, ScaleIn, StaggerContainer, CountUp, Parallax } from "@/components/ui/motion"
-import { Quote, Play, ArrowRight, Users, Heart, Star } from "lucide-react"
+import { Quote, Play, ArrowRight, Heart, Star } from "lucide-react"
 
 const ArrowRightIcon = () => (
   <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,7 +21,7 @@ const testimonials = [
     role: "Program Graduate",
     program: "Table Talk for Men",
     quote: "The Fatherhood Foundation transformed my perspective on being a father. Through the mentoring program, I learned practical skills that have strengthened my relationship with my children and wife. I am now a more intentional father and husband.",
-    image: "/testimonials/pieter.jpg",
+    initials: "PK",
     featured: true,
   },
   {
@@ -31,7 +30,7 @@ const testimonials = [
     role: "Community Leader",
     program: "Social Impact",
     quote: "Being part of the community development initiatives opened my eyes to the power of men supporting each other. Together, we are building a stronger community for our families.",
-    image: "/testimonials/ricardo.jpg",
+    initials: "RB",
     featured: false,
   },
   {
@@ -40,7 +39,7 @@ const testimonials = [
     role: "Married Couple",
     program: "MyGreatMarriage",
     quote: "The marriage enrichment program gave us tools to communicate better and resolve conflicts with grace. Our marriage has never been stronger, and we are grateful for this foundation.",
-    image: "/testimonials/couple1.jpg",
+    initials: "VR",
     featured: false,
   },
   {
@@ -49,7 +48,7 @@ const testimonials = [
     role: "Young Father",
     program: "Table Talk for Men",
     quote: "As a young father, I had no role model growing up. The mentoring program connected me with experienced fathers who showed me what intentional fatherhood looks like.",
-    image: "/testimonials/brandon.jpg",
+    initials: "BW",
     featured: false,
   },
   {
@@ -58,7 +57,7 @@ const testimonials = [
     role: "Married 15 Years",
     program: "MyGreatMarriage",
     quote: "After 15 years of marriage, we thought we knew everything. This program showed us there is always room for growth. We learned new ways to love and support each other.",
-    image: "/testimonials/couple2.jpg",
+    initials: "WJ",
     featured: false,
   },
   {
@@ -67,7 +66,7 @@ const testimonials = [
     role: "Mentor",
     program: "Missions for Men",
     quote: "Serving on mission trips has been life-changing. I have seen firsthand how men can make a difference when they step up and lead with purpose.",
-    image: "/testimonials/hendrik.jpg",
+    initials: "HV",
     featured: false,
   },
 ]
@@ -146,17 +145,17 @@ export default function TestimonialsPage() {
                 <Card className="bg-gradient-to-br from-[#FAF8F5] to-white border-2 border-[#D4A574]/20 overflow-hidden">
                   <CardContent className="p-0">
                     <div className="grid lg:grid-cols-2 gap-0">
-                      {/* Image Side */}
-                      <div className="relative h-64 lg:h-auto lg:min-h-[400px] bg-[#8B2B3E]/10">
+                      {/* Initials Side */}
+                      <div className="relative h-64 lg:h-auto lg:min-h-[400px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-[#D4A574]/20">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Users className="w-16 h-16 lg:w-24 lg:h-24 text-[#8B2B3E]/40" />
-                            </div>
+                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                            <span className="text-5xl lg:text-7xl font-bold text-white">
+                              {featuredTestimonial.initials}
+                            </span>
                           </div>
                         </div>
                         {/* Decorative badge */}
-                        <div className="absolute top-4 left-4 px-3 py-1 bg-[#8B2B3E] text-white text-xs font-semibold rounded-full flex items-center gap-1">
+                        <div className="absolute top-4 left-4 px-3 py-1 bg-white text-[#8B2B3E] text-xs font-semibold rounded-full flex items-center gap-1">
                           <Star className="w-3 h-3" />
                           Featured Story
                         </div>
@@ -171,7 +170,7 @@ export default function TestimonialsPage() {
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
                             <span className="text-[#8B2B3E] font-bold text-lg">
-                              {featuredTestimonial.name.charAt(0)}
+                              {featuredTestimonial.initials}
                             </span>
                           </div>
                           <div>
@@ -222,8 +221,8 @@ export default function TestimonialsPage() {
                       {/* Author */}
                       <div className="flex items-center gap-3 pt-4 border-t border-black/10">
                         <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] transition-colors">
-                          <span className="text-[#8B2B3E] font-semibold group-hover:text-white transition-colors">
-                            {testimonial.name.charAt(0)}
+                          <span className="text-[#8B2B3E] font-semibold text-sm group-hover:text-white transition-colors">
+                            {testimonial.initials}
                           </span>
                         </div>
                         <div>
