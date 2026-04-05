@@ -262,9 +262,9 @@ export default function TestimonialsPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
                     <p className="text-white font-semibold text-lg">South Africa</p>
-                    <p className="text-white/80 text-sm">Building brotherhood in the Cape</p>
+                    <p className="text-white/90 text-sm">Building brotherhood in the Cape</p>
                   </div>
                 </div>
               </FadeIn>
@@ -277,9 +277,9 @@ export default function TestimonialsPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
                     <p className="text-white font-semibold text-lg">Germany</p>
-                    <p className="text-white/80 text-sm">Mentoring the next generation</p>
+                    <p className="text-white/90 text-sm">Mentoring the next generation</p>
                   </div>
                 </div>
               </FadeIn>
@@ -292,9 +292,9 @@ export default function TestimonialsPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
                     <p className="text-white font-semibold text-lg">Namibia</p>
-                    <p className="text-white/80 text-sm">Strengthening communities in Windhoek</p>
+                    <p className="text-white/90 text-sm">Strengthening communities in Windhoek</p>
                   </div>
                 </div>
               </FadeIn>
@@ -307,9 +307,9 @@ export default function TestimonialsPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
                     <p className="text-white font-semibold text-lg">Family Life</p>
-                    <p className="text-white/80 text-sm">Strengthening families across borders</p>
+                    <p className="text-white/90 text-sm">Strengthening families across borders</p>
                   </div>
                 </div>
               </FadeIn>
