@@ -125,12 +125,12 @@ export default function MyGreatMarriagePage() {
                 
                 {/* Text content */}
                 <div className="flex-1 text-center lg:text-left">
-                  <span className="inline-block px-4 py-2 rounded-full bg-[#D4A574] text-white text-sm font-bold tracking-wide mb-4">
-                    KEY FOCUS OF WHY MGM
-                  </span>
-                  <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight text-balance max-w-3xl mb-6" style={{ fontFamily: 'Georgia, serif' }}>
-                    Build the Marriage You&apos;ve Always Dreamed Of
+                  <h1 className="font-serif italic text-4xl lg:text-5xl xl:text-6xl text-white leading-tight mb-4">
+                    My Great Marriage
                   </h1>
+                  <p className="text-2xl lg:text-3xl font-semibold text-white/90 leading-tight text-balance max-w-3xl mb-6">
+                    Build the Marriage You&apos;ve Always Dreamed Of
+                  </p>
                   <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
                     Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
                   </p>
@@ -213,7 +213,7 @@ export default function MyGreatMarriagePage() {
                 </FadeIn>
                 <FadeIn direction="left" delay={0.3}>
                   <p className="text-[#6b4c52] leading-relaxed">
-                    MyGreatMarriage provides couples with the tools, principles, and support needed to build a thriving
+                    <span className="font-serif italic text-[#8B2B3E]">My Great Marriage</span> provides couples with the tools, principles, and support needed to build a thriving
                     relationship. Through workshops, retreats, and couple&apos;s groups, you&apos;ll learn effective communication,
                     conflict resolution, and how to maintain romance and intimacy throughout your marriage.
                   </p>

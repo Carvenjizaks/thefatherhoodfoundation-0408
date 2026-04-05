@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn, ScaleIn, StaggerContainer, CountUp, Parallax } from "@/components/ui/motion"
-import { Quote, Play, ArrowRight, Users, Heart, Star } from "lucide-react"
+import { Quote, ArrowRight, Heart, Star } from "lucide-react"
 
 const ArrowRightIcon = () => (
   <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,56 +18,56 @@ const ArrowRightIcon = () => (
 const testimonials = [
   {
     id: 1,
-    name: "David Nangolo",
-    role: "Program Graduate",
+    name: "Struggle Ipinginge",
+    role: "Community Leader",
     program: "Table Talk for Men",
     quote: "The Fatherhood Foundation transformed my perspective on being a father. Through the mentoring program, I learned practical skills that have strengthened my relationship with my children and wife. I am now a more intentional father and husband.",
-    image: "/testimonials/david.jpg",
+    initials: "SI",
     featured: true,
   },
   {
     id: 2,
-    name: "Johannes Shikongo",
-    role: "Community Leader",
+    name: "Petrus Naubeb",
+    role: "Program Graduate",
     program: "Social Impact",
-    quote: "Being part of the community development initiatives opened my eyes to the power of men supporting each other. Together, we are building a stronger community for our families.",
-    image: "/testimonials/johannes.jpg",
+    quote: "Being part of the community development initiatives opened my eyes to the power of men supporting each other. Together, we are building a stronger community for our families in Namibia.",
+    initials: "PN",
     featured: false,
   },
   {
     id: 3,
-    name: "Michael & Sarah Amupolo",
+    name: "Johan & Mariska Van Rensburg",
     role: "Married Couple",
-    program: "MyGreatMarriage",
+    program: "My Great Marriage",
     quote: "The marriage enrichment program gave us tools to communicate better and resolve conflicts with grace. Our marriage has never been stronger, and we are grateful for this foundation.",
-    image: "/testimonials/couple1.jpg",
+    initials: "VR",
     featured: false,
   },
   {
     id: 4,
-    name: "Peter Shilongo",
+    name: "Brandon Van Wyk",
     role: "Young Father",
     program: "Table Talk for Men",
     quote: "As a young father, I had no role model growing up. The mentoring program connected me with experienced fathers who showed me what intentional fatherhood looks like.",
-    image: "/testimonials/peter.jpg",
+    initials: "BW",
     featured: false,
   },
   {
     id: 5,
-    name: "Thomas & Grace Katjivena",
-    role: "Married 15 Years",
-    program: "MyGreatMarriage",
-    quote: "After 15 years of marriage, we thought we knew everything. This program showed us there is always room for growth. We learned new ways to love and support each other.",
-    image: "/testimonials/couple2.jpg",
+    name: "Pieter Kruger",
+    role: "Mentor",
+    program: "Missions for Men",
+    quote: "Serving on mission trips has been life-changing. I have seen firsthand how men can make a difference when they step up and lead with purpose.",
+    initials: "PK",
     featured: false,
   },
   {
     id: 6,
-    name: "Simon Hamutenya",
-    role: "Mentor",
-    program: "Missions for Men",
-    quote: "Serving on mission trips has been life-changing. I have seen firsthand how men can make a difference when they step up and lead with purpose.",
-    image: "/testimonials/simon.jpg",
+    name: "Ricardo Beukes",
+    role: "Married 15 Years",
+    program: "My Great Marriage",
+    quote: "After 15 years of marriage, we thought we knew everything. This program showed us there is always room for growth. We learned new ways to love and support each other.",
+    initials: "RB",
     featured: false,
   },
 ]
@@ -146,17 +146,17 @@ export default function TestimonialsPage() {
                 <Card className="bg-gradient-to-br from-[#FAF8F5] to-white border-2 border-[#D4A574]/20 overflow-hidden">
                   <CardContent className="p-0">
                     <div className="grid lg:grid-cols-2 gap-0">
-                      {/* Image Side */}
-                      <div className="relative h-64 lg:h-auto lg:min-h-[400px] bg-[#8B2B3E]/10">
+                      {/* Initials Side */}
+                      <div className="relative h-64 lg:h-auto lg:min-h-[400px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-[#D4A574]/20">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Users className="w-16 h-16 lg:w-24 lg:h-24 text-[#8B2B3E]/40" />
-                            </div>
+                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                            <span className="text-5xl lg:text-7xl font-bold text-white">
+                              {featuredTestimonial.initials}
+                            </span>
                           </div>
                         </div>
                         {/* Decorative badge */}
-                        <div className="absolute top-4 left-4 px-3 py-1 bg-[#8B2B3E] text-white text-xs font-semibold rounded-full flex items-center gap-1">
+                        <div className="absolute top-4 left-4 px-3 py-1 bg-white text-[#8B2B3E] text-xs font-semibold rounded-full flex items-center gap-1">
                           <Star className="w-3 h-3" />
                           Featured Story
                         </div>
@@ -171,13 +171,13 @@ export default function TestimonialsPage() {
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
                             <span className="text-[#8B2B3E] font-bold text-lg">
-                              {featuredTestimonial.name.charAt(0)}
+                              {featuredTestimonial.initials}
                             </span>
                           </div>
                           <div>
                             <p className="font-semibold text-[#1a1a1a]">{featuredTestimonial.name}</p>
                             <p className="text-sm text-black/60">{featuredTestimonial.role}</p>
-                            <span className="inline-block mt-1 px-2 py-0.5 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs rounded-full">
+                            <span className={`inline-block mt-1 px-2 py-0.5 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs rounded-full ${featuredTestimonial.program === "My Great Marriage" ? "font-serif italic" : ""}`}>
                               {featuredTestimonial.program}
                             </span>
                           </div>
@@ -209,7 +209,7 @@ export default function TestimonialsPage() {
                   <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                     <CardContent className="p-6 lg:p-8 flex flex-col h-full">
                       {/* Program Badge */}
-                      <span className="inline-block self-start px-3 py-1 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs font-semibold rounded-full mb-4">
+                      <span className={`inline-block self-start px-3 py-1 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs font-semibold rounded-full mb-4 ${testimonial.program === "My Great Marriage" ? "font-serif italic" : ""}`}>
                         {testimonial.program}
                       </span>
                       
@@ -222,8 +222,8 @@ export default function TestimonialsPage() {
                       {/* Author */}
                       <div className="flex items-center gap-3 pt-4 border-t border-black/10">
                         <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center group-hover:bg-[#8B2B3E] transition-colors">
-                          <span className="text-[#8B2B3E] font-semibold group-hover:text-white transition-colors">
-                            {testimonial.name.charAt(0)}
+                          <span className="text-[#8B2B3E] font-semibold text-sm group-hover:text-white transition-colors">
+                            {testimonial.initials}
                           </span>
                         </div>
                         <div>
@@ -239,46 +239,80 @@ export default function TestimonialsPage() {
           </div>
         </section>
 
-        {/* Video Testimonials Section */}
+        {/* Global Community Section */}
         <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
           <Parallax speed={0.2} className="absolute top-0 right-0 w-96 h-96 bg-[#D4A574]/5 rounded-full blur-3xl" />
           
           <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <FadeIn direction="up" className="text-center mb-16">
               <h2 className="text-3xl lg:text-4xl font-bold text-[#1a1a1a] mb-4">
-                Watch Their Stories
+                Our Global Community
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
-                Hear directly from the men and families whose lives have been transformed.
+                Men and families across South Africa, Germany, and Namibia are transforming their lives together.
               </p>
             </FadeIn>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {[1, 2].map((video, index) => (
-                <FadeIn key={video} delay={index * 0.2} direction="up">
-                  <div className="group relative aspect-video bg-gradient-to-br from-[#1a1a1a] to-[#333] rounded-2xl overflow-hidden cursor-pointer">
-                    {/* Video thumbnail placeholder */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Play button */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-lg">
-                        <Play className="w-8 h-8 text-[#8B2B3E] ml-1" fill="currentColor" />
-                      </div>
-                    </div>
-                    
-                    {/* Video info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <p className="text-white font-semibold mb-1">
-                        {video === 1 ? "A Father's Journey" : "Marriage Transformed"}
-                      </p>
-                      <p className="text-white/70 text-sm">
-                        {video === 1 ? "David shares his transformation story" : "The Amupolos share their story"}
-                      </p>
-                    </div>
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+              <FadeIn delay={0.1} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/south-africa-fathers.jpg"
+                    alt="Fathers gathering in South Africa"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
+                    <p className="text-white font-semibold text-lg">South Africa</p>
+                    <p className="text-white/90 text-sm">Building brotherhood in the Cape</p>
                   </div>
-                </FadeIn>
-              ))}
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.2} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/germany-mentorship.jpg"
+                    alt="Mentorship gathering in Germany"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
+                    <p className="text-white font-semibold text-lg">Germany</p>
+                    <p className="text-white/90 text-sm">Mentoring the next generation</p>
+                  </div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.3} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/namibia-community.jpg"
+                    alt="Community event in Namibia"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
+                    <p className="text-white font-semibold text-lg">Namibia</p>
+                    <p className="text-white/90 text-sm">Strengthening communities in Windhoek</p>
+                  </div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.4} direction="up">
+                <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden">
+                  <Image
+                    src="/images/community/cape-town-family.jpg"
+                    alt="Family in Cape Town"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#8B6B61]/90 to-transparent">
+                    <p className="text-white font-semibold text-lg">Family Life</p>
+                    <p className="text-white/90 text-sm">Strengthening families across borders</p>
+                  </div>
+                </div>
+              </FadeIn>
             </div>
           </div>
         </section>

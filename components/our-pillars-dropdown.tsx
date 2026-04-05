@@ -8,12 +8,13 @@ import { ChevronDown } from "lucide-react"
 interface PillarLink {
   label: string
   href: string
+  isSerif?: boolean
 }
 
 const pillars: PillarLink[] = [
   { label: "Monthly Table Talk for Men", href: "/mentoring-men" },
   // { label: "ActiveParenting", href: "/active-parenting" }, // Hidden - activate later
-  { label: "MyGreatMarriage", href: "/my-great-marriage" },
+  { label: "My Great Marriage", href: "/my-great-marriage", isSerif: true },
   { label: "Missions for Men", href: "/missions-for-men" },
   { label: "MGM26Conference", href: "/events/my-great-marriage-2026" },
   { label: "Social Impact", href: "/community-development" },
@@ -57,7 +58,7 @@ export function OurPillarsDropdown() {
               onClick={() => setIsOpen(false)}
               className={`block px-4 py-3 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors ${
                 index !== pillars.length - 1 ? "border-b border-gray-100" : ""
-              }`}
+              } ${pillar.isSerif ? "font-serif italic" : ""}`}
             >
               {pillar.label}
             </Link>
