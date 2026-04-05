@@ -38,7 +38,7 @@ const testimonials = [
     id: 3,
     name: "Johan & Mariska Van Rensburg",
     role: "Married Couple",
-    program: "MyGreatMarriage",
+    program: "My Great Marriage",
     quote: "The marriage enrichment program gave us tools to communicate better and resolve conflicts with grace. Our marriage has never been stronger, and we are grateful for this foundation.",
     initials: "VR",
     featured: false,
@@ -65,7 +65,7 @@ const testimonials = [
     id: 6,
     name: "Ricardo Beukes",
     role: "Married 15 Years",
-    program: "MyGreatMarriage",
+    program: "My Great Marriage",
     quote: "After 15 years of marriage, we thought we knew everything. This program showed us there is always room for growth. We learned new ways to love and support each other.",
     initials: "RB",
     featured: false,
@@ -177,7 +177,7 @@ export default function TestimonialsPage() {
                           <div>
                             <p className="font-semibold text-[#1a1a1a]">{featuredTestimonial.name}</p>
                             <p className="text-sm text-black/60">{featuredTestimonial.role}</p>
-                            <span className="inline-block mt-1 px-2 py-0.5 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs rounded-full">
+                            <span className={`inline-block mt-1 px-2 py-0.5 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs rounded-full ${featuredTestimonial.program === "My Great Marriage" ? "font-serif italic" : ""}`}>
                               {featuredTestimonial.program}
                             </span>
                           </div>
@@ -209,7 +209,7 @@ export default function TestimonialsPage() {
                   <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
                     <CardContent className="p-6 lg:p-8 flex flex-col h-full">
                       {/* Program Badge */}
-                      <span className="inline-block self-start px-3 py-1 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs font-semibold rounded-full mb-4">
+                      <span className={`inline-block self-start px-3 py-1 bg-[#8B2B3E]/10 text-[#8B2B3E] text-xs font-semibold rounded-full mb-4 ${testimonial.program === "My Great Marriage" ? "font-serif italic" : ""}`}>
                         {testimonial.program}
                       </span>
                       

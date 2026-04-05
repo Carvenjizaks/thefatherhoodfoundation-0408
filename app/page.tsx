@@ -315,7 +315,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">MyGreatMarriage</h3>
+                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center font-serif italic">My Great Marriage</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Build a thriving marriage through proven principles, practical tools, and supportive community for
                     couples.
@@ -522,7 +522,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <p className="font-semibold text-[#1a1a1a] text-sm">Johan & Mariska Van Rensburg</p>
-                        <p className="text-xs text-black/60">MyGreatMarriage Couple</p>
+                        <p className="text-xs text-black/60 font-serif italic">My Great Marriage Couple</p>
                       </div>
                     </div>
                   </CardContent>
