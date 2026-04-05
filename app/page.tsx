@@ -466,11 +466,11 @@ export default function HomePage() {
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">P</span>
+                        <span className="text-[#8B2B3E] font-semibold">SI</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Pieter Kruger</p>
-                        <p className="text-xs text-black/60">Table Talk Graduate</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Struggle Ipinginge</p>
+                        <p className="text-xs text-black/60">Community Leader</p>
                       </div>
                     </div>
                   </CardContent>
@@ -488,15 +488,15 @@ export default function HomePage() {
                       ))}
                     </div>
                     <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
-                      {`"The marriage enrichment program gave us tools to communicate better. Our marriage has never been stronger."`}
+                      {`"Being part of the community development initiatives opened my eyes to the power of men supporting each other in Namibia."`}
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">J</span>
+                        <span className="text-[#8B2B3E] font-semibold">PN</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Johan & Mariska Van Rensburg</p>
-                        <p className="text-xs text-black/60">MyGreatMarriage Couple</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Petrus Naubeb</p>
+                        <p className="text-xs text-black/60">Program Graduate</p>
                       </div>
                     </div>
                   </CardContent>
@@ -514,15 +514,15 @@ export default function HomePage() {
                       ))}
                     </div>
                     <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
-                      {`"Being part of the community development initiatives opened my eyes to the power of men supporting each other."`}
+                      {`"The marriage enrichment program gave us tools to communicate better. Our marriage has never been stronger."`}
                     </p>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">R</span>
+                        <span className="text-[#8B2B3E] font-semibold">VR</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Ricardo Beukes</p>
-                        <p className="text-xs text-black/60">Community Leader</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">Johan & Mariska Van Rensburg</p>
+                        <p className="text-xs text-black/60">MyGreatMarriage Couple</p>
                       </div>
                     </div>
                   </CardContent>
