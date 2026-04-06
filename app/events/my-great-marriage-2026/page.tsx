@@ -262,19 +262,19 @@ export default function MyGreatMarriageEventPage() {
 
         {/* Hero Section - Full Screen with Bottom Info Bar */}
         <section className="relative min-h-screen bg-[#0a0a0a] pt-28">
-          {/* Background Images */}
+          {/* Background Images - Full clarity, no dark overlay */}
           {carouselImages.map((img, idx) => (
             <div
               key={idx}
               className="absolute inset-0 transition-opacity duration-1000"
-              style={{ opacity: idx === currentImageIndex ? 0.4 : 0 }}
+              style={{ opacity: idx === currentImageIndex ? 1 : 0 }}
             >
               <Image src={img.src} alt={img.alt} fill className="object-cover" priority={idx === 0} />
             </div>
           ))}
           
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50" />
+          {/* Subtle gradient only at bottom for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/70 via-transparent to-transparent" />
           
           {/* Cinematic floating elements */}
           <Parallax speed={0.3} className="absolute top-40 right-20 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
@@ -297,12 +297,12 @@ export default function MyGreatMarriageEventPage() {
           <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
             <div className="max-w-4xl">
               <FadeIn direction="up" delay={0.2}>
-                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'Georgia, serif' }}>
+                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'Georgia, serif' }}>
                   My Great<br />Marriage
                 </h1>
               </FadeIn>
               <FadeIn direction="up" delay={0.3}>
-                <p className="text-xl lg:text-2xl text-white/70 max-w-xl leading-relaxed">
+                <p className="text-xl lg:text-2xl text-white max-w-xl leading-relaxed drop-shadow-md">
                   A transformative conference for couples seeking deeper connection and renewed love.
                 </p>
               </FadeIn>
