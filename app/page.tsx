@@ -476,7 +476,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <p className="font-semibold text-[#1a1a1a] text-sm">James Ipinginge</p>
-                        <p className="text-xs text-black/60">Community Leader</p>
+                        <p className="text-xs text-black/60">Business Man</p>
                       </div>
                     </div>
                   </CardContent>

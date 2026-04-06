@@ -19,7 +19,7 @@ const testimonials = [
   {
     id: 1,
     name: "James Ipinginge",
-    role: "Community Leader",
+    role: "Business Man",
     program: "Table Talk for Men",
     quote: "The Fatherhood Foundation transformed my perspective on being a father. Through the mentoring program, I learned practical skills that have strengthened my relationship with my children and wife. I am now a more intentional father and husband.",
     initials: "JI",
