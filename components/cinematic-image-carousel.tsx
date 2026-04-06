@@ -25,8 +25,12 @@ const heroImages = [
     alt: "Father coaching youth basketball team",
   },
   {
-    src: "/images/hero-mens-group.jpg",
-    alt: "Men's Bible study group in living room",
+    src: "/images/hero-couple.jpg",
+    alt: "Happy couple relaxing together on front porch",
+  },
+  {
+    src: "/images/hero-students.jpg",
+    alt: "High school students standing together talking and laughing",
   },
 ]
 
