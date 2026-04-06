@@ -6,19 +6,27 @@ import Image from "next/image"
 const heroImages = [
   {
     src: "/images/hero-men-talking.jpg",
-    alt: "Men in meaningful conversation together",
+    alt: "Diverse group of men having genuine conversation at outdoor gathering",
   },
   {
     src: "/images/hero-father-son.jpg",
-    alt: "Father and son walking together",
+    alt: "Father playing catch with his son in the backyard",
   },
   {
-    src: "/images/hero-father-daughter.jpg",
-    alt: "Father playing with daughter",
+    src: "/images/hero-community-service.jpg",
+    alt: "Men volunteering together at a community building project",
   },
   {
-    src: "/images/hero-couple-relaxing.jpg",
-    alt: "Couple relaxing together",
+    src: "/images/hero-mentorship.jpg",
+    alt: "Older man mentoring younger man on a park bench",
+  },
+  {
+    src: "/images/hero-dad-coaching.jpg",
+    alt: "Father coaching youth basketball team",
+  },
+  {
+    src: "/images/hero-mens-group.jpg",
+    alt: "Men's Bible study group in living room",
   },
 ]
 
