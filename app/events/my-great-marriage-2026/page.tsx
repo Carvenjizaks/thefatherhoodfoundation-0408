@@ -261,7 +261,7 @@ export default function MyGreatMarriageEventPage() {
         </nav>
 
         {/* Hero Section - Full Screen with Bottom Info Bar */}
-        <section className="relative min-h-screen bg-[#0a0a0a] pt-28">
+        <section className="relative min-h-screen bg-[#D4B896] pt-28">
           {/* Background Images - Full clarity, no dark overlay */}
           {carouselImages.map((img, idx) => (
             <div
@@ -274,7 +274,7 @@ export default function MyGreatMarriageEventPage() {
           ))}
           
           {/* Subtle gradient only at bottom for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#D4B896]/50 via-transparent to-transparent" />
           
           {/* Cinematic floating elements */}
           <Parallax speed={0.3} className="absolute top-40 right-20 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
@@ -293,16 +293,16 @@ export default function MyGreatMarriageEventPage() {
             </div>
           </FadeIn>
 
-          {/* Main Content */}
-          <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
-            <div className="max-w-4xl">
+          {/* Main Content - Positioned at bottom */}
+          <div className="relative z-10 min-h-screen flex flex-col justify-end px-8 lg:px-16 pb-32">
+            <div className="max-w-4xl mb-24">
               <FadeIn direction="up" delay={0.2}>
-                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'Georgia, serif' }}>
+                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-medium text-[#1E3A5F] leading-[0.95] tracking-tight mb-6" style={{ fontFamily: 'Georgia, serif' }}>
                   My Great<br />Marriage
                 </h1>
               </FadeIn>
               <FadeIn direction="up" delay={0.3}>
-                <p className="text-xl lg:text-2xl text-white max-w-xl leading-relaxed drop-shadow-md">
+                <p className="text-xl lg:text-2xl text-[#1E3A5F]/80 max-w-xl leading-relaxed">
                   A transformative conference for couples seeking deeper connection and renewed love.
                 </p>
               </FadeIn>
@@ -310,30 +310,30 @@ export default function MyGreatMarriageEventPage() {
           </div>
 
           {/* Bottom Info Bar */}
-          <div className="absolute bottom-0 left-0 right-0 bg-[#0a0a0a]/90 backdrop-blur-sm border-t border-white/10">
+          <div className="absolute bottom-0 left-0 right-0 bg-[#D4B896]/95 backdrop-blur-sm border-t border-[#8B2B3E]/20">
             <div className="max-w-7xl mx-auto px-8 lg:px-16 py-6">
               <div className="flex flex-wrap items-center justify-between gap-6">
                 <div className="flex flex-wrap items-center gap-8 lg:gap-16">
                   <div>
-                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">LOCATION</p>
-                    <p className="text-white font-medium">Windhoek, Namibia</p>
+                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">LOCATION</p>
+                    <p className="text-[#3D2314] font-medium">Windhoek, Namibia</p>
                   </div>
                   <div>
-                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
-                    <p className="text-white font-medium">7, 8 & 9 May 2026</p>
+                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
+                    <p className="text-[#3D2314] font-medium">7, 8 & 9 May 2026</p>
                   </div>
                   <div>
-                    <p className="text-white/50 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD</p>
+                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-white font-bold text-xl">N$ 400</span>
-                      <span className="text-white/40 line-through text-sm">N$ 550</span>
+                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 400</span>
+                      <span className="text-[#3D2314]/40 line-through text-sm">N$ 550</span>
                     </div>
                   </div>
                 </div>
                 <Button 
                   onClick={() => setIsOpen(true)}
                   size="lg" 
-                  className="bg-white text-[#0a0a0a] hover:bg-white/90 font-bold rounded-full px-8 group"
+                  className="bg-[#8B2B3E] text-white hover:bg-[#8B2B3E]/90 font-bold rounded-full px-8 group"
                 >
                   GET TICKETS
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -344,22 +344,22 @@ export default function MyGreatMarriageEventPage() {
         </section>
 
         {/* Schedule Section */}
-        <section id="schedule" className="py-24 bg-[#0a0a0a]">
+        <section id="schedule" className="py-24 bg-[#D4B896]">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-12" style={{ fontFamily: 'Georgia, serif' }}>
+            <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-12" style={{ fontFamily: 'Georgia, serif' }}>
               Schedule
             </h2>
 
             {/* Day Tabs */}
-            <div className="flex gap-2 mb-8 border-b border-white/10">
+            <div className="flex gap-2 mb-8 border-b border-[#8B2B3E]/20">
               {(["thursday", "friday", "saturday"] as const).map((day) => (
                 <button
                   key={day}
                   onClick={() => setActiveDay(day)}
                   className={`px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all ${
                     activeDay === day 
-                      ? "text-white border-b-2 border-[#D4A574]" 
-                      : "text-white/40 hover:text-white/70"
+                      ? "text-[#3D2314] border-b-2 border-[#8B2B3E]" 
+                      : "text-[#3D2314]/50 hover:text-[#3D2314]/80"
                   }`}
                 >
                   {day === "thursday" ? "Day 1 - Thu" : day === "friday" ? "Day 2 - Fri" : "Day 3 - Sat"}
@@ -373,17 +373,17 @@ export default function MyGreatMarriageEventPage() {
                 <div 
                   key={idx}
                   className={`flex items-center gap-6 p-5 rounded-lg transition-colors ${
-                    idx % 2 === 0 ? "bg-white/5" : ""
+                    idx % 2 === 0 ? "bg-white/30" : ""
                   }`}
                 >
                   <div className="w-40 flex-shrink-0">
-                    <span className="text-white/50 text-sm font-mono">{item.time}</span>
+                    <span className="text-[#3D2314]/60 text-sm font-mono">{item.time}</span>
                   </div>
                   <div className="flex items-center gap-4 flex-1">
                     <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/20 flex items-center justify-center">
-                      <item.icon className="w-5 h-5 text-[#D4A574]" />
+                      <item.icon className="w-5 h-5 text-[#8B2B3E]" />
                     </div>
-                    <span className="text-white font-medium">{item.title}</span>
+                    <span className="text-[#3D2314] font-medium">{item.title}</span>
                   </div>
                 </div>
               ))}
@@ -451,13 +451,13 @@ export default function MyGreatMarriageEventPage() {
         </section>
 
         {/* Tickets Section */}
-        <section id="tickets" className="py-24 bg-[#0a0a0a]">
+        <section id="tickets" className="py-24 bg-[#D4B896]">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+              <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-4" style={{ fontFamily: 'Georgia, serif' }}>
                 Select Your Ticket
               </h2>
-              <p className="text-white/60 text-lg">
+              <p className="text-[#3D2314]/70 text-lg">
                 Seating is limited. Register early to secure your spot.
               </p>
             </div>
@@ -474,7 +474,7 @@ export default function MyGreatMarriageEventPage() {
                   className={`relative text-left p-8 rounded-2xl border-2 transition-all duration-300 ${
                     ticket.popular
                       ? "bg-white border-[#D4A574] shadow-xl"
-                      : "bg-white/5 border-white/10 hover:border-white/30"
+                      : "bg-white/60 border-[#8B2B3E]/20 hover:border-[#8B2B3E]/40"
                   }`}
                 >
                   {ticket.popular && (
@@ -483,22 +483,22 @@ export default function MyGreatMarriageEventPage() {
                     </span>
                   )}
                   
-                  <h3 className={`text-xl font-bold mb-2 ${ticket.popular ? "text-[#1a0a0e]" : "text-white"}`}>
+                  <h3 className={`text-xl font-bold mb-2 ${ticket.popular ? "text-[#1a0a0e]" : "text-[#3D2314]"}`}>
                     {ticket.title}
                   </h3>
                   
                   <div className="mb-6">
-                    <span className={`text-4xl font-bold ${ticket.popular ? "text-[#8B2B3E]" : "text-white"}`}>
+                    <span className={`text-4xl font-bold ${ticket.popular ? "text-[#8B2B3E]" : "text-[#3D2314]"}`}>
                       {ticket.priceDisplay}
                     </span>
-                    <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-white/50"}`}>
+                    <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/60"}`}>
                       per person
                     </span>
                   </div>
                   
                   <ul className="space-y-3">
                     {ticket.features.map((feature, idx) => (
-                      <li key={idx} className={`flex items-center gap-3 text-sm ${ticket.popular ? "text-[#6b4c52]" : "text-white/70"}`}>
+                      <li key={idx} className={`flex items-center gap-3 text-sm ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/70"}`}>
                         <Check className={`w-4 h-4 ${ticket.popular ? "text-[#8B2B3E]" : "text-[#D4A574]"}`} />
                         {feature}
                       </li>
@@ -508,7 +508,7 @@ export default function MyGreatMarriageEventPage() {
                   <div className={`mt-6 py-3 px-6 rounded-full text-center font-bold transition-colors ${
                     ticket.popular 
                       ? "bg-[#8B2B3E] text-white" 
-                      : "bg-white/10 text-white hover:bg-white/20"
+                      : "bg-[#8B2B3E]/20 text-[#3D2314] hover:bg-[#8B2B3E]/30"
                   }`}>
                     Select & Register
                   </div>
@@ -518,10 +518,10 @@ export default function MyGreatMarriageEventPage() {
 
             {/* Closing Date */}
             <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10">
-                <Clock className="w-4 h-4 text-[#D4A574]" />
-                <span className="text-white/70 text-sm">Registration closes:</span>
-                <span className="text-[#D4A574] font-bold">1 May 2026</span>
+              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
+                <Clock className="w-4 h-4 text-[#8B2B3E]" />
+                <span className="text-[#3D2314]/70 text-sm">Registration closes:</span>
+                <span className="text-[#8B2B3E] font-bold">1 May 2026</span>
               </div>
             </div>
           </div>
@@ -551,10 +551,10 @@ export default function MyGreatMarriageEventPage() {
 
       {/* Registration Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border-white/10">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#F5EDE4] border-[#8B2B3E]/20">
           <DialogHeader>
-            <DialogTitle className="text-2xl text-white">Register for MGM26 Conference</DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogTitle className="text-2xl text-[#3D2314]">Register for MGM26 Conference</DialogTitle>
+            <DialogDescription className="text-[#3D2314]/70">
               Complete your registration for the MyGreatMarriage Conference 2026.
             </DialogDescription>
           </DialogHeader>
@@ -564,14 +564,14 @@ export default function MyGreatMarriageEventPage() {
               <div className="w-20 h-20 bg-[#8B2B3E] rounded-full flex items-center justify-center mx-auto mb-6">
                 <Check className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-white">Registration Successful!</h3>
-              <p className="text-white/60">Confirmation details will be sent to your email.</p>
+              <h3 className="text-2xl font-bold mb-2 text-[#3D2314]">Registration Successful!</h3>
+              <p className="text-[#3D2314]/70">Confirmation details will be sent to your email.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 mt-4">
               {/* Ticket Selection */}
               <div className="space-y-3">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
                 <div className="grid grid-cols-2 gap-3">
                   {ticketOptions.map((ticket) => (
                     <button
@@ -584,11 +584,11 @@ export default function MyGreatMarriageEventPage() {
                       className={`p-4 rounded-xl border-2 text-left transition-all ${
                         selectedTicket === ticket.id
                           ? "border-[#D4A574] bg-[#D4A574]/10"
-                          : "border-white/10 hover:border-white/30"
+                          : "border-[#1E3A5F]/20 hover:border-[#1E3A5F]/40"
                       }`}
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <span className="text-white font-medium">{ticket.title}</span>
+                        <span className="text-[#1E3A5F] font-medium">{ticket.title}</span>
                         {ticket.popular && (
                           <span className="text-[10px] bg-[#D4A574] text-white px-2 py-0.5 rounded-full">SAVE</span>
                         )}
@@ -601,87 +601,87 @@ export default function MyGreatMarriageEventPage() {
 
               {/* Your Details */}
               <div className="space-y-4">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">2. Your Details</Label>
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">2. Your Details</Label>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName" className="text-white/80 text-sm">First Name</Label>
+                    <Label htmlFor="firstName" className="text-[#1E3A5F]/80 text-sm">First Name</Label>
                     <Input 
                       id="firstName" 
                       value={formData.firstName} 
                       onChange={(e) => handleInputChange("firstName", e.target.value)} 
-                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                      className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                     />
                     {errors.firstName && <p className="text-xs text-red-400 mt-1">{errors.firstName}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-white/80 text-sm">Last Name</Label>
+                    <Label htmlFor="lastName" className="text-[#1E3A5F]/80 text-sm">Last Name</Label>
                     <Input 
                       id="lastName" 
                       value={formData.lastName} 
                       onChange={(e) => handleInputChange("lastName", e.target.value)} 
-                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                      className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                     />
                     {errors.lastName && <p className="text-xs text-red-400 mt-1">{errors.lastName}</p>}
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="email" className="text-white/80 text-sm">Email</Label>
+                  <Label htmlFor="email" className="text-[#1E3A5F]/80 text-sm">Email</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     value={formData.email} 
                     onChange={(e) => handleInputChange("email", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="cellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Label htmlFor="cellphone" className="text-[#1E3A5F]/80 text-sm">Cellphone</Label>
                   <Input 
                     id="cellphone" 
                     type="tel" 
                     value={formData.cellphone} 
                     onChange={(e) => handleInputChange("cellphone", e.target.value)} 
                     placeholder="+264 81 234 5678" 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.cellphone && <p className="text-xs text-red-400 mt-1">{errors.cellphone}</p>}
                 </div>
               </div>
 
               {/* Spouse Details */}
-              <div className="space-y-4 p-5 rounded-xl bg-white/5 border border-white/10">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">3. Spouse/Partner Details</Label>
+              <div className="space-y-4 p-5 rounded-xl bg-[#1E3A5F]/5 border border-[#1E3A5F]/10">
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">3. Spouse/Partner Details</Label>
                 <div>
-                  <Label htmlFor="spouseName" className="text-white/80 text-sm">Full Name</Label>
+                  <Label htmlFor="spouseName" className="text-[#1E3A5F]/80 text-sm">Full Name</Label>
                   <Input 
                     id="spouseName" 
                     value={formData.spouseName} 
                     onChange={(e) => handleInputChange("spouseName", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseName && <p className="text-xs text-red-400 mt-1">{errors.spouseName}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="spouseEmail" className="text-white/80 text-sm">Email</Label>
+                  <Label htmlFor="spouseEmail" className="text-[#1E3A5F]/80 text-sm">Email</Label>
                   <Input 
                     id="spouseEmail" 
                     type="email" 
                     value={formData.spouseEmail} 
                     onChange={(e) => handleInputChange("spouseEmail", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseEmail && <p className="text-xs text-red-400 mt-1">{errors.spouseEmail}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="spouseCellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Label htmlFor="spouseCellphone" className="text-[#1E3A5F]/80 text-sm">Cellphone</Label>
                   <Input 
                     id="spouseCellphone" 
                     type="tel" 
                     value={formData.spouseCellphone} 
                     onChange={(e) => handleInputChange("spouseCellphone", e.target.value)} 
                     placeholder="+264 81 234 5678" 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseCellphone && <p className="text-xs text-red-400 mt-1">{errors.spouseCellphone}</p>}
                 </div>
@@ -694,15 +694,15 @@ export default function MyGreatMarriageEventPage() {
               )}
 
               {/* Order Summary */}
-              <div className="p-5 rounded-xl bg-[#8B2B3E]/20 border border-[#8B2B3E]/30">
+              <div className="p-5 rounded-xl bg-[#8B2B3E]/10 border border-[#8B2B3E]/20">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-white/70 text-sm">Selected Package</span>
-                  <span className="text-white font-medium">
+                  <span className="text-[#1E3A5F]/70 text-sm">Selected Package</span>
+                  <span className="text-[#1E3A5F] font-medium">
                     {ticketOptions.find(t => t.id === selectedTicket)?.title}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-white/70 text-sm">Total (per person)</span>
+                  <span className="text-[#1E3A5F]/70 text-sm">Total (per person)</span>
                   <span className="text-[#D4A574] font-bold text-xl">
                     {ticketOptions.find(t => t.id === selectedTicket)?.priceDisplay}
                   </span>
@@ -714,7 +714,7 @@ export default function MyGreatMarriageEventPage() {
                   type="button" 
                   variant="outline" 
                   onClick={() => setIsOpen(false)} 
-                  className="flex-1 rounded-full border-white/20 text-white hover:bg-white/10"
+                  className="flex-1 rounded-full border-[#1E3A5F]/30 text-[#1E3A5F] hover:bg-[#1E3A5F]/10"
                 >
                   Cancel
                 </Button>
