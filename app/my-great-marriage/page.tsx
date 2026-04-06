@@ -125,7 +125,7 @@ export default function MyGreatMarriagePage() {
                 
                 {/* Text content */}
                 <div className="flex-1 text-center lg:text-left">
-                  <h1 className="font-serif italic text-4xl lg:text-5xl xl:text-6xl text-white leading-tight mb-4">
+                  <h1 className="text-4xl lg:text-5xl xl:text-6xl font-semibold text-white leading-tight mb-4">
                     My Great Marriage
                   </h1>
                   <p className="text-2xl lg:text-3xl font-semibold text-white/90 leading-tight text-balance max-w-3xl mb-6">
@@ -213,7 +213,7 @@ export default function MyGreatMarriagePage() {
                 </FadeIn>
                 <FadeIn direction="left" delay={0.3}>
                   <p className="text-[#6b4c52] leading-relaxed">
-                    <span className="font-serif italic text-[#8B2B3E]">My Great Marriage</span> provides couples with the tools, principles, and support needed to build a thriving
+                    <span className="font-semibold text-[#8B2B3E]">My Great Marriage</span> provides couples with the tools, principles, and support needed to build a thriving
                     relationship. Through workshops, retreats, and couple&apos;s groups, you&apos;ll learn effective communication,
                     conflict resolution, and how to maintain romance and intimacy throughout your marriage.
                   </p>
@@ -297,9 +297,9 @@ export default function MyGreatMarriagePage() {
         </section>
 
         {/* Divider quote */}
-        <section className="bg-[#8B2B3E] py-14">
+        <section className="bg-[#D4B896] py-14">
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <p className="text-xl lg:text-2xl italic text-white/90 leading-relaxed text-balance">
+            <p className="text-xl lg:text-2xl italic text-[#3D2314] leading-relaxed text-balance">
               &ldquo;Good marriages don&apos;t happen by accident. They are built intentionally, one day at a time.&rdquo;
             </p>
           </div>
