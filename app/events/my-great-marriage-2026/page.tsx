@@ -293,11 +293,11 @@ export default function MyGreatMarriageEventPage() {
             </div>
           </FadeIn>
 
-          {/* Main Content */}
-          <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
-            <div className="max-w-4xl">
+          {/* Main Content - Positioned at bottom */}
+          <div className="relative z-10 min-h-screen flex flex-col justify-end px-8 lg:px-16 pb-32">
+            <div className="max-w-4xl mb-24">
               <FadeIn direction="up" delay={0.2}>
-                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-medium text-[#1E3A5F] leading-[0.95] tracking-tight mb-8" style={{ fontFamily: 'Georgia, serif' }}>
+                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-medium text-[#1E3A5F] leading-[0.95] tracking-tight mb-6" style={{ fontFamily: 'Georgia, serif' }}>
                   My Great<br />Marriage
                 </h1>
               </FadeIn>
