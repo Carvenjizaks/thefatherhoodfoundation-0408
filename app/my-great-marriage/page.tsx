@@ -103,8 +103,8 @@ export default function MyGreatMarriagePage() {
                 className="object-cover object-center"
                 priority={i === 0}
               />
-              {/* Dark overlay for text legibility */}
-              <div className="absolute inset-0 bg-black/50" />
+              {/* Subtle gradient for minimal text legibility - images stay clear */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
             </div>
           ))}
 
