@@ -246,19 +246,22 @@ export default function PartnershipPage() {
                       {paymentMethod === "once" && (
                         <>
                           {/* PayPal Button - Official styling */}
-                          <button
-                            onClick={() => handleDonate("paypal")}
-                            disabled={!selectedAmount}
-                            className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-lg bg-[#FFC439] hover:bg-[#F0B72F] disabled:opacity-50 shadow-md transition-colors border-0 cursor-pointer"
-                          >
-                            {/* PayPal "PP" icon */}
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003087] text-white font-black text-sm leading-none select-none">
-                              P
-                            </span>
-                            <span className="text-base font-bold leading-none">
-                              <span className="text-[#003087]">Pay</span><span className="text-[#0070E0]">Pal</span>
-                            </span>
-                          </button>
+                          <div className="flex flex-col items-center">
+                            <button
+                              onClick={() => handleDonate("paypal")}
+                              disabled={!selectedAmount}
+                              className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-lg bg-[#FFC439] hover:bg-[#F0B72F] disabled:opacity-50 shadow-md transition-colors border-0 cursor-pointer"
+                            >
+                              {/* PayPal "PP" icon */}
+                              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003087] text-white font-black text-sm leading-none select-none">
+                                P
+                              </span>
+                              <span className="text-base font-bold leading-none">
+                                <span className="text-[#003087]">Pay</span><span className="text-[#0070E0]">Pal</span>
+                              </span>
+                            </button>
+                            <span className="text-xs text-muted-foreground mt-1">Coming Soon</span>
+                          </div>
 
                           {/* PayToday Button */}
                           <Button
