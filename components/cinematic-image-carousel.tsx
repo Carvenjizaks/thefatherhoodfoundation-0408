@@ -28,6 +28,10 @@ const heroImages = [
     src: "/images/hero-couple.jpg",
     alt: "Happy couple relaxing together on front porch",
   },
+  {
+    src: "/images/hero-students.jpg",
+    alt: "High school students standing together talking and laughing",
+  },
 ]
 
 export function CinematicImageCarousel() {
