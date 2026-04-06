@@ -297,12 +297,12 @@ export default function MyGreatMarriageEventPage() {
           <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 lg:px-16 pb-40">
             <div className="max-w-4xl">
               <FadeIn direction="up" delay={0.2}>
-                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'Georgia, serif' }}>
+                <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-[#1E3A5F] leading-[0.95] tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'Georgia, serif' }}>
                   My Great<br />Marriage
                 </h1>
               </FadeIn>
               <FadeIn direction="up" delay={0.3}>
-                <p className="text-xl lg:text-2xl text-white max-w-xl leading-relaxed drop-shadow-md">
+                <p className="text-xl lg:text-2xl text-[#1E3A5F]/80 max-w-xl leading-relaxed">
                   A transformative conference for couples seeking deeper connection and renewed love.
                 </p>
               </FadeIn>
@@ -571,7 +571,7 @@ export default function MyGreatMarriageEventPage() {
             <form onSubmit={handleSubmit} className="space-y-6 mt-4">
               {/* Ticket Selection */}
               <div className="space-y-3">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
                 <div className="grid grid-cols-2 gap-3">
                   {ticketOptions.map((ticket) => (
                     <button
@@ -584,11 +584,11 @@ export default function MyGreatMarriageEventPage() {
                       className={`p-4 rounded-xl border-2 text-left transition-all ${
                         selectedTicket === ticket.id
                           ? "border-[#D4A574] bg-[#D4A574]/10"
-                          : "border-white/10 hover:border-white/30"
+                          : "border-[#1E3A5F]/20 hover:border-[#1E3A5F]/40"
                       }`}
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <span className="text-white font-medium">{ticket.title}</span>
+                        <span className="text-[#1E3A5F] font-medium">{ticket.title}</span>
                         {ticket.popular && (
                           <span className="text-[10px] bg-[#D4A574] text-white px-2 py-0.5 rounded-full">SAVE</span>
                         )}
@@ -601,87 +601,87 @@ export default function MyGreatMarriageEventPage() {
 
               {/* Your Details */}
               <div className="space-y-4">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">2. Your Details</Label>
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">2. Your Details</Label>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName" className="text-white/80 text-sm">First Name</Label>
+                    <Label htmlFor="firstName" className="text-[#1E3A5F]/80 text-sm">First Name</Label>
                     <Input 
                       id="firstName" 
                       value={formData.firstName} 
                       onChange={(e) => handleInputChange("firstName", e.target.value)} 
-                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                      className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                     />
                     {errors.firstName && <p className="text-xs text-red-400 mt-1">{errors.firstName}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-white/80 text-sm">Last Name</Label>
+                    <Label htmlFor="lastName" className="text-[#1E3A5F]/80 text-sm">Last Name</Label>
                     <Input 
                       id="lastName" 
                       value={formData.lastName} 
                       onChange={(e) => handleInputChange("lastName", e.target.value)} 
-                      className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                      className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                     />
                     {errors.lastName && <p className="text-xs text-red-400 mt-1">{errors.lastName}</p>}
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="email" className="text-white/80 text-sm">Email</Label>
+                  <Label htmlFor="email" className="text-[#1E3A5F]/80 text-sm">Email</Label>
                   <Input 
                     id="email" 
                     type="email" 
                     value={formData.email} 
                     onChange={(e) => handleInputChange("email", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="cellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Label htmlFor="cellphone" className="text-[#1E3A5F]/80 text-sm">Cellphone</Label>
                   <Input 
                     id="cellphone" 
                     type="tel" 
                     value={formData.cellphone} 
                     onChange={(e) => handleInputChange("cellphone", e.target.value)} 
                     placeholder="+264 81 234 5678" 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.cellphone && <p className="text-xs text-red-400 mt-1">{errors.cellphone}</p>}
                 </div>
               </div>
 
               {/* Spouse Details */}
-              <div className="space-y-4 p-5 rounded-xl bg-white/5 border border-white/10">
-                <Label className="text-white/70 text-xs font-medium tracking-wider uppercase">3. Spouse/Partner Details</Label>
+              <div className="space-y-4 p-5 rounded-xl bg-[#1E3A5F]/5 border border-[#1E3A5F]/10">
+                <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">3. Spouse/Partner Details</Label>
                 <div>
-                  <Label htmlFor="spouseName" className="text-white/80 text-sm">Full Name</Label>
+                  <Label htmlFor="spouseName" className="text-[#1E3A5F]/80 text-sm">Full Name</Label>
                   <Input 
                     id="spouseName" 
                     value={formData.spouseName} 
                     onChange={(e) => handleInputChange("spouseName", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseName && <p className="text-xs text-red-400 mt-1">{errors.spouseName}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="spouseEmail" className="text-white/80 text-sm">Email</Label>
+                  <Label htmlFor="spouseEmail" className="text-[#1E3A5F]/80 text-sm">Email</Label>
                   <Input 
                     id="spouseEmail" 
                     type="email" 
                     value={formData.spouseEmail} 
                     onChange={(e) => handleInputChange("spouseEmail", e.target.value)} 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseEmail && <p className="text-xs text-red-400 mt-1">{errors.spouseEmail}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="spouseCellphone" className="text-white/80 text-sm">Cellphone</Label>
+                  <Label htmlFor="spouseCellphone" className="text-[#1E3A5F]/80 text-sm">Cellphone</Label>
                   <Input 
                     id="spouseCellphone" 
                     type="tel" 
                     value={formData.spouseCellphone} 
                     onChange={(e) => handleInputChange("spouseCellphone", e.target.value)} 
                     placeholder="+264 81 234 5678" 
-                    className="mt-1 bg-white/5 border-white/10 text-white placeholder:text-white/30" 
+                    className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
                   />
                   {errors.spouseCellphone && <p className="text-xs text-red-400 mt-1">{errors.spouseCellphone}</p>}
                 </div>
@@ -694,15 +694,15 @@ export default function MyGreatMarriageEventPage() {
               )}
 
               {/* Order Summary */}
-              <div className="p-5 rounded-xl bg-[#8B2B3E]/20 border border-[#8B2B3E]/30">
+              <div className="p-5 rounded-xl bg-[#8B2B3E]/10 border border-[#8B2B3E]/20">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-white/70 text-sm">Selected Package</span>
-                  <span className="text-white font-medium">
+                  <span className="text-[#1E3A5F]/70 text-sm">Selected Package</span>
+                  <span className="text-[#1E3A5F] font-medium">
                     {ticketOptions.find(t => t.id === selectedTicket)?.title}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-white/70 text-sm">Total (per person)</span>
+                  <span className="text-[#1E3A5F]/70 text-sm">Total (per person)</span>
                   <span className="text-[#D4A574] font-bold text-xl">
                     {ticketOptions.find(t => t.id === selectedTicket)?.priceDisplay}
                   </span>
@@ -714,7 +714,7 @@ export default function MyGreatMarriageEventPage() {
                   type="button" 
                   variant="outline" 
                   onClick={() => setIsOpen(false)} 
-                  className="flex-1 rounded-full border-white/20 text-white hover:bg-white/10"
+                  className="flex-1 rounded-full border-[#1E3A5F]/30 text-[#1E3A5F] hover:bg-[#1E3A5F]/10"
                 >
                   Cancel
                 </Button>
