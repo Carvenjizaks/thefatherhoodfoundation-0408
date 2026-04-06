@@ -113,6 +113,15 @@ export default function Gideon300Page() {
               </FadeIn>
 
               <FadeIn delay={0.2} direction="up">
+                <div className="flex justify-center mb-6">
+                  <Image
+                    src="/images/gideon300-badge.png"
+                    alt="Gideon 300 Badge"
+                    width={180}
+                    height={180}
+                    className="object-contain"
+                  />
+                </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
                   The <span className="text-[#8B2B3E]">Gideon300</span>
                 </h1>
