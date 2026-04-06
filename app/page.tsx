@@ -467,15 +467,15 @@ export default function HomePage() {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden">
                         <Image
-                          src="/images/testimonials/struggle-ipinginge.jpg"
-                          alt="Struggle Ipinginge"
+                          src="/images/testimonials/james-ipinginge.jpg"
+                          alt="James Ipinginge"
                           width={40}
                           height={40}
                           className="object-cover w-full h-full"
                         />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Struggle Ipinginge</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">James Ipinginge</p>
                         <p className="text-xs text-black/60">Community Leader</p>
                       </div>
                     </div>
