@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Facebook, Mail, Phone, MapPin, ArrowUpRight, Heart } from "lucide-react"
+import { Facebook, Mail, MapPin, ArrowUpRight, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
@@ -237,11 +237,13 @@ export function Footer() {
               </li>
               <li>
                 <a 
-                  href="tel:+264811234567"
+                  href="https://www.facebook.com/intensemennamibia/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-start gap-3 text-white/70 hover:text-white transition-colors duration-200 group"
                 >
-                  <Phone className="w-5 h-5 mt-0.5 group-hover:scale-110 transition-transform duration-200" />
-                  <span>+264 81 123 4567</span>
+                  <Facebook className="w-5 h-5 mt-0.5 group-hover:scale-110 transition-transform duration-200" />
+                  <span>Follow us on Facebook</span>
                 </a>
               </li>
               <li className="flex items-start gap-3 text-white/70">
