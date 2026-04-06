@@ -247,17 +247,13 @@ export default function Gideon300Page() {
                 </div>
               </div>
               
-              <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/gideon/vip-event.jpg"
-                  alt="VIP Event Access"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-xl font-bold text-white mb-1">VIP Event Access</h3>
-                  <p className="text-white/80 text-sm">Exclusive access to premier events</p>
+              <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-[#8B2B3E] via-[#6d2230] to-[#8B2B3E]">
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+                  <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                    <Crown className="w-10 h-10 text-[#D4A574]" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-1 text-center">VIP Event Access</h3>
+                  <p className="text-white/80 text-sm text-center">Exclusive access to premier events</p>
                 </div>
               </div>
             </div>
