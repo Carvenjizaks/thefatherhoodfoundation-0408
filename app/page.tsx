@@ -178,24 +178,24 @@ export default function HomePage() {
         <JourneySection />
 
         {/* Empowering Men Section */}
-        <section id="empowering-section" className="py-24 lg:py-32 bg-[#8B2B3E] relative overflow-hidden">
+        <section id="empowering-section" className="py-24 lg:py-32 bg-[#D4B896] relative overflow-hidden">
           {/* Animated gradient background */}
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E] via-[#6d2230] to-[#8B2B3E] animate-gradient-shift" 
+            <div className="absolute inset-0 bg-gradient-to-br from-[#D4B896] via-[#C9A882] to-[#D4B896] animate-gradient-shift" 
                  style={{ backgroundSize: '400% 400%', animation: 'gradientShift 15s ease infinite' }} />
           </div>
           
           {/* Floating orbs with motion */}
-          <div className="absolute top-10 left-10 w-64 h-64 bg-[#D4A574]/20 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-float-medium" />
-          <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-[#D4A574]/15 rounded-full blur-2xl animate-float-fast" />
-          <div className="absolute bottom-1/3 right-1/3 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse-slow" />
+          <div className="absolute top-10 left-10 w-64 h-64 bg-[#8B2B3E]/15 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-white/20 rounded-full blur-3xl animate-float-medium" />
+          <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-[#8B2B3E]/10 rounded-full blur-2xl animate-float-fast" />
+          <div className="absolute bottom-1/3 right-1/3 w-32 h-32 bg-white/15 rounded-full blur-xl animate-pulse-slow" />
           
           {/* Moving light streaks */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 -left-full w-full h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent animate-streak-1" />
-            <div className="absolute top-1/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4A574]/30 to-transparent animate-streak-2" />
-            <div className="absolute top-2/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent animate-streak-3" />
+            <div className="absolute top-0 -left-full w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent animate-streak-1" />
+            <div className="absolute top-1/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-[#8B2B3E]/20 to-transparent animate-streak-2" />
+            <div className="absolute top-2/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent animate-streak-3" />
           </div>
           
           {/* Particle dots */}
@@ -210,13 +210,13 @@ export default function HomePage() {
           
           <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
             <FadeIn direction="up">
-              <h2 className="text-3xl lg:text-5xl font-bold text-white mb-8 text-balance leading-tight drop-shadow-lg">
+              <h2 className="text-3xl lg:text-5xl font-bold text-[#3D2314] mb-8 text-balance leading-tight">
                 Empowering men to Learn, Grow and Contribute through serving
               </h2>
             </FadeIn>
             
             <FadeIn direction="up" delay={0.2}>
-              <p className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-4xl mx-auto drop-shadow-md">
+              <p className="text-lg lg:text-xl text-[#3D2314]/85 leading-relaxed max-w-4xl mx-auto">
                 The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
               </p>
             </FadeIn>
@@ -315,7 +315,7 @@ export default function HomePage() {
                       />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center font-serif italic">My Great Marriage</h3>
+                  <h3 className="text-2xl font-semibold text-[#8B2B3E] mb-4 text-center">My Great Marriage</h3>
                   <p className="text-black mb-6 leading-relaxed text-center">
                     Build a thriving marriage through proven principles, practical tools, and supportive community for
                     couples.
