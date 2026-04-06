@@ -425,8 +425,14 @@ export default function PartnershipPage() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border-4 border-[#8B2B3E]/30 bg-gradient-to-br from-amber-100 to-orange-50 dark:from-[#8B2B3E]/20 dark:to-background mb-6">
-                <Shield className="w-10 h-10 text-[#8B2B3E]" />
+              <div className="flex justify-center mb-6">
+                <Image
+                  src="/images/gideon300-badge.png"
+                  alt="Gideon 300 Badge"
+                  width={150}
+                  height={150}
+                  className="object-contain"
+                />
               </div>
 
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8B2B3E] mb-4">
