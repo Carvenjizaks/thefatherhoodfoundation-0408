@@ -465,12 +465,18 @@ export default function HomePage() {
                       {`"The Fatherhood Foundation transformed my perspective on being a father. I am now a more intentional father and husband."`}
                     </p>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">SI</span>
+                      <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <Image
+                          src="/images/testimonials/james-ipinginge.jpg"
+                          alt="James Ipinginge"
+                          width={40}
+                          height={40}
+                          className="object-cover w-full h-full"
+                        />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Struggle Ipinginge</p>
-                        <p className="text-xs text-black/60">Community Leader</p>
+                        <p className="font-semibold text-[#1a1a1a] text-sm">James Ipinginge</p>
+                        <p className="text-xs text-black/60">Business Man</p>
                       </div>
                     </div>
                   </CardContent>
