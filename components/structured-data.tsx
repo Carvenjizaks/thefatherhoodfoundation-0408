@@ -21,7 +21,7 @@ export function OrganizationSchema() {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
-      email: "info@thefatherhoodfoundation.org",
+      email: "admin@fathersfound.org",
     },
     knowsAbout: [
       "Fatherhood",

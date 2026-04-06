@@ -120,7 +120,7 @@ const organizationJsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
-    email: "info@thefatherhoodfoundation.org",
+    email: "admin@fathersfound.org",
   },
   areaServed: {
     "@type": "Country",

@@ -62,7 +62,7 @@ const faqs = [
   {
     question: "How can I contact The Fatherhood Foundation?",
     answer:
-      "You can reach us through our website contact form, email us at info@thefatherhoodfoundation.org, or connect with us on social media. We typically respond to inquiries within 1-2 business days.",
+      "You can reach us through our website contact form, email us at admin@fathersfound.org, or connect with us on social media. We typically respond to inquiries within 1-2 business days.",
   },
   {
     question: "Are your events only for married couples?",

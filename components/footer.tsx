@@ -228,11 +228,11 @@ export function Footer() {
             <ul className="space-y-4">
               <li>
                 <a 
-                  href="mailto:info@thefatherhoodfoundation.org"
+                  href="mailto:admin@fathersfound.org"
                   className="flex items-start gap-3 text-white/70 hover:text-white transition-colors duration-200 group"
                 >
                   <Mail className="w-5 h-5 mt-0.5 group-hover:scale-110 transition-transform duration-200" />
-                  <span>info@thefatherhoodfoundation.org</span>
+                  <span>admin@fathersfound.org</span>
                 </a>
               </li>
               <li>
