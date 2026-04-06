@@ -17,16 +17,16 @@ const heroImages = [
     alt: "Men volunteering together at a community building project",
   },
   {
-    src: "/images/hero-father-daughter.jpg",
-    alt: "Father reading with his daughter on the porch",
+    src: "/images/hero-mentorship.jpg",
+    alt: "Older man mentoring younger man on a park bench",
   },
   {
-    src: "/images/hero-couple-relaxing.jpg",
-    alt: "Couple walking hand-in-hand through autumn park",
+    src: "/images/hero-dad-coaching.jpg",
+    alt: "Father coaching youth basketball team",
   },
   {
-    src: "/images/hero-family-dinner.jpg",
-    alt: "Multi-generational family enjoying dinner together",
+    src: "/images/hero-mens-group.jpg",
+    alt: "Men's Bible study group in living room",
   },
 ]
 
