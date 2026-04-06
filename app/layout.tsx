@@ -97,6 +97,44 @@ export const metadata: Metadata = {
   },
 }
 
+// Organization structured data for SEO
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NonprofitOrganization",
+  name: "The Fatherhood Foundation",
+  alternateName: "Fatherhood Foundation",
+  url: "https://thefatherhoodfoundation.org",
+  logo: "https://thefatherhoodfoundation.org/logo.png",
+  description:
+    "The Fatherhood Foundation empowers men to become intentional fathers, committed husbands, and impactful leaders through mentorship programs, marriage enrichment, and community development initiatives.",
+  foundingDate: "2010",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Windhoek",
+    addressCountry: "Namibia",
+  },
+  sameAs: [
+    "https://www.facebook.com/thefatherhoodfoundation",
+    "https://www.instagram.com/thefatherhoodfoundation",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "info@thefatherhoodfoundation.org",
+  },
+  areaServed: {
+    "@type": "Country",
+    name: "Namibia",
+  },
+  knowsAbout: [
+    "Fatherhood programs",
+    "Marriage enrichment",
+    "Men's mentorship",
+    "Community development",
+    "Family strengthening",
+  ],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -104,6 +142,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body className={`${inter.className} ${playfair.variable} font-sans antialiased`}>
         {children}
         <NewsletterPopup />
