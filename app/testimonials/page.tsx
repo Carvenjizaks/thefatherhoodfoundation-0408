@@ -23,6 +23,7 @@ const testimonials = [
     program: "Table Talk for Men",
     quote: "The Fatherhood Foundation transformed my perspective on being a father. Through the mentoring program, I learned practical skills that have strengthened my relationship with my children and wife. I am now a more intentional father and husband.",
     initials: "SI",
+    image: "/images/testimonials/struggle-ipinginge.jpg",
     featured: true,
   },
   {
@@ -146,13 +147,24 @@ export default function TestimonialsPage() {
                 <Card className="bg-gradient-to-br from-[#FAF8F5] to-white border-2 border-[#D4A574]/20 overflow-hidden">
                   <CardContent className="p-0">
                     <div className="grid lg:grid-cols-2 gap-0">
-                      {/* Initials Side */}
+                      {/* Image Side */}
                       <div className="relative h-64 lg:h-auto lg:min-h-[400px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                            <span className="text-5xl lg:text-7xl font-bold text-white">
-                              {featuredTestimonial.initials}
-                            </span>
+                          <div className="relative w-32 h-32 lg:w-48 lg:h-48 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden">
+                            {featuredTestimonial.image ? (
+                              <Image
+                                src={featuredTestimonial.image}
+                                alt={featuredTestimonial.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                                <span className="text-5xl lg:text-7xl font-bold text-white">
+                                  {featuredTestimonial.initials}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                         {/* Decorative badge */}
@@ -169,10 +181,22 @@ export default function TestimonialsPage() {
                           {`"${featuredTestimonial.quote}"`}
                         </p>
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                            <span className="text-[#8B2B3E] font-bold text-lg">
-                              {featuredTestimonial.initials}
-                            </span>
+                          <div className="w-12 h-12 rounded-full overflow-hidden">
+                            {featuredTestimonial.image ? (
+                              <Image
+                                src={featuredTestimonial.image}
+                                alt={featuredTestimonial.name}
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-[#8B2B3E]/10 flex items-center justify-center">
+                                <span className="text-[#8B2B3E] font-bold text-lg">
+                                  {featuredTestimonial.initials}
+                                </span>
+                              </div>
+                            )}
                           </div>
                           <div>
                             <p className="font-semibold text-[#1a1a1a]">{featuredTestimonial.name}</p>
