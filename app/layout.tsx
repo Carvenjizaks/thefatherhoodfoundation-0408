@@ -11,22 +11,72 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefatherhoodfoundation.org"),
-  title: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
+  title: {
+    default: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
+    template: "%s | The Fatherhood Foundation",
+  },
   description:
-    "The Fatherhood Foundation provides resources, mentorship, and community support to help men become better fathers, husbands, and leaders.",
-  keywords: ["fatherhood", "parenting", "marriage", "mentoring", "community development", "family"],
+    "The Fatherhood Foundation empowers men to become intentional fathers, committed husbands, and impactful leaders through mentorship programs, marriage enrichment, and community development initiatives.",
+  keywords: [
+    "fatherhood programs",
+    "men's mentorship",
+    "marriage enrichment",
+    "father training",
+    "community development",
+    "family strengthening",
+    "intentional fatherhood",
+    "husband leadership",
+    "men's ministry",
+    "parenting resources",
+    "father mentoring",
+    "healthy marriages",
+  ],
+  authors: [{ name: "The Fatherhood Foundation" }],
+  creator: "The Fatherhood Foundation",
+  publisher: "The Fatherhood Foundation",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "The Fatherhood Foundation",
+    title: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
     description:
-      "Empowering men to become better fathers, husbands, and leaders through mentorship and community support.",
+      "Empowering men to become intentional fathers, committed husbands, and impactful leaders through mentorship and community support.",
+    url: "https://thefatherhoodfoundation.org",
+    siteName: "The Fatherhood Foundation",
+    locale: "en_US",
     type: "website",
-    images: ["/og-image.jpg"],
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "The Fatherhood Foundation - Empowering Men, Strengthening Families",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "The Fatherhood Foundation",
-    description: "Empowering men to become better fathers, husbands, and leaders.",
+    description: "Empowering men to become intentional fathers, committed husbands, and impactful leaders.",
+    images: ["/og-image.jpg"],
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://thefatherhoodfoundation.org",
+  },
+  category: "nonprofit",
   generator: "v0.app",
   icons: {
     icon: [
