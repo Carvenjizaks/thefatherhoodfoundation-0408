@@ -47,6 +47,7 @@ export function Footer() {
     { label: "Get Involved", href: "/get-involved" },
     { label: "Curriculum", href: "/curriculum" },
     { label: "Events", href: "/events" },
+    { label: "FAQ", href: "/faq" },
     { label: "Donate", href: "/donate" },
   ]
 
