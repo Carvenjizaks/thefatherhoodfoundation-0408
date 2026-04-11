@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
-import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail } from "@/lib/email-service"
+import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
 import { generateRegistrationCode } from "@/lib/registration-code"
 
 
@@ -33,11 +33,9 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
-    console.log("[v0] Event registration API called for:", eventName, email)
 
     // Generate unique registration code
     const registrationCode = generateRegistrationCode("EVT")
-    console.log("[v0] Generated registration code:", registrationCode)
 
     // Check for existing registration
     const { data: existingRegistration } = await supabase
@@ -76,18 +74,13 @@ export async function POST(request: Request) {
       spouse_phone: null,
       checked_in: false,
     }
-    console.log("[v0] Inserting event registration:", JSON.stringify(insertData))
-
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")
       .insert(insertData)
       .select()
       .single()
 
-    console.log("[v0] Insert result:", { registration, insertError })
-
     if (insertError) {
-      console.error("[v0] Error inserting event registration:", insertError)
       return NextResponse.json(
         { error: "Failed to create registration", details: insertError.message },
         { status: 500 }
@@ -110,9 +103,8 @@ export async function POST(request: Request) {
         await sendWelcomeEmail(contact.id)
       }
 
-      // Always send registration confirmation email
-      console.log("[v0] Sending registration confirmation email to:", email)
-      const emailSent = await sendRegistrationConfirmationEmail({
+      // Send registration confirmation email
+      await sendRegistrationConfirmationEmail({
         email,
         firstName,
         lastName,
@@ -124,12 +116,20 @@ export async function POST(request: Request) {
         paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
       })
 
-      console.log("[v0] Registration confirmation email result:", emailSent)
-      if (emailSent) {
-        console.log(`[v0] Registration confirmation email sent successfully to: ${email}`)
-      } else {
-        console.log(`[v0] Registration confirmation email FAILED for: ${email}`)
-      }
+      // Send admin notification
+      const spouseFullName = spouseFirstName && spouseLastName 
+        ? `${spouseFirstName} ${spouseLastName}` 
+        : spouseFirstName || undefined
+
+      await sendAdminNotification({
+        eventName,
+        registrantName: `${firstName} ${lastName}`,
+        registrantEmail: email,
+        registrantPhone: phone,
+        spouseName: spouseFullName,
+        paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
+        registrationCode,
+      })
     } catch (emailError) {
       console.error("[v0] Error sending emails:", emailError)
       // Don't fail registration if email fails
