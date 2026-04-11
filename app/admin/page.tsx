@@ -12,6 +12,10 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { 
   Search, 
@@ -19,14 +23,14 @@ import {
   RefreshCw, 
   LogOut, 
   Users, 
-  Calendar, 
   Heart, 
   DollarSign,
   Mail,
-  Phone,
+  Send,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  Loader2,
 } from "lucide-react"
 
 interface TableTalkRegistration {
@@ -101,6 +105,18 @@ export default function AdminDashboardPage() {
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
+
+  // Email compose state
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false)
+  const [emailRecipients, setEmailRecipients] = useState<{ email: string; firstName: string; lastName: string }[]>([])
+  const [emailSubject, setEmailSubject] = useState("")
+  const [emailBody, setEmailBody] = useState("")
+  const [isSendingEmail, setIsSendingEmail] = useState(false)
+  const [emailResult, setEmailResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
+
+  // Bulk selection state
+  const [selectedEventRegs, setSelectedEventRegs] = useState<Set<string>>(new Set())
+  const [selectedTableTalkRegs, setSelectedTableTalkRegs] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     checkAuth()
@@ -254,6 +270,95 @@ export default function AdminDashboardPage() {
         return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
       default:
         return <Badge className="bg-gray-100 text-gray-800">{status || "Unknown"}</Badge>
+    }
+  }
+
+  // Open email compose for a single recipient
+  const openEmailForOne = (email: string, firstName: string, lastName: string) => {
+    setEmailRecipients([{ email, firstName, lastName }])
+    setEmailSubject("")
+    setEmailBody("")
+    setEmailResult(null)
+    setEmailDialogOpen(true)
+  }
+
+  // Open email compose for multiple recipients (bulk)
+  const openEmailForBulk = (recipients: { email: string; firstName: string; lastName: string }[]) => {
+    if (recipients.length === 0) return
+    setEmailRecipients(recipients)
+    setEmailSubject("")
+    setEmailBody("")
+    setEmailResult(null)
+    setEmailDialogOpen(true)
+  }
+
+  // Send email via admin API
+  const handleSendEmail = async () => {
+    if (!emailSubject.trim() || !emailBody.trim()) return
+    setIsSendingEmail(true)
+    setEmailResult(null)
+    try {
+      const response = await fetch("/api/admin/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipients: emailRecipients,
+          subject: emailSubject,
+          body: emailBody,
+        }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setEmailResult({ message: data.message, type: "success" })
+        setTimeout(() => {
+          setEmailDialogOpen(false)
+          setSelectedEventRegs(new Set())
+          setSelectedTableTalkRegs(new Set())
+        }, 2000)
+      } else {
+        setEmailResult({ message: data.error || "Failed to send", type: "error" })
+      }
+    } catch {
+      setEmailResult({ message: "Network error. Please try again.", type: "error" })
+    } finally {
+      setIsSendingEmail(false)
+    }
+  }
+
+  // Toggle bulk selection helpers
+  const toggleEventRegSelection = (id: string) => {
+    setSelectedEventRegs(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const toggleAllEventRegs = (regs: EventRegistration[]) => {
+    const allSelected = regs.every(r => selectedEventRegs.has(r.id))
+    if (allSelected) {
+      setSelectedEventRegs(new Set())
+    } else {
+      setSelectedEventRegs(new Set(regs.map(r => r.id)))
+    }
+  }
+
+  const toggleTableTalkSelection = (id: string) => {
+    setSelectedTableTalkRegs(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const toggleAllTableTalk = (regs: TableTalkRegistration[]) => {
+    const allSelected = regs.every(r => selectedTableTalkRegs.has(r.id))
+    if (allSelected) {
+      setSelectedTableTalkRegs(new Set())
+    } else {
+      setSelectedTableTalkRegs(new Set(regs.map(r => r.id)))
     }
   }
 
@@ -440,15 +545,30 @@ export default function AdminDashboardPage() {
                     <CardTitle className="text-[#3D1F0F]">Table Talk Registrations</CardTitle>
                     <CardDescription>All Table Talk session sign-ups</CardDescription>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
-                    className="border-[#8B2B3E] text-[#8B2B3E]"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Export CSV
-                  </Button>
+                  <div className="flex gap-2">
+                    {selectedTableTalkRegs.size > 0 && (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          const selected = tableTalkRegistrations.filter(r => selectedTableTalkRegs.has(r.id))
+                          openEmailForBulk(selected.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))
+                        }}
+                        className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                      >
+                        <Send className="w-4 h-4 mr-2" />
+                        Email Selected ({selectedTableTalkRegs.size})
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
+                      className="border-[#8B2B3E] text-[#8B2B3E]"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {isLoading ? (
@@ -461,11 +581,16 @@ export default function AdminDashboardPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
+                            <TableHead className="w-10">
+                              <Checkbox
+                                checked={filterData(tableTalkRegistrations, searchTerm).length > 0 && filterData(tableTalkRegistrations, searchTerm).every(r => selectedTableTalkRegs.has(r.id))}
+                                onCheckedChange={() => toggleAllTableTalk(filterData(tableTalkRegistrations, searchTerm))}
+                              />
+                            </TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Email</TableHead>
                             <TableHead>Phone</TableHead>
                             <TableHead>Session Date</TableHead>
-                            <TableHead>Location</TableHead>
                             <TableHead>Code</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Checked In</TableHead>
@@ -475,11 +600,27 @@ export default function AdminDashboardPage() {
                         <TableBody>
                           {filterData(tableTalkRegistrations, searchTerm).map((reg) => (
                             <TableRow key={reg.id}>
-                              <TableCell className="font-medium">{reg.first_name} {reg.last_name}</TableCell>
+                              <TableCell>
+                                <Checkbox
+                                  checked={selectedTableTalkRegs.has(reg.id)}
+                                  onCheckedChange={() => toggleTableTalkSelection(reg.id)}
+                                />
+                              </TableCell>
+                              <TableCell className="font-medium">
+                                <div className="flex items-center gap-2">
+                                  <span>{reg.first_name} {reg.last_name}</span>
+                                  <button
+                                    onClick={() => openEmailForOne(reg.email, reg.first_name, reg.last_name)}
+                                    className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                    title={`Email ${reg.first_name}`}
+                                  >
+                                    <Mail className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </TableCell>
                               <TableCell>{reg.email}</TableCell>
                               <TableCell>{reg.phone}</TableCell>
                               <TableCell>{formatDate(reg.session_date)}</TableCell>
-                              <TableCell>{reg.location}</TableCell>
                               <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
                               <TableCell>
                                 <button
@@ -540,8 +681,21 @@ export default function AdminDashboardPage() {
                   })()}
                 </div>
 
-                {/* Export All Button */}
-                <div className="flex justify-end">
+                {/* Bulk Actions */}
+                <div className="flex justify-end gap-2">
+                  {selectedEventRegs.size > 0 && (
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        const selected = eventRegistrations.filter(r => selectedEventRegs.has(r.id))
+                        openEmailForBulk(selected.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))
+                      }}
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                    >
+                      <Send className="w-4 h-4 mr-2" />
+                      Email Selected ({selectedEventRegs.size})
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     size="sm"
@@ -597,21 +751,48 @@ export default function AdminDashboardPage() {
                               <Badge className={eventColor}>{eventName}</Badge>
                               <span className="text-sm text-[#5C3D2E]">{regs.length} registration{regs.length !== 1 ? 's' : ''}</span>
                             </div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, '-')}-registrations`)}
-                              className="border-[#8B2B3E] text-[#8B2B3E]"
-                            >
-                              <Download className="w-4 h-4 mr-2" />
-                              Export
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => openEmailForBulk(regs.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))}
+                                className="border-[#8B2B3E] text-[#8B2B3E]"
+                              >
+                                <Mail className="w-4 h-4 mr-2" />
+                                Email All
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, '-')}-registrations`)}
+                                className="border-[#8B2B3E] text-[#8B2B3E]"
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export
+                              </Button>
+                            </div>
                           </CardHeader>
                           <CardContent className="pt-4">
                             <div className="overflow-x-auto">
                               <Table>
                                 <TableHeader>
                                   <TableRow>
+                                    <TableHead className="w-10">
+                                      <Checkbox
+                                        checked={regs.every(r => selectedEventRegs.has(r.id))}
+                                        onCheckedChange={() => {
+                                          const allSelected = regs.every(r => selectedEventRegs.has(r.id))
+                                          setSelectedEventRegs(prev => {
+                                            const next = new Set(prev)
+                                            regs.forEach(r => {
+                                              if (allSelected) next.delete(r.id)
+                                              else next.add(r.id)
+                                            })
+                                            return next
+                                          })
+                                        }}
+                                      />
+                                    </TableHead>
                                     <TableHead>Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Phone</TableHead>
@@ -625,7 +806,24 @@ export default function AdminDashboardPage() {
                                 <TableBody>
                                   {regs.map((reg) => (
                                     <TableRow key={reg.id}>
-                                      <TableCell className="font-medium">{reg.first_name} {reg.last_name}</TableCell>
+                                      <TableCell>
+                                        <Checkbox
+                                          checked={selectedEventRegs.has(reg.id)}
+                                          onCheckedChange={() => toggleEventRegSelection(reg.id)}
+                                        />
+                                      </TableCell>
+                                      <TableCell className="font-medium">
+                                        <div className="flex items-center gap-2">
+                                          <span>{reg.first_name} {reg.last_name}</span>
+                                          <button
+                                            onClick={() => openEmailForOne(reg.email, reg.first_name, reg.last_name)}
+                                            className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                            title={`Email ${reg.first_name}`}
+                                          >
+                                            <Mail className="w-4 h-4" />
+                                          </button>
+                                        </div>
+                                      </TableCell>
                                       <TableCell>{reg.email}</TableCell>
                                       <TableCell>{reg.phone}</TableCell>
                                       <TableCell>{reg.spouse_name || "-"}</TableCell>
@@ -775,7 +973,18 @@ export default function AdminDashboardPage() {
                                 <TableBody>
                                   {sourceContacts.map((contact) => (
                                     <TableRow key={contact.id}>
-                                      <TableCell className="font-medium">{contact.first_name} {contact.last_name}</TableCell>
+                                      <TableCell className="font-medium">
+                                        <div className="flex items-center gap-2">
+                                          <span>{contact.first_name} {contact.last_name}</span>
+                                          <button
+                                            onClick={() => openEmailForOne(contact.email, contact.first_name, contact.last_name)}
+                                            className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                            title={`Email ${contact.first_name}`}
+                                          >
+                                            <Mail className="w-4 h-4" />
+                                          </button>
+                                        </div>
+                                      </TableCell>
                                       <TableCell>{contact.email}</TableCell>
                                       <TableCell>{contact.cellphone || "-"}</TableCell>
                                       <TableCell className="text-xs text-gray-500 max-w-[150px] truncate">{contact.source_details || "-"}</TableCell>
@@ -869,6 +1078,94 @@ export default function AdminDashboardPage() {
         </div>
       </main>
       <Footer />
+
+      {/* Email Compose Dialog */}
+      <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-[#3D1F0F] flex items-center gap-2">
+              <Mail className="w-5 h-5 text-[#8B2B3E]" />
+              {emailRecipients.length === 1 ? "Send Email" : `Broadcast to ${emailRecipients.length} Recipients`}
+            </DialogTitle>
+            <DialogDescription>
+              {emailRecipients.length === 1
+                ? `To: ${emailRecipients[0].firstName} ${emailRecipients[0].lastName} (${emailRecipients[0].email})`
+                : `Sending to ${emailRecipients.length} people`}
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Recipient list for bulk */}
+          {emailRecipients.length > 1 && (
+            <div className="max-h-28 overflow-y-auto bg-[#f5f0eb] rounded-lg p-3">
+              <div className="flex flex-wrap gap-1.5">
+                {emailRecipients.map((r, i) => (
+                  <Badge key={i} variant="outline" className="text-xs bg-white">
+                    {r.firstName} {r.lastName}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="email-subject" className="text-[#5C3D2E]">Subject</Label>
+              <Input
+                id="email-subject"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder="e.g. Payment Confirmation Required"
+                className="mt-1 border-[#e8d8c8]"
+              />
+            </div>
+            <div>
+              <Label htmlFor="email-body" className="text-[#5C3D2E]">Message</Label>
+              <Textarea
+                id="email-body"
+                value={emailBody}
+                onChange={(e) => setEmailBody(e.target.value)}
+                placeholder="Write your message here..."
+                rows={6}
+                className="mt-1 border-[#e8d8c8] resize-none"
+              />
+              <p className="text-xs text-[#5C3D2E]/60 mt-1">
+                Each recipient will be addressed by name automatically.
+              </p>
+            </div>
+
+            {emailResult && (
+              <div className={`p-3 rounded-lg text-sm ${
+                emailResult.type === "success"
+                  ? "bg-green-50 text-green-800 border border-green-200"
+                  : "bg-red-50 text-red-800 border border-red-200"
+              }`}>
+                {emailResult.message}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => setEmailDialogOpen(false)}
+                className="border-[#e8d8c8]"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSendEmail}
+                disabled={isSendingEmail || !emailSubject.trim() || !emailBody.trim()}
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+              >
+                {isSendingEmail ? (
+                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</>
+                ) : (
+                  <><Send className="w-4 h-4 mr-2" /> {emailRecipients.length === 1 ? "Send Email" : `Send to ${emailRecipients.length}`}</>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
