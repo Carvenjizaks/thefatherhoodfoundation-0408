@@ -159,6 +159,7 @@ export default function MyGreatMarriageEventPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [registrationCode, setRegistrationCode] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [activeDay, setActiveDay] = useState<"thursday" | "friday" | "saturday">("thursday")
   const [selectedTicket, setSelectedTicket] = useState("early-bird")
@@ -206,28 +207,35 @@ export default function MyGreatMarriageEventPage() {
     setIsSubmitting(true)
     setSubmitError(null)
     try {
-      const response = await fetch("/api/contacts", {
+      const selectedOption = getTicketOptions().find(t => t.id === selectedTicket)
+      const spouseNameParts = formData.spouseName?.trim().split(" ") || []
+      
+      const response = await fetch("/api/events/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          cellphone: formData.cellphone,
-          source: "event_registration",
-          sourceDetails: `MyGreatMarriage Conference 2026 - ${formData.ticketType}`,
-          spouseFirstName: formData.spouseName,
-          spouseEmail: formData.spouseEmail,
-          spouseCellphone: formData.spouseCellphone,
+          phone: formData.cellphone,
+          eventSlug: "my-great-marriage-2026",
+          eventName: "MyGreatMarriage Conference 2026",
+          eventDate: "7, 8 & 9 May 2026",
+          eventTime: "Thu & Fri: 18:30 - 21:00, Sat: 08:00 - 13:00",
+          eventLocation: "Windhoek, Namibia",
+          paymentAmount: selectedOption?.price?.toString() || "0",
+          spouseFirstName: spouseNameParts[0] || "",
+          spouseLastName: spouseNameParts.slice(1).join(" ") || "",
         }),
       })
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || "Registration failed")
       }
+      const data = await response.json()
+      setRegistrationCode(data.registrationCode)
       setSubmitSuccess(true)
       setFormData({ firstName: "", lastName: "", email: "", cellphone: "", spouseName: "", spouseEmail: "", spouseCellphone: "", ticketType: "early-bird" })
-      setTimeout(() => { setIsOpen(false); setSubmitSuccess(false) }, 2000)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Failed to submit registration.")
     } finally {
@@ -585,12 +593,27 @@ export default function MyGreatMarriageEventPage() {
           </DialogHeader>
           
           {submitSuccess ? (
-            <div className="py-12 text-center">
+            <div className="py-8 text-center">
               <div className="w-20 h-20 bg-[#8B2B3E] rounded-full flex items-center justify-center mx-auto mb-6">
                 <Check className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-2 text-[#3D2314]">Registration Successful!</h3>
-              <p className="text-[#3D2314]/70">Confirmation details will be sent to your email.</p>
+              <p className="text-[#3D2314]/70 mb-6">Confirmation details have been sent to your email.</p>
+              
+              {registrationCode && (
+                <div className="bg-[#f5f0eb] border-2 border-dashed border-[#8B2B3E]/40 rounded-xl p-6 mx-auto max-w-xs">
+                  <p className="text-xs text-[#3D2314]/60 font-medium tracking-wider uppercase mb-2">Your Check-In Reference Code</p>
+                  <p className="text-3xl font-bold text-[#8B2B3E] tracking-widest font-mono">{registrationCode}</p>
+                  <p className="text-xs text-[#3D2314]/50 mt-3">Present this code at the check-in desk</p>
+                </div>
+              )}
+
+              <Button
+                onClick={() => { setIsOpen(false); setSubmitSuccess(false); setRegistrationCode(null) }}
+                className="mt-6 bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8"
+              >
+                Done
+              </Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 mt-4">
