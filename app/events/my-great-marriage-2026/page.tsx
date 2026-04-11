@@ -78,24 +78,39 @@ const conferenceHighlights = [
   { icon: Sparkles, title: "Spiritual Growth", desc: "Strengthen through shared values" },
 ]
 
-const ticketOptions = [
-  {
-    id: "early-bird",
-    title: "Early Bird",
-    price: 400,
-    priceDisplay: "N$ 400",
-    features: ["Full conference access", "Conference materials", "Meals and Drinks"],
-    popular: true,
-  },
-  {
+// Early Bird ends on 24 April 2026 (disappears on 25 April)
+const EARLY_BIRD_END_DATE = new Date("2026-04-25T00:00:00")
+
+const getTicketOptions = () => {
+  const now = new Date()
+  const isEarlyBirdActive = now < EARLY_BIRD_END_DATE
+  
+  const options = []
+  
+  if (isEarlyBirdActive) {
+    options.push({
+      id: "early-bird",
+      title: "Early Bird",
+      price: 400,
+      priceDisplay: "N$ 400",
+      perCouple: true,
+      features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
+      popular: true,
+    })
+  }
+  
+  options.push({
     id: "standard",
     title: "Conference Package",
     price: 550,
     priceDisplay: "N$ 550",
-    features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
-    popular: false,
-  },
-]
+    perCouple: true,
+    features: ["Full conference access", "Conference materials", "Meals and Drinks"],
+    popular: !isEarlyBirdActive,
+  })
+  
+  return options
+}
 
 function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
   const [count, setCount] = useState(0)
@@ -325,13 +340,20 @@ export default function MyGreatMarriageEventPage() {
                     <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
                     <p className="text-[#3D2314] font-medium">7, 8 & 9 May 2026</p>
                   </div>
-                  <div>
-                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 400</span>
-                      <span className="text-[#3D2314]/40 line-through text-sm">N$ 550</span>
+                  {new Date() < EARLY_BIRD_END_DATE ? (
+                    <div>
+                      <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD (per couple)</p>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[#8B2B3E] font-bold text-xl">N$ 400</span>
+                        <span className="text-[#3D2314]/40 line-through text-sm">N$ 550</span>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div>
+                      <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">PRICE (per couple)</p>
+                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 550</span>
+                    </div>
+                  )}
                 </div>
                 <Button 
                   onClick={() => setIsOpen(true)}
@@ -466,7 +488,7 @@ export default function MyGreatMarriageEventPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {ticketOptions.map((ticket) => (
+              {getTicketOptions().map((ticket) => (
                 <button
                   key={ticket.id}
                   onClick={() => {
@@ -495,7 +517,7 @@ export default function MyGreatMarriageEventPage() {
                       {ticket.priceDisplay}
                     </span>
                     <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/60"}`}>
-                      per person
+                      per couple
                     </span>
                   </div>
                   
@@ -576,7 +598,7 @@ export default function MyGreatMarriageEventPage() {
               <div className="space-y-3">
                 <Label className="text-[#1E3A5F]/70 text-xs font-medium tracking-wider uppercase">1. Select Ticket Type</Label>
                 <div className="grid grid-cols-2 gap-3">
-                  {ticketOptions.map((ticket) => (
+                  {getTicketOptions().map((ticket) => (
                     <button
                       key={ticket.id}
                       type="button"
@@ -597,6 +619,7 @@ export default function MyGreatMarriageEventPage() {
                         )}
                       </div>
                       <span className="text-[#D4A574] font-bold">{ticket.priceDisplay}</span>
+                      <span className="text-[#1E3A5F]/60 text-xs ml-1">per couple</span>
                     </button>
                   ))}
                 </div>
