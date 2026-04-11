@@ -1,11 +1,5 @@
 import { NextResponse } from "next/server"
 
-// SMTP.com API Configuration
-const SMTP_API_KEY = process.env.SMTP_API_KEY
-const SMTP_SENDER_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
-const SMTP_SENDER_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
-const SMTP_CHANNEL = process.env.SMTP_CHANNEL
-
 export async function POST(request: Request) {
   try {
     const { email } = await request.json()
@@ -13,6 +7,12 @@ export async function POST(request: Request) {
     if (!email) {
       return NextResponse.json({ error: "Email address is required" }, { status: 400 })
     }
+
+    // Read env vars at runtime
+    const SMTP_API_KEY = process.env.SMTP_API_KEY
+    const SMTP_SENDER_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
+    const SMTP_SENDER_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
+    const SMTP_CHANNEL = process.env.SMTP_CHANNEL
 
     // Check configuration
     const configStatus = {

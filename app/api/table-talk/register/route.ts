@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
-import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail } from "@/lib/email-service"
+import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
 import { generateRegistrationCode } from "@/lib/registration-code"
 
 
@@ -16,11 +16,6 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-
-    // Log the Supabase URL for debugging
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-    const fixedUrl = supabaseUrl.startsWith('http') ? supabaseUrl : `https://${supabaseUrl}`
-    console.log("[v0] Supabase URL:", fixedUrl)
 
     const supabase = await createClient()
     
@@ -68,11 +63,10 @@ export async function POST(request: Request) {
       // Send welcome email for new contacts
       if (isNewContact && contact) {
         await sendWelcomeEmail(contact.id)
-        console.log(`[v0] Welcome email sent to: ${email}`)
       }
 
-      // Always send registration confirmation email with event details and code
-      const emailSent = await sendRegistrationConfirmationEmail({
+      // Send registration confirmation email
+      await sendRegistrationConfirmationEmail({
         email,
         firstName,
         lastName,
@@ -83,24 +77,20 @@ export async function POST(request: Request) {
         dynamicCode,
         paymentAmount: "NAD 50",
       })
-      
-      if (emailSent) {
-        console.log(`[v0] Registration confirmation email sent to: ${email}`)
-      } else {
-        console.error(`[v0] Failed to send registration confirmation email to: ${email}`)
-      }
+
+      // Send admin notification
+      await sendAdminNotification({
+        eventName: "Table Talk for Men",
+        registrantName: `${firstName} ${lastName}`,
+        registrantEmail: email,
+        registrantPhone: phone,
+        paymentAmount: "NAD 50",
+        registrationCode: dynamicCode,
+      })
     } catch (emailError) {
       console.error("[v0] Error sending emails:", emailError)
       // Don't fail the registration if email fails
     }
-
-    console.log(`[v0] New Table Talk Registration:
-      Name: ${firstName} ${lastName}
-      Email: ${email}
-      Phone: ${phone}
-      Session: ${sessionDate}
-      Dynamic Code: ${dynamicCode}
-    `)
 
     return NextResponse.json({
       success: true,
