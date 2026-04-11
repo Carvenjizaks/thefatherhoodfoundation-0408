@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState } from "react"
 
 export const dynamic = "force-dynamic"
 
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createClient } from "@/lib/supabase-client"
+
 import { 
   Search, 
   Download, 
@@ -106,8 +106,6 @@ export default function AdminDashboardPage() {
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
 
-  const supabase = useMemo(() => createClient(), [])
-
   useEffect(() => {
     checkAuth()
   }, [])
@@ -161,24 +159,18 @@ export default function AdminDashboardPage() {
         setEventRegistrations(eventData.registrations)
       }
 
-      // Fetch Contacts directly from Supabase
-      if (supabase) {
-        const { data: contactsData } = await supabase
-          .from("contacts")
-          .select("*")
-          .order("created_at", { ascending: false })
-        if (contactsData) {
-          setContacts(contactsData)
-        }
+      // Fetch Contacts via API
+      const contactsResponse = await fetch("/api/admin/contacts")
+      const contactsData = await contactsResponse.json()
+      if (contactsData.contacts) {
+        setContacts(contactsData.contacts)
+      }
 
-        // Fetch Donations
-        const { data: donationsData } = await supabase
-          .from("donations")
-          .select("*")
-          .order("created_at", { ascending: false })
-        if (donationsData) {
-          setDonations(donationsData)
-        }
+      // Fetch Donations via API
+      const donationsResponse = await fetch("/api/admin/donations")
+      const donationsData = await donationsResponse.json()
+      if (donationsData.donations) {
+        setDonations(donationsData.donations)
       }
     } catch (error) {
       console.error("Error fetching data:", error)

@@ -4,10 +4,7 @@ import { createContact, sendWelcomeEmail, sendSubscriptionNotification, type Con
 
 export async function POST(request: Request) {
   try {
-    console.log("[v0] Contacts API called - SUPABASE_URL exists:", !!process.env.SUPABASE_URL, "NEXT_PUBLIC_SUPABASE_URL exists:", !!process.env.NEXT_PUBLIC_SUPABASE_URL, "SERVICE_ROLE_KEY exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
-    
     const body = await request.json()
-    console.log("[v0] Request body:", JSON.stringify({ firstName: body.firstName, lastName: body.lastName, email: body.email, source: body.source }))
 
     const {
       firstName,
