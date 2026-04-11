@@ -13,6 +13,7 @@ export function Footer() {
   const [email, setEmail] = useState("")
   const [isSubscribing, setIsSubscribing] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,9 +22,10 @@ export function Footer() {
     // Split name into first and last name
     const nameParts = name.trim().split(" ")
     const firstName = nameParts[0] || ""
-    const lastName = nameParts.slice(1).join(" ") || ""
+    const lastName = nameParts.slice(1).join(" ") || "Subscriber"
     
     setIsSubscribing(true)
+    setError("")
     try {
       const response = await fetch("/api/contacts", {
         method: "POST",
@@ -40,9 +42,13 @@ export function Footer() {
         setSubscribed(true)
         setName("")
         setEmail("")
+      } else {
+        const data = await response.json()
+        setError(data.error || "Failed to subscribe. Please try again.")
       }
-    } catch (error) {
-      console.error("Subscription error:", error)
+    } catch (err) {
+      console.error("Subscription error:", err)
+      setError("Connection error. Please try again.")
     } finally {
       setIsSubscribing(false)
     }
@@ -142,8 +148,11 @@ export function Footer() {
                   disabled={isSubscribing}
                   className="h-10 bg-white text-[#8B2B3E] hover:bg-white/90 font-medium text-sm"
                 >
-                  {isSubscribing ? "..." : "Subscribe"}
+                  {isSubscribing ? "Subscribing..." : "Subscribe"}
                 </Button>
+                {error && (
+                  <p className="text-red-300 text-xs mt-1">{error}</p>
+                )}
               </form>
             )}
           </div>
