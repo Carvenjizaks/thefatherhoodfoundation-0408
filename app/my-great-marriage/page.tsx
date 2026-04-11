@@ -134,15 +134,18 @@ export default function MyGreatMarriagePage() {
                   <p className="text-lg text-white/80 leading-relaxed max-w-xl mb-8">
                     Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
                   </p>
+                  <p className="text-sm text-white/90 font-medium bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 inline-block mb-4">
+                    Early Bird registration closes 24 April 2026 - Total (per couple) Includes Follow-Up Resources
+                  </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <Button
                       size="lg"
                       className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
                       asChild
                     >
-                      <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                      <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                         Register Now <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </Button>
                     <Button
                       size="lg"
@@ -230,9 +233,9 @@ export default function MyGreatMarriagePage() {
                     size="lg"
                     className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white rounded-full px-8 shadow-lg hover:shadow-xl"
                   >
-                    <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                    <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                       Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    </a>
                   </Button>
                 </FadeIn>
               </div>
@@ -350,9 +353,9 @@ export default function MyGreatMarriagePage() {
                 size="lg"
                 className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
               >
-                <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                   Join MyGreatMarriage <ArrowRight className="w-4 h-4" />
-                </Link>
+                </a>
               </Button>
               <Button
                 asChild
