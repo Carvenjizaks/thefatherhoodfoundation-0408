@@ -4,7 +4,6 @@ import { createContact, sendWelcomeEmail, type ContactSource } from "@/lib/email
 
 export async function POST(request: Request) {
   try {
-    console.log("[v0] Contacts API called - Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
     
     const body = await request.json()
 
@@ -34,8 +33,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
     }
 
-    console.log("[v0] Creating contact for:", email)
-    
     // Create contact
     const { contact, isNewContact } = await createContact({
       firstName,
@@ -49,13 +46,9 @@ export async function POST(request: Request) {
       spouseCellphone,
     })
 
-    console.log("[v0] Contact created:", { contactId: contact?.id, isNewContact })
-
     // Send welcome email for new contacts
     if (isNewContact && contact) {
-      console.log("[v0] Sending welcome email to:", email)
-      const emailResult = await sendWelcomeEmail(contact.id)
-      console.log("[v0] Welcome email result:", emailResult)
+      await sendWelcomeEmail(contact.id)
     }
 
     return NextResponse.json({
