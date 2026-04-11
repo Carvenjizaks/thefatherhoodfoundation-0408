@@ -92,16 +92,20 @@ export async function createContact(params: CreateContactParams) {
   return { contact, isNewContact }
 }
 
-// SMTP Configuration
-const SMTP_API_KEY = process.env.SMTP_API_KEY
-const SMTP_CHANNEL = process.env.SMTP_CHANNEL || "default"
-const SMTP_HOST = "send.smtp.com"
-const SMTP_PORT = 587
-const SMTP_USER = process.env.SMTP_USERNAME
-const SMTP_PASS = process.env.SMTP_PASSWORD
-const FROM_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
-const FROM_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carvenjizaks@gmail.com"
+// SMTP Configuration - read at runtime to ensure env vars are loaded
+function getEmailConfig() {
+  return {
+    SMTP_API_KEY: process.env.SMTP_API_KEY,
+    SMTP_CHANNEL: process.env.SMTP_CHANNEL || "default",
+    SMTP_HOST: "send.smtp.com",
+    SMTP_PORT: 587,
+    SMTP_USER: process.env.SMTP_USERNAME,
+    SMTP_PASS: process.env.SMTP_PASSWORD,
+    FROM_EMAIL: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
+    FROM_NAME: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL || "carvenjizaks@gmail.com",
+  }
+}
 
 async function sendEmailViaSMTP(
   to: string,
@@ -110,19 +114,24 @@ async function sendEmailViaSMTP(
   html: string,
   text: string
 ): Promise<boolean> {
+  const config = getEmailConfig()
+  
+  console.log("[v0] Email config check - SMTP_API_KEY exists:", !!config.SMTP_API_KEY, "FROM_EMAIL:", config.FROM_EMAIL)
+  
   // Try SMTP.com API first (preferred method)
-  if (SMTP_API_KEY) {
+  if (config.SMTP_API_KEY) {
+    console.log("[v0] Using SMTP.com API to send email to:", to)
     try {
       const apiUrl = "https://api.smtp.com/v4/messages"
       const body = {
-        channel: SMTP_CHANNEL,
+        channel: config.SMTP_CHANNEL,
         recipients: {
           to: [{ address: to, name: toName }],
         },
         originator: {
           from: {
-            address: FROM_EMAIL,
-            name: FROM_NAME,
+            address: config.FROM_EMAIL,
+            name: config.FROM_NAME,
           },
         },
         subject,
@@ -138,7 +147,7 @@ async function sendEmailViaSMTP(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${SMTP_API_KEY}`,
+          Authorization: `Bearer ${config.SMTP_API_KEY}`,
         },
         body: JSON.stringify(body),
       })
@@ -149,6 +158,7 @@ async function sendEmailViaSMTP(
         return false
       }
 
+      console.log("[v0] Email sent successfully via SMTP.com API to:", to)
       return true
     } catch (error) {
       console.error("[v0] SMTP.com API error:", error)
@@ -157,7 +167,7 @@ async function sendEmailViaSMTP(
   }
 
   // Fallback to nodemailer
-  if (!SMTP_USER || !SMTP_PASS) {
+  if (!config.SMTP_USER || !config.SMTP_PASS) {
     console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
     return false
   }
@@ -166,17 +176,17 @@ async function sendEmailViaSMTP(
     const nodemailer = await import("nodemailer")
     
     const transporter = nodemailer.default.createTransport({
-      host: SMTP_HOST,
-      port: SMTP_PORT,
+      host: config.SMTP_HOST,
+      port: config.SMTP_PORT,
       secure: false,
       auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
+        user: config.SMTP_USER,
+        pass: config.SMTP_PASS,
       },
     })
 
     await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      from: `"${config.FROM_NAME}" <${config.FROM_EMAIL}>`,
       to: `"${toName}" <${to}>`,
       subject,
       text,
@@ -261,7 +271,75 @@ Registration Code: ${registrationCode}
 Registered at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
 `
 
-  return await sendEmailViaSMTP(ADMIN_EMAIL, "Admin", subject, html, text)
+  const config = getEmailConfig()
+  return await sendEmailViaSMTP(config.ADMIN_EMAIL, "Admin", subject, html, text)
+}
+
+// Send admin notification when someone subscribes to newsletter
+export async function sendSubscriptionNotification(params: {
+  subscriberName: string
+  subscriberEmail: string
+  source: string
+  sourceDetails?: string
+}): Promise<boolean> {
+  const { subscriberName, subscriberEmail, source, sourceDetails } = params
+
+  const subject = `New Subscription: ${subscriberName}`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #1E3A5F; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;">New Subscription</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${subscriberName}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${subscriberEmail}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Source:</strong> ${source}</p>
+                    ${sourceDetails ? `<p style="margin: 0;"><strong>Details:</strong> ${sourceDetails}</p>` : ''}
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #666666; font-size: 14px; margin: 20px 0 0 0;">
+                Subscribed at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  const text = `
+New Subscription
+
+Name: ${subscriberName}
+Email: ${subscriberEmail}
+Source: ${source}
+${sourceDetails ? `Details: ${sourceDetails}` : ''}
+
+Subscribed at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+`
+
+  const config = getEmailConfig()
+  return await sendEmailViaSMTP(config.ADMIN_EMAIL, "Admin", subject, html, text)
 }
 
 function generateWelcomeEmailHTML(firstName: string, confirmationUrl: string, source: string, sourceDetails?: string): string {

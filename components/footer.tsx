@@ -103,7 +103,15 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Stay Updated</h3>
             {subscribed ? (
-              <p className="text-white/70 text-sm">Thank you for subscribing!</p>
+              <div className="bg-white/10 rounded-lg p-4 text-center">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="text-white font-semibold text-sm">You are Now Subscribed!</p>
+                <p className="text-white/70 text-xs mt-1">Check your email to confirm.</p>
+              </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
                 <Input
