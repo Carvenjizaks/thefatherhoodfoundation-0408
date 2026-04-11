@@ -92,13 +92,16 @@ export async function createContact(params: CreateContactParams) {
   return { contact, isNewContact }
 }
 
-// SMTP Configuration for send.smtp.com
+// SMTP Configuration
+const SMTP_API_KEY = process.env.SMTP_API_KEY
+const SMTP_CHANNEL = process.env.SMTP_CHANNEL || "default"
 const SMTP_HOST = "send.smtp.com"
-const SMTP_PORT = 587 // Using STARTTLS
+const SMTP_PORT = 587
 const SMTP_USER = process.env.SMTP_USERNAME
 const SMTP_PASS = process.env.SMTP_PASSWORD
-const FROM_EMAIL = "noreply@thefathersfoundations.org"
-const FROM_NAME = "The Fatherhood Foundation"
+const FROM_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
+const FROM_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carvenjizaks@gmail.com"
 
 async function sendEmailViaSMTP(
   to: string,
@@ -107,19 +110,65 @@ async function sendEmailViaSMTP(
   html: string,
   text: string
 ): Promise<boolean> {
+  // Try SMTP.com API first (preferred method)
+  if (SMTP_API_KEY) {
+    try {
+      const apiUrl = "https://api.smtp.com/v4/messages"
+      const body = {
+        channel: SMTP_CHANNEL,
+        recipients: {
+          to: [{ address: to, name: toName }],
+        },
+        originator: {
+          from: {
+            address: FROM_EMAIL,
+            name: FROM_NAME,
+          },
+        },
+        subject,
+        body: {
+          parts: [
+            { type: "text/plain", content: text },
+            { type: "text/html", content: html },
+          ],
+        },
+      }
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SMTP_API_KEY}`,
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error("[v0] SMTP.com API error:", errorData)
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error("[v0] SMTP.com API error:", error)
+      return false
+    }
+  }
+
+  // Fallback to nodemailer
   if (!SMTP_USER || !SMTP_PASS) {
-    console.error("[v0] SMTP credentials not configured (SMTP_USERNAME, SMTP_PASSWORD)")
+    console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
     return false
   }
 
   try {
-    // Dynamic import of nodemailer
     const nodemailer = await import("nodemailer")
     
     const transporter = nodemailer.default.createTransport({
       host: SMTP_HOST,
       port: SMTP_PORT,
-      secure: false, // Use STARTTLS
+      secure: false,
       auth: {
         user: SMTP_USER,
         pass: SMTP_PASS,
@@ -136,9 +185,83 @@ async function sendEmailViaSMTP(
 
     return true
   } catch (error) {
-    console.error("[v0] Email send error:", error)
+    console.error("[v0] Nodemailer error:", error)
     return false
   }
+}
+
+// Send admin notification when someone registers
+export async function sendAdminNotification(params: {
+  eventName: string
+  registrantName: string
+  registrantEmail: string
+  registrantPhone?: string
+  spouseName?: string
+  paymentAmount: string
+  registrationCode: string
+}): Promise<boolean> {
+  const { eventName, registrantName, registrantEmail, registrantPhone, spouseName, paymentAmount, registrationCode } = params
+
+  const subject = `New Registration: ${eventName} - ${registrantName}`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #8B2B3E; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;">New Registration Alert</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              <h2 style="color: #8B2B3E; margin: 0 0 20px 0; font-size: 20px;">${eventName}</h2>
+              <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${registrantName}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${registrantEmail}</p>
+                    ${registrantPhone ? `<p style="margin: 0 0 10px 0;"><strong>Phone:</strong> ${registrantPhone}</p>` : ''}
+                    ${spouseName ? `<p style="margin: 0 0 10px 0;"><strong>Spouse:</strong> ${spouseName}</p>` : ''}
+                    <p style="margin: 0 0 10px 0;"><strong>Amount:</strong> ${paymentAmount}</p>
+                    <p style="margin: 0;"><strong>Registration Code:</strong> <span style="font-weight: bold; color: #8B2B3E;">${registrationCode}</span></p>
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #666666; font-size: 14px; margin: 20px 0 0 0;">
+                Registered at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  const text = `
+New Registration: ${eventName}
+
+Name: ${registrantName}
+Email: ${registrantEmail}
+${registrantPhone ? `Phone: ${registrantPhone}` : ''}
+${spouseName ? `Spouse: ${spouseName}` : ''}
+Amount: ${paymentAmount}
+Registration Code: ${registrationCode}
+
+Registered at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+`
+
+  return await sendEmailViaSMTP(ADMIN_EMAIL, "Admin", subject, html, text)
 }
 
 function generateWelcomeEmailHTML(firstName: string, confirmationUrl: string, source: string, sourceDetails?: string): string {
