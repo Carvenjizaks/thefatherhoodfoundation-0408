@@ -131,7 +131,7 @@ export function NewsletterPopup() {
               You are Now Subscribed!
             </h2>
             <p className="text-gray-600 mb-4">
-              Welcome to the family, {formData.firstName}! You are now part of The Fatherhood Foundation community.
+              Welcome to The Fatherhood Foundation, {formData.firstName}! You are now part of our community.
             </p>
             <p className="text-sm text-gray-500 mb-4">
               Please check your email to confirm your subscription.
