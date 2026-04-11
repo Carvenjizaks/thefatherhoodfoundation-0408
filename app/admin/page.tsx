@@ -328,9 +328,9 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Stats Overview */}
+          {/* Stats Overview - Categorized Summary */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <Card className="border-[#e8d8c8]">
+            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("table-talk")}>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
@@ -338,12 +338,12 @@ export default function AdminDashboardPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-[#3D1F0F]">{tableTalkRegistrations.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Table Talk</p>
+                    <p className="text-sm text-[#5C3D2E]">Table Talk Registrations</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-[#e8d8c8]">
+            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("events")}>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#D4A574]/20 flex items-center justify-center">
@@ -356,7 +356,7 @@ export default function AdminDashboardPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-[#e8d8c8]">
+            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("contacts")}>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -364,12 +364,12 @@ export default function AdminDashboardPage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-[#3D1F0F]">{contacts.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Contacts</p>
+                    <p className="text-sm text-[#5C3D2E]">Subscriptions</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-[#e8d8c8]">
+            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("donations")}>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
@@ -397,17 +397,17 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Tabs */}
+          {/* Tabs - Categorized Registrations & Subscriptions */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white border border-[#e8d8c8]">
+            <TabsList className="bg-white border border-[#e8d8c8] flex-wrap h-auto p-1">
               <TabsTrigger value="table-talk" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
-                Table Talk ({tableTalkRegistrations.length})
+                Table Talk Registrations ({tableTalkRegistrations.length})
               </TabsTrigger>
               <TabsTrigger value="events" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
-                Events ({eventRegistrations.length})
+                Event Registrations ({eventRegistrations.length})
               </TabsTrigger>
               <TabsTrigger value="contacts" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
-                Contacts ({contacts.length})
+                Subscriptions ({contacts.length})
               </TabsTrigger>
               <TabsTrigger value="donations" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
                 Donations ({donations.length})
@@ -615,69 +615,138 @@ export default function AdminDashboardPage() {
               </div>
             </TabsContent>
 
-            {/* Contacts */}
+            {/* Contacts / Subscriptions - Categorized by Source */}
             <TabsContent value="contacts">
-              <Card className="border-[#e8d8c8]">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-[#3D1F0F]">Contacts</CardTitle>
-                    <CardDescription>Newsletter sign-ups and contact form submissions</CardDescription>
-                  </div>
+              <div className="space-y-6">
+                {/* Subscription Source Overview Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {(() => {
+                    const sourceCounts = filterData(contacts, searchTerm).reduce((acc, contact) => {
+                      const source = contact.source || 'Unknown'
+                      acc[source] = (acc[source] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                    
+                    return Object.entries(sourceCounts).map(([source, count]) => (
+                      <Card key={source} className="border-[#e8d8c8] bg-gradient-to-br from-white to-[#f5f0eb]">
+                        <CardContent className="p-4 text-center">
+                          <p className="text-2xl font-bold text-blue-600">{count}</p>
+                          <p className="text-xs text-[#5C3D2E] font-medium capitalize">{source}</p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  })()}
+                </div>
+
+                {/* Export All Button */}
+                <div className="flex justify-end">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => exportToCSV(filterData(contacts, searchTerm), "contacts")}
+                    onClick={() => exportToCSV(filterData(contacts, searchTerm), "all-contacts-subscriptions")}
                     className="border-[#8B2B3E] text-[#8B2B3E]"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    Export CSV
+                    Export All Contacts CSV
                   </Button>
-                </CardHeader>
-                <CardContent>
-                  {isLoading ? (
-                    <div className="text-center py-12">
-                      <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                      <p className="mt-2 text-[#5C3D2E]">Loading...</p>
-                    </div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Source</TableHead>
-                            <TableHead>Confirmed</TableHead>
-                            <TableHead>Created</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {filterData(contacts, searchTerm).map((contact) => (
-                            <TableRow key={contact.id}>
-                              <TableCell className="font-medium">{contact.first_name} {contact.last_name}</TableCell>
-                              <TableCell>{contact.email}</TableCell>
-                              <TableCell>{contact.cellphone || "-"}</TableCell>
-                              <TableCell><Badge variant="outline">{contact.source || "Unknown"}</Badge></TableCell>
-                              <TableCell>
-                                {contact.email_confirmed ? (
-                                  <CheckCircle className="w-5 h-5 text-green-600" />
-                                ) : (
-                                  <Clock className="w-5 h-5 text-yellow-500" />
-                                )}
-                              </TableCell>
-                              <TableCell className="text-sm text-gray-500">{formatDateTime(contact.created_at)}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                      {filterData(contacts, searchTerm).length === 0 && (
-                        <p className="text-center py-8 text-[#5C3D2E]">No contacts found</p>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                </div>
+
+                {/* Categorized by Source */}
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
+                    <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                  </div>
+                ) : (
+                  (() => {
+                    const filteredContacts = filterData(contacts, searchTerm)
+                    const groupedContacts = filteredContacts.reduce((acc, contact) => {
+                      const source = contact.source || 'Unknown'
+                      if (!acc[source]) acc[source] = []
+                      acc[source].push(contact)
+                      return acc
+                    }, {} as Record<string, typeof contacts>)
+
+                    const sourceOrder = ['Newsletter', 'Contact Form', 'Event Registration', 'Table Talk', 'Popup']
+                    const sortedSourceNames = Object.keys(groupedContacts).sort((a, b) => {
+                      const indexA = sourceOrder.findIndex(s => a.toLowerCase().includes(s.toLowerCase()))
+                      const indexB = sourceOrder.findIndex(s => b.toLowerCase().includes(s.toLowerCase()))
+                      if (indexA === -1 && indexB === -1) return a.localeCompare(b)
+                      if (indexA === -1) return 1
+                      if (indexB === -1) return -1
+                      return indexA - indexB
+                    })
+
+                    if (sortedSourceNames.length === 0) {
+                      return <p className="text-center py-8 text-[#5C3D2E]">No contacts/subscriptions found</p>
+                    }
+
+                    return sortedSourceNames.map((source) => {
+                      const sourceContacts = groupedContacts[source]
+                      const sourceColor = source.toLowerCase().includes('newsletter') ? 'bg-blue-100 text-blue-800'
+                        : source.toLowerCase().includes('contact') ? 'bg-green-100 text-green-800'
+                        : source.toLowerCase().includes('event') ? 'bg-pink-100 text-pink-800'
+                        : source.toLowerCase().includes('table') ? 'bg-amber-100 text-amber-800'
+                        : source.toLowerCase().includes('popup') ? 'bg-purple-100 text-purple-800'
+                        : 'bg-gray-100 text-gray-800'
+
+                      return (
+                        <Card key={source} className="border-[#e8d8c8]">
+                          <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#f5f0eb] to-white">
+                            <div className="flex items-center gap-3">
+                              <Badge className={sourceColor}>{source}</Badge>
+                              <span className="text-sm text-[#5C3D2E]">{sourceContacts.length} subscription{sourceContacts.length !== 1 ? 's' : ''}</span>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, '-')}-contacts`)}
+                              className="border-[#8B2B3E] text-[#8B2B3E]"
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Export
+                            </Button>
+                          </CardHeader>
+                          <CardContent className="pt-4">
+                            <div className="overflow-x-auto">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead>Phone</TableHead>
+                                    <TableHead>Details</TableHead>
+                                    <TableHead>Confirmed</TableHead>
+                                    <TableHead>Subscribed</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {sourceContacts.map((contact) => (
+                                    <TableRow key={contact.id}>
+                                      <TableCell className="font-medium">{contact.first_name} {contact.last_name}</TableCell>
+                                      <TableCell>{contact.email}</TableCell>
+                                      <TableCell>{contact.cellphone || "-"}</TableCell>
+                                      <TableCell className="text-xs text-gray-500 max-w-[150px] truncate">{contact.source_details || "-"}</TableCell>
+                                      <TableCell>
+                                        {contact.email_confirmed ? (
+                                          <CheckCircle className="w-5 h-5 text-green-600" />
+                                        ) : (
+                                          <Clock className="w-5 h-5 text-yellow-500" />
+                                        )}
+                                      </TableCell>
+                                      <TableCell className="text-sm text-gray-500">{formatDateTime(contact.created_at)}</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )
+                    })
+                  })()
+                )}
+              </div>
             </TabsContent>
 
             {/* Donations */}
