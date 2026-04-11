@@ -52,19 +52,14 @@ const carouselImages = [
 ]
 
 const schedule = {
-  thursday: [
-    { time: "18:30 - 19:00", title: "Registration & Welcome", icon: Coffee },
-    { time: "19:00 - 21:00", title: "Session 1", icon: BookOpen },
-  ],
-  friday: [
-    { time: "18:30 - 19:00", title: "Arrival & Fellowship", icon: Coffee },
-    { time: "19:00 - 21:00", title: "Session 2", icon: MessageCircle },
-  ],
   saturday: [
-    { time: "08:30 - 09:00", title: "Registration & Breakfast", icon: Coffee },
-    { time: "09:00 - 10:30", title: "Session 3", icon: BookOpen },
-    { time: "10:30 - 11:00", title: "Tea Break", icon: Utensils },
-    { time: "11:00 - 13:00", title: "Session 4", icon: Heart },
+    { time: "08:00 - 08:30", title: "Registration & Breakfast", icon: Coffee },
+    { time: "08:30 - 09:30", title: "Session 1", icon: BookOpen },
+    { time: "09:30 - 10:00", title: "Tea Break", icon: Utensils },
+    { time: "10:00 - 11:00", title: "Session 2", icon: MessageCircle },
+    { time: "11:00 - 11:30", title: "Tea Break", icon: Utensils },
+    { time: "11:30 - 12:30", title: "Session 3", icon: BookOpen },
+    { time: "12:30 - 13:00", title: "Session 4", icon: Heart },
   ],
 }
 
@@ -142,7 +137,7 @@ export default function MyGreatMarriageEventPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [activeDay, setActiveDay] = useState<"thursday" | "friday" | "saturday">("thursday")
+  const [activeDay, setActiveDay] = useState<"saturday">("saturday")
   const [selectedTicket, setSelectedTicket] = useState("early-bird")
 
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -350,21 +345,11 @@ export default function MyGreatMarriageEventPage() {
               Schedule
             </h2>
 
-            {/* Day Tabs */}
-            <div className="flex gap-2 mb-8 border-b border-[#8B2B3E]/20">
-              {(["thursday", "friday", "saturday"] as const).map((day) => (
-                <button
-                  key={day}
-                  onClick={() => setActiveDay(day)}
-                  className={`px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all ${
-                    activeDay === day 
-                      ? "text-[#3D2314] border-b-2 border-[#8B2B3E]" 
-                      : "text-[#3D2314]/50 hover:text-[#3D2314]/80"
-                  }`}
-                >
-                  {day === "thursday" ? "Day 1 - Thu" : day === "friday" ? "Day 2 - Fri" : "Day 3 - Sat"}
-                </button>
-              ))}
+            {/* Day Header */}
+            <div className="mb-8 border-b border-[#8B2B3E]/20 pb-3">
+              <span className="text-sm font-medium uppercase tracking-wider text-[#3D2314]">
+                Saturday - Closes at 1pm
+              </span>
             </div>
 
             {/* Schedule Items */}
