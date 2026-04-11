@@ -92,16 +92,20 @@ export async function createContact(params: CreateContactParams) {
   return { contact, isNewContact }
 }
 
-// SMTP Configuration
-const SMTP_API_KEY = process.env.SMTP_API_KEY
-const SMTP_CHANNEL = process.env.SMTP_CHANNEL || "default"
-const SMTP_HOST = "send.smtp.com"
-const SMTP_PORT = 587
-const SMTP_USER = process.env.SMTP_USERNAME
-const SMTP_PASS = process.env.SMTP_PASSWORD
-const FROM_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
-const FROM_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carvenjizaks@gmail.com"
+// SMTP Configuration - read at runtime to ensure env vars are loaded
+function getEmailConfig() {
+  return {
+    SMTP_API_KEY: process.env.SMTP_API_KEY,
+    SMTP_CHANNEL: process.env.SMTP_CHANNEL || "default",
+    SMTP_HOST: "send.smtp.com",
+    SMTP_PORT: 587,
+    SMTP_USER: process.env.SMTP_USERNAME,
+    SMTP_PASS: process.env.SMTP_PASSWORD,
+    FROM_EMAIL: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
+    FROM_NAME: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL || "carvenjizaks@gmail.com",
+  }
+}
 
 async function sendEmailViaSMTP(
   to: string,
@@ -110,19 +114,24 @@ async function sendEmailViaSMTP(
   html: string,
   text: string
 ): Promise<boolean> {
+  const config = getEmailConfig()
+  
+  console.log("[v0] Email config check - SMTP_API_KEY exists:", !!config.SMTP_API_KEY, "FROM_EMAIL:", config.FROM_EMAIL)
+  
   // Try SMTP.com API first (preferred method)
-  if (SMTP_API_KEY) {
+  if (config.SMTP_API_KEY) {
+    console.log("[v0] Using SMTP.com API to send email to:", to)
     try {
       const apiUrl = "https://api.smtp.com/v4/messages"
       const body = {
-        channel: SMTP_CHANNEL,
+        channel: config.SMTP_CHANNEL,
         recipients: {
           to: [{ address: to, name: toName }],
         },
         originator: {
           from: {
-            address: FROM_EMAIL,
-            name: FROM_NAME,
+            address: config.FROM_EMAIL,
+            name: config.FROM_NAME,
           },
         },
         subject,
@@ -138,7 +147,7 @@ async function sendEmailViaSMTP(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${SMTP_API_KEY}`,
+          Authorization: `Bearer ${config.SMTP_API_KEY}`,
         },
         body: JSON.stringify(body),
       })
@@ -149,6 +158,7 @@ async function sendEmailViaSMTP(
         return false
       }
 
+      console.log("[v0] Email sent successfully via SMTP.com API to:", to)
       return true
     } catch (error) {
       console.error("[v0] SMTP.com API error:", error)
@@ -157,7 +167,7 @@ async function sendEmailViaSMTP(
   }
 
   // Fallback to nodemailer
-  if (!SMTP_USER || !SMTP_PASS) {
+  if (!config.SMTP_USER || !config.SMTP_PASS) {
     console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
     return false
   }
@@ -166,17 +176,17 @@ async function sendEmailViaSMTP(
     const nodemailer = await import("nodemailer")
     
     const transporter = nodemailer.default.createTransport({
-      host: SMTP_HOST,
-      port: SMTP_PORT,
+      host: config.SMTP_HOST,
+      port: config.SMTP_PORT,
       secure: false,
       auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
+        user: config.SMTP_USER,
+        pass: config.SMTP_PASS,
       },
     })
 
     await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      from: `"${config.FROM_NAME}" <${config.FROM_EMAIL}>`,
       to: `"${toName}" <${to}>`,
       subject,
       text,
@@ -261,7 +271,8 @@ Registration Code: ${registrationCode}
 Registered at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
 `
 
-  return await sendEmailViaSMTP(ADMIN_EMAIL, "Admin", subject, html, text)
+  const config = getEmailConfig()
+  return await sendEmailViaSMTP(config.ADMIN_EMAIL, "Admin", subject, html, text)
 }
 
 function generateWelcomeEmailHTML(firstName: string, confirmationUrl: string, source: string, sourceDetails?: string): string {
