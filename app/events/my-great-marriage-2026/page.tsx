@@ -724,13 +724,13 @@ export default function MyGreatMarriageEventPage() {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-[#1E3A5F]/70 text-sm">Selected Package</span>
                   <span className="text-[#1E3A5F] font-medium">
-                    {ticketOptions.find(t => t.id === selectedTicket)?.title}
+                    {getTicketOptions().find(t => t.id === selectedTicket)?.title}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#1E3A5F]/70 text-sm">Total (per person)</span>
+                  <span className="text-[#1E3A5F]/70 text-sm">Total (per couple)</span>
                   <span className="text-[#D4A574] font-bold text-xl">
-                    {ticketOptions.find(t => t.id === selectedTicket)?.priceDisplay}
+                    {getTicketOptions().find(t => t.id === selectedTicket)?.priceDisplay}
                   </span>
                 </div>
               </div>
