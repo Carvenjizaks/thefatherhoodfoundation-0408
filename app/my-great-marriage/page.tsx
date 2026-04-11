@@ -140,9 +140,9 @@ export default function MyGreatMarriagePage() {
                       className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
                       asChild
                     >
-                      <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                      <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                         Register Now <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </Button>
                     <Button
                       size="lg"
@@ -230,9 +230,9 @@ export default function MyGreatMarriagePage() {
                     size="lg"
                     className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white rounded-full px-8 shadow-lg hover:shadow-xl"
                   >
-                    <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                    <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                       Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    </a>
                   </Button>
                 </FadeIn>
               </div>
@@ -350,9 +350,9 @@ export default function MyGreatMarriagePage() {
                 size="lg"
                 className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
               >
-                <Link href="/events/my-great-marriage-2026?register=true" className="flex items-center gap-2">
+                <a href="https://snaplinks.net/mygreatmarriage2026-15227" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                   Join MyGreatMarriage <ArrowRight className="w-4 h-4" />
-                </Link>
+                </a>
               </Button>
               <Button
                 asChild
