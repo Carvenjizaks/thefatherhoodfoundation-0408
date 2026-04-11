@@ -55,7 +55,10 @@ export function OurPillarsDropdown() {
             <Link
               key={pillar.href}
               href={pillar.href}
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsOpen(false)
+              }}
               className={`block px-4 py-3 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors ${
                 index !== pillars.length - 1 ? "border-b border-gray-100" : ""
               } ${pillar.isSerif ? "font-serif italic" : ""}`}
