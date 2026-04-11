@@ -1,25 +1,14 @@
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-    
-    // Check if user is authenticated
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
+    const supabase = createAdminClient()
 
-    // Fetch all registrations
+    // Fetch all Table Talk registrations
     const { data, error } = await supabase
       .from("table_talk_registrations")
       .select("*")
-      .order("session_date", { ascending: true })
       .order("created_at", { ascending: false })
 
     if (error) {
