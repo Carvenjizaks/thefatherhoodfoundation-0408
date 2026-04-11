@@ -54,17 +54,17 @@ const carouselImages = [
 const schedule = {
   thursday: [
     { time: "18:30 - 19:00", title: "Registration & Welcome", icon: Coffee },
-    { time: "19:00 - 21:00", title: "Opening Session: Building Your Foundation", icon: BookOpen },
+    { time: "19:00 - 21:00", title: "Session 1", icon: BookOpen },
   ],
   friday: [
     { time: "18:30 - 19:00", title: "Arrival & Fellowship", icon: Coffee },
-    { time: "19:00 - 21:00", title: "Session: Communication That Connects", icon: MessageCircle },
+    { time: "19:00 - 21:00", title: "Session 2", icon: MessageCircle },
   ],
   saturday: [
     { time: "08:30 - 09:00", title: "Registration & Breakfast", icon: Coffee },
-    { time: "09:00 - 10:30", title: "Session: Conflict Resolution", icon: BookOpen },
+    { time: "09:00 - 10:30", title: "Session 3", icon: BookOpen },
     { time: "10:30 - 11:00", title: "Tea Break", icon: Utensils },
-    { time: "11:00 - 13:00", title: "Closing Session: Renewed Commitment", icon: Heart },
+    { time: "11:00 - 13:00", title: "Session 4", icon: Heart },
   ],
 }
 
