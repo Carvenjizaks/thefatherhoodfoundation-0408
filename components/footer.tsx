@@ -9,13 +9,19 @@ import { useState } from "react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [isSubscribing, setIsSubscribing] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
+    if (!email || !name) return
+    
+    // Split name into first and last name
+    const nameParts = name.trim().split(" ")
+    const firstName = nameParts[0] || ""
+    const lastName = nameParts.slice(1).join(" ") || ""
     
     setIsSubscribing(true)
     try {
@@ -23,8 +29,8 @@ export function Footer() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: "Newsletter",
-          lastName: "Subscriber",
+          firstName,
+          lastName,
           email,
           source: "newsletter",
           sourceDetails: "Footer Newsletter Signup",
@@ -32,6 +38,7 @@ export function Footer() {
       })
       if (response.ok) {
         setSubscribed(true)
+        setName("")
         setEmail("")
       }
     } catch (error) {
@@ -114,6 +121,14 @@ export function Footer() {
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+                <Input
+                  type="text"
+                  placeholder="Your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-sm"
+                  required
+                />
                 <Input
                   type="email"
                   placeholder="Your email"
