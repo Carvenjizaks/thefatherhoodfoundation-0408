@@ -1,8 +1,11 @@
 import { createAdminClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+import { verifyAdminRequest, unauthorizedResponse } from "@/lib/admin-auth"
 
 export async function GET(request: Request) {
   try {
+    const isAdmin = await verifyAdminRequest()
+    if (!isAdmin) return unauthorizedResponse()
     const { searchParams } = new URL(request.url)
     const eventSlug = searchParams.get("event")
 

@@ -89,10 +89,6 @@ interface Donation {
   created_at: string
 }
 
-// Simple hardcoded admin credentials - FOR YOUR EYES ONLY
-const ADMIN_USERNAME = "carvenjizaks@gmail.com"
-const ADMIN_PASSWORD = "!carvenjizaks*Ci26"
-
 export default function AdminDashboardPage() {
   const [tableTalkRegistrations, setTableTalkRegistrations] = useState<TableTalkRegistration[]>([])
   const [eventRegistrations, setEventRegistrations] = useState<EventRegistration[]>([])
@@ -120,16 +116,26 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginError("")
     
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      sessionStorage.setItem("ff_admin_auth", "authenticated")
-      setIsAuthenticated(true)
-      fetchAllData()
-    } else {
-      setLoginError("Invalid username or password. Please try again.")
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+      
+      if (response.ok) {
+        sessionStorage.setItem("ff_admin_auth", "authenticated")
+        setIsAuthenticated(true)
+        fetchAllData()
+      } else {
+        setLoginError("Invalid username or password. Please try again.")
+      }
+    } catch {
+      setLoginError("Login failed. Please try again.")
     }
   }
 
@@ -217,6 +223,26 @@ export default function AdminDashboardPage() {
         String(val).toLowerCase().includes(term.toLowerCase())
       )
     )
+  }
+
+  const handleTogglePayment = async (id: string, currentStatus: string, table: string) => {
+    const newStatus = currentStatus === "paid" ? "pending" : "paid"
+    try {
+      const response = await fetch("/api/admin/update-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, table, field: "payment_status", value: newStatus }),
+      })
+      if (response.ok) {
+        if (table === "event_registrations") {
+          setEventRegistrations(prev => prev.map(r => r.id === id ? { ...r, payment_status: newStatus } : r))
+        } else if (table === "table_talk_registrations") {
+          setTableTalkRegistrations(prev => prev.map(r => r.id === id ? { ...r, payment_status: newStatus } : r))
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update status:", error)
+    }
   }
 
   const getStatusBadge = (status: string) => {
@@ -455,12 +481,26 @@ export default function AdminDashboardPage() {
                               <TableCell>{formatDate(reg.session_date)}</TableCell>
                               <TableCell>{reg.location}</TableCell>
                               <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
-                              <TableCell>{getStatusBadge(reg.payment_status)}</TableCell>
+                              <TableCell>
+                                <button
+                                  onClick={() => handleTogglePayment(reg.id, reg.payment_status, "table_talk_registrations")}
+                                  className="cursor-pointer"
+                                  title="Click to toggle payment status"
+                                >
+                                  {getStatusBadge(reg.payment_status)}
+                                </button>
+                              </TableCell>
                               <TableCell>
                                 {reg.checked_in ? (
-                                  <CheckCircle className="w-5 h-5 text-green-600" />
+                                  <div className="flex items-center gap-1">
+                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                    <span className="text-xs text-green-700">Yes</span>
+                                  </div>
                                 ) : (
-                                  <XCircle className="w-5 h-5 text-gray-400" />
+                                  <div className="flex items-center gap-1">
+                                    <XCircle className="w-5 h-5 text-gray-400" />
+                                    <span className="text-xs text-gray-500">No</span>
+                                  </div>
                                 )}
                               </TableCell>
                               <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
@@ -576,9 +616,9 @@ export default function AdminDashboardPage() {
                                     <TableHead>Email</TableHead>
                                     <TableHead>Phone</TableHead>
                                     <TableHead>Spouse</TableHead>
-                                    <TableHead>Date</TableHead>
                                     <TableHead>Code</TableHead>
-                                    <TableHead>Status</TableHead>
+                                    <TableHead>Payment</TableHead>
+                                    <TableHead>Checked In</TableHead>
                                     <TableHead>Registered</TableHead>
                                   </TableRow>
                                 </TableHeader>
@@ -589,9 +629,29 @@ export default function AdminDashboardPage() {
                                       <TableCell>{reg.email}</TableCell>
                                       <TableCell>{reg.phone}</TableCell>
                                       <TableCell>{reg.spouse_name || "-"}</TableCell>
-                                      <TableCell>{reg.session_date ? formatDate(reg.session_date) : "-"}</TableCell>
                                       <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
-                                      <TableCell>{getStatusBadge(reg.payment_status)}</TableCell>
+                                      <TableCell>
+                                        <button
+                                          onClick={() => handleTogglePayment(reg.id, reg.payment_status, "event_registrations")}
+                                          className="cursor-pointer"
+                                          title="Click to toggle payment status"
+                                        >
+                                          {getStatusBadge(reg.payment_status)}
+                                        </button>
+                                      </TableCell>
+                                      <TableCell>
+                                        {reg.checked_in ? (
+                                          <div className="flex items-center gap-1">
+                                            <CheckCircle className="w-5 h-5 text-green-600" />
+                                            <span className="text-xs text-green-700">Yes</span>
+                                          </div>
+                                        ) : (
+                                          <div className="flex items-center gap-1">
+                                            <XCircle className="w-5 h-5 text-gray-400" />
+                                            <span className="text-xs text-gray-500">No</span>
+                                          </div>
+                                        )}
+                                      </TableCell>
                                       <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
                                     </TableRow>
                                   ))}

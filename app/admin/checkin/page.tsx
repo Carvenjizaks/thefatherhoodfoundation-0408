@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 
 export const dynamic = "force-dynamic"
 import { Header } from "@/components/header"
@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createClient } from "@/lib/supabase-client"
+import { Badge } from "@/components/ui/badge"
 import { Search, CheckCircle, XCircle, UserCheck, AlertCircle, Loader2 } from "lucide-react"
 
 interface VerificationResult {
@@ -19,14 +19,18 @@ interface VerificationResult {
   success?: boolean
   message?: string
   error?: string
+  eventType?: string
   registration?: {
     id: string
     firstName: string
     lastName: string
     email?: string
     sessionDate: string
+    eventName?: string
     paymentStatus?: string
+    paymentAmount?: number
     checkedIn?: boolean
+    spouseName?: string
   }
 }
 
@@ -40,20 +44,25 @@ export default function AdminCheckinPage() {
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
 
-  const supabase = useMemo(() => createClient(), [])
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginError("")
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      })
 
-    if (error) {
-      setLoginError("Invalid credentials")
-      return
+      if (response.ok) {
+        setIsAuthenticated(true)
+      } else {
+        setLoginError("Invalid credentials")
+      }
+    } catch {
+      setLoginError("Login failed. Please try again.")
     }
-
-    setIsAuthenticated(true)
   }
 
   const handleVerify = async () => {
@@ -205,9 +214,9 @@ export default function AdminCheckinPage() {
                     <p className="text-green-700">
                       {result.registration?.firstName} {result.registration?.lastName}
                     </p>
-                    <p className="text-sm text-green-600 mt-2">
-                      Session: {result.registration?.sessionDate}
-                    </p>
+                    {result.registration?.eventName && (
+                      <Badge className="bg-green-200 text-green-900 mt-2">{result.registration.eventName}</Badge>
+                    )}
                   </div>
                 ) : result.alreadyCheckedIn ? (
                   <div className="text-center">
@@ -216,6 +225,9 @@ export default function AdminCheckinPage() {
                     <p className="text-yellow-700">
                       {result.registration?.firstName} {result.registration?.lastName}
                     </p>
+                    {result.registration?.eventName && (
+                      <Badge className="bg-yellow-200 text-yellow-900 mt-2">{result.registration.eventName}</Badge>
+                    )}
                     <p className="text-sm text-yellow-600 mt-2">
                       Checked in at: {new Date(result.checkedInAt!).toLocaleString()}
                     </p>
@@ -224,20 +236,30 @@ export default function AdminCheckinPage() {
                   <div>
                     <div className="flex items-start gap-4 mb-6">
                       <UserCheck className="w-10 h-10 text-blue-600 flex-shrink-0" />
-                      <div>
+                      <div className="flex-1">
                         <h3 className="text-xl font-bold text-blue-800">
                           {result.registration.firstName} {result.registration.lastName}
                         </h3>
+                        {result.registration.eventName && (
+                          <Badge className="bg-blue-200 text-blue-900 mt-1 mb-2">{result.registration.eventName}</Badge>
+                        )}
                         <p className="text-blue-700">{result.registration.email}</p>
-                        <p className="text-sm text-blue-600 mt-1">
-                          Session: {result.registration.sessionDate}
-                        </p>
-                        <p className="text-sm text-blue-600">
-                          Payment: <span className={
-                            result.registration.paymentStatus === "paid" ? "text-green-600 font-semibold" : "text-orange-600"
-                          }>
-                            {result.registration.paymentStatus || "pending"}
+                        {result.registration.spouseName && (
+                          <p className="text-sm text-blue-600 mt-1">Spouse: {result.registration.spouseName}</p>
+                        )}
+                        {result.registration.sessionDate && (
+                          <p className="text-sm text-blue-600 mt-1">Session: {result.registration.sessionDate}</p>
+                        )}
+                        <p className="text-sm mt-2">
+                          Payment:{" "}
+                          <span className={`font-semibold ${
+                            result.registration.paymentStatus === "paid" ? "text-green-600" : "text-orange-600"
+                          }`}>
+                            {result.registration.paymentStatus === "paid" ? "PAID" : "PENDING"}
                           </span>
+                          {result.registration.paymentAmount && (
+                            <span className="text-blue-600 ml-1">(NAD {result.registration.paymentAmount})</span>
+                          )}
                         </p>
                       </div>
                     </div>
