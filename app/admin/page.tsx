@@ -89,10 +89,6 @@ interface Donation {
   created_at: string
 }
 
-// Simple hardcoded admin credentials - FOR YOUR EYES ONLY
-const ADMIN_USERNAME = "carvenjizaks@gmail.com"
-const ADMIN_PASSWORD = "!carvenjizaks*Ci26"
-
 export default function AdminDashboardPage() {
   const [tableTalkRegistrations, setTableTalkRegistrations] = useState<TableTalkRegistration[]>([])
   const [eventRegistrations, setEventRegistrations] = useState<EventRegistration[]>([])
@@ -120,16 +116,26 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginError("")
     
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      sessionStorage.setItem("ff_admin_auth", "authenticated")
-      setIsAuthenticated(true)
-      fetchAllData()
-    } else {
-      setLoginError("Invalid username or password. Please try again.")
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+      
+      if (response.ok) {
+        sessionStorage.setItem("ff_admin_auth", "authenticated")
+        setIsAuthenticated(true)
+        fetchAllData()
+      } else {
+        setLoginError("Invalid username or password. Please try again.")
+      }
+    } catch {
+      setLoginError("Login failed. Please try again.")
     }
   }
 

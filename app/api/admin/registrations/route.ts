@@ -1,8 +1,12 @@
 import { createAdminClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+import { verifyAdminRequest, unauthorizedResponse } from "@/lib/admin-auth"
 
 export async function GET() {
   try {
+    const isAdmin = await verifyAdminRequest()
+    if (!isAdmin) return unauthorizedResponse()
+
     const supabase = createAdminClient()
 
     // Fetch all Table Talk registrations
