@@ -128,10 +128,10 @@ export function NewsletterPopup() {
               />
             </div>
             <h2 className="text-2xl font-bold text-[#8B2B3E] mb-3">
-              Welcome to the Family!
+              You are Now Subscribed!
             </h2>
             <p className="text-gray-600 mb-4">
-              Thank you for subscribing, {formData.firstName}! You are now part of The Fatherhood Foundation community.
+              Welcome to the family, {formData.firstName}! You are now part of The Fatherhood Foundation community.
             </p>
             <p className="text-sm text-gray-500 mb-4">
               Please check your email to confirm your subscription.

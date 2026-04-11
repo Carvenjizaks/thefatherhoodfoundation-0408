@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createContact, sendWelcomeEmail, type ContactSource } from "@/lib/email-service"
+import { createContact, sendWelcomeEmail, sendSubscriptionNotification, type ContactSource } from "@/lib/email-service"
 
 
 export async function POST(request: Request) {
@@ -49,6 +49,14 @@ export async function POST(request: Request) {
     // Send welcome email for new contacts
     if (isNewContact && contact) {
       await sendWelcomeEmail(contact.id)
+      
+      // Send admin notification for new subscriptions
+      await sendSubscriptionNotification({
+        subscriberName: `${firstName} ${lastName}`,
+        subscriberEmail: email,
+        source: source,
+        sourceDetails: sourceDetails,
+      })
     }
 
     return NextResponse.json({

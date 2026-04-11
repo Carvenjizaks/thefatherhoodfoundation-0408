@@ -275,6 +275,73 @@ Registered at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannes
   return await sendEmailViaSMTP(config.ADMIN_EMAIL, "Admin", subject, html, text)
 }
 
+// Send admin notification when someone subscribes to newsletter
+export async function sendSubscriptionNotification(params: {
+  subscriberName: string
+  subscriberEmail: string
+  source: string
+  sourceDetails?: string
+}): Promise<boolean> {
+  const { subscriberName, subscriberEmail, source, sourceDetails } = params
+
+  const subject = `New Subscription: ${subscriberName}`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #1E3A5F; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;">New Subscription</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${subscriberName}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${subscriberEmail}</p>
+                    <p style="margin: 0 0 10px 0;"><strong>Source:</strong> ${source}</p>
+                    ${sourceDetails ? `<p style="margin: 0;"><strong>Details:</strong> ${sourceDetails}</p>` : ''}
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #666666; font-size: 14px; margin: 20px 0 0 0;">
+                Subscribed at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  const text = `
+New Subscription
+
+Name: ${subscriberName}
+Email: ${subscriberEmail}
+Source: ${source}
+${sourceDetails ? `Details: ${sourceDetails}` : ''}
+
+Subscribed at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
+`
+
+  const config = getEmailConfig()
+  return await sendEmailViaSMTP(config.ADMIN_EMAIL, "Admin", subject, html, text)
+}
+
 function generateWelcomeEmailHTML(firstName: string, confirmationUrl: string, source: string, sourceDetails?: string): string {
   const isEventRegistration = source === "event_registration"
   const eventName = sourceDetails || "our event"
