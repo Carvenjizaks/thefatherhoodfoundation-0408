@@ -45,6 +45,11 @@ export function QuotesTicker() {
         .animate-marquee:hover {
           animation-play-state: paused;
         }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-marquee {
+            animation: none;
+          }
+        }
       `}</style>
     </div>
   )

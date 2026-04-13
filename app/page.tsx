@@ -136,41 +136,7 @@ export default function HomePage() {
               </p>
             </FadeIn>
             
-            {/* Impact Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-              <FadeIn delay={0.1} direction="up">
-                <div className="text-center">
-                  <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                    <CountUp end={20} suffix="k+" duration={2.5} />
-                  </p>
-                  <p className="text-sm text-black/70 mt-2 font-medium">Men Mentored</p>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.2} direction="up">
-                <div className="text-center">
-                  <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                    <CountUp end={50} suffix="+" duration={2.5} />
-                  </p>
-                  <p className="text-sm text-black/70 mt-2 font-medium">Events Hosted</p>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.3} direction="up">
-                <div className="text-center">
-                  <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                    <CountUp end={25} suffix="+" duration={2.5} />
-                  </p>
-                  <p className="text-sm text-black/70 mt-2 font-medium">Years of Impact</p>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.4} direction="up">
-                <div className="text-center">
-                  <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                    <CountUp end={1000} suffix="+" duration={2.5} />
-                  </p>
-                  <p className="text-sm text-black/70 mt-2 font-medium">Families Strengthened</p>
-                </div>
-              </FadeIn>
-            </div>
+
           </div>
         </section>
 
@@ -240,7 +206,7 @@ export default function HomePage() {
               <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-all duration-500 group-hover:scale-110">
                       <Image
                         src="/pillars/mentoring-men.jpg"
                         alt="Diverse men in mentoring conversation"

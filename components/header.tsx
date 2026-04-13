@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { OurPillarsDropdown } from "./our-pillars-dropdown"
@@ -10,6 +11,7 @@ import { OurPillarsDropdown } from "./our-pillars-dropdown"
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,15 +64,27 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative text-sm transition-colors py-1 group ${
+                    isActive 
+                      ? "text-[#8B2B3E] font-medium" 
+                      : "text-foreground/80 hover:text-foreground"
+                  }`}
+                >
+                  {link.label}
+                  <span 
+                    className={`absolute bottom-0 left-0 h-0.5 bg-[#8B2B3E] transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </Link>
+              )
+            })}
             <OurPillarsDropdown />
           </div>
 
@@ -87,35 +101,51 @@ export function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-border bg-background/95 backdrop-blur-xl">
-            <div className="py-4 space-y-1">
-              {navLinks.map((link) => (
+        <div 
+          className={`lg:hidden border-t border-border bg-background/95 backdrop-blur-xl overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="py-4 space-y-1">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href
+              return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-4 py-3 text-base text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  className={`block px-4 py-3 text-base transition-colors ${
+                    isActive 
+                      ? "text-[#8B2B3E] font-medium bg-[#8B2B3E]/5 border-l-4 border-[#8B2B3E]" 
+                      : "text-foreground/80 hover:text-foreground hover:bg-muted"
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
-              ))}
-              <div className="border-t border-border pt-2 mt-2">
-                <div className="px-4 py-2 text-sm font-semibold text-foreground/60">Our Pillars</div>
-                {mobilePillarLinks.map((link) => (
+              )
+            })}
+            <div className="border-t border-border pt-2 mt-2">
+              <div className="px-4 py-2 text-sm font-semibold text-foreground/60">Our Pillars</div>
+              {mobilePillarLinks.map((link) => {
+                const isActive = pathname === link.href
+                return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block px-4 py-3 text-base text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className={`block px-4 py-3 text-base transition-colors ${
+                      isActive 
+                        ? "text-[#8B2B3E] font-medium bg-[#8B2B3E]/5 border-l-4 border-[#8B2B3E]" 
+                        : "text-foreground/80 hover:text-foreground hover:bg-muted"
+                    }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
                   </Link>
-                ))}
-              </div>
+                )
+              })}
             </div>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   )
