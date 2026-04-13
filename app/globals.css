@@ -565,3 +565,41 @@ html {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ===== ACCESSIBILITY: REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-marquee,
+  .animate-faces-scroll,
+  .animate-scroll,
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-medium,
+  .animate-float-fast,
+  .animate-pulse-slow,
+  .animate-streak-1,
+  .animate-streak-2,
+  .animate-streak-3,
+  .animate-twinkle,
+  .animate-twinkle-delay-1,
+  .animate-twinkle-delay-2,
+  .animate-twinkle-delay-3,
+  .animate-gradient-shift,
+  .animate-orb-float-1,
+  .animate-orb-float-2,
+  .animate-ray-1,
+  .animate-ray-2,
+  .animate-ray-3,
+  .animate-ray-4,
+  .animate-ambient-particle {
+    animation: none !important;
+  }
+}

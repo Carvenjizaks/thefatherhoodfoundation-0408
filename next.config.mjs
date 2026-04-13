@@ -1,14 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Enable image optimization for better performance
   images: {
-    unoptimized: true,
-  },
-  // Force cache clear
-  generateBuildId: async () => {
-    return Date.now().toString()
+    formats: ['image/avif', 'image/webp'],
   },
 }
 

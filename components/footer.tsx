@@ -84,11 +84,11 @@ export function Footer() {
               Empowering men to become better fathers, husbands, and leaders.
             </p>
             <div className="flex flex-col gap-2 text-sm">
-              <a href="mailto:admin@fathersfound.org" className="text-white/70 hover:text-white flex items-center gap-2">
-                <Mail className="w-4 h-4" /> admin@fathersfound.org
+              <a href="mailto:admin@fathersfound.org" className="text-white/70 hover:text-white flex items-center gap-2 transition-all duration-200 hover:translate-x-1 group">
+                <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" /> admin@fathersfound.org
               </a>
-              <a href="https://www.facebook.com/intensemennamibia/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white flex items-center gap-2">
-                <Facebook className="w-4 h-4" /> Facebook
+              <a href="https://www.facebook.com/intensemennamibia/" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white flex items-center gap-2 transition-all duration-200 hover:translate-x-1 group">
+                <Facebook className="w-4 h-4 group-hover:scale-110 transition-transform" /> Facebook
               </a>
               <span className="text-white/70 flex items-center gap-2">
                 <MapPin className="w-4 h-4" /> Windhoek, Namibia
@@ -104,7 +104,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white/70 hover:text-white transition-colors"
+                  className="text-white/70 hover:text-white transition-all duration-200 hover:translate-x-1"
                 >
                   {link.label}
                 </Link>
@@ -132,7 +132,7 @@ export function Footer() {
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-sm"
+                  className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-sm focus:bg-white/15 focus:border-[#D4A574] focus:ring-1 focus:ring-[#D4A574] transition-all"
                   required
                 />
                 <Input
@@ -140,13 +140,13 @@ export function Footer() {
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-sm"
+                  className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-sm focus:bg-white/15 focus:border-[#D4A574] focus:ring-1 focus:ring-[#D4A574] transition-all"
                   required
                 />
                 <Button 
                   type="submit" 
                   disabled={isSubscribing}
-                  className="h-10 bg-white text-[#8B2B3E] hover:bg-white/90 font-medium text-sm"
+                  className="h-10 bg-white text-[#8B2B3E] hover:bg-[#D4A574] hover:text-white font-medium text-sm transition-all duration-300 hover:scale-[1.02]"
                 >
                   {isSubscribing ? "Subscribing..." : "Subscribe"}
                 </Button>
