@@ -55,9 +55,16 @@ export async function createClient() {
  * Uses the service role key - only use this in secure server contexts.
  */
 export function createAdminClient() {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!serviceRoleKey) {
+    console.error("[v0] SUPABASE_SERVICE_ROLE_KEY is not set - admin operations will fail")
+    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable")
+  }
+
   return createSupabaseClient(
     getSupabaseUrl(),
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    serviceRoleKey,
     {
       auth: {
         autoRefreshToken: false,
