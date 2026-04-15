@@ -51,7 +51,7 @@ const eventJsonLd = {
     {
       "@type": "Offer",
       name: "Early Bird Ticket",
-      price: "400",
+      price: "450",
       priceCurrency: "NAD",
       availability: "https://schema.org/InStock",
       validFrom: "2026-01-01",
@@ -60,7 +60,7 @@ const eventJsonLd = {
     {
       "@type": "Offer",
       name: "Standard Ticket",
-      price: "500",
+      price: "550",
       priceCurrency: "NAD",
       availability: "https://schema.org/InStock",
       url: "https://thefatherhoodfoundation.org/events/my-great-marriage-2026",
