@@ -60,7 +60,7 @@ const eventJsonLd = {
     {
       "@type": "Offer",
       name: "Standard Ticket",
-      price: "550",
+      price: "500",
       priceCurrency: "NAD",
       availability: "https://schema.org/InStock",
       url: "https://thefatherhoodfoundation.org/events/my-great-marriage-2026",
