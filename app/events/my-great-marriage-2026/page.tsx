@@ -102,8 +102,8 @@ const getTicketOptions = () => {
   options.push({
     id: "standard",
     title: "Conference Package",
-    price: 550,
-    priceDisplay: "N$ 550",
+    price: 500,
+    priceDisplay: "N$ 500",
     perCouple: true,
     features: ["Full conference access", "Conference materials", "Meals and Drinks"],
     popular: !isEarlyBirdActive,
@@ -353,13 +353,13 @@ export default function MyGreatMarriageEventPage() {
                       <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD (per couple)</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-[#8B2B3E] font-bold text-xl">N$ 400</span>
-                        <span className="text-[#3D2314]/40 line-through text-sm">N$ 550</span>
+                        <span className="text-[#3D2314]/40 line-through text-sm">N$ 500</span>
                       </div>
                     </div>
                   ) : (
                     <div>
                       <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">PRICE (per couple)</p>
-                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 550</span>
+                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 500</span>
                     </div>
                   )}
                 </div>
