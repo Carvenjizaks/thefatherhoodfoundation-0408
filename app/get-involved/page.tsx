@@ -243,9 +243,9 @@ export default function GetInvolvedPage() {
                   and shared meals. No agenda, no pressure—just authentic fellowship.
                 </p>
                 <div className="mt-6 inline-flex items-center gap-2 bg-[#8B2B3E] text-white px-6 py-3 rounded-lg">
-                  <span className="font-semibold">NAD 65</span>
+                  <span className="font-semibold">NAD 50 per person</span>
                   <span className="text-white/80">|</span>
-                  <span>Includes Drinks & Light Meal</span>
+                  <span>Includes Light Meal & Drinks</span>
                 </div>
               </div>
             </FadeIn>
@@ -588,7 +588,7 @@ export default function GetInvolvedPage() {
                     />
                   </div>
                   <div className="bg-muted p-4 rounded-lg text-sm">
-                    <p><strong>Fee:</strong> NAD 50 (Includes Drinks & Light Meal)</p>
+                    <p><strong>Fee:</strong> NAD 50 per person (Includes Light Meal & Drinks)</p>
                     <p><strong>Location:</strong> Scouts Hall, Suiderhof, Windhoek</p>
                     <p><strong>Time:</strong> 8:30am - 10:30am</p>
                   </div>
