@@ -50,7 +50,7 @@ export function OurPillarsDropdown() {
       </Button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-border rounded-lg shadow-lg overflow-hidden z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg overflow-hidden z-50">
           {pillars.map((pillar, index) => (
             <Link
               key={pillar.href}
@@ -59,8 +59,8 @@ export function OurPillarsDropdown() {
                 e.stopPropagation()
                 setIsOpen(false)
               }}
-              className={`block px-4 py-3 text-sm text-gray-700 hover:bg-primary/10 hover:text-primary transition-colors ${
-                index !== pillars.length - 1 ? "border-b border-gray-100" : ""
+              className={`block px-4 py-3 text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary transition-colors ${
+                index !== pillars.length - 1 ? "border-b border-border/50" : ""
               } ${pillar.isSerif ? "font-serif italic" : ""}`}
             >
               {pillar.label}

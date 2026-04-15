@@ -42,7 +42,7 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-sm" : "bg-background/80 backdrop-blur-sm"
+        isScrolled ? "bg-background border-b border-border shadow-sm" : "bg-background/95 backdrop-blur-md"
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -63,23 +63,23 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative text-sm transition-colors py-1 group ${
+                  className={`relative text-sm whitespace-nowrap transition-colors px-2.5 xl:px-3 py-2 rounded-md group ${
                     isActive 
-                      ? "text-[#8B2B3E] font-medium" 
-                      : "text-foreground/80 hover:text-foreground"
+                      ? "text-[#8B2B3E] font-medium bg-[#8B2B3E]/5" 
+                      : "text-foreground/80 hover:text-foreground hover:bg-muted"
                   }`}
                 >
                   {link.label}
                   <span 
-                    className={`absolute bottom-0 left-0 h-0.5 bg-[#8B2B3E] transition-all duration-300 ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    className={`absolute bottom-0.5 left-2.5 right-2.5 h-0.5 bg-[#8B2B3E] transition-all duration-300 ${
+                      isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                     }`}
                   />
                 </Link>
@@ -102,7 +102,7 @@ export function Header() {
 
         {/* Mobile Navigation */}
         <div 
-          className={`lg:hidden border-t border-border bg-background/95 backdrop-blur-xl overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`lg:hidden border-t border-border bg-background overflow-hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
