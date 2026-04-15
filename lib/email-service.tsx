@@ -471,31 +471,68 @@ export async function sendWelcomeEmail(contactId: string) {
 }
 
 export async function confirmEmail(token: string) {
-  const { data: contact, error } = await getSupabaseAdmin()
-    .from("contacts")
-    .update({
-      email_confirmed: true,
-      confirmed_at: new Date().toISOString(),
-    })
-    .eq("confirmation_token", token)
-    .select()
-    .single()
+  try {
+    // First, find the contact by token
+    const { data: existing, error: findError } = await getSupabaseAdmin()
+      .from("contacts")
+      .select("*")
+      .eq("confirmation_token", token)
+      .single()
 
-  if (error || !contact) {
-    return { success: false, error: "Invalid or expired confirmation token" }
+    if (findError || !existing) {
+      console.error("[v0] confirmEmail - Contact not found for token:", token, "Error:", findError?.message)
+      return { success: false, error: "Invalid or expired confirmation token" }
+    }
+
+    // If already confirmed, return success with the contact
+    if (existing.email_confirmed) {
+      console.log("[v0] confirmEmail - Email already confirmed for:", existing.email)
+      return { success: true, contact: existing, alreadyConfirmed: true }
+    }
+
+    // Update the contact to confirmed
+    const { data: contact, error: updateError } = await getSupabaseAdmin()
+      .from("contacts")
+      .update({
+        email_confirmed: true,
+        confirmed_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", existing.id)
+      .select()
+      .single()
+
+    if (updateError || !contact) {
+      console.error("[v0] confirmEmail - Update failed:", updateError?.message)
+      return { success: false, error: "Failed to confirm email. Please try again." }
+    }
+
+    console.log("[v0] confirmEmail - Successfully confirmed email for:", contact.email)
+    return { success: true, contact }
+  } catch (err) {
+    console.error("[v0] confirmEmail - Unexpected error:", err)
+    return { success: false, error: "An unexpected error occurred during confirmation" }
   }
-
-  return { success: true, contact }
 }
 
 export async function getContactByToken(token: string) {
-  const { data: contact } = await getSupabaseAdmin()
-    .from("contacts")
-    .select("*")
-    .eq("confirmation_token", token)
-    .single()
+  try {
+    const { data: contact, error } = await getSupabaseAdmin()
+      .from("contacts")
+      .select("*")
+      .eq("confirmation_token", token)
+      .single()
 
-  return contact
+    if (error) {
+      console.error("[v0] getContactByToken - Error:", error.message)
+      return null
+    }
+
+    return contact
+  } catch (err) {
+    console.error("[v0] getContactByToken - Unexpected error:", err)
+    return null
+  }
 }
 
 // Send registration confirmation email with event details and dynamic code
