@@ -50,7 +50,7 @@ export function OurPillarsDropdown() {
       </Button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg overflow-hidden z-50">
+        <div className="absolute top-full left-0 mt-2 w-56 bg-background border border-border rounded-lg shadow-lg overflow-hidden z-[10000]">
           {pillars.map((pillar, index) => (
             <Link
               key={pillar.href}

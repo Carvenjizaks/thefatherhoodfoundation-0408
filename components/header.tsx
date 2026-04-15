@@ -41,9 +41,10 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
         isScrolled ? "bg-background border-b border-border shadow-sm" : "bg-background/95 backdrop-blur-md"
       }`}
+      style={{ pointerEvents: "auto" }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
@@ -102,9 +103,10 @@ export function Header() {
 
         {/* Mobile Navigation */}
         <div 
-          className={`lg:hidden border-t border-border bg-background overflow-hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+          className={`lg:hidden border-t border-border bg-background transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? "max-h-[80vh] opacity-100 overflow-y-auto" : "max-h-0 opacity-0 overflow-hidden"
           }`}
+          style={{ pointerEvents: isMobileMenuOpen ? "auto" : "none" }}
         >
           <div className="py-4 space-y-1">
             {navLinks.map((link) => {

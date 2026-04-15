@@ -243,6 +243,17 @@
   background: radial-gradient(circle, var(--tw-gradient-from), var(--tw-gradient-to));
 }
 
+/* Ensure header is always interactive and above overlays */
+header {
+  position: relative;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+header * {
+  pointer-events: auto;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
