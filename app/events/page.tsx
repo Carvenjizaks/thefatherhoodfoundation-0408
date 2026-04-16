@@ -66,8 +66,8 @@ const events = [
     registrationOpen: false,
     requiresSpouse: false,
     description: "The annual gathering for men seeking to become champions in their families and communities.",
-    price: "NAD 450 per person",
-    priceAmount: 450,
+    price: "NAD 250 per man",
+    priceAmount: 250,
   },
 ]
 

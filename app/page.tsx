@@ -400,6 +400,69 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Monthly ManTalk CTA Banner */}
+        <section className="relative py-20 lg:py-24 bg-[#1E3A5F] overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/table-talk-banner.jpg"
+              alt="Men gathering at Monthly Table Talk"
+              fill
+              className="object-cover opacity-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1E3A5F]/95 via-[#1E3A5F]/80 to-[#1E3A5F]/60" />
+          </div>
+          
+          {/* Decorative elements */}
+          <Parallax speed={0.2} className="absolute top-10 right-10 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+              <div className="flex-1 text-center lg:text-left">
+                <FadeIn direction="left">
+                  <span className="inline-block px-4 py-2 bg-[#D4A574]/20 text-[#D4A574] rounded-full text-sm font-semibold mb-4">
+                    Monthly Gathering
+                  </span>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.1}>
+                  <h2 className="text-3xl lg:text-5xl font-bold text-white mb-4 text-balance">
+                    Join the Monthly ManTalk
+                  </h2>
+                </FadeIn>
+                <FadeIn direction="left" delay={0.2}>
+                  <p className="text-lg text-white/80 max-w-xl leading-relaxed">
+                    A gathering space where men from all walks of life come together for real conversation about everyday life. No pretenses. No facades. Just authentic conversations.
+                  </p>
+                </FadeIn>
+              </div>
+              
+              <FadeIn direction="right" delay={0.3}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    className="text-lg px-8 py-6 bg-[#D4A574] text-[#1E3A5F] hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 font-bold"
+                  >
+                    <Link href="/mentoring-men">
+                      Learn More <ArrowRightIcon />
+                    </Link>
+                  </Button>
+                  <Button 
+                    asChild 
+                    size="lg" 
+                    variant="outline"
+                    className="text-lg px-8 py-6 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full font-semibold"
+                  >
+                    <Link href="/get-involved">
+                      Get Involved
+                    </Link>
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
+          </div>
+        </section>
+
         {/* Testimonials Preview Section */}
         <section className="py-20 lg:py-28 bg-[#FAF8F5] relative overflow-hidden">
           <Parallax speed={-0.1} className="absolute top-0 right-0 w-80 h-80 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
