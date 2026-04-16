@@ -372,8 +372,11 @@ export default function MentoringMenPage() {
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Your Seat at the Table is Waiting
             </h2>
-            <p className="text-lg text-white/70 mb-10 text-balance leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 mb-4 text-balance leading-relaxed max-w-2xl mx-auto">
               Join a brotherhood of men committed to growth, honesty, and becoming the best versions of themselves.
+            </p>
+            <p className="text-2xl font-bold text-[#D4A574] mb-10">
+              NAD 50 <span className="text-base font-normal text-white/60">per man</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold">
