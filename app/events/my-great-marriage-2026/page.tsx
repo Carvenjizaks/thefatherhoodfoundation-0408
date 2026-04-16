@@ -92,7 +92,7 @@ const getTicketOptions = () => {
       id: "early-bird",
       title: "Early Bird",
       price: 450,
-      priceDisplay: "N$ 450",
+      priceDisplay: "NAD 450",
       perCouple: true,
       features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
       popular: true,
@@ -103,7 +103,7 @@ const getTicketOptions = () => {
     id: "standard",
     title: "Conference Package",
     price: 550,
-    priceDisplay: "N$ 550",
+    priceDisplay: "NAD 550",
     perCouple: true,
     features: ["Full conference access", "Conference materials", "Meals and Drinks"],
     popular: !isEarlyBirdActive,
@@ -352,14 +352,14 @@ export default function MyGreatMarriageEventPage() {
                     <div>
                       <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD (per couple)</p>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-[#8B2B3E] font-bold text-xl">N$ 450</span>
-                        <span className="text-[#3D2314]/40 line-through text-sm">N$ 550</span>
+                        <span className="text-[#8B2B3E] font-bold text-xl">NAD 450</span>
+                        <span className="text-[#3D2314]/40 line-through text-sm">NAD 550</span>
                       </div>
                     </div>
                   ) : (
                     <div>
                       <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">PRICE (per couple)</p>
-                      <span className="text-[#8B2B3E] font-bold text-xl">N$ 550</span>
+                      <span className="text-[#8B2B3E] font-bold text-xl">NAD 550</span>
                     </div>
                   )}
                 </div>
