@@ -190,20 +190,20 @@ export default function HomePage() {
           
         </section>
 
-        {/* Four Pillars with staggered animations */}
+        {/* Five Pillars with staggered animations */}
         <section id="pillars" className="py-20 lg:py-32 bg-gray-50 relative overflow-hidden">
           <Parallax speed={0.3} className="absolute bottom-0 left-0 w-96 h-96 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
           <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <FadeIn direction="up" className="text-center mb-16">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-4">Our Four Pillars</h2>
+              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-4">Our Five Pillars</h2>
               <p className="text-lg text-black max-w-2xl mx-auto text-balance font-medium">
                 Comprehensive programs designed to strengthen every aspect of manhood and family life.
               </p>
             </FadeIn>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              <FadeIn delay={0.1} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
+              <FadeIn delay={0.1} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-all duration-500 group-hover:scale-110">
@@ -268,8 +268,8 @@ export default function HomePage() {
               </Card>
               */}
 
-              <FadeIn delay={0.2} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.2} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
@@ -301,8 +301,8 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              <FadeIn delay={0.3} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.3} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
@@ -333,8 +333,8 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              <FadeIn delay={0.4} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.4} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
@@ -365,8 +365,8 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              <FadeIn delay={0.5} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.5} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
