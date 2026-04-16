@@ -201,10 +201,9 @@ export default function HomePage() {
               </p>
             </FadeIn>
 
-            {/* Top row - 3 pillars */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              <FadeIn delay={0.1} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
+              <FadeIn delay={0.1} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-all duration-500 group-hover:scale-110">
@@ -269,8 +268,8 @@ export default function HomePage() {
               </Card>
               */}
 
-              <FadeIn delay={0.2} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.2} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
@@ -302,8 +301,8 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              <FadeIn delay={0.3} direction="up">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white">
+              <FadeIn delay={0.3} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
@@ -334,11 +333,7 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              </div>
-
-            {/* Bottom row - 2 pillars centered */}
-            <div className="flex flex-col md:flex-row justify-center gap-6 lg:gap-8 mt-6 lg:mt-8">
-              <FadeIn delay={0.4} direction="up" className="md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <FadeIn delay={0.4} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
               <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
@@ -370,7 +365,7 @@ export default function HomePage() {
               </Card>
               </FadeIn>
 
-              <FadeIn delay={0.5} direction="up" className="md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+              <FadeIn delay={0.5} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
               <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
                 <CardContent className="p-8 lg:p-10">
                   <div className="flex justify-center mb-6">
