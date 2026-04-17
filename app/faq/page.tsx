@@ -20,7 +20,24 @@ export const metadata: Metadata = {
     "Gideon300 membership",
     "volunteer questions",
     "event registration help",
+    "Table Talk for Men",
+    "MyGreatMarriage Conference",
+    "Active Parenting Namibia",
   ],
+  openGraph: {
+    title: "Frequently Asked Questions | The Fatherhood Foundation",
+    description: "Find answers about our programs, events, Table Talk for Men, MyGreatMarriage Conference, and how to get involved.",
+    type: "website",
+    url: "https://thefatherhoodfoundation.org/faq",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAQ | The Fatherhood Foundation",
+    description: "Find answers about our programs, events, and how to get involved.",
+  },
+  alternates: {
+    canonical: "https://thefatherhoodfoundation.org/faq",
+  },
 }
 
 const faqs = [
@@ -42,7 +59,7 @@ const faqs = [
   {
     question: "How can I register for the MyGreatMarriage Conference?",
     answer:
-      "You can register for the MyGreatMarriage Conference 2026 directly on our website. Visit the Events page and click on the MyGreatMarriage Conference to access the registration form. Early bird pricing is available until May 1, 2026.",
+      "You can register for the MyGreatMarriage Conference 2026 directly on our website. Visit the Events page and click on the MyGreatMarriage Conference to access the registration form. Early Bird pricing (NAD 400 per couple) is available until April 24, 2026. Standard pricing is NAD 550 per couple.",
   },
   {
     question: "How can I become a volunteer?",
@@ -73,6 +90,36 @@ const faqs = [
     question: "Do you offer resources for churches or organizations?",
     answer:
       "Yes! We partner with churches, community organizations, and businesses to deliver our curriculum and programs. Contact us to discuss how we can collaborate to strengthen families in your community.",
+  },
+  {
+    question: "What is Table Talk for Men?",
+    answer:
+      "Table Talk for Men is a monthly gathering where men come together for honest conversation, mutual encouragement, and shared meals. Sessions are held at Scouts Hall, Suiderhof, Windhoek from 8:30am to 10:30am. Registration costs NAD 50 per person, which includes a light meal and drinks. You can register through our Get Involved page.",
+  },
+  {
+    question: "How much does the MyGreatMarriage Conference cost?",
+    answer:
+      "The MyGreatMarriage Conference 2026 offers two pricing tiers: Early Bird at NAD 400 per couple (available until April 24, 2026) and Standard at NAD 550 per couple. The conference takes place May 7-9, 2026 in Windhoek, Namibia. Registration includes all sessions, materials, and meals during the event.",
+  },
+  {
+    question: "What is Active Parenting?",
+    answer:
+      "Active Parenting is our evidence-based parenting skills program that equips parents with practical tools for raising responsible, cooperative children. The program covers communication skills, discipline techniques, and building strong parent-child relationships. Sessions are facilitated by trained leaders and are available throughout Namibia.",
+  },
+  {
+    question: "How do I register for Table Talk for Men?",
+    answer:
+      "To register for Table Talk for Men, visit our Get Involved page and fill out the registration form in the Sign Up Today section. Select your preferred session date, provide your contact details, and complete the registration. You will receive a unique Dynamic Code for payment reference. The registration fee is NAD 50 per session.",
+  },
+  {
+    question: "What is the Missions for Men program?",
+    answer:
+      "Missions for Men is our community service and outreach initiative where men serve together on purpose-driven projects that transform neighborhoods. Projects include home repairs for vulnerable families, school maintenance, community clean-ups, and mentoring youth. It builds brotherhood while making a tangible difference in Namibian communities.",
+  },
+  {
+    question: "Can I attend events if I am not from Namibia?",
+    answer:
+      "Yes, our events are open to men and couples from all countries. While The Fatherhood Foundation is based in Windhoek, Namibia, we welcome international attendees to our conferences and gatherings. For the MyGreatMarriage Conference, we recommend booking accommodation in advance as the event spans multiple days.",
   },
 ]
 

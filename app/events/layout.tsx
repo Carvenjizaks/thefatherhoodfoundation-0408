@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     title: "Events | The Fatherhood Foundation",
     description: "Discover upcoming workshops, conferences, and community events for fathers and families.",
   },
+  alternates: {
+    canonical: "https://thefatherhoodfoundation.org/events",
+  },
 }
 
 export default function EventsLayout({ children }: { children: React.ReactNode }) {

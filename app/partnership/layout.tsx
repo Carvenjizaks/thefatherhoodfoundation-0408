@@ -10,6 +10,15 @@ export const metadata: Metadata = {
     description:
       "Support our mission to end fatherlessness. Donate, partner with us, or volunteer your time to make a lasting impact.",
     type: "website",
+    url: "https://thefatherhoodfoundation.org/partnership",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Partnership Opportunities - The Fatherhood Foundation",
+    description: "Support our mission to end fatherlessness. Donate, partner with us, or volunteer your time.",
+  },
+  alternates: {
+    canonical: "https://thefatherhoodfoundation.org/partnership",
   },
 }
 

@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { NewsletterPopup } from "@/components/newsletter-popup"
@@ -8,6 +8,17 @@ import { Analytics } from "@vercel/analytics/next"
 // Cache bust v9 - Added serif font for cinematic hero
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#8B2B3E" },
+    { media: "(prefers-color-scheme: dark)", color: "#3D2314" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://thefatherhoodfoundation.org"),
@@ -97,7 +108,9 @@ export const metadata: Metadata = {
   },
 }
 
-// Organization structured data for SEO
+import { WebsiteSchema } from "@/components/structured-data"
+
+// Organization structured data for SEO - single source of truth
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "NonprofitOrganization",
@@ -105,17 +118,19 @@ const organizationJsonLd = {
   alternateName: "Fatherhood Foundation",
   url: "https://thefatherhoodfoundation.org",
   logo: "https://thefatherhoodfoundation.org/logo.png",
+  image: "https://thefatherhoodfoundation.org/og-image.jpg",
   description:
     "The Fatherhood Foundation empowers men to become intentional fathers, committed husbands, and impactful leaders through mentorship programs, marriage enrichment, and community development initiatives.",
-  foundingDate: "2010",
+  foundingDate: "2014",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Windhoek",
-    addressCountry: "Namibia",
+    addressCountry: "NA",
   },
   sameAs: [
     "https://www.facebook.com/thefatherhoodfoundation",
     "https://www.instagram.com/thefatherhoodfoundation",
+    "https://www.linkedin.com/company/thefatherhoodfoundation",
   ],
   contactPoint: {
     "@type": "ContactPoint",
@@ -132,6 +147,8 @@ const organizationJsonLd = {
     "Men's mentorship",
     "Community development",
     "Family strengthening",
+    "Active parenting",
+    "Table Talk for Men",
   ],
 }
 
@@ -147,6 +164,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <WebsiteSchema />
       </head>
       <body className={`${inter.className} ${playfair.variable} font-sans antialiased`}>
         {children}
