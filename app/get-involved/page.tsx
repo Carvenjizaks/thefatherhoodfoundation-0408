@@ -140,6 +140,15 @@ export default function GetInvolvedPage() {
             </FadeIn>
             <FadeIn direction="up" delay={0.1}>
               <div className="text-center mb-16">
+                <div className="flex justify-center mb-6">
+                  <Image
+                    src="/images/tabletalk-logo.jpg"
+                    alt="TableTalk for Men - Fatherhood Foundation logo"
+                    width={140}
+                    height={140}
+                    className="rounded-full shadow-xl border-3 border-[#8B2B3E]/20"
+                  />
+                </div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Monthly Table Talk for Men</h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
                   Join us for monthly gatherings where men come together for honest conversation, mutual encouragement,
@@ -294,7 +303,16 @@ export default function GetInvolvedPage() {
                 </div>
               </div>
               <CardHeader className="pt-6">
-                <CardTitle className="text-xl text-[#8B2B3E]">Table Talk for Men Registration</CardTitle>
+                <div className="flex items-center gap-4 mb-2">
+                  <Image
+                    src="/images/tabletalk-logo.jpg"
+                    alt="TableTalk for Men logo"
+                    width={48}
+                    height={48}
+                    className="rounded-full shadow-md"
+                  />
+                  <CardTitle className="text-xl text-[#8B2B3E]">Table Talk for Men Registration</CardTitle>
+                </div>
                 <CardDescription className="text-base">
                   Join us for our monthly gathering where men come together for honest conversation, mutual encouragement,
                   and shared meals. Fill out the form below to secure your seat at the table.

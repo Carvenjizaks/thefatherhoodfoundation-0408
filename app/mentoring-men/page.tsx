@@ -271,6 +271,17 @@ export default function MentoringMenPage() {
               heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
+            <FadeIn delay={0.05} direction="up">
+              <div className="flex justify-center mb-8">
+                <Image
+                  src="/images/tabletalk-logo.jpg"
+                  alt="TableTalk for Men - Fatherhood Foundation logo"
+                  width={180}
+                  height={180}
+                  className="rounded-full shadow-2xl border-4 border-white/20"
+                />
+              </div>
+            </FadeIn>
             <FadeIn delay={0.1} direction="up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance">
                 Monthly Table Talk for Men
@@ -368,7 +379,15 @@ export default function MentoringMenPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F]/90 via-[#1E3A5F]/50 to-[#1E3A5F]/30" />
           </div>
           <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-            
+            <div className="flex justify-center mb-8">
+              <Image
+                src="/images/tabletalk-logo.jpg"
+                alt="TableTalk for Men logo"
+                width={120}
+                height={120}
+                className="rounded-full shadow-xl border-3 border-white/20"
+              />
+            </div>
             <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Your Seat at the Table is Waiting
             </h2>
