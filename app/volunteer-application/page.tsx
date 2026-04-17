@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Users } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
@@ -93,8 +94,28 @@ export default function VolunteerApplicationPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background pt-32 pb-16">
-        <div className="max-w-2xl mx-auto px-4 md:px-8">
+      <main className="min-h-screen bg-background">
+        {/* Hero Banner */}
+        <section className="relative h-[280px] md:h-[340px] w-full overflow-hidden">
+          <Image
+            src="/images/volunteer-banner.jpg"
+            alt="Volunteers working together in the community"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">
+              Become a Volunteer
+            </h1>
+            <p className="text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-md">
+              Join our mission to strengthen families and empower fathers in your community
+            </p>
+          </div>
+        </section>
+
+        <div className="max-w-2xl mx-auto px-4 md:px-8 py-12">
           <Link
             href="/partnership"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
