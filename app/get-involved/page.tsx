@@ -10,27 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Calendar, CheckCircle, Copy } from "lucide-react"
-import { FadeIn, ScaleIn, Parallax } from "@/components/ui/motion"
+import { CheckCircle, Copy } from "lucide-react"
+import { FadeIn, Parallax } from "@/components/ui/motion"
 
 export default function GetInvolvedPage() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    interest: "",
-    howToInvolve: "",
-  })
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  
   // Table Talk Registration
   const [selectedSession, setSelectedSession] = useState<string | null>(null)
   const [registrationData, setRegistrationData] = useState({
@@ -49,90 +36,6 @@ export default function GetInvolvedPage() {
     paymentEmail: string
   } | null>(null)
   const [copiedCode, setCopiedCode] = useState(false)
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const [isFormSubmitting, setIsFormSubmitting] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!agreedToTerms) {
-      alert("Please agree to the terms and privacy policy")
-      return
-    }
-
-    setIsFormSubmitting(true)
-
-    try {
-      const response = await fetch("/api/contacts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          cellphone: formData.phone,
-          source: "newsletter",
-          sourceDetails: `Get Involved - Interest: ${formData.interest}`,
-        }),
-      })
-
-      if (!response.ok) throw new Error("Failed to submit")
-
-      setIsSubmitted(true)
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          interest: "",
-          howToInvolve: "",
-        })
-        setAgreedToTerms(false)
-      }, 5000)
-    } catch (error) {
-      alert("Failed to submit. Please try again.")
-    } finally {
-      setIsFormSubmitting(false)
-    }
-  }
-
-  const tableTalkSessions = [
-    { 
-      month: "APRIL",
-      sessions: [
-        { 
-          date: "4th April 2026", 
-          dateValue: "2026-04-04", 
-          time: "8:30am - 10:30am", 
-          isOpen: true,
-          description: "This Gathering will set the stage for 2026, share what is coming up and how you can get involved. This gathering will set the tone for the year, so make sure to join us. Our current venue has seating limitations."
-        },
-        { date: "11 April 2026", dateValue: "2026-04-11", time: "8:30am - 10:30am", isOpen: false },
-        { date: "25 April 2026", dateValue: "2026-04-25", time: "8:30am - 10:30am", isOpen: false },
-      ]
-    },
-    { 
-      month: "MAY",
-      sessions: [
-        { date: "9 May 2026", dateValue: "2026-05-09", time: "8:30am - 10:30am", isOpen: false },
-        { date: "23 May 2026", dateValue: "2026-05-23", time: "8:30am - 10:30am", isOpen: false },
-      ]
-    },
-    { 
-      month: "JUNE",
-      sessions: [
-        { date: "6 June 2026", dateValue: "2026-06-06", time: "8:30am - 10:30am", isOpen: false },
-        { date: "20 June 2026", dateValue: "2026-06-20", time: "8:30am - 10:30am", isOpen: false },
-      ]
-    },
-  ]
 
   const handleSessionRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -372,8 +275,8 @@ export default function GetInvolvedPage() {
           </div>
         </section>
 
-        {/* Sign Up Form */}
-        <section className="py-20 lg:py-32">
+        {/* Sign Up Form - Table Talk Registration */}
+        <section id="signup-form" className="py-20 lg:py-32">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <Card className="border-2 overflow-hidden">
               {/* Banner Image */}
@@ -387,147 +290,155 @@ export default function GetInvolvedPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
                   <h2 className="text-3xl sm:text-4xl font-bold text-white">Sign Up Today</h2>
+                  <p className="text-white/80 mt-2">Register for Table Talk for Men</p>
                 </div>
               </div>
               <CardHeader className="pt-6">
+                <CardTitle className="text-xl text-[#8B2B3E]">Table Talk for Men Registration</CardTitle>
                 <CardDescription className="text-base">
-                  Start your journey with The Fatherhood Foundation. Fill out the form below to connect with us and
-                  learn about opportunities that match your interests.
+                  Join us for our monthly gathering where men come together for honest conversation, mutual encouragement,
+                  and shared meals. Fill out the form below to secure your seat at the table.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {!isSubmitted ? (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                {!registrationResult ? (
+                  <form onSubmit={handleSessionRegister} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name *</Label>
+                        <Label htmlFor="signup-firstName">First Name *</Label>
                         <Input
-                          id="firstName"
-                          name="firstName"
+                          id="signup-firstName"
                           type="text"
                           placeholder="John"
-                          value={formData.firstName}
-                          onChange={handleInputChange}
+                          value={registrationData.firstName}
+                          onChange={(e) => setRegistrationData(prev => ({ ...prev, firstName: e.target.value }))}
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name *</Label>
+                        <Label htmlFor="signup-lastName">Last Name *</Label>
                         <Input
-                          id="lastName"
-                          name="lastName"
+                          id="signup-lastName"
                           type="text"
                           placeholder="Doe"
-                          value={formData.lastName}
-                          onChange={handleInputChange}
+                          value={registrationData.lastName}
+                          onChange={(e) => setRegistrationData(prev => ({ ...prev, lastName: e.target.value }))}
                           required
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email *</Label>
+                      <Label htmlFor="signup-email">Email *</Label>
                       <Input
-                        id="email"
-                        name="email"
+                        id="signup-email"
                         type="email"
                         placeholder="john.doe@example.com"
-                        value={formData.email}
-                        onChange={handleInputChange}
+                        value={registrationData.email}
+                        onChange={(e) => setRegistrationData(prev => ({ ...prev, email: e.target.value }))}
                         required
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number *</Label>
+                      <Label htmlFor="signup-phone">Phone Number *</Label>
                       <Input
-                        id="phone"
-                        name="phone"
+                        id="signup-phone"
                         type="tel"
-                        placeholder="(555) 123-4567"
-                        value={formData.phone}
-                        onChange={handleInputChange}
+                        placeholder="+264 81 123 4567"
+                        value={registrationData.phone}
+                        onChange={(e) => setRegistrationData(prev => ({ ...prev, phone: e.target.value }))}
                         required
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="interest">Area of Interest *</Label>
+                      <Label htmlFor="signup-session">Select Session Date *</Label>
                       <Select
-                        value={formData.interest}
-                        onValueChange={(value) => setFormData((prev) => ({ ...prev, interest: value }))}
+                        value={selectedSession || ""}
+                        onValueChange={(value) => setSelectedSession(value)}
                         required
                       >
-                        <SelectTrigger id="interest">
-                          <SelectValue placeholder="Select an area" />
+                        <SelectTrigger id="signup-session">
+                          <SelectValue placeholder="Choose a session date" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="mentoring">Monthly Table Talk for Men</SelectItem>
-                          <SelectItem value="parenting">ActiveParenting</SelectItem>
-                          <SelectItem value="marriage">MyGreatMarriage</SelectItem>
-                          <SelectItem value="community">Community Development</SelectItem>
-                          <SelectItem value="all">All Programs</SelectItem>
+                          <SelectItem value="2026-04-25">25 April 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="notify">Notify me of future dates</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="howToInvolve">How would you like to get involved?</Label>
-                      <Textarea
-                        id="howToInvolve"
-                        name="howToInvolve"
-                        placeholder="Tell us how you'd like to contribute or participate..."
-                        value={formData.howToInvolve}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, howToInvolve: e.target.value }))}
-                        rows={4}
-                      />
-                    </div>
-
-                    <div className="space-y-4 pt-4">
-                      <div className="flex items-start space-x-3">
-                        <Checkbox
-                          id="terms"
-                          checked={agreedToTerms}
-                          onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-                          required
-                        />
-                        <Label htmlFor="terms" className="text-sm font-normal cursor-pointer leading-relaxed">
-                          I agree to the{" "}
-                          <Link href="/terms" className="text-primary hover:underline">
-                            Terms of Service
-                          </Link>{" "}
-                          and{" "}
-                          <Link href="/privacy" className="text-primary hover:underline">
-                            Privacy Policy
-                          </Link>
-                          . I understand that my information will be used to connect me with The Fatherhood Foundation
-                          programs and updates.
-                        </Label>
+                    <div className="bg-[#F5F0E8] p-4 rounded-lg space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-[#8B2B3E]">Registration Fee:</span>
+                        <span className="font-bold text-lg">NAD 50</span>
                       </div>
+                      <p className="text-sm text-muted-foreground">Includes light meal and drinks</p>
+                      <p className="text-sm"><strong>Location:</strong> Scouts Hall, Suiderhof, Windhoek</p>
+                      <p className="text-sm"><strong>Time:</strong> 8:30am - 10:30am</p>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isFormSubmitting}>
-                      {isFormSubmitting ? "Submitting..." : "SUBMIT"}
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full bg-[#8B2B3E] hover:bg-[#6d2230]" 
+                      disabled={isRegistering || !selectedSession}
+                    >
+                      {isRegistering ? "Registering..." : "COMPLETE REGISTRATION"}
                     </Button>
                   </form>
                 ) : (
-                  <div className="py-12 text-center">
-                    <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <svg
-                        className="w-10 h-10 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle className="w-10 h-10 text-green-600" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-foreground mb-2">Registration Successful!</h3>
+                      <p className="text-muted-foreground">Your seat at the table has been reserved.</p>
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3">Thank You for Signing Up!</h3>
-                    <p className="text-muted-foreground text-lg">
-                      We'll be in touch soon with more information about getting involved.
-                    </p>
+
+                    <div className="bg-[#8B2B3E] text-white p-6 rounded-lg text-center">
+                      <p className="text-sm mb-2">Your Dynamic Code</p>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-3xl font-bold tracking-wider">{registrationResult.dynamicCode}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-white hover:bg-white/20"
+                          onClick={copyDynamicCode}
+                        >
+                          {copiedCode ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+                      <p><strong>Session Date:</strong> {registrationResult.sessionDate}</p>
+                      <p><strong>Time:</strong> {registrationResult.sessionTime}</p>
+                      <p><strong>Location:</strong> {registrationResult.location}</p>
+                      <p><strong>Amount:</strong> {registrationResult.paymentAmount}</p>
+                    </div>
+
+                    <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                      <p className="font-semibold text-amber-800 mb-2">Payment Instructions:</p>
+                      <p className="text-sm text-amber-700">
+                        Use your Dynamic Code <strong>{registrationResult.dynamicCode}</strong> as your payment reference.
+                      </p>
+                    </div>
+
+                    <Button 
+                      onClick={() => {
+                        setRegistrationResult(null)
+                        setRegistrationData({ firstName: "", lastName: "", email: "", phone: "" })
+                        setSelectedSession(null)
+                      }} 
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Register Another Person
+                    </Button>
                   </div>
                 )}
               </CardContent>
