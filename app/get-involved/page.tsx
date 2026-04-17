@@ -288,16 +288,23 @@ export default function GetInvolvedPage() {
         <section id="signup-form" className="py-20 lg:py-32">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <Card className="border-2 overflow-hidden">
-              {/* Banner Image */}
-              <div className="relative h-48 sm:h-64 w-full">
+              {/* Banner Image - Men at Table with Logo */}
+              <div className="relative h-56 sm:h-72 w-full">
                 <Image
-                  src="/images/signup-banner.jpg"
-                  alt="Join our community of men"
+                  src="/images/men-at-table.jpg"
+                  alt="Men sitting around tables in fellowship at Table Talk gathering"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                  <Image
+                    src="/images/tabletalk-logo.jpg"
+                    alt="TableTalk for Men logo"
+                    width={100}
+                    height={100}
+                    className="rounded-full shadow-2xl border-3 border-white/30 mb-4"
+                  />
                   <h2 className="text-3xl sm:text-4xl font-bold text-white">Sign Up Today</h2>
                   <p className="text-white/80 mt-2">Register for Table Talk for Men</p>
                 </div>
