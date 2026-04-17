@@ -46,16 +46,31 @@ export async function POST(request: Request) {
     })
 
     // Send welcome email for new contacts
+    console.log("[v0] Contact result - isNewContact:", isNewContact, "contactId:", contact?.id)
     if (isNewContact && contact) {
-      await sendWelcomeEmail(contact.id)
+      console.log("[v0] Sending welcome email to:", email)
+      try {
+        const welcomeResult = await sendWelcomeEmail(contact.id)
+        console.log("[v0] Welcome email result:", welcomeResult)
+      } catch (emailError) {
+        console.error("[v0] Welcome email error:", emailError)
+      }
       
       // Send admin notification for new subscriptions
-      await sendSubscriptionNotification({
-        subscriberName: `${firstName} ${lastName}`,
-        subscriberEmail: email,
-        source: source,
-        sourceDetails: sourceDetails,
-      })
+      console.log("[v0] Sending admin subscription notification")
+      try {
+        const notifResult = await sendSubscriptionNotification({
+          subscriberName: `${firstName} ${lastName}`,
+          subscriberEmail: email,
+          source: source,
+          sourceDetails: sourceDetails,
+        })
+        console.log("[v0] Admin notification result:", notifResult)
+      } catch (notifError) {
+        console.error("[v0] Admin notification error:", notifError)
+      }
+    } else {
+      console.log("[v0] Skipping emails - existing contact or no contact data")
     }
 
     return NextResponse.json({
