@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server"
 
-// SMTP.com API Configuration
-const SMTP_API_KEY = process.env.SMTP_API_KEY
-const SMTP_SENDER_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
-const SMTP_SENDER_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
-const SMTP_CHANNEL = process.env.SMTP_CHANNEL // Optional: SMTP.com channel name
+// SMTP.com API Configuration - read at runtime to work in serverless
+function getSmtpConfig() {
+  return {
+    apiKey: process.env.SMTP_API_KEY,
+    senderEmail: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
+    senderName: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
+    channel: process.env.SMTP_CHANNEL,
+  }
+}
 
 interface SendEmailRequest {
   to: string
@@ -22,7 +26,8 @@ interface SMTPApiResponse {
 }
 
 async function sendViaSMTPApi(params: SendEmailRequest): Promise<SMTPApiResponse> {
-  if (!SMTP_API_KEY) {
+  const { apiKey, senderEmail, senderName, channel } = getSmtpConfig()
+  if (!apiKey) {
     throw new Error("SMTP_API_KEY environment variable is not set")
   }
 
@@ -41,12 +46,12 @@ async function sendViaSMTPApi(params: SendEmailRequest): Promise<SMTPApiResponse
   }
 
   const body: Record<string, unknown> = {
-    channel: SMTP_CHANNEL || "default",
+    channel: channel || "default",
     recipients,
     originator: {
       from: {
-        address: SMTP_SENDER_EMAIL,
-        name: SMTP_SENDER_NAME,
+        address: senderEmail,
+        name: senderName,
       },
     },
     subject,
@@ -80,7 +85,7 @@ async function sendViaSMTPApi(params: SendEmailRequest): Promise<SMTPApiResponse
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${SMTP_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify(body),
   })
@@ -100,6 +105,7 @@ async function sendViaSMTPApi(params: SendEmailRequest): Promise<SMTPApiResponse
 
 // Fallback to nodemailer SMTP if API key not available
 async function sendViaSMTPNodemailer(params: SendEmailRequest): Promise<SMTPApiResponse> {
+  const { senderEmail, senderName } = getSmtpConfig()
   const SMTP_HOST = "send.smtp.com"
   const SMTP_PORT = 587
   const SMTP_USER = process.env.SMTP_USERNAME
@@ -124,7 +130,7 @@ async function sendViaSMTPNodemailer(params: SendEmailRequest): Promise<SMTPApiR
   const { to, toName, subject, html, text, replyTo } = params
 
   const info = await transporter.sendMail({
-    from: `"${SMTP_SENDER_NAME}" <${SMTP_SENDER_EMAIL}>`,
+    from: `"${senderName}" <${senderEmail}>`,
     to: toName ? `"${toName}" <${to}>` : to,
     subject,
     text,
@@ -166,7 +172,8 @@ export async function POST(request: Request) {
     let result: SMTPApiResponse
 
     // Try SMTP.com API first, fallback to nodemailer
-    if (SMTP_API_KEY) {
+    const { apiKey } = getSmtpConfig()
+    if (apiKey) {
       console.log("[v0] Sending email via SMTP.com API")
       result = await sendViaSMTPApi(body)
     } else {
@@ -191,7 +198,8 @@ export async function POST(request: Request) {
 
 // Export helper function for internal use
 export async function sendEmail(params: SendEmailRequest): Promise<SMTPApiResponse> {
-  if (SMTP_API_KEY) {
+  const { apiKey } = getSmtpConfig()
+  if (apiKey) {
     return sendViaSMTPApi(params)
   }
   return sendViaSMTPNodemailer(params)
