@@ -51,7 +51,7 @@ const eventJsonLd = {
     {
       "@type": "Offer",
       name: "Early Bird Ticket",
-      price: "450",
+      price: "400",
       priceCurrency: "NAD",
       availability: "https://schema.org/InStock",
       validFrom: "2026-01-01",
