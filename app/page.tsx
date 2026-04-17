@@ -208,8 +208,8 @@ export default function HomePage() {
                   <div className="flex justify-center mb-6">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-all duration-500 group-hover:scale-110">
                       <Image
-                        src="/pillars/mentoring-men.jpg"
-                        alt="Diverse men in mentoring conversation"
+                        src="/images/tabletalk-logo.jpg"
+                        alt="TableTalk for Men - Fatherhood Foundation logo"
                         fill
                         className="object-cover"
                       />
@@ -420,9 +420,18 @@ export default function HomePage() {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
               <div className="flex-1 text-center lg:text-left">
                 <FadeIn direction="left">
-                  <span className="inline-block px-4 py-2 bg-[#D4A574]/20 text-[#D4A574] rounded-full text-sm font-semibold mb-4">
-                    Monthly Gathering
-                  </span>
+                  <div className="flex items-center gap-4 justify-center lg:justify-start mb-4">
+                    <Image
+                      src="/images/tabletalk-logo.jpg"
+                      alt="TableTalk for Men logo"
+                      width={64}
+                      height={64}
+                      className="rounded-full shadow-lg border-2 border-white/20"
+                    />
+                    <span className="inline-block px-4 py-2 bg-[#D4A574]/20 text-[#D4A574] rounded-full text-sm font-semibold">
+                      Monthly Gathering
+                    </span>
+                  </div>
                 </FadeIn>
                 <FadeIn direction="left" delay={0.1}>
                   <h2 className="text-3xl lg:text-5xl font-bold text-white mb-4 text-balance">
