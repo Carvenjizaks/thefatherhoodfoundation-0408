@@ -55,6 +55,8 @@ const donationTiers: DonationTier[] = [
   },
 ]
 
+const MONTHLY_LABEL = "/mo"
+
 const gideon300Pillars = [
   {
     icon: Shield,
@@ -96,7 +98,6 @@ const gideon300Pillars = [
 
 export default function PartnershipPage() {
   const [selectedAmount, setSelectedAmount] = useState<string>("")
-  const [paymentMethod, setPaymentMethod] = useState<"once" | "monthly">("once")
   const router = useRouter()
 
   const handleDonate = (method: string) => {
@@ -166,7 +167,7 @@ export default function PartnershipPage() {
                   </div>
                   <CardTitle className="text-3xl font-bold text-foreground">Give to Transform Lives</CardTitle>
                   <CardDescription className="text-base max-w-xl mx-auto">
-                    Your financial gift directly funds mentorship programs, curriculum development, and community
+                    Your monthly contribution directly funds mentorship programs, curriculum development, and community
                     outreach that empowers fathers to lead their families well.
                   </CardDescription>
                 </CardHeader>
@@ -192,7 +193,7 @@ export default function PartnershipPage() {
                             <span className={`text-3xl lg:text-4xl font-bold block ${
                               selectedAmount === tier.amount.toString() ? "text-white" : "text-foreground"
                             }`}>
-                              ${tier.amount}
+                              ${tier.amount}<span className="text-base font-medium">{MONTHLY_LABEL}</span>
                             </span>
                             <span className={`text-sm font-semibold block ${
                               selectedAmount === tier.amount.toString() ? "text-white/90" : "text-[#8B2B3E]"
@@ -210,122 +211,56 @@ export default function PartnershipPage() {
                     </div>
                   </RadioGroup>
 
-                  {/* Payment Type Toggle */}
-                  <div className="flex justify-center gap-4 mb-6">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("once")}
-                      className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${
-                        paymentMethod === "once"
-                          ? "bg-[#8B2B3E] text-white shadow-lg"
-                          : "bg-muted text-muted-foreground hover:bg-[#8B2B3E]/10"
-                      }`}
-                    >
-                      One-Time Gift
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("monthly")}
-                      className={`px-6 py-3 rounded-full text-sm font-semibold transition-all ${
-                        paymentMethod === "monthly"
-                          ? "bg-[#8B2B3E] text-white shadow-lg"
-                          : "bg-muted text-muted-foreground hover:bg-[#8B2B3E]/10"
-                      }`}
-                    >
-                      Monthly Giving
-                    </button>
+                  {/* Monthly Contribution Badge */}
+                  <div className="flex justify-center mb-6">
+                    <div className="inline-flex items-center gap-2 bg-[#8B2B3E]/10 text-[#8B2B3E] px-5 py-2.5 rounded-full text-sm font-semibold">
+                      <CalendarCheck className="w-4 h-4" />
+                      Monthly Contributions
+                    </div>
                   </div>
 
                   {/* Payment Options */}
                   <div className="border-t border-border/50 pt-6">
                     <p className="text-center text-sm text-muted-foreground mb-4">
-                      {paymentMethod === "once" ? "Choose your payment method" : "Set up your monthly debit order"}
+                      Set up your monthly contribution
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                      {/* One-Time Payment Options */}
-                      {paymentMethod === "once" && (
-                        <>
-                          {/* PayPal Button - Official styling */}
-                          <div className="flex flex-col items-center">
-                            <button
-                              onClick={() => handleDonate("paypal")}
-                              disabled={!selectedAmount}
-                              className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-lg bg-[#FFC439] hover:bg-[#F0B72F] disabled:opacity-50 shadow-md transition-colors border-0 cursor-pointer"
-                            >
-                              {/* PayPal "PP" icon */}
-                              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003087] text-white font-black text-sm leading-none select-none">
-                                P
-                              </span>
-                              <span className="text-base font-bold leading-none">
-                                <span className="text-[#003087]">Pay</span><span className="text-[#0070E0]">Pal</span>
-                              </span>
-                            </button>
-                            <span className="text-xs text-muted-foreground mt-1">Coming Soon</span>
-                          </div>
+                      {/* PayToday Monthly */}
+                      <Button
+                        asChild
+                        className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
+                        size="lg"
+                      >
+                        <a
+                          href="https://site.paytoday.com.na"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img 
+                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
+                            alt="PayToday" 
+                            className="w-8 h-8 rounded"
+                          />
+                          Setup with PayToday
+                        </a>
+                      </Button>
 
-                          {/* PayToday Button */}
-                          <Button
-                            asChild
-                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
-                            size="lg"
-                          >
-                            <a
-                              href="https://site.paytoday.com.na"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img 
-                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
-                                alt="PayToday" 
-                                className="w-8 h-8 rounded"
-                              />
-                              PayToday
-                            </a>
-                          </Button>
-                        </>
-                      )}
-
-                      {/* Monthly Payment Options */}
-                      {paymentMethod === "monthly" && (
-                        <>
-                          {/* PayToday Monthly */}
-                          <Button
-                            asChild
-                            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-[#00D4AA] to-[#40E0D0] text-white hover:from-[#00C49A] hover:to-[#30D0C0] shadow-lg gap-3 border-0"
-                            size="lg"
-                          >
-                            <a
-                              href="https://site.paytoday.com.na"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img 
-                                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PayToday%20Logo-Z0Y3eORtscSI80Gx8V89GaHIxtGR4T.png" 
-                                alt="PayToday" 
-                                className="w-8 h-8 rounded"
-                              />
-                              Setup with PayToday
-                            </a>
-                          </Button>
-
-                          {/* Monthly Debit Order */}
-                          <Button
-                            onClick={() => handleDonate("debit-order")}
-                            disabled={!selectedAmount}
-                            variant="outline"
-                            className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white disabled:opacity-50 gap-2"
-                            size="lg"
-                          >
-                            <CalendarCheck className="w-5 h-5" />
-                            Monthly Debit Order
-                          </Button>
-                        </>
-                      )}
+                      {/* Monthly Debit Order */}
+                      <Button
+                        onClick={() => handleDonate("debit-order")}
+                        disabled={!selectedAmount}
+                        variant="outline"
+                        className="h-14 px-8 text-base font-semibold border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white disabled:opacity-50 gap-2"
+                        size="lg"
+                      >
+                        <CalendarCheck className="w-5 h-5" />
+                        Monthly Debit Order
+                      </Button>
                     </div>
 
-                    {paymentMethod === "monthly" && selectedAmount && (
+                    {selectedAmount && (
                       <p className="text-center text-sm text-muted-foreground mt-4">
-                        You will be charged <span className="font-semibold text-[#8B2B3E]">${selectedAmount}</span> monthly
+                        You will be contributing <span className="font-semibold text-[#8B2B3E]">${selectedAmount}/month</span> to transform lives
                       </p>
                     )}
                   </div>
