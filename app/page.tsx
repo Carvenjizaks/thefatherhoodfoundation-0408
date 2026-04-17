@@ -388,7 +388,7 @@ export default function HomePage() {
                       variant="ghost"
                       className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
                     >
-                      <Link href="/men-on-mission">
+                      <Link href="/missions-for-men">
                         Explore Program <ArrowRightIcon />
                       </Link>
                     </Button>
