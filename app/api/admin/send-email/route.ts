@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server"
 import { verifyAdminRequest, unauthorizedResponse } from "@/lib/admin-auth"
 
-const SMTP_API_KEY = process.env.SMTP_API_KEY
-const SMTP_SENDER_EMAIL = process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org"
-const SMTP_SENDER_NAME = process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation"
-const SMTP_CHANNEL = process.env.SMTP_CHANNEL
+function getSmtpConfig() {
+  return {
+    apiKey: process.env.SMTP_API_KEY,
+    senderEmail: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
+    senderName: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
+    channel: process.env.SMTP_CHANNEL,
+  }
+}
 
 async function sendEmailSMTP(to: string, toName: string, subject: string, html: string, text: string) {
+  const { apiKey: SMTP_API_KEY, senderEmail: SMTP_SENDER_EMAIL, senderName: SMTP_SENDER_NAME, channel: SMTP_CHANNEL } = getSmtpConfig()
   if (!SMTP_API_KEY) throw new Error("SMTP_API_KEY not set")
 
   const response = await fetch("https://api.smtp.com/v4/messages", {
