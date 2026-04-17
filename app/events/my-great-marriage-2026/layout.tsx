@@ -1,5 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
+import { BreadcrumbSchema } from "@/components/structured-data"
 
 export const metadata: Metadata = {
   title: "MyGreatMarriage Conference 2026 | The Fatherhood Foundation",
@@ -19,6 +20,14 @@ export const metadata: Metadata = {
     description: "A transformative conference for couples seeking deeper connection and renewed love. May 7-9, 2026 in Windhoek, Namibia.",
     type: "website",
     url: "https://thefatherhoodfoundation.org/events/my-great-marriage-2026",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MyGreatMarriage Conference 2026",
+    description: "A transformative conference for couples. May 7-9, 2026 in Windhoek, Namibia. Early Bird NAD 400 per couple.",
+  },
+  alternates: {
+    canonical: "https://thefatherhoodfoundation.org/events/my-great-marriage-2026",
   },
 }
 
@@ -80,6 +89,11 @@ export default function EventLayout({ children }: { children: React.ReactNode })
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "https://thefatherhoodfoundation.org" },
+        { name: "Events", url: "https://thefatherhoodfoundation.org/events" },
+        { name: "MyGreatMarriage 2026", url: "https://thefatherhoodfoundation.org/events/my-great-marriage-2026" },
+      ]} />
       {children}
     </>
   )

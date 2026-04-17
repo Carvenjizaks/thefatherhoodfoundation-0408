@@ -46,31 +46,24 @@ export async function POST(request: Request) {
     })
 
     // Send welcome email for new contacts
-    console.log("[v0] Contact result - isNewContact:", isNewContact, "contactId:", contact?.id)
     if (isNewContact && contact) {
-      console.log("[v0] Sending welcome email to:", email)
       try {
-        const welcomeResult = await sendWelcomeEmail(contact.id)
-        console.log("[v0] Welcome email result:", welcomeResult)
+        await sendWelcomeEmail(contact.id)
       } catch (emailError) {
-        console.error("[v0] Welcome email error:", emailError)
+        console.error("Welcome email error:", emailError)
       }
       
       // Send admin notification for new subscriptions
-      console.log("[v0] Sending admin subscription notification")
       try {
-        const notifResult = await sendSubscriptionNotification({
+        await sendSubscriptionNotification({
           subscriberName: `${firstName} ${lastName}`,
           subscriberEmail: email,
           source: source,
           sourceDetails: sourceDetails,
         })
-        console.log("[v0] Admin notification result:", notifResult)
       } catch (notifError) {
-        console.error("[v0] Admin notification error:", notifError)
+        console.error("Admin notification error:", notifError)
       }
-    } else {
-      console.log("[v0] Skipping emails - existing contact or no contact data")
     }
 
     return NextResponse.json({
@@ -83,12 +76,7 @@ export async function POST(request: Request) {
     })
   } catch (error: unknown) {
     const err = error as { message?: string; details?: string; hint?: string; code?: string }
-    console.error("[v0] Error creating contact:", {
-      message: err.message,
-      details: err.details,
-      hint: err.hint,
-      code: err.code,
-    })
+    console.error("Error creating contact:", err.message)
     return NextResponse.json(
       { error: "Failed to create contact", details: err.message },
       { status: 500 }

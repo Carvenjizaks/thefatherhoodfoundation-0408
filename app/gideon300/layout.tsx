@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { BreadcrumbSchema } from "@/components/structured-data"
 
 export const metadata: Metadata = {
   title: "Gideon 300 - Elite Men's Leadership Program",
@@ -29,5 +30,13 @@ export default function Gideon300Layout({
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return (
+    <>
+      <BreadcrumbSchema items={[
+        { name: "Home", url: "https://thefatherhoodfoundation.org" },
+        { name: "Gideon 300", url: "https://thefatherhoodfoundation.org/gideon300" },
+      ]} />
+      {children}
+    </>
+  )
 }

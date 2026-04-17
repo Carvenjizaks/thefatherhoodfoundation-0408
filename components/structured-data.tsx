@@ -11,7 +11,8 @@ export function OrganizationSchema() {
     foundingDate: "2014",
     address: {
       "@type": "PostalAddress",
-      addressCountry: "ZA",
+      addressLocality: "Windhoek",
+      addressCountry: "NA",
     },
     sameAs: [
       "https://www.facebook.com/thefatherhoodfoundation",
