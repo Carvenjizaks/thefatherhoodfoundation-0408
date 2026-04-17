@@ -91,8 +91,8 @@ const getTicketOptions = () => {
     options.push({
       id: "early-bird",
       title: "Early Bird",
-      price: 450,
-      priceDisplay: "NAD 450",
+      price: 400,
+      priceDisplay: "NAD 400",
       perCouple: true,
       features: ["Full conference access", "Conference materials", "Meals and Drinks", "Follow-up resources"],
       popular: true,
@@ -352,7 +352,7 @@ export default function MyGreatMarriageEventPage() {
                     <div>
                       <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EARLY BIRD (per couple)</p>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-[#8B2B3E] font-bold text-xl">NAD 450</span>
+                        <span className="text-[#8B2B3E] font-bold text-xl">NAD 400</span>
                         <span className="text-[#3D2314]/40 line-through text-sm">NAD 550</span>
                       </div>
                     </div>
