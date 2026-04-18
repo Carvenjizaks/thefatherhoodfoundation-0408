@@ -120,11 +120,11 @@ export default function VolunteerApplicationPage() {
             href="/partnership"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
           >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Partnership
-        </Link>
+            <ArrowLeft className="h-4 w-4" />
+            Back to Partnership
+          </Link>
 
-        <Card className="border-2 shadow-lg">
+          <Card className="border-2 shadow-lg">
           <CardHeader>
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 bg-primary/10 rounded-lg">
