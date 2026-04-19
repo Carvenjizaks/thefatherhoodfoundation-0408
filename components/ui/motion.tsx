@@ -73,9 +73,10 @@ interface ParallaxProps {
   children?: ReactNode
   speed?: number
   className?: string
+  style?: React.CSSProperties
 }
 
-export function Parallax({ children, speed = 0.5, className = "" }: ParallaxProps) {
+export function Parallax({ children, speed = 0.5, className = "", style }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState(0)
 
@@ -94,7 +95,7 @@ export function Parallax({ children, speed = 0.5, className = "" }: ParallaxProp
   }, [speed])
 
   return (
-    <div ref={ref} className={className} style={{ transform: `translateY(${offset}px)` }}>
+    <div ref={ref} className={className} style={{ ...style, transform: `translateY(${offset}px)` }}>
       {children}
     </div>
   )

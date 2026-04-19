@@ -33,7 +33,7 @@ import {
   Loader2,
 } from "lucide-react"
 
-interface TableTalkRegistration {
+interface TableTalkRegistration extends Record<string, unknown> {
   id: string
   first_name: string
   last_name: string
@@ -49,7 +49,7 @@ interface TableTalkRegistration {
   created_at: string
 }
 
-interface EventRegistration {
+interface EventRegistration extends Record<string, unknown> {
   id: string
   first_name: string
   last_name: string
@@ -67,7 +67,7 @@ interface EventRegistration {
   created_at: string
 }
 
-interface Contact {
+interface Contact extends Record<string, unknown> {
   id: string
   first_name: string
   last_name: string
@@ -79,7 +79,7 @@ interface Contact {
   created_at: string
 }
 
-interface Donation {
+interface Donation extends Record<string, unknown> {
   id: string
   first_name: string
   last_name: string
