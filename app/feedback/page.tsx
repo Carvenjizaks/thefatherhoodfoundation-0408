@@ -12,12 +12,12 @@ import { Slider } from '@/components/ui/slider'
 import { CheckCircle, Shield, EyeOff } from 'lucide-react'
 
 const categories = [
-  { id: 'marriage', label: 'Marriage & Relationships', color: 'bg-rose-100 text-rose-800' },
-  { id: 'parenting', label: 'Parenting & Fatherhood', color: 'bg-blue-100 text-blue-800' },
-  { id: 'spiritual', label: 'Spiritual Growth', color: 'bg-purple-100 text-purple-800' },
-  { id: 'career', label: 'Career & Finances', color: 'bg-green-100 text-green-800' },
-  { id: 'health', label: 'Health & Wellness', color: 'bg-orange-100 text-orange-800' },
-  { id: 'community', label: 'Community & Support', color: 'bg-teal-100 text-teal-800' }
+  { id: 'marriage', label: 'Marriage & Relationships', color: 'bg-maroon-100 text-maroon-800' },
+  { id: 'parenting', label: 'Parenting & Fatherhood', color: 'bg-maroon-100 text-maroon-800' },
+  { id: 'spiritual', label: 'Spiritual Growth', color: 'bg-maroon-100 text-maroon-800' },
+  { id: 'career', label: 'Career & Finances', color: 'bg-maroon-100 text-maroon-800' },
+  { id: 'health', label: 'Health & Wellness', color: 'bg-maroon-100 text-maroon-800' },
+  { id: 'community', label: 'Community & Support', color: 'bg-maroon-100 text-maroon-800' }
 ]
 
 const commonChallenges = [
@@ -110,10 +110,10 @@ export default function FeedbackPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="bg-[#8B2B3E]/10 border border-[#8B2B3E]/20 rounded-lg p-4 flex items-start gap-3">
-            <Shield className="w-5 h-5 text-[#8B2B3E] mt-0.5 flex-shrink-0" />
+          <div className="bg-[#800000]/10 border border-[#800000]/20 rounded-lg p-4 flex items-start gap-3">
+            <Shield className="w-5 h-5 text-[#800000] mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-[#8B2B3E] flex items-center gap-2">
+              <h3 className="font-semibold text-[#800000] flex items-center gap-2">
                 <EyeOff className="w-4 h-4" />
                 Anonymous Survey
               </h3>
@@ -143,7 +143,7 @@ export default function FeedbackPage() {
               </div>
               <div className="h-2 bg-slate-200 rounded-full">
                 <div
-                  className="h-2 bg-[#8B2B3E] rounded-full transition-all duration-300"
+                  className="h-2 bg-[#800000] rounded-full transition-all duration-300"
                   style={{ width: `${(step / 4) * 100}%` }}
                 />
               </div>
@@ -186,7 +186,7 @@ export default function FeedbackPage() {
                 <Button
                   onClick={() => setStep(2)}
                   disabled={!formData.challenge || (formData.challenge === 'other' && !formData.customChallenge)}
-                  className="w-full bg-[#8B2B3E] hover:bg-[#7a2636]"
+                  className="w-full bg-[#800000] hover:bg-[#660000]"
                 >
                   Continue
                 </Button>
@@ -208,7 +208,7 @@ export default function FeedbackPage() {
                       onClick={() => setFormData({ ...formData, category: cat.id })}
                       className={`p-3 rounded-lg border-2 text-left transition-all ${
                         formData.category === cat.id
-                          ? 'border-[#8B2B3E] bg-[#8B2B3E]/5'
+                          ? 'border-[#800000] bg-[#800000]/5'
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
@@ -226,7 +226,7 @@ export default function FeedbackPage() {
                   <Button
                     onClick={() => setStep(3)}
                     disabled={!formData.category}
-                    className="flex-1 bg-[#8B2B3E] hover:bg-[#7a2636]"
+                    className="flex-1 bg-[#800000] hover:bg-[#660000]"
                   >
                     Continue
                   </Button>
@@ -256,7 +256,7 @@ export default function FeedbackPage() {
                     />
                     <div className="flex justify-between text-sm text-slate-500">
                       <span>1</span>
-                      <span className="font-bold text-[#8B2B3E] text-lg">{formData.urgency}</span>
+                      <span className="font-bold text-[#800000] text-lg">{formData.urgency}</span>
                       <span>10</span>
                     </div>
                   </div>
@@ -277,7 +277,7 @@ export default function FeedbackPage() {
                   </Button>
                   <Button
                     onClick={() => setStep(4)}
-                    className="flex-1 bg-[#8B2B3E] hover:bg-[#7a2636]"
+                    className="flex-1 bg-[#800000] hover:bg-[#660000]"
                   >
                     Continue
                   </Button>
@@ -319,7 +319,7 @@ export default function FeedbackPage() {
                   <Button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 bg-[#8B2B3E] hover:bg-[#7a2636]"
+                    className="flex-1 bg-[#800000] hover:bg-[#660000]"
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit Anonymously'}
                   </Button>

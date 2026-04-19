@@ -100,7 +100,7 @@ export default function AdminFeedbackPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#8B2B3E]" />
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#800000]" />
       </div>
     )
   }
@@ -145,7 +145,7 @@ export default function AdminFeedbackPage() {
               <Download className="w-4 h-4 mr-2" />
               Export CSV
             </Button>
-            <Button onClick={handleSendReport} className="bg-[#8B2B3E] hover:bg-[#7a2636]">
+            <Button onClick={handleSendReport} className="bg-[#800000] hover:bg-[#660000]">
               <Mail className="w-4 h-4 mr-2" />
               Send Report
             </Button>
@@ -229,7 +229,7 @@ export default function AdminFeedbackPage() {
                   <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="#8B2B3E" />
+                  <Bar dataKey="value" fill="#800000" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -247,7 +247,7 @@ export default function AdminFeedbackPage() {
               {summary?.topChallenges?.map((item, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                   <span className="font-medium">{item.challenge}</span>
-                  <span className="bg-[#8B2B3E] text-white px-3 py-1 rounded-full text-sm">
+                  <span className="bg-[#800000] text-white px-3 py-1 rounded-full text-sm">
                     {item.count} responses
                   </span>
                 </div>
