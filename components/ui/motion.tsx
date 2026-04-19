@@ -70,7 +70,7 @@ export function FadeIn({
 }
 
 interface ParallaxProps {
-  children: ReactNode
+  children?: ReactNode
   speed?: number
   className?: string
 }
