@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis } from 'recharts'
-import { RefreshCw, Mail, Download, AlertCircle } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
+import { RefreshCw, Mail, Download, AlertCircle, Lock, LogOut } from 'lucide-react'
 
 interface FeedbackSummary {
   totalResponses: number
@@ -23,12 +25,12 @@ interface FeedbackSummary {
 }
 
 const categoryColors: Record<string, string> = {
-  marriage: '#f43f5e',
-  parenting: '#3b82f6',
-  spiritual: '#a855f7',
-  career: '#22c55e',
-  health: '#f97316',
-  community: '#14b8a6'
+  marriage: '#800000',
+  parenting: '#660000',
+  spiritual: '#990000',
+  career: '#550000',
+  health: '#770000',
+  community: '#440000'
 }
 
 const categoryLabels: Record<string, string> = {
@@ -40,10 +42,43 @@ const categoryLabels: Record<string, string> = {
   community: 'Community & Support'
 }
 
+// Admin PIN - only you should know this
+const ADMIN_PIN = 'FF2026!'
+
 export default function AdminFeedbackPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [pin, setPin] = useState('')
+  const [pinError, setPinError] = useState('')
   const [summary, setSummary] = useState<FeedbackSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const router = useRouter()
+
+  // Check if already authenticated
+  useEffect(() => {
+    const auth = sessionStorage.getItem('admin_feedback_auth')
+    if (auth === 'true') {
+      setIsAuthenticated(true)
+    } else {
+      setLoading(false)
+    }
+  }, [])
+
+  const handlePinSubmit = () => {
+    if (pin === ADMIN_PIN) {
+      sessionStorage.setItem('admin_feedback_auth', 'true')
+      setIsAuthenticated(true)
+      setPinError('')
+    } else {
+      setPinError('Invalid PIN. Access denied.')
+    }
+  }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('admin_feedback_auth')
+    setIsAuthenticated(false)
+    setPin('')
+  }
 
   const fetchSummary = async () => {
     setLoading(true)
@@ -63,8 +98,10 @@ export default function AdminFeedbackPage() {
   }
 
   useEffect(() => {
-    fetchSummary()
-  }, [])
+    if (isAuthenticated) {
+      fetchSummary()
+    }
+  }, [isAuthenticated])
 
   const handleExport = () => {
     if (!summary) return
@@ -97,10 +134,58 @@ export default function AdminFeedbackPage() {
     }
   }
 
+  // Login Screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <Card className="max-w-md w-full">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 bg-maroon-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <CardTitle className="text-2xl">Admin Access</CardTitle>
+            <CardDescription>
+              Enter PIN to access feedback dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Input
+                type="password"
+                placeholder="Enter PIN"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handlePinSubmit()}
+                className="text-center text-2xl tracking-widest"
+                maxLength={10}
+              />
+              {pinError && (
+                <p className="text-red-500 text-sm text-center">{pinError}</p>
+              )}
+              <Button 
+                onClick={handlePinSubmit}
+                className="w-full bg-maroon-900 hover:bg-maroon-800"
+              >
+                Access Dashboard
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => router.push('/')}
+                className="w-full"
+              >
+                Return to Homepage
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#800000]" />
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-maroon-900" />
       </div>
     )
   }
@@ -124,7 +209,7 @@ export default function AdminFeedbackPage() {
   const categoryData = summary ? Object.entries(summary.categoryCounts).map(([key, value]) => ({
     name: categoryLabels[key] || key,
     value,
-    color: categoryColors[key] || '#8884d8'
+    color: categoryColors[key] || '#800000'
   })) : []
 
   return (
@@ -145,9 +230,13 @@ export default function AdminFeedbackPage() {
               <Download className="w-4 h-4 mr-2" />
               Export CSV
             </Button>
-            <Button onClick={handleSendReport} className="bg-[#800000] hover:bg-[#660000]">
+            <Button onClick={handleSendReport} className="bg-maroon-900 hover:bg-maroon-800">
               <Mail className="w-4 h-4 mr-2" />
               Send Report
+            </Button>
+            <Button variant="ghost" onClick={handleLogout} className="text-slate-500">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
             </Button>
           </div>
         </div>
@@ -204,7 +293,7 @@ export default function AdminFeedbackPage() {
                     labelLine={false}
                     label={({ range, count }) => `${range}: ${count}`}
                     outerRadius={80}
-                    fill="#8884d8"
+                    fill="#800000"
                     dataKey="count"
                   >
                     {summary?.urgencyDistribution?.map((entry, index) => (
@@ -247,7 +336,7 @@ export default function AdminFeedbackPage() {
               {summary?.topChallenges?.map((item, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                   <span className="font-medium">{item.challenge}</span>
-                  <span className="bg-[#800000] text-white px-3 py-1 rounded-full text-sm">
+                  <span className="bg-maroon-900 text-white px-3 py-1 rounded-full text-sm">
                     {item.count} responses
                   </span>
                 </div>
