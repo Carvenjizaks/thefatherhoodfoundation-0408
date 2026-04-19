@@ -2,13 +2,23 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Initialize Supabase client only if environment variables are available
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null
 
 export async function GET() {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      return NextResponse.json({ 
+        error: 'Database not configured. Please set up Supabase environment variables.' 
+      }, { status: 503 })
+    }
+
     // Get all feedback
     const { data: feedback, error } = await supabase
       .from('feedback_responses')
