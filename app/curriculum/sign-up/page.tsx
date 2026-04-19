@@ -16,10 +16,46 @@ export default function CurriculumSignUpPage() {
   const [studyType, setStudyType] = useState<StudyType>(null)
   const [isOrg, setIsOrg] = useState<boolean | null>(null)
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    const formData = new FormData(e.currentTarget)
+
+    try {
+      const response = await fetch("/api/curriculum/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.get("firstName"),
+          lastName: formData.get("lastName"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          city: formData.get("city"),
+          studyType,
+          groupSize: formData.get("groupSize"),
+          isOrg,
+          orgName: formData.get("orgName"),
+          orgRole: formData.get("orgRole"),
+          orgWebsite: formData.get("orgWebsite"),
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to submit sign-up")
+      }
+
+      setSubmitted(true)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "An error occurred. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (submitted) {
@@ -200,11 +236,18 @@ export default function CurriculumSignUpPage() {
               </Card>
             )}
 
+            {/* Error display */}
+            {submitError && (
+              <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg">
+                {submitError}
+              </div>
+            )}
+
             {/* Submit */}
             {studyType && isOrg !== null && (
-              <Button type="submit" size="lg" className="w-full gap-2">
-                Complete Sign Up
-                <ArrowRight className="h-5 w-5" />
+              <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Complete Sign Up"}
+                {!isSubmitting && <ArrowRight className="h-5 w-5" />}
               </Button>
             )}
           </form>

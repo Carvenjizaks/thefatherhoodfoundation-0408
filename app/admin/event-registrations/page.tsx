@@ -16,20 +16,19 @@ import { Search, Download, RefreshCw, LogOut, Calendar, Users } from "lucide-rea
 
 interface EventRegistration {
   id: string
-  event_slug: string
+  event_id: string
   event_name: string
   first_name: string
   last_name: string
   email: string
   phone: string
-  spouse_first_name: string | null
-  spouse_last_name: string | null
+  spouse_name: string | null
   spouse_email: string | null
-  event_date: string
-  registration_code: string
+  spouse_phone: string | null
+  session_date: string
+  dynamic_code: string
   payment_status: string
   payment_amount: number
-  special_requirements: string | null
   checked_in: boolean
   checked_in_at: string | null
   created_at: string
@@ -37,8 +36,9 @@ interface EventRegistration {
 
 const EVENTS = [
   { slug: "all", name: "All Events" },
-  { slug: "my-great-marriage-2026", name: "MyGreatMarriage 2026" },
-  { slug: "goc-2026", name: "Game of Champions 2026" },
+  { slug: "mgm-may-2026", name: "MyGreatMarriage May 2026" },
+  { slug: "mgm-sept-2026", name: "MyGreatMarriage Sept 2026" },
+  { slug: "goc26", name: "Gathering of Champions 2026" },
 ]
 
 export default function AdminEventRegistrationsPage() {
@@ -62,7 +62,7 @@ export default function AdminEventRegistrationsPage() {
     let filtered = registrations
 
     if (selectedEvent !== "all") {
-      filtered = filtered.filter((reg) => reg.event_slug === selectedEvent)
+      filtered = filtered.filter((reg) => reg.event_id === selectedEvent)
     }
 
     if (searchTerm) {
@@ -71,8 +71,8 @@ export default function AdminEventRegistrationsPage() {
           reg.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           reg.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           reg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          reg.registration_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (reg.spouse_first_name && reg.spouse_first_name.toLowerCase().includes(searchTerm.toLowerCase()))
+          reg.dynamic_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (reg.spouse_name && reg.spouse_name.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     }
 
@@ -137,12 +137,11 @@ export default function AdminEventRegistrationsPage() {
       "Phone",
       "Spouse Name",
       "Spouse Email",
-      "Event Date",
-      "Registration Code",
+      "Session Date",
+      "Dynamic Code",
       "Payment Status",
       "Amount",
       "Checked In",
-      "Special Requirements",
       "Registered At",
     ]
     const rows = filteredRegistrations.map((reg) => [
@@ -150,14 +149,13 @@ export default function AdminEventRegistrationsPage() {
       `${reg.first_name} ${reg.last_name}`,
       reg.email,
       reg.phone,
-      reg.spouse_first_name ? `${reg.spouse_first_name} ${reg.spouse_last_name}` : "",
+      reg.spouse_name || "",
       reg.spouse_email || "",
-      new Date(reg.event_date).toLocaleDateString(),
-      reg.registration_code,
+      new Date(reg.session_date).toLocaleDateString(),
+      reg.dynamic_code,
       reg.payment_status,
       reg.payment_amount,
       reg.checked_in ? "Yes" : "No",
-      reg.special_requirements || "",
       new Date(reg.created_at).toLocaleString(),
     ])
 
@@ -181,7 +179,7 @@ export default function AdminEventRegistrationsPage() {
   const getEventStats = () => {
     const stats: Record<string, number> = {}
     registrations.forEach((reg) => {
-      stats[reg.event_slug] = (stats[reg.event_slug] || 0) + 1
+      stats[reg.event_id] = (stats[reg.event_id] || 0) + 1
     })
     return stats
   }
@@ -328,8 +326,8 @@ export default function AdminEventRegistrationsPage() {
                         <TableHead>Attendee</TableHead>
                         <TableHead>Contact</TableHead>
                         <TableHead>Spouse</TableHead>
-                        <TableHead>Event Date</TableHead>
-                        <TableHead>Code</TableHead>
+                        <TableHead>Session Date</TableHead>
+                        <TableHead>Dynamic Code</TableHead>
                         <TableHead>Payment</TableHead>
                         <TableHead>Check-in</TableHead>
                         <TableHead>Registered</TableHead>
@@ -353,19 +351,19 @@ export default function AdminEventRegistrationsPage() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            {reg.spouse_first_name ? (
+                            {reg.spouse_name ? (
                               <div className="text-sm">
-                                <div>{reg.spouse_first_name} {reg.spouse_last_name}</div>
+                                <div>{reg.spouse_name}</div>
                                 <div className="text-muted-foreground">{reg.spouse_email}</div>
                               </div>
                             ) : (
                               <span className="text-muted-foreground">-</span>
                             )}
                           </TableCell>
-                          <TableCell>{formatDate(reg.event_date)}</TableCell>
+                          <TableCell>{formatDate(reg.session_date)}</TableCell>
                           <TableCell>
                             <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
-                              {reg.registration_code}
+                              {reg.dynamic_code}
                             </code>
                           </TableCell>
                           <TableCell>
