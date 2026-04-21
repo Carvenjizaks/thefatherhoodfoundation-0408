@@ -1,33 +1,81 @@
-import crypto from 'crypto'
+/**
+ * Event slug to abbreviation mapping
+ */
+const EVENT_ABBREVIATIONS: Record<string, string> = {
+  'my-great-marriage-2026': 'MGM',
+  'my-great-marriage': 'MGM',
+  'table-talk-for-men': 'TT4M',
+  'tabletalk-for-men': 'TT4M',
+  'mentoring-men': 'MM',
+  'world-youth-conference': 'WYC',
+  'family-conference': 'FC',
+  'leaders-summit': 'LS',
+}
 
 /**
- * Generates a unique, secure registration code
- * Format: PREFIX-XXXXXX (e.g., TFF-A3B7C9)
- * - 6 alphanumeric characters (excluding confusing chars like 0/O, 1/I/L)
- * - Cryptographically secure random generation
+ * Gets the event abbreviation from the event slug
+ * Falls back to first 3 letters of slug uppercase if not mapped
  */
-export function generateRegistrationCode(prefix: string = 'TFF'): string {
-  // Characters that are easy to read and distinguish
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
-  const codeLength = 6
+export function getEventAbbreviation(eventSlug: string): string {
+  const normalized = eventSlug.toLowerCase().trim()
   
-  // Use crypto for secure random generation
-  const randomBytes = crypto.randomBytes(codeLength)
-  let code = ''
-  
-  for (let i = 0; i < codeLength; i++) {
-    code += chars[randomBytes[i] % chars.length]
+  // Check exact match first
+  if (EVENT_ABBREVIATIONS[normalized]) {
+    return EVENT_ABBREVIATIONS[normalized]
   }
   
-  return `${prefix}-${code}`
+  // Check partial match
+  for (const [key, abbrev] of Object.entries(EVENT_ABBREVIATIONS)) {
+    if (normalized.includes(key) || key.includes(normalized)) {
+      return abbrev
+    }
+  }
+  
+  // Fallback: take first letters of each word, max 4 chars
+  const words = normalized.split(/[-_\s]+/)
+  const fallback = words
+    .map(w => w.charAt(0))
+    .join('')
+    .toUpperCase()
+    .slice(0, 4)
+  
+  return fallback || 'EVT'
+}
+
+/**
+ * Generates a sequential registration code
+ * Format: PREFIX-XXX (e.g., MGM-001, TT4M-102)
+ * 
+ * @param eventSlug - The event slug to generate abbreviation from
+ * @param currentMax - The current highest registration number for this event
+ * @returns The next sequential registration code
+ */
+export function generateRegistrationCode(eventSlug: string, currentMax: number = 0): string {
+  const prefix = getEventAbbreviation(eventSlug)
+  const nextNumber = currentMax + 1
+  const paddedNumber = String(nextNumber).padStart(3, '0')
+  
+  return `${prefix}-${paddedNumber}`
+}
+
+/**
+ * Extracts the number from a registration code
+ * e.g., "MGM-047" returns 47
+ */
+export function extractCodeNumber(code: string): number | null {
+  const match = code.match(/-(\d+)$/)
+  if (match) {
+    return parseInt(match[1], 10)
+  }
+  return null
 }
 
 /**
  * Validates the format of a registration code
  */
 export function isValidCodeFormat(code: string): boolean {
-  // Format: XXX-XXXXXX (3 letter prefix, dash, 6 alphanumeric)
-  const codePattern = /^[A-Z]{2,4}-[A-Z0-9]{6}$/
+  // Format: 2-4 letter prefix, dash, 3+ digits (e.g., MGM-001, TT4M-102)
+  const codePattern = /^[A-Z0-9]{2,4}-\d{3,}$/
   return codePattern.test(code.toUpperCase())
 }
 
@@ -44,7 +92,7 @@ export function generateQRData(registrationId: string, code: string, eventDate: 
 }
 
 /**
- * Formats a registration code for display (adds spacing)
+ * Formats a registration code for display
  */
 export function formatCodeForDisplay(code: string): string {
   return code.toUpperCase()
