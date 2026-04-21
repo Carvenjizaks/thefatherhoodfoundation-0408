@@ -636,7 +636,7 @@ export async function sendRegistrationConfirmationEmail(params: {
                     <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Account Name:</strong> The FATHERHOOD FOUNDATION</p>
                     <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Account Number:</strong> 64279664451</p>
                     <p style="color: #333333; font-size: 14px; margin: 0 0 10px 0;"><strong>Branch Code:</strong> 282273</p>
-                    <p style="color: #333333; font-size: 14px; margin: 0;"><strong>Reference:</strong> Your Name + Cellphone</p>
+                    <p style="color: #333333; font-size: 14px; margin: 0;"><strong>Reference:</strong> ${dynamicCode}</p>
                   </td>
                 </tr>
               </table>
@@ -688,7 +688,7 @@ Bank: FNB
 Account Name: The FATHERHOOD FOUNDATION
 Account Number: 64279664451
 Branch Code: 282273
-Reference: Your Name + Cellphone
+Reference: ${dynamicCode}
 
 Or pay online via PayToday: https://site.paytoday.com.na
 

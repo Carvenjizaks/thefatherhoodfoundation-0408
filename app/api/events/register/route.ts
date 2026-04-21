@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
-import { generateRegistrationCode } from "@/lib/registration-code"
+import { generateRegistrationCode, extractCodeNumber } from "@/lib/registration-code"
 
 
 export async function POST(request: Request) {
@@ -34,8 +34,26 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // Generate unique registration code
-    const registrationCode = generateRegistrationCode("EVT")
+    // Get the current max registration number for this event
+    const { data: existingCodes } = await supabase
+      .from("event_registrations")
+      .select("dynamic_code")
+      .eq("event_id", eventSlug)
+      .order("created_at", { ascending: false })
+    
+    // Find the highest number from existing codes
+    let maxNumber = 0
+    if (existingCodes && existingCodes.length > 0) {
+      for (const record of existingCodes) {
+        const num = extractCodeNumber(record.dynamic_code)
+        if (num !== null && num > maxNumber) {
+          maxNumber = num
+        }
+      }
+    }
+
+    // Generate sequential registration code (e.g., MGM-001, TT4M-102)
+    const registrationCode = generateRegistrationCode(eventSlug, maxNumber)
 
     // Check for existing registration
     const { data: existingRegistration } = await supabase
