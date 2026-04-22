@@ -19,6 +19,55 @@ export interface CreateContactParams {
   spouseCellphone?: string
 }
 
+// Global Control Webhook Configuration
+const GC_WEBHOOK_URL = process.env.GC_WEBHOOK_URL || "https://gc-sync-webhook.vercel.app/api/sync"
+
+// Map source to Global Control tag
+function getGCTag(source: ContactSource, sourceDetails?: string): string {
+  // Table Talk for Men registrations
+  if (source === "event_registration" && sourceDetails?.toLowerCase().includes("table talk")) {
+    return "TT4Men"
+  }
+  // My Great Marriage registrations
+  if (source === "event_registration" && sourceDetails?.toLowerCase().includes("marriage")) {
+    return "MGM"
+  }
+  // Newsletter subscriptions
+  if (source === "newsletter") {
+    return "NL-FF newsletter"
+  }
+  // Default to newsletter for other sources
+  return "NL-FF newsletter"
+}
+
+// Sync contact to Global Control
+async function syncToGlobalControl(params: CreateContactParams & { isNew: boolean }) {
+  try {
+    const tag = getGCTag(params.source, params.sourceDetails)
+    
+    const response = await fetch(GC_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: params.email,
+        firstName: params.firstName,
+        lastName: params.lastName,
+        phone: params.cellphone,
+        tag: tag,
+      }),
+    })
+
+    if (!response.ok) {
+      console.error("[GC Sync] Failed to sync contact:", await response.text())
+    } else {
+      console.log("[GC Sync] Contact synced to Global Control:", params.email, "Tag:", tag)
+    }
+  } catch (error) {
+    // Don't fail the contact creation if GC sync fails
+    console.error("[GC Sync] Error:", error)
+  }
+}
+
 export async function createContact(params: CreateContactParams) {
   const {
     firstName,
@@ -88,6 +137,17 @@ export async function createContact(params: CreateContactParams) {
     .select("*")
     .eq("id", contactId)
     .single()
+
+  // Sync to Global Control (fire and forget - don't block)
+  syncToGlobalControl({
+    firstName,
+    lastName,
+    email,
+    cellphone,
+    source,
+    sourceDetails,
+    isNew: isNewContact,
+  }).catch(console.error)
 
   return { contact, isNewContact }
 }
