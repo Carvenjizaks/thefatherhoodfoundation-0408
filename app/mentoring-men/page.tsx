@@ -342,13 +342,13 @@ export default function MentoringMenPage() {
               <FadeIn direction="left" delay={0.2}>
                 <div className="space-y-6">
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">TableTalk for Men</span> is a monthly breakfast gathering where men from all walks of life come together to engage in authentic, meaningful conversations about the things that matter most.
+                    <span className="font-semibold text-foreground">TableTalk for Men</span> is a monthly gathering where men from all walks of life come together to engage in authentic, meaningful conversations about the things that matter most.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">
                     It&apos;s not a seminar. It&apos;s not a lecture. It&apos;s a <span className="font-semibold text-[#8B2B3E]">table</span> — where men sit together, share a meal, and talk openly about their journeys as <span className="font-semibold">men</span>, <span className="font-semibold">husbands</span>, and <span className="font-semibold">fathers</span>.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    We call it <span className="italic text-[#8B2B3E] font-semibold">&quot;Matters of Life&quot;</span> — because that&apos;s exactly what we talk about. The real stuff. The hard stuff. The victories and the struggles. The questions that keep us up at night and the breakthroughs that change everything.
+                    We call it <span className="italic text-[#8B2B3E] font-semibold">&quot;TableTalk-4-Men&quot;</span> — because we talk about the things that matter to men in every facet of his life. The real stuff. The hard stuff. The victories and the struggles. The questions that keep us up at night and the breakthroughs that change everything.
                   </p>
                 </div>
               </FadeIn>
