@@ -70,21 +70,6 @@ const events = [
   },
 
   {
-    id: "mgm-sept-2026",
-    slug: "mgm-sept-2026",
-    title: "MyGreatMarriage Follow-Up",
-    subtitle: "Marriage Enrichment Continuation",
-    dates: "3, 4 & 5 September 2026",
-    time: "Evening Session: 6:00pm - 9:00pm",
-    location: "Venue: To be Announced",
-    banner: "/images/couples/couple-1.jpg",
-    registrationOpen: false,
-    requiresSpouse: true,
-    description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
-    price: "NAD 300 per couple",
-    priceAmount: 300,
-  },
-  {
     id: "goc26",
     slug: "goc26",
     title: "Gathering of Champions 2026",
@@ -105,6 +90,21 @@ const events = [
     description: "The annual gathering for men seeking to become champions in their families and communities.",
     price: "NAD 250 per man",
     priceAmount: 250,
+  },
+  {
+    id: "mgm-sept-2026",
+    slug: "mgm-sept-2026",
+    title: "MyGreatMarriage Follow-Up",
+    subtitle: "Marriage Enrichment Continuation",
+    dates: "3, 4 & 5 September 2026",
+    time: "Evening Session: 6:00pm - 9:00pm",
+    location: "Venue: To be Announced",
+    banner: "/images/couples/couple-1.jpg",
+    registrationOpen: false,
+    requiresSpouse: true,
+    description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
+    price: "NAD 300 per couple",
+    priceAmount: 300,
   },
 ]
 
