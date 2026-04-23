@@ -389,7 +389,7 @@ export default function MentoringMenPage() {
                 { icon: Heart, title: "Marriage & Relationships", desc: "Building and maintaining strong, loving relationships with our spouses and partners." },
                 { icon: Users, title: "Fatherhood", desc: "Raising children with intention, being present, and leaving a legacy that matters." },
                 { icon: Target, title: "Purpose & Direction", desc: "Finding clarity in our calling, careers, and the impact we want to make." },
-                { icon: Handshake, title: "Brotherhood & Community", desc: "Why men need other men, and how to build authentic friendships." },
+                { icon: Handshake, title: "Build Authentic Manhood", desc: "Why men need other men, and how to build authentic friendships." },
                 { icon: Coffee, title: "Life's Challenges", desc: "Navigating hardships, failures, and setbacks with resilience and hope." },
               ].map((topic, index) => (
                 <ScaleIn key={topic.title} delay={index * 0.1}>
