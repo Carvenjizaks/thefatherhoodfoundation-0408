@@ -440,32 +440,40 @@ export default function HomePage() {
                 </FadeIn>
                 <FadeIn direction="left" delay={0.2}>
                   <p className="text-lg text-white/80 max-w-xl leading-relaxed">
-                    A gathering space where men from all walks of life come together for real conversation about everyday life. No pretenses. No facades. Just authentic conversations.
+                    Where men rub shoulders, share life experiences, and engage in meaningful conversations about the <span className="text-[#D4A574] font-semibold">Matters of Life</span> — as men, husbands, and fathers. Every first Saturday of the month.
                   </p>
                 </FadeIn>
               </div>
               
               <FadeIn direction="right" delay={0.3}>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    className="text-lg px-8 py-6 bg-[#D4A574] text-[#1E3A5F] hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 font-bold"
-                  >
-                    <Link href="/mentoring-men">
-                      Learn More <ArrowRightIcon />
-                    </Link>
-                  </Button>
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    variant="outline"
-                    className="text-lg px-8 py-6 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full font-semibold"
-                  >
-                    <Link href="/get-involved">
-                      Get Involved
-                    </Link>
-                  </Button>
+                <div className="flex flex-col gap-6">
+                  {/* Next Session Highlight */}
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <p className="text-[#D4A574] text-sm font-semibold mb-1">Next Session</p>
+                    <p className="text-white text-xl font-bold">30 May 2026</p>
+                    <p className="text-white/70 text-sm">8:30am - 10:30am | Scouts Hall, Suiderhof</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button 
+                      asChild 
+                      size="lg" 
+                      className="text-lg px-8 py-6 bg-[#D4A574] text-[#1E3A5F] hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 font-bold"
+                    >
+                      <Link href="/mentoring-men">
+                        Learn More <ArrowRightIcon />
+                      </Link>
+                    </Button>
+                    <Button 
+                      asChild 
+                      size="lg" 
+                      variant="outline"
+                      className="text-lg px-8 py-6 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full font-semibold"
+                    >
+                      <Link href="/events">
+                        Register Now
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </FadeIn>
             </div>
