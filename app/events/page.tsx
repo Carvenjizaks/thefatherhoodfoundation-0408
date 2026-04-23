@@ -703,73 +703,91 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
   const [currentSlide, setCurrentSlide] = useState(0)
   const slides = (event as typeof events[0] & { bannerSlides?: string[] }).bannerSlides || [event.banner]
   const logo = (event as typeof events[0] & { logo?: string }).logo
+  const isTableTalk = (event as typeof events[0] & { isTableTalk?: boolean }).isTableTalk
   
   useEffect(() => {
-    if (slides.length <= 1) return
+    if (slides.length <= 1 || isTableTalk) return
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 4000)
     return () => clearInterval(interval)
-  }, [slides.length])
+  }, [slides.length, isTableTalk])
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-      {/* Banner Image with Slider */}
-      <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Image
-              src={slide}
-              alt={`${event.title} - Image ${index + 1}`}
-              fill
-              priority={index === 0}
-              className="object-cover object-center"
-            />
+      {/* Banner - Different layout for TableTalk */}
+      {isTableTalk && logo ? (
+        <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E] flex items-center justify-center">
+          <Image
+            src={logo}
+            alt={`${event.title} logo`}
+            width={200}
+            height={200}
+            className="rounded-full shadow-2xl border-4 border-white/30 md:w-[250px] md:h-[250px] lg:w-[280px] lg:h-[280px]"
+          />
+          <div className="absolute top-4 right-4 z-10">
+            <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
+              {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
+            </Badge>
           </div>
-        ))}
-        {/* Gradient overlay for better text visibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
-        
-        {/* Event Logo */}
-        {logo && (
-          <div className="absolute bottom-4 left-4 z-10">
-            <Image
-              src={logo}
-              alt={`${event.title} logo`}
-              width={100}
-              height={100}
-              className="rounded-full shadow-xl border-3 border-white/30"
-            />
-          </div>
-        )}
-        
-        {/* Slide indicators */}
-        {slides.length > 1 && (
-          <div className={`absolute ${logo ? 'bottom-4 right-4' : 'bottom-4 left-1/2 -translate-x-1/2'} flex gap-2 z-10`}>
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'w-6 bg-white' : 'bg-white/50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
-        
-        <div className="absolute top-4 right-4 z-10">
-          <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
-            {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
-          </Badge>
         </div>
-      </div>
+      ) : (
+        <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <Image
+                src={slide}
+                alt={`${event.title} - Image ${index + 1}`}
+                fill
+                priority={index === 0}
+                className="object-cover object-center"
+              />
+            </div>
+          ))}
+          {/* Gradient overlay for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+          
+          {/* Event Logo (for non-TableTalk events with logo) */}
+          {logo && (
+            <div className="absolute bottom-4 left-4 z-10">
+              <Image
+                src={logo}
+                alt={`${event.title} logo`}
+                width={100}
+                height={100}
+                className="rounded-full shadow-xl border-3 border-white/30"
+              />
+            </div>
+          )}
+          
+          {/* Slide indicators */}
+          {slides.length > 1 && (
+            <div className={`absolute ${logo ? 'bottom-4 right-4' : 'bottom-4 left-1/2 -translate-x-1/2'} flex gap-2 z-10`}>
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide ? 'w-6 bg-white' : 'bg-white/50'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+          
+          <div className="absolute top-4 right-4 z-10">
+            <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
+              {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
+            </Badge>
+          </div>
+        </div>
+      )}
 
       {/* Event Details */}
       <div className="p-6 lg:p-8">
