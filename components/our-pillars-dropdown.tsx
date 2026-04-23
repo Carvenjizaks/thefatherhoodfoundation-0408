@@ -12,11 +12,12 @@ interface PillarLink {
 }
 
 const pillars: PillarLink[] = [
-  { label: "Monthly Table Talk for Men", href: "/mentoring-men" },
+  { label: "Monthly Table Talk", href: "/mentoring-men" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "Curriculum for Men", href: "/curriculum" },
   // { label: "ActiveParenting", href: "/active-parenting" }, // Hidden - activate later
-  { label: "My Great Marriage", href: "/my-great-marriage", isSerif: true },
-  { label: "Missions for Men", href: "/missions-for-men" },
   { label: "MGM26Conference", href: "/events/my-great-marriage-2026" },
+  { label: "Missions for Men", href: "/missions-for-men" },
   { label: "Social Impact", href: "/community-development" },
   { label: "Admin", href: "/admin" },
 ]
