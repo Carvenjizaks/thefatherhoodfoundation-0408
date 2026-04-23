@@ -40,6 +40,7 @@ const events = [
       "/images/hero/men-gathering.jpg",
       "/images/goc/goc-training-1.jpg",
     ],
+    logo: "/images/tabletalk-logo.jpg",
     registrationOpen: true,
     requiresSpouse: false,
     isTableTalk: true,
@@ -523,9 +524,18 @@ function TableTalkRegistrationModal({
       <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto my-8">
         {/* Header */}
         <div className="sticky top-0 bg-[#8B2B3E] p-6 flex justify-between items-start z-10">
-          <div>
-            <h2 className="text-xl font-bold text-white">TableTalk for Men</h2>
-            <p className="text-white/80 text-sm mt-1">Monthly Breakfast & Fellowship</p>
+          <div className="flex items-center gap-4">
+            <Image
+              src="/images/tabletalk-logo.jpg"
+              alt="TableTalk for Men logo"
+              width={60}
+              height={60}
+              className="rounded-full border-2 border-white/30 shadow-lg"
+            />
+            <div>
+              <h2 className="text-xl font-bold text-white">TableTalk for Men</h2>
+              <p className="text-white/80 text-sm mt-1">Monthly Breakfast & Fellowship</p>
+            </div>
           </div>
           <button onClick={onClose} className="text-white hover:text-white/80 p-1">
             <X className="w-6 h-6" />
@@ -692,6 +702,7 @@ function TableTalkRegistrationModal({
 function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister: () => void }) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const slides = (event as typeof events[0] & { bannerSlides?: string[] }).bannerSlides || [event.banner]
+  const logo = (event as typeof events[0] & { logo?: string }).logo
   
   useEffect(() => {
     if (slides.length <= 1) return
@@ -724,9 +735,22 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
         {/* Gradient overlay for better text visibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
         
+        {/* Event Logo */}
+        {logo && (
+          <div className="absolute bottom-4 left-4 z-10">
+            <Image
+              src={logo}
+              alt={`${event.title} logo`}
+              width={100}
+              height={100}
+              className="rounded-full shadow-xl border-3 border-white/30"
+            />
+          </div>
+        )}
+        
         {/* Slide indicators */}
         {slides.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          <div className={`absolute ${logo ? 'bottom-4 right-4' : 'bottom-4 left-1/2 -translate-x-1/2'} flex gap-2 z-10`}>
             {slides.map((_, index) => (
               <button
                 key={index}
