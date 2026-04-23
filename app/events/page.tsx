@@ -63,6 +63,9 @@ const events = [
     description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
     price: "NAD 550 per couple",
     priceAmount: 550,
+    earlyBirdPrice: "NAD 400 per couple",
+    earlyBirdAmount: 400,
+    earlyBirdEndDate: "2026-05-01",
     detailsPage: "/events/my-great-marriage-2026",
   },
 
@@ -413,7 +416,22 @@ function EventRegistrationModal({
             {/* Registration Fee */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-semibold mb-2">Registration Fee</h4>
-              <p className="text-2xl font-bold text-[#8B2B3E]">{event.price}</p>
+              {(event as typeof events[0] & { earlyBirdPrice?: string; earlyBirdEndDate?: string }).earlyBirdPrice && 
+               new Date() < new Date((event as typeof events[0] & { earlyBirdEndDate?: string }).earlyBirdEndDate!) ? (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-green-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
+                    <span className="text-2xl font-bold text-green-600">
+                      {(event as typeof events[0] & { earlyBirdPrice?: string }).earlyBirdPrice}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Ends 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
+                  </p>
+                </div>
+              ) : (
+                <p className="text-2xl font-bold text-[#8B2B3E]">{event.price}</p>
+              )}
               <p className="text-sm text-gray-600 mt-2">
                 Payment instructions will be provided after registration.
               </p>
@@ -821,7 +839,22 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
         )}
 
         <div className="border-t pt-4 mb-6">
-          <span className="text-xl font-bold text-[#8B2B3E]">{event.price}</span>
+          {(event as typeof events[0] & { earlyBirdPrice?: string; earlyBirdEndDate?: string }).earlyBirdPrice && 
+           new Date() < new Date((event as typeof events[0] & { earlyBirdEndDate?: string }).earlyBirdEndDate!) ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Badge className="bg-green-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
+                <span className="text-xl font-bold text-green-600">
+                  {(event as typeof events[0] & { earlyBirdPrice?: string }).earlyBirdPrice}
+                </span>
+              </div>
+              <p className="text-sm text-gray-500">
+                Ends 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
+              </p>
+            </div>
+          ) : (
+            <span className="text-xl font-bold text-[#8B2B3E]">{event.price}</span>
+          )}
         </div>
 
         {event.registrationOpen ? (
