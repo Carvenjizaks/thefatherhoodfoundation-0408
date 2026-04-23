@@ -15,15 +15,12 @@ import { FadeIn, Parallax, ScaleIn, BlurIn } from "@/components/ui/motion"
 
 // TableTalk for Men event dates (monthly sessions)
 const tableTalkSessions = [
-  { id: "tt-may-2026", date: "3 May 2026", sessionDate: "2026-05-03" },
-  { id: "tt-may-30-2026", date: "30 May 2026", sessionDate: "2026-05-30" },
-  { id: "tt-jun-2026", date: "7 June 2026", sessionDate: "2026-06-07" },
-  { id: "tt-jul-2026", date: "5 July 2026", sessionDate: "2026-07-05" },
-  { id: "tt-aug-2026", date: "2 August 2026", sessionDate: "2026-08-02" },
-  { id: "tt-sep-2026", date: "6 September 2026", sessionDate: "2026-09-06" },
-  { id: "tt-oct-2026", date: "4 October 2026", sessionDate: "2026-10-04" },
-  { id: "tt-nov-2026", date: "1 November 2026", sessionDate: "2026-11-01" },
-  { id: "tt-dec-2026", date: "6 December 2026", sessionDate: "2026-12-06" },
+  { id: "tt-apr-2026", date: "25 April 2026", sessionDate: "2026-04-25" },
+  { id: "tt-jun-2026", date: "6 June 2026", sessionDate: "2026-06-06" },
+  { id: "tt-jul-2026", date: "4 July 2026", sessionDate: "2026-07-04" },
+  { id: "tt-aug-2026", date: "8 August 2026", sessionDate: "2026-08-08" },
+  { id: "tt-sep-2026", date: "5 September 2026", sessionDate: "2026-09-05" },
+  { id: "tt-oct-2026", date: "3 October 2026", sessionDate: "2026-10-03" },
 ]
 
 // Event configuration with open/closed status
