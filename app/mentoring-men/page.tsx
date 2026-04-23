@@ -599,12 +599,12 @@ export default function MentoringMenPage() {
             <FadeIn direction="up" delay={0.5}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Link href="/get-involved#signup-form">
+                  <Link href="/events">
                     Register Now <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 bg-transparent">
-                  <Link href="/events">View All Events</Link>
+                  <Link href="/get-involved">Get Involved</Link>
                 </Button>
               </div>
             </FadeIn>

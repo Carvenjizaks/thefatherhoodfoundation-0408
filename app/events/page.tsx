@@ -23,6 +23,7 @@ const tableTalkSessions = [
   { id: "tt-sep-2026", date: "6 September 2026", sessionDate: "2026-09-06" },
   { id: "tt-oct-2026", date: "4 October 2026", sessionDate: "2026-10-04" },
   { id: "tt-nov-2026", date: "1 November 2026", sessionDate: "2026-11-01" },
+  { id: "tt-dec-2026", date: "6 December 2026", sessionDate: "2026-12-06" },
 ]
 
 // Event configuration with open/closed status
@@ -45,7 +46,7 @@ const events = [
     registrationOpen: true,
     requiresSpouse: false,
     isTableTalk: true,
-    description: "Join us for a transformative monthly gathering where men come together over breakfast to discuss life, faith, and fatherhood. Build lasting connections and grow as leaders in your family and community.",
+    description: "A monthly breakfast gathering where men rub shoulders, share life experiences, and engage in meaningful conversations about the 'Matters of Life' — as men, husbands, and fathers. Build lasting connections and grow together.",
     price: "NAD 50 per person",
     priceAmount: 50,
     detailsPage: "/mentoring-men",
@@ -61,7 +62,7 @@ const events = [
     banner: "/images/couples/couple-together-1.jpg",
     registrationOpen: true,
     requiresSpouse: true,
-    description: "A transformative conference designed to strengthen marriages and build lasting partnerships.",
+    description: "A powerful 3-day conference for couples to reconnect, rediscover, and reignite their marriage. Practical tools, inspiring sessions, and meaningful time together.",
     price: "NAD 550 per couple",
     priceAmount: 550,
     earlyBirdPrice: "NAD 400 per couple",
@@ -88,7 +89,7 @@ const events = [
     ],
     registrationOpen: false,
     requiresSpouse: false,
-    description: "The annual gathering for men seeking to become champions in their families and communities.",
+    description: "The flagship annual conference for men ready to step up as champions in their homes, workplaces, and communities. Powerful teaching, brotherhood, and life-changing encounters.",
     price: "NAD 250 per man",
     priceAmount: 250,
   },
