@@ -25,18 +25,20 @@ export function Header() {
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/impact", label: "Our Impact" },
-    { href: "/testimonials", label: "Testimonials" },
+    { href: "/my-great-marriage", label: "My Great Marriage" },
+    { href: "/mentoring-men", label: "TableTalk Sign Up" },
     { href: "/events", label: "Events" },
-    { href: "/curriculum", label: "Curriculum for Men" },
     { href: "/partnership", label: "Partnership" },
     { href: "/get-involved", label: "Get Involved" },
   ]
 
   const mobilePillarLinks = [
-    { href: "/mentoring-men", label: "Monthly Table Talk for Men" },
+    { href: "/testimonials", label: "Testimonials" },
+    { href: "/curriculum", label: "Curriculum for Men" },
     // { href: "/active-parenting", label: "ActiveParenting" }, // Hidden - activate later
     { href: "/events/my-great-marriage-2026", label: "MGM26Conference" },
     { href: "/community-development", label: "Social Impact" },
+    { href: "/missions-for-men", label: "Missions for Men" },
   ]
 
   return (
