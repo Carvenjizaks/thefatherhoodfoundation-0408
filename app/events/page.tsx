@@ -16,6 +16,7 @@ import { FadeIn, Parallax } from "@/components/ui/motion"
 // TableTalk for Men event dates (monthly sessions)
 const tableTalkSessions = [
   { id: "tt-may-2026", date: "3 May 2026", sessionDate: "2026-05-03" },
+  { id: "tt-may-30-2026", date: "30 May 2026", sessionDate: "2026-05-30" },
   { id: "tt-jun-2026", date: "7 June 2026", sessionDate: "2026-06-07" },
   { id: "tt-jul-2026", date: "5 July 2026", sessionDate: "2026-07-05" },
   { id: "tt-aug-2026", date: "2 August 2026", sessionDate: "2026-08-02" },
