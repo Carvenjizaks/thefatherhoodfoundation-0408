@@ -172,44 +172,85 @@ export default function GetInvolvedPage() {
               <CardContent className="p-8">
                 {/* Round Table Circles */}
                 <div className="flex flex-wrap justify-center gap-8 mb-6">
-                  {/* Table 1 - Maroon - With Date */}
+                  {/* Table 1 - Maroon - Next Session */}
                   <div className="flex flex-col items-center gap-3">
-                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-xl border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
-                      <div className="text-center px-2">
-                        <span className="text-white text-sm lg:text-base font-bold block">25 April</span>
-                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                    <div className="relative">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                        NEXT SESSION
+                      </div>
+                      <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#8B2B3E] flex items-center justify-center shadow-xl border-4 border-[#8B2B3E]/30 hover:scale-105 transition-transform cursor-pointer">
+                        <div className="text-center px-2">
+                          <span className="text-white text-sm lg:text-base font-bold block">6 June</span>
+                          <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                        </div>
                       </div>
                     </div>
                     <Button 
                       className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                      onClick={() => setSelectedSession("2026-04-25")}
+                      onClick={() => setSelectedSession("2026-06-06")}
                     >
                       REGISTER NOW
                     </Button>
                   </div>
-                  {/* Table 2 - Navy */}
-                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-xl border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center">
-                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                  {/* Table 2 - Navy - July */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-xl border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">5 July</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
+                    <Button 
+                      className="bg-[#1E3A5F] hover:bg-[#152d4a] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-07-05")}
+                    >
+                      REGISTER NOW
+                    </Button>
                   </div>
-                  {/* Table 3 - Terracotta */}
-                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#D4A574] flex items-center justify-center shadow-xl border-4 border-[#D4A574]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center">
-                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                  {/* Table 3 - Terracotta - August */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#D4A574] flex items-center justify-center shadow-xl border-4 border-[#D4A574]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">2 August</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
+                    <Button 
+                      className="bg-[#D4A574] hover:bg-[#c49564] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-08-02")}
+                    >
+                      REGISTER NOW
+                    </Button>
                   </div>
-                  {/* Table 4 - Dark Brown */}
-                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#3D1F0F] flex items-center justify-center shadow-xl border-4 border-[#3D1F0F]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center">
-                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                  {/* Table 4 - Dark Brown - September */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#3D1F0F] flex items-center justify-center shadow-xl border-4 border-[#3D1F0F]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">6 September</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
+                    <Button 
+                      className="bg-[#3D1F0F] hover:bg-[#2d170b] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-09-06")}
+                    >
+                      REGISTER NOW
+                    </Button>
                   </div>
-                  {/* Table 5 - Warm Brown */}
-                  <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#5C3D2E] flex items-center justify-center shadow-xl border-4 border-[#5C3D2E]/30 hover:scale-105 transition-transform cursor-pointer">
-                    <div className="text-center">
-                      <span className="text-white text-base lg:text-lg font-bold">TBA</span>
+                  {/* Table 5 - Warm Brown - October */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#5C3D2E] flex items-center justify-center shadow-xl border-4 border-[#5C3D2E]/30 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="text-center px-2">
+                        <span className="text-white text-sm lg:text-base font-bold block">4 October</span>
+                        <span className="text-white text-base lg:text-lg font-bold">2026</span>
+                      </div>
                     </div>
+                    <Button 
+                      className="bg-[#5C3D2E] hover:bg-[#4a3124] text-white px-6 py-3 text-sm font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      onClick={() => setSelectedSession("2026-10-04")}
+                    >
+                      REGISTER NOW
+                    </Button>
                   </div>
                 </div>
 
@@ -389,7 +430,13 @@ export default function GetInvolvedPage() {
                           <SelectValue placeholder="Choose a session date" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="2026-04-25">25 April 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-06-06">6 June 2026 - 8:30am to 10:30am (Next Session)</SelectItem>
+                          <SelectItem value="2026-07-05">5 July 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-08-02">2 August 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-09-06">6 September 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-10-04">4 October 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-11-01">1 November 2026 - 8:30am to 10:30am</SelectItem>
+                          <SelectItem value="2026-12-06">6 December 2026 - 8:30am to 10:30am</SelectItem>
                           <SelectItem value="notify">Notify me of future dates</SelectItem>
                         </SelectContent>
                       </Select>
