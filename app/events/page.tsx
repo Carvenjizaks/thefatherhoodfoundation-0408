@@ -46,6 +46,7 @@ const events = [
     registrationOpen: true,
     requiresSpouse: false,
     isTableTalk: true,
+    nextSession: "30 May 2026",
     description: "A monthly breakfast gathering where men rub shoulders, share life experiences, and engage in meaningful conversations about the 'Matters of Life' — as men, husbands, and fathers. Build lasting connections and grow together.",
     price: "NAD 50 per person",
     priceAmount: 50,
@@ -755,6 +756,16 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
               className="relative rounded-full shadow-2xl border-4 border-white/30 md:w-[250px] md:h-[250px] lg:w-[280px] lg:h-[280px] hover:scale-105 transition-transform duration-500"
             />
           </div>
+          
+          {/* Next Session Badge */}
+          {(event as typeof events[0] & { nextSession?: string }).nextSession && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+              <div className="bg-white/15 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20 text-center">
+                <p className="text-[#D4A574] text-xs font-semibold uppercase tracking-wider">Next Session</p>
+                <p className="text-white text-xl font-bold">{(event as typeof events[0] & { nextSession?: string }).nextSession}</p>
+              </div>
+            </div>
+          )}
           
           <div className="absolute top-4 right-4 z-10">
             <Badge className={`${event.registrationOpen ? 'bg-green-600 animate-pulse' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
