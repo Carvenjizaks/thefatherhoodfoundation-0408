@@ -109,7 +109,7 @@ const faqs = [
   {
     question: "How do I register for Table Talk for Men?",
     answer:
-      "To register for Table Talk for Men, visit our Get Involved page and fill out the registration form in the Sign Up Today section. Select your preferred session date, provide your contact details, and complete the registration. You will receive a unique Dynamic Code for payment reference. The registration fee is NAD 50 per session.",
+      "To register for Table Talk for Men, visit our Get Involved page and fill out the registration form in the Sign Up Today section. Select your preferred session date, provide your contact details, and complete the registration. You will receive a unique Dynamic Code for payment reference. The registration fee is NAD 50 per person.",
   },
   {
     question: "What is the Missions for Men program?",

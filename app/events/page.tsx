@@ -45,7 +45,7 @@ const events = [
     requiresSpouse: false,
     isTableTalk: true,
     description: "Join us for a transformative monthly gathering where men come together over breakfast to discuss life, faith, and fatherhood. Build lasting connections and grow as leaders in your family and community.",
-    price: "NAD 50 per session",
+    price: "NAD 50 per person",
     priceAmount: 50,
     detailsPage: "/mentoring-men",
   },
@@ -679,7 +679,7 @@ function TableTalkRegistrationModal({
             {/* Registration Fee */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-semibold mb-2">Registration Fee</h4>
-              <p className="text-2xl font-bold text-[#8B2B3E]">NAD 50 per session</p>
+              <p className="text-2xl font-bold text-[#8B2B3E]">NAD 50 per person</p>
               <p className="text-sm text-gray-600 mt-2">
                 Payment instructions will be provided after registration.
               </p>
