@@ -345,3 +345,198 @@ export function CountUp({ end, duration = 2, prefix = "", suffix = "", className
     </span>
   )
 }
+
+// Slide in from side with bounce
+interface SlideInProps {
+  children: ReactNode
+  direction?: "left" | "right"
+  delay?: number
+  className?: string
+}
+
+export function SlideIn({ children, direction = "left", delay = 0, className = "" }: SlideInProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setIsVisible(true)
+          setHasAnimated(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
+  const translateX = direction === "left" ? "-100px" : "100px"
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: shouldShow ? 1 : 0,
+        transform: shouldShow ? "translateX(0)" : `translateX(${translateX})`,
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+// Blur in effect
+interface BlurInProps {
+  children: ReactNode
+  delay?: number
+  className?: string
+}
+
+export function BlurIn({ children, delay = 0, className = "" }: BlurInProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setIsVisible(true)
+          setHasAnimated(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: shouldShow ? 1 : 0,
+        filter: shouldShow ? "blur(0px)" : "blur(10px)",
+        transform: shouldShow ? "scale(1)" : "scale(0.95)",
+        transition: `opacity 0.8s ease-out ${delay}s, filter 0.8s ease-out ${delay}s, transform 0.8s ease-out ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+// Pulse animation for attention
+interface PulseProps {
+  children: ReactNode
+  className?: string
+  intensity?: "subtle" | "medium" | "strong"
+}
+
+export function Pulse({ children, className = "", intensity = "medium" }: PulseProps) {
+  const scaleMap = {
+    subtle: "1.02",
+    medium: "1.05",
+    strong: "1.1"
+  }
+  
+  return (
+    <div
+      className={className}
+      style={{
+        animation: `pulse-scale 2s ease-in-out infinite`,
+      }}
+    >
+      <style jsx>{`
+        @keyframes pulse-scale {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(${scaleMap[intensity]}); }
+        }
+      `}</style>
+      {children}
+    </div>
+  )
+}
+
+// Shimmer effect for loading or highlights
+interface ShimmerProps {
+  children: ReactNode
+  className?: string
+}
+
+export function Shimmer({ children, className = "" }: ShimmerProps) {
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      {children}
+      <div 
+        className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        style={{
+          animation: "shimmer 2s infinite",
+        }}
+      />
+      <style jsx>{`
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+// Bounce in effect
+interface BounceInProps {
+  children: ReactNode
+  delay?: number
+  className?: string
+}
+
+export function BounceIn({ children, delay = 0, className = "" }: BounceInProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setIsVisible(true)
+          setHasAnimated(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [hasAnimated])
+
+  const shouldShow = isVisible || hasAnimated
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: shouldShow ? 1 : 0,
+        transform: shouldShow ? "scale(1)" : "scale(0.3)",
+        transition: `opacity 0.5s ease-out ${delay}s, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
