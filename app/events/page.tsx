@@ -426,7 +426,7 @@ function EventRegistrationModal({
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">
-                    Ends 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
+                    Early Bird Registration closes: 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
                   </p>
                 </div>
               ) : (
@@ -870,7 +870,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
                 </span>
               </div>
               <p className="text-sm text-gray-500">
-                Ends 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
+                Early Bird Registration closes: 1 May 2026 | Regular price: <span className="line-through">{event.price}</span>
               </p>
             </div>
           ) : (
