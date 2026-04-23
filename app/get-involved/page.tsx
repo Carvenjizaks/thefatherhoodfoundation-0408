@@ -190,7 +190,7 @@ export default function GetInvolvedPage() {
                   {/* Table 2 - Navy - June (Next Session) */}
                   <div className="flex flex-col items-center gap-3">
                     <div className="relative">
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                         NEXT SESSION
                       </div>
                       <div className="w-36 h-36 lg:w-40 lg:h-40 rounded-full bg-[#1E3A5F] flex items-center justify-center shadow-xl border-4 border-[#1E3A5F]/30 hover:scale-105 transition-transform cursor-pointer">
@@ -478,8 +478,8 @@ export default function GetInvolvedPage() {
                 ) : (
                   <div className="space-y-6">
                     <div className="text-center">
-                      <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle className="w-10 h-10 text-green-600" />
+                      <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle className="w-10 h-10 text-blue-600" />
                       </div>
                       <h3 className="text-2xl font-bold text-foreground mb-2">Registration Successful!</h3>
                       <p className="text-muted-foreground">Your seat at the table has been reserved.</p>
@@ -597,7 +597,7 @@ export default function GetInvolvedPage() {
             ) : (
               <>
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-green-600">
+                  <DialogTitle className="flex items-center gap-2 text-blue-600">
                     <CheckCircle className="w-6 h-6" />
                     Registration Successful!
                   </DialogTitle>

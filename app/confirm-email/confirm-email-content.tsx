@@ -82,9 +82,9 @@ export default function ConfirmEmailContent() {
                 Your email has been successfully confirmed. You will now receive updates and
                 notifications from The Fatherhood Foundation.
               </p>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <svg
-                  className="w-8 h-8 text-green-600 mx-auto mb-2"
+                  className="w-8 h-8 text-blue-600 mx-auto mb-2"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -96,7 +96,7 @@ export default function ConfirmEmailContent() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <p className="text-green-800 font-medium">Subscription Active</p>
+                <p className="text-blue-800 font-medium">Subscription Active</p>
               </div>
               <Link href="/">
                 <Button className="bg-[#8B2B3E] hover:bg-[#6B1F2E] px-8">

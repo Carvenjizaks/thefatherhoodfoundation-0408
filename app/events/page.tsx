@@ -240,8 +240,8 @@ function EventRegistrationModal({
 
         {submitSuccess ? (
           <div className="p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-blue-600" />
             </div>
             <h3 className="text-2xl font-bold mb-4">Registration Successful!</h3>
             <p className="text-gray-600 mb-6">
@@ -420,8 +420,8 @@ function EventRegistrationModal({
                new Date() < new Date((event as typeof events[0] & { earlyBirdEndDate?: string }).earlyBirdEndDate!) ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Badge className="bg-green-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
-                    <span className="text-2xl font-bold text-green-600">
+                    <Badge className="bg-blue-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
+                    <span className="text-2xl font-bold text-blue-600">
                       {(event as typeof events[0] & { earlyBirdPrice?: string }).earlyBirdPrice}
                     </span>
                   </div>
@@ -562,8 +562,8 @@ function TableTalkRegistrationModal({
 
         {submitSuccess ? (
           <div className="p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-blue-600" />
             </div>
             <h3 className="text-2xl font-bold mb-4">Registration Successful!</h3>
             <p className="text-gray-600 mb-6">
@@ -765,7 +765,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           )}
           
           <div className="absolute top-4 right-4 z-10">
-            <Badge className={`${event.registrationOpen ? 'bg-green-600 animate-pulse' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
+            <Badge className={`${event.registrationOpen ? 'bg-blue-600 animate-pulse' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
               {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
             </Badge>
           </div>
@@ -821,7 +821,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           )}
           
           <div className="absolute top-4 right-4 z-10">
-            <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
+            <Badge className={`${event.registrationOpen ? 'bg-blue-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
               {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
             </Badge>
           </div>
@@ -864,8 +864,8 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
            new Date() < new Date((event as typeof events[0] & { earlyBirdEndDate?: string }).earlyBirdEndDate!) ? (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Badge className="bg-green-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
-                <span className="text-xl font-bold text-green-600">
+                <Badge className="bg-blue-600 text-white px-2 py-0.5 text-xs">Early Bird</Badge>
+                <span className="text-xl font-bold text-blue-600">
                   {(event as typeof events[0] & { earlyBirdPrice?: string }).earlyBirdPrice}
                 </span>
               </div>

@@ -342,13 +342,13 @@ export default function MentoringMenPage() {
               <FadeIn direction="left" delay={0.2}>
                 <div className="space-y-6">
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">TableTalk for Men</span> is a monthly breakfast gathering where men from all walks of life come together to engage in authentic, meaningful conversations about the things that matter most.
+                    <span className="font-semibold text-foreground">TableTalk for Men</span> is a monthly gathering where men from all walks of life come together to engage in authentic, meaningful conversations about the things that matter most.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">
                     It&apos;s not a seminar. It&apos;s not a lecture. It&apos;s a <span className="font-semibold text-[#8B2B3E]">table</span> — where men sit together, share a meal, and talk openly about their journeys as <span className="font-semibold">men</span>, <span className="font-semibold">husbands</span>, and <span className="font-semibold">fathers</span>.
                   </p>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    We call it <span className="italic text-[#8B2B3E] font-semibold">&quot;Matters of Life&quot;</span> — because that&apos;s exactly what we talk about. The real stuff. The hard stuff. The victories and the struggles. The questions that keep us up at night and the breakthroughs that change everything.
+                    We call it <span className="italic text-[#8B2B3E] font-semibold">&quot;TableTalk-4-Men&quot;</span> — because we talk about the things that matter to men in every facet of his life. The real stuff. The hard stuff. The victories and the struggles. The questions that keep us up at night and the breakthroughs that change everything.
                   </p>
                 </div>
               </FadeIn>
@@ -389,7 +389,7 @@ export default function MentoringMenPage() {
                 { icon: Heart, title: "Marriage & Relationships", desc: "Building and maintaining strong, loving relationships with our spouses and partners." },
                 { icon: Users, title: "Fatherhood", desc: "Raising children with intention, being present, and leaving a legacy that matters." },
                 { icon: Target, title: "Purpose & Direction", desc: "Finding clarity in our calling, careers, and the impact we want to make." },
-                { icon: Handshake, title: "Brotherhood & Community", desc: "Why men need other men, and how to build authentic friendships." },
+                { icon: Handshake, title: "Build Authentic Manhood", desc: "Why men need other men, and how to build authentic friendships." },
                 { icon: Coffee, title: "Life's Challenges", desc: "Navigating hardships, failures, and setbacks with resilience and hope." },
               ].map((topic, index) => (
                 <ScaleIn key={topic.title} delay={index * 0.1}>
@@ -435,7 +435,7 @@ export default function MentoringMenPage() {
                       "You're ready to invest in yourself and others",
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                           <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
