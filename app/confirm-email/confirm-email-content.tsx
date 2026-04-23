@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Header } from "@/components/header"
 
 export default function ConfirmEmailContent() {
   const searchParams = useSearchParams()
@@ -49,7 +50,9 @@ export default function ConfirmEmailContent() {
   }, [token])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <>
+      <Header />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pt-24">
       <Card className="max-w-md w-full">
         <CardContent className="p-8 text-center">
           {status === "loading" && (
@@ -201,5 +204,6 @@ export default function ConfirmEmailContent() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 }
