@@ -450,7 +450,7 @@ export default function HomePage() {
                   {/* Next Session Highlight */}
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                     <p className="text-[#D4A574] text-sm font-semibold mb-1">Next Session</p>
-                    <p className="text-white text-xl font-bold">30 May 2026</p>
+                    <p className="text-white text-xl font-bold">6 June 2026</p>
                     <p className="text-white/70 text-sm">8:30am - 10:30am | Scouts Hall, Suiderhof</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4">

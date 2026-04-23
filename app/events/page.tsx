@@ -46,7 +46,7 @@ const events = [
     registrationOpen: true,
     requiresSpouse: false,
     isTableTalk: true,
-    nextSession: "30 May 2026",
+    nextSession: "6 June 2026",
     description: "A monthly breakfast gathering where men rub shoulders, share life experiences, and engage in meaningful conversations about the 'Matters of Life' — as men, husbands, and fathers. Build lasting connections and grow together.",
     price: "NAD 50 per person",
     priceAmount: 50,
