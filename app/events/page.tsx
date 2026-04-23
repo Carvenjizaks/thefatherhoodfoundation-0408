@@ -13,8 +13,41 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { FadeIn, Parallax } from "@/components/ui/motion"
 
+// TableTalk for Men event dates (monthly sessions)
+const tableTalkSessions = [
+  { id: "tt-may-2026", date: "3 May 2026", sessionDate: "2026-05-03" },
+  { id: "tt-jun-2026", date: "7 June 2026", sessionDate: "2026-06-07" },
+  { id: "tt-jul-2026", date: "5 July 2026", sessionDate: "2026-07-05" },
+  { id: "tt-aug-2026", date: "2 August 2026", sessionDate: "2026-08-02" },
+  { id: "tt-sep-2026", date: "6 September 2026", sessionDate: "2026-09-06" },
+  { id: "tt-oct-2026", date: "4 October 2026", sessionDate: "2026-10-04" },
+  { id: "tt-nov-2026", date: "1 November 2026", sessionDate: "2026-11-01" },
+]
+
 // Event configuration with open/closed status
 const events = [
+  {
+    id: "table-talk-for-men",
+    slug: "table-talk-for-men",
+    title: "TableTalk for Men",
+    subtitle: "Monthly Men's Breakfast & Fellowship",
+    dates: "First Saturday of Every Month",
+    time: "8:30am - 10:30am",
+    location: "Scouts Hall, Suiderhof, Windhoek",
+    banner: "/images/goc/goc-men-learning.jpg",
+    bannerSlides: [
+      "/images/goc/goc-men-learning.jpg",
+      "/images/hero/men-gathering.jpg",
+      "/images/goc/goc-training-1.jpg",
+    ],
+    registrationOpen: true,
+    requiresSpouse: false,
+    isTableTalk: true,
+    description: "Join us for a transformative monthly gathering where men come together over breakfast to discuss life, faith, and fatherhood. Build lasting connections and grow as leaders in your family and community.",
+    price: "NAD 50 per session",
+    priceAmount: 50,
+    detailsPage: "/mentoring-men",
+  },
   {
     id: "mgm-may-2026",
     slug: "mgm-may-2026",
@@ -399,6 +432,263 @@ function EventRegistrationModal({
   )
 }
 
+function TableTalkRegistrationModal({ 
+  onClose 
+}: { 
+  onClose: () => void 
+}) {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    cellphone: "",
+    sessionDate: "",
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [registrationCode, setRegistrationCode] = useState("")
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const validatePhone = (phone: string) => /^[\d\s+()-]{10,}$/.test(phone)
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }))
+    }
+  }
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {}
+
+    if (!formData.firstName.trim()) newErrors.firstName = "First name is required"
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required"
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Invalid email address"
+    }
+    if (!formData.cellphone.trim()) {
+      newErrors.cellphone = "Cellphone is required"
+    } else if (!validatePhone(formData.cellphone)) {
+      newErrors.cellphone = "Invalid phone number"
+    }
+    if (!formData.sessionDate) newErrors.sessionDate = "Please select a session date"
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      const response = await fetch("/api/table-talk/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.cellphone,
+          sessionDate: formData.sessionDate,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed")
+      }
+
+      setRegistrationCode(data.registration.dynamicCode)
+      setSubmitSuccess(true)
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Registration failed. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const selectedSession = tableTalkSessions.find(s => s.sessionDate === formData.sessionDate)
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto my-8">
+        {/* Header */}
+        <div className="sticky top-0 bg-[#8B2B3E] p-6 flex justify-between items-start z-10">
+          <div>
+            <h2 className="text-xl font-bold text-white">TableTalk for Men</h2>
+            <p className="text-white/80 text-sm mt-1">Monthly Breakfast & Fellowship</p>
+          </div>
+          <button onClick={onClose} className="text-white hover:text-white/80 p-1">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {submitSuccess ? (
+          <div className="p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Registration Successful!</h3>
+            <p className="text-gray-600 mb-6">
+              Thank you for registering for TableTalk. A confirmation email has been sent to your email address.
+            </p>
+            
+            {/* Registration Code */}
+            <div className="bg-[#8B2B3E] text-white rounded-lg p-6 mb-6">
+              <p className="text-sm text-white/80 mb-2">Your Registration Code</p>
+              <p className="text-3xl font-bold tracking-wider">{registrationCode}</p>
+              <p className="text-xs text-white/70 mt-2">Present this code at check-in</p>
+            </div>
+
+            {/* Session Details */}
+            <div className="bg-gray-50 rounded-lg p-6 text-left mb-6">
+              <h4 className="font-semibold text-[#8B2B3E] mb-4">Session Details</h4>
+              <div className="space-y-2 text-sm">
+                <p><strong>Date:</strong> {selectedSession?.date}</p>
+                <p><strong>Time:</strong> 8:30am - 10:30am</p>
+                <p><strong>Location:</strong> Scouts Hall, Suiderhof, Windhoek</p>
+                <p><strong>Amount Due:</strong> NAD 50</p>
+              </div>
+              <div className="border-t pt-3 mt-3">
+                <p className="font-medium mb-2">Banking Details (EFT):</p>
+                <p><strong>Bank:</strong> FNB</p>
+                <p><strong>Account Name:</strong> The FATHERHOOD FOUNDATION</p>
+                <p><strong>Account Number:</strong> 64279664451</p>
+                <p><strong>Branch Code:</strong> 282273</p>
+                <p><strong>Reference:</strong> Your Name + Cellphone</p>
+              </div>
+              <div className="mt-4 pt-4 border-t">
+                <p className="text-sm text-gray-600 mb-3">Or pay online:</p>
+                <a
+                  href="https://site.paytoday.com.na"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  Pay Now via PayToday
+                </a>
+              </div>
+            </div>
+            
+            <Button onClick={onClose} className="bg-[#8B2B3E] hover:bg-[#6d2230]">
+              Close
+            </Button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {submitError}
+              </div>
+            )}
+
+            {/* Session Date Selection */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-[#8B2B3E] border-b pb-2">Select Session Date</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {tableTalkSessions.map((session) => (
+                  <button
+                    key={session.id}
+                    type="button"
+                    onClick={() => handleInputChange("sessionDate", session.sessionDate)}
+                    className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                      formData.sessionDate === session.sessionDate
+                        ? "border-[#8B2B3E] bg-[#8B2B3E]/10 text-[#8B2B3E]"
+                        : "border-gray-200 hover:border-[#8B2B3E]/50"
+                    }`}
+                  >
+                    {session.date}
+                  </button>
+                ))}
+              </div>
+              {errors.sessionDate && <p className="text-sm text-red-500">{errors.sessionDate}</p>}
+            </div>
+
+            {/* Your Details */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-[#8B2B3E] border-b pb-2">Your Details</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="ttFirstName">First Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="ttFirstName"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    className="mt-1"
+                  />
+                  {errors.firstName && <p className="text-sm text-red-500 mt-1">{errors.firstName}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="ttLastName">Surname <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="ttLastName"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    className="mt-1"
+                  />
+                  {errors.lastName && <p className="text-sm text-red-500 mt-1">{errors.lastName}</p>}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="ttEmail">Email <span className="text-red-500">*</span></Label>
+                <Input
+                  id="ttEmail"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  className="mt-1"
+                />
+                {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="ttCellphone">Cellphone <span className="text-red-500">*</span></Label>
+                <Input
+                  id="ttCellphone"
+                  type="tel"
+                  value={formData.cellphone}
+                  onChange={(e) => handleInputChange("cellphone", e.target.value)}
+                  placeholder="+264 81 234 5678"
+                  className="mt-1"
+                />
+                {errors.cellphone && <p className="text-sm text-red-500 mt-1">{errors.cellphone}</p>}
+              </div>
+            </div>
+
+            {/* Registration Fee */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="font-semibold mb-2">Registration Fee</h4>
+              <p className="text-2xl font-bold text-[#8B2B3E]">NAD 50 per session</p>
+              <p className="text-sm text-gray-600 mt-2">
+                Payment instructions will be provided after registration.
+              </p>
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white py-3 h-12"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Processing..." : "Complete Registration"}
+            </Button>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister: () => void }) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const slides = (event as typeof events[0] & { bannerSlides?: string[] }).bannerSlides || [event.banner]
@@ -514,6 +804,15 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
 
 export default function EventsPage() {
   const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null)
+  const [showTableTalkModal, setShowTableTalkModal] = useState(false)
+
+  const handleRegister = (event: typeof events[0]) => {
+    if ((event as typeof events[0] & { isTableTalk?: boolean }).isTableTalk) {
+      setShowTableTalkModal(true)
+    } else {
+      setSelectedEvent(event)
+    }
+  }
 
   return (
     <>
@@ -541,7 +840,7 @@ export default function EventsPage() {
           <FadeIn key={event.id} direction="up" delay={index * 0.1}>
             <EventCard 
               event={event} 
-              onRegister={() => setSelectedEvent(event)}
+              onRegister={() => handleRegister(event)}
             />
           </FadeIn>
         ))}
@@ -626,6 +925,13 @@ export default function EventsPage() {
         <EventRegistrationModal 
           event={selectedEvent} 
           onClose={() => setSelectedEvent(null)} 
+        />
+      )}
+
+      {/* TableTalk Registration Modal */}
+      {showTableTalkModal && (
+        <TableTalkRegistrationModal 
+          onClose={() => setShowTableTalkModal(false)} 
         />
       )}
     </main>
