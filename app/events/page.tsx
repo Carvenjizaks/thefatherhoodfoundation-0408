@@ -11,7 +11,7 @@ import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-reac
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { FadeIn, Parallax } from "@/components/ui/motion"
+import { FadeIn, Parallax, ScaleIn, BlurIn } from "@/components/ui/motion"
 
 // TableTalk for Men event dates (monthly sessions)
 const tableTalkSessions = [
@@ -733,19 +733,30 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
   }, [slides.length, isTableTalk])
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group">
       {/* Banner - Different layout for TableTalk */}
       {isTableTalk && logo ? (
-        <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E] flex items-center justify-center">
-          <Image
-            src={logo}
-            alt={`${event.title} logo`}
-            width={200}
-            height={200}
-            className="rounded-full shadow-2xl border-4 border-white/30 md:w-[250px] md:h-[250px] lg:w-[280px] lg:h-[280px]"
-          />
+        <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] via-[#7A2536] to-[#6B1B2E] flex items-center justify-center overflow-hidden">
+          {/* Animated background rings */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] rounded-full border border-white/10 animate-pulse" style={{ animationDuration: '3s' }} />
+            <div className="absolute w-[380px] h-[380px] md:w-[480px] md:h-[480px] rounded-full border border-white/5 animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }} />
+          </div>
+          
+          {/* Floating logo with glow effect */}
+          <div className="relative animate-float-slow">
+            <div className="absolute inset-0 bg-[#D4A574]/30 rounded-full blur-2xl scale-110" />
+            <Image
+              src={logo}
+              alt={`${event.title} logo`}
+              width={200}
+              height={200}
+              className="relative rounded-full shadow-2xl border-4 border-white/30 md:w-[250px] md:h-[250px] lg:w-[280px] lg:h-[280px] hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          
           <div className="absolute top-4 right-4 z-10">
-            <Badge className={`${event.registrationOpen ? 'bg-green-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
+            <Badge className={`${event.registrationOpen ? 'bg-green-600 animate-pulse' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
               {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
             </Badge>
           </div>
@@ -810,7 +821,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
 
       {/* Event Details */}
       <div className="p-6 lg:p-8">
-        <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-2">{event.title}</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-2 group-hover:text-[#6B1B2E] transition-colors duration-300">{event.title}</h2>
         <p className="text-lg text-gray-600 mb-4">{event.subtitle}</p>
         
         <div className="space-y-3 mb-6">
@@ -895,30 +906,53 @@ export default function EventsPage() {
       <Header />
       <main className="min-h-screen pt-20 lg:pt-24 bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-[#8B2B3E] py-16 lg:py-20 relative overflow-hidden">
-        <Parallax speed={0.3} className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+      <section className="bg-gradient-to-br from-[#8B2B3E] via-[#7A2536] to-[#6B1B2E] py-16 lg:py-24 relative overflow-hidden">
+        {/* Animated background elements */}
+        <Parallax speed={0.3} className="absolute top-10 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse" />
         <Parallax speed={0.2} className="absolute bottom-10 left-10 w-96 h-96 bg-[#D4A574]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+        
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-[20%] left-[15%] w-2 h-2 bg-white/20 rounded-full animate-bounce" style={{ animationDuration: '3s', animationDelay: '0s' }} />
+          <div className="absolute top-[40%] right-[20%] w-3 h-3 bg-[#D4A574]/30 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }} />
+          <div className="absolute bottom-[30%] left-[25%] w-2 h-2 bg-white/15 rounded-full animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '0.5s' }} />
+          <div className="absolute top-[60%] right-[35%] w-4 h-4 bg-white/10 rounded-full animate-bounce" style={{ animationDuration: '5s', animationDelay: '2s' }} />
+        </div>
+        
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
-          <FadeIn direction="up" delay={0.1}>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">Upcoming Events</h1>
-          </FadeIn>
-          <FadeIn direction="up" delay={0.2}>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
+          <BlurIn delay={0.1}>
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4 text-balance">Upcoming Events</h1>
+          </BlurIn>
+          <FadeIn direction="up" delay={0.3}>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto text-balance">
               Join us for transformative events designed to strengthen men, marriages, and families.
             </p>
+          </FadeIn>
+          
+          {/* Animated scroll indicator */}
+          <FadeIn direction="up" delay={0.5}>
+            <div className="mt-10 flex justify-center">
+              <div className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2">
+                <div className="w-1.5 h-3 bg-white/50 rounded-full animate-bounce" />
+              </div>
+            </div>
           </FadeIn>
         </div>
       </section>
 
       {/* Events List */}
-      <section className="max-w-5xl mx-auto px-6 lg:px-8 py-12 space-y-12">
+      <section className="max-w-5xl mx-auto px-6 lg:px-8 py-16 space-y-12">
+        <FadeIn direction="up" delay={0.1} className="text-center mb-8">
+          <p className="text-lg text-gray-600">Select an event below to register</p>
+        </FadeIn>
         {events.map((event, index) => (
-          <FadeIn key={event.id} direction="up" delay={index * 0.1}>
+          <ScaleIn key={event.id} delay={index * 0.15}>
             <EventCard 
               event={event} 
               onRegister={() => handleRegister(event)}
             />
-          </FadeIn>
+          </ScaleIn>
         ))}
       </section>
 
