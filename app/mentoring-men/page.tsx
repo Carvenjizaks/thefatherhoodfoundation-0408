@@ -300,8 +300,8 @@ export default function MentoringMenPage() {
             <FadeIn delay={0.4} direction="up">
               <div className="mt-10">
                 <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] hover:scale-105 transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-xl">
-                  <Link href="/get-involved">
-                    Join the Table <ArrowRight className="ml-2 h-5 w-5" />
+                  <Link href="/get-involved#signup-form">
+                    Register Now <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               </div>
@@ -399,11 +399,11 @@ export default function MentoringMenPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold">
-                <Link href="/get-involved">
-                  Get Involved <ArrowRight className="ml-2 h-5 w-5" />
+                <Link href="/get-involved#signup-form">
+                  Register Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
+              <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 bg-transparent">
                 <Link href="/">Back to Home</Link>
               </Button>
             </div>

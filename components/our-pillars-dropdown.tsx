@@ -12,6 +12,7 @@ interface PillarLink {
 }
 
 const pillars: PillarLink[] = [
+  { label: "Monthly Table Talk", href: "/mentoring-men" },
   { label: "Testimonials", href: "/testimonials" },
   { label: "Curriculum for Men", href: "/curriculum" },
   // { label: "ActiveParenting", href: "/active-parenting" }, // Hidden - activate later

@@ -26,13 +26,14 @@ export function Header() {
     { href: "/about", label: "About" },
     { href: "/impact", label: "Our Impact" },
     { href: "/my-great-marriage", label: "My Great Marriage" },
-    { href: "/mentoring-men", label: "TableTalk Sign Up" },
+    { href: "/get-involved#signup-form", label: "TableTalk Sign Up" },
     { href: "/events", label: "Events" },
     { href: "/partnership", label: "Partnership" },
     { href: "/get-involved", label: "Get Involved" },
   ]
 
   const mobilePillarLinks = [
+    { href: "/mentoring-men", label: "Monthly Table Talk" },
     { href: "/testimonials", label: "Testimonials" },
     { href: "/curriculum", label: "Curriculum for Men" },
     // { href: "/active-parenting", label: "ActiveParenting" }, // Hidden - activate later
