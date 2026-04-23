@@ -103,8 +103,8 @@ const events = [
     registrationOpen: false,
     requiresSpouse: true,
     description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
-    price: "NAD 300 per couple",
-    priceAmount: 300,
+    price: "TBA",
+    priceAmount: 0,
   },
 ]
 
