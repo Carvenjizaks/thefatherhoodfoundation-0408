@@ -31,6 +31,7 @@ import {
   XCircle,
   Clock,
   Loader2,
+  UserPlus,
 } from "lucide-react"
 
 interface TableTalkRegistration extends Record<string, unknown> {
@@ -119,6 +120,15 @@ export default function AdminDashboardPage() {
   const [selectedTableTalkRegs, setSelectedTableTalkRegs] = useState<Set<string>>(new Set())
   const [selectedContacts, setSelectedContacts] = useState<Set<string>>(new Set())
   const [selectedDonations, setSelectedDonations] = useState<Set<string>>(new Set())
+
+  // Walk-in registration state
+  const [addRegDialogOpen, setAddRegDialogOpen] = useState(false)
+  const [addRegType, setAddRegType] = useState<"event" | "table-talk">("event")
+  const [addRegForm, setAddRegForm] = useState({
+    firstName: "", lastName: "", email: "", phone: "", spouseName: "", eventName: ""
+  })
+  const [isAddingReg, setIsAddingReg] = useState(false)
+  const [addRegResult, setAddRegResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
 
   // Helper to make authenticated fetch requests with Bearer token
   const adminFetch = (url: string, options?: RequestInit) => {
@@ -305,6 +315,26 @@ export default function AdminDashboardPage() {
     )
   }
 
+  const handleToggleCheckin = async (id: string, currentCheckedIn: boolean, table: string) => {
+    const newValue = !currentCheckedIn
+    try {
+      const response = await adminFetch("/api/admin/update-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, table, field: "checked_in", value: newValue }),
+      })
+      if (response.ok) {
+        if (table === "event_registrations") {
+          setEventRegistrations(prev => prev.map(r => r.id === id ? { ...r, checked_in: newValue } : r))
+        } else if (table === "table_talk_registrations") {
+          setTableTalkRegistrations(prev => prev.map(r => r.id === id ? { ...r, checked_in: newValue } : r))
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update check-in:", error)
+    }
+  }
+
   const handleTogglePayment = async (id: string, currentStatus: string, table: string) => {
     const newStatus = currentStatus === "paid" ? "unpaid" : "paid"
     try {
@@ -324,6 +354,58 @@ export default function AdminDashboardPage() {
       }
     } catch (error) {
       console.error("Failed to update status:", error)
+    }
+  }
+
+  const openAddRegistration = (type: "event" | "table-talk") => {
+    setAddRegType(type)
+    setAddRegForm({ firstName: "", lastName: "", email: "", phone: "", spouseName: "", eventName: "" })
+    setAddRegResult(null)
+    setAddRegDialogOpen(true)
+  }
+
+  const handleAddRegistration = async () => {
+    if (!addRegForm.firstName || !addRegForm.lastName || !addRegForm.email) return
+    setIsAddingReg(true)
+    setAddRegResult(null)
+    try {
+      const endpoint = addRegType === "event" ? "/api/events/register" : "/api/table-talk/register"
+      const body = addRegType === "event"
+        ? {
+            firstName: addRegForm.firstName,
+            lastName: addRegForm.lastName,
+            email: addRegForm.email,
+            phone: addRegForm.phone,
+            spouseName: addRegForm.spouseName,
+            eventName: addRegForm.eventName || "Walk-in Registration",
+            eventId: "walk-in",
+          }
+        : {
+            firstName: addRegForm.firstName,
+            lastName: addRegForm.lastName,
+            email: addRegForm.email,
+            phone: addRegForm.phone,
+            sessionDate: new Date().toISOString().split("T")[0],
+          }
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+      if (response.ok) {
+        setAddRegResult({ message: `${addRegForm.firstName} ${addRegForm.lastName} registered successfully!`, type: "success" })
+        setAddRegForm({ firstName: "", lastName: "", email: "", phone: "", spouseName: "", eventName: "" })
+        // Refresh data
+        await fetchAllData()
+        setTimeout(() => setAddRegDialogOpen(false), 2000)
+      } else {
+        const data = await response.json()
+        setAddRegResult({ message: data.error || "Registration failed", type: "error" })
+      }
+    } catch {
+      setAddRegResult({ message: "Failed to register. Please try again.", type: "error" })
+    } finally {
+      setIsAddingReg(false)
     }
   }
 
@@ -652,6 +734,14 @@ export default function AdminDashboardPage() {
                     <CardDescription>All Table Talk session sign-ups</CardDescription>
                   </div>
                   <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => openAddRegistration("table-talk")}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Add Walk-in
+                    </Button>
                     {selectedTableTalkRegs.size > 0 && (
                       <Button
                         size="sm"
@@ -738,17 +828,23 @@ export default function AdminDashboardPage() {
                                 </button>
                               </TableCell>
                               <TableCell>
-                                {reg.checked_in ? (
-                                  <div className="flex items-center gap-1">
-                                    <CheckCircle className="w-5 h-5 text-green-600" />
-                                    <span className="text-xs text-green-700">Yes</span>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-1">
-                                    <XCircle className="w-5 h-5 text-gray-400" />
-                                    <span className="text-xs text-gray-500">No</span>
-                                  </div>
-                                )}
+                                <button
+                                  onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "table_talk_registrations")}
+                                  className="cursor-pointer"
+                                  title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
+                                >
+                                  {reg.checked_in ? (
+                                    <div className="flex items-center gap-1">
+                                      <CheckCircle className="w-5 h-5 text-green-600" />
+                                      <span className="text-xs text-green-700">Yes</span>
+                                    </div>
+                                  ) : (
+                                    <div className="flex items-center gap-1 hover:text-green-600 transition-colors">
+                                      <XCircle className="w-5 h-5 text-gray-400 hover:text-green-500" />
+                                      <span className="text-xs text-gray-500">No</span>
+                                    </div>
+                                  )}
+                                </button>
                               </TableCell>
                               <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
                             </TableRow>
@@ -789,6 +885,14 @@ export default function AdminDashboardPage() {
 
                 {/* Bulk Actions */}
                 <div className="flex justify-end gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => openAddRegistration("event")}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Add Walk-in
+                  </Button>
                   {selectedEventRegs.size > 0 && (
                     <Button
                       size="sm"
@@ -944,17 +1048,23 @@ export default function AdminDashboardPage() {
                                         </button>
                                       </TableCell>
                                       <TableCell>
-                                        {reg.checked_in ? (
-                                          <div className="flex items-center gap-1">
-                                            <CheckCircle className="w-5 h-5 text-green-600" />
-                                            <span className="text-xs text-green-700">Yes</span>
-                                          </div>
-                                        ) : (
-                                          <div className="flex items-center gap-1">
-                                            <XCircle className="w-5 h-5 text-gray-400" />
-                                            <span className="text-xs text-gray-500">No</span>
-                                          </div>
-                                        )}
+                                        <button
+                                          onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "event_registrations")}
+                                          className="cursor-pointer"
+                                          title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
+                                        >
+                                          {reg.checked_in ? (
+                                            <div className="flex items-center gap-1">
+                                              <CheckCircle className="w-5 h-5 text-green-600" />
+                                              <span className="text-xs text-green-700">Yes</span>
+                                            </div>
+                                          ) : (
+                                            <div className="flex items-center gap-1 hover:text-green-600 transition-colors">
+                                              <XCircle className="w-5 h-5 text-gray-400 hover:text-green-500" />
+                                              <span className="text-xs text-gray-500">No</span>
+                                            </div>
+                                          )}
+                                        </button>
                                       </TableCell>
                                       <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
                                     </TableRow>
@@ -1370,6 +1480,114 @@ export default function AdminDashboardPage() {
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</>
                 ) : (
                   <><Send className="w-4 h-4 mr-2" /> {emailRecipients.length === 1 ? "Send Email" : `Send to ${emailRecipients.length}`}</>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Walk-in Registration Dialog */}
+      <Dialog open={addRegDialogOpen} onOpenChange={setAddRegDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-[#3D1F0F] flex items-center gap-2">
+              <UserPlus className="w-5 h-5 text-green-600" />
+              Add Walk-in Registration
+            </DialogTitle>
+            <DialogDescription>
+              {addRegType === "event" ? "Register a walk-in attendee for an event" : "Register a walk-in attendee for Table Talk"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {addRegType === "event" && (
+              <div className="space-y-2">
+                <Label htmlFor="add-event">Event</Label>
+                <select
+                  id="add-event"
+                  value={addRegForm.eventName}
+                  onChange={(e) => setAddRegForm(prev => ({ ...prev, eventName: e.target.value }))}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="">Select an event...</option>
+                  <option value="MyGreatMarriage 2026">MyGreatMarriage 2026</option>
+                  <option value="Gathering of Champions 2026">Gathering of Champions 2026</option>
+                  <option value="Table Talk">Table Talk</option>
+                </select>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="add-first">First Name *</Label>
+                <Input
+                  id="add-first"
+                  value={addRegForm.firstName}
+                  onChange={(e) => setAddRegForm(prev => ({ ...prev, firstName: e.target.value }))}
+                  placeholder="First name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="add-last">Last Name *</Label>
+                <Input
+                  id="add-last"
+                  value={addRegForm.lastName}
+                  onChange={(e) => setAddRegForm(prev => ({ ...prev, lastName: e.target.value }))}
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-email">Email *</Label>
+              <Input
+                id="add-email"
+                type="email"
+                value={addRegForm.email}
+                onChange={(e) => setAddRegForm(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="email@example.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-phone">Phone</Label>
+              <Input
+                id="add-phone"
+                value={addRegForm.phone}
+                onChange={(e) => setAddRegForm(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="+264 81 234 5678"
+              />
+            </div>
+            {addRegType === "event" && (
+              <div className="space-y-2">
+                <Label htmlFor="add-spouse">Spouse Name (optional)</Label>
+                <Input
+                  id="add-spouse"
+                  value={addRegForm.spouseName}
+                  onChange={(e) => setAddRegForm(prev => ({ ...prev, spouseName: e.target.value }))}
+                  placeholder="Spouse full name"
+                />
+              </div>
+            )}
+
+            {addRegResult && (
+              <div className={`p-3 rounded-md text-sm ${
+                addRegResult.type === "success" ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"
+              }`}>
+                {addRegResult.message}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setAddRegDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddRegistration}
+                disabled={isAddingReg || !addRegForm.firstName.trim() || !addRegForm.lastName.trim() || !addRegForm.email.trim()}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {isAddingReg ? (
+                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Registering...</>
+                ) : (
+                  <><UserPlus className="w-4 h-4 mr-2" /> Register</>
                 )}
               </Button>
             </div>
