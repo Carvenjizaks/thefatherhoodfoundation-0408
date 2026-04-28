@@ -13,12 +13,12 @@ export async function POST(request: Request) {
       cookieStore.set("ff_admin_token", "ff_admin_authenticated_session_2026", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 8, // 8 hours
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24, // 24 hours
         path: "/",
       })
 
-      return NextResponse.json({ success: true })
+      return NextResponse.json({ success: true, token: "ff_admin_authenticated_session_2026" })
     }
 
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
