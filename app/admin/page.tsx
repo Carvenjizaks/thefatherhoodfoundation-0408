@@ -122,11 +122,45 @@ export default function AdminDashboardPage() {
     checkAuth()
   }, [])
 
-  const checkAuth = () => {
+  const checkAuth = async () => {
     const isAdmin = sessionStorage.getItem("ff_admin_auth")
     if (isAdmin === "authenticated") {
-      setIsAuthenticated(true)
-      fetchAllData()
+      // Verify the cookie is still valid by making a test request
+      try {
+        const testResponse = await fetch("/api/admin/registrations")
+        if (testResponse.status === 401) {
+          // Cookie expired or missing, clear session and show login
+          sessionStorage.removeItem("ff_admin_auth")
+          setIsAuthenticated(false)
+          setIsLoading(false)
+          return
+        }
+        // Cookie is valid, load all data
+        setIsAuthenticated(true)
+        const ttData = await testResponse.json()
+        if (ttData.registrations) {
+          setTableTalkRegistrations(ttData.registrations)
+        }
+        // Now fetch the rest
+        const [eventResponse, contactsResponse, donationsResponse] = await Promise.all([
+          fetch("/api/admin/event-registrations"),
+          fetch("/api/admin/contacts"),
+          fetch("/api/admin/donations"),
+        ])
+        const [eventData, contactsData, donationsData] = await Promise.all([
+          eventResponse.json(),
+          contactsResponse.json(),
+          donationsResponse.json(),
+        ])
+        if (eventData.registrations) setEventRegistrations(eventData.registrations)
+        if (contactsData.contacts) setContacts(contactsData.contacts)
+        if (donationsData.donations) setDonations(donationsData.donations)
+        setIsLoading(false)
+      } catch {
+        sessionStorage.removeItem("ff_admin_auth")
+        setIsAuthenticated(false)
+        setIsLoading(false)
+      }
     } else {
       setIsLoading(false)
     }
@@ -135,6 +169,7 @@ export default function AdminDashboardPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginError("")
+    setIsLoading(true)
     
     try {
       const response = await fetch("/api/admin/login", {
@@ -146,11 +181,15 @@ export default function AdminDashboardPage() {
       if (response.ok) {
         sessionStorage.setItem("ff_admin_auth", "authenticated")
         setIsAuthenticated(true)
-        fetchAllData()
+        // Small delay to ensure cookie is processed by the browser
+        await new Promise(resolve => setTimeout(resolve, 100))
+        await fetchAllData()
       } else {
+        setIsLoading(false)
         setLoginError("Invalid username or password. Please try again.")
       }
     } catch {
+      setIsLoading(false)
       setLoginError("Login failed. Please try again.")
     }
   }
@@ -167,30 +206,47 @@ export default function AdminDashboardPage() {
   const fetchAllData = async () => {
     setIsLoading(true)
     try {
-      // Fetch Table Talk registrations
-      const ttResponse = await fetch("/api/admin/registrations")
-      const ttData = await ttResponse.json()
+      // Fetch all data in parallel for better performance
+      const [ttResponse, eventResponse, contactsResponse, donationsResponse] = await Promise.all([
+        fetch("/api/admin/registrations"),
+        fetch("/api/admin/event-registrations"),
+        fetch("/api/admin/contacts"),
+        fetch("/api/admin/donations"),
+      ])
+
+      // Check if any response is 401 - means cookie expired or missing
+      if (
+        ttResponse.status === 401 ||
+        eventResponse.status === 401 ||
+        contactsResponse.status === 401 ||
+        donationsResponse.status === 401
+      ) {
+        console.error("Admin session expired or invalid. Logging out.")
+        sessionStorage.removeItem("ff_admin_auth")
+        setIsAuthenticated(false)
+        setTableTalkRegistrations([])
+        setEventRegistrations([])
+        setContacts([])
+        setDonations([])
+        return
+      }
+
+      const [ttData, eventData, contactsData, donationsData] = await Promise.all([
+        ttResponse.json(),
+        eventResponse.json(),
+        contactsResponse.json(),
+        donationsResponse.json(),
+      ])
+
       if (ttData.registrations) {
         setTableTalkRegistrations(ttData.registrations)
       }
-
-      // Fetch Event registrations
-      const eventResponse = await fetch("/api/admin/event-registrations")
-      const eventData = await eventResponse.json()
       if (eventData.registrations) {
         setEventRegistrations(eventData.registrations)
       }
-
-      // Fetch Contacts via API
-      const contactsResponse = await fetch("/api/admin/contacts")
-      const contactsData = await contactsResponse.json()
       if (contactsData.contacts) {
         setContacts(contactsData.contacts)
       }
-
-      // Fetch Donations via API
-      const donationsResponse = await fetch("/api/admin/donations")
-      const donationsData = await donationsResponse.json()
       if (donationsData.donations) {
         setDonations(donationsData.donations)
       }
