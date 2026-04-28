@@ -1,4 +1,4 @@
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { NextResponse } from "next/server"
 
 const ADMIN_TOKEN_COOKIE = "ff_admin_token"
@@ -10,9 +10,24 @@ export function generateAdminToken(): string {
 
 export async function verifyAdminRequest(): Promise<boolean> {
   try {
+    // First try cookie-based auth
     const cookieStore = await cookies()
     const token = cookieStore.get(ADMIN_TOKEN_COOKIE)
-    return token?.value === ADMIN_TOKEN_VALUE
+    if (token?.value === ADMIN_TOKEN_VALUE) {
+      return true
+    }
+
+    // Fallback: check Authorization header (Bearer token)
+    const headerStore = await headers()
+    const authHeader = headerStore.get("authorization")
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const bearerToken = authHeader.slice(7)
+      if (bearerToken === ADMIN_TOKEN_VALUE) {
+        return true
+      }
+    }
+
+    return false
   } catch {
     return false
   }

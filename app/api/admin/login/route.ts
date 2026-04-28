@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         path: "/",
       })
 
-      return NextResponse.json({ success: true })
+      return NextResponse.json({ success: true, token: "ff_admin_authenticated_session_2026" })
     }
 
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })

@@ -118,45 +118,43 @@ export default function AdminDashboardPage() {
   const [selectedEventRegs, setSelectedEventRegs] = useState<Set<string>>(new Set())
   const [selectedTableTalkRegs, setSelectedTableTalkRegs] = useState<Set<string>>(new Set())
 
+  // Helper to make authenticated fetch requests with Bearer token
+  const adminFetch = (url: string, options?: RequestInit) => {
+    const token = sessionStorage.getItem("ff_admin_token")
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    })
+  }
+
   useEffect(() => {
     checkAuth()
   }, [])
 
   const checkAuth = async () => {
-    const isAdmin = sessionStorage.getItem("ff_admin_auth")
-    if (isAdmin === "authenticated") {
-      // Verify the cookie is still valid by making a test request
+    const token = sessionStorage.getItem("ff_admin_token")
+    if (token) {
+      // Verify the token is still valid by making a test request
       try {
-        const testResponse = await fetch("/api/admin/registrations")
+        const testResponse = await fetch("/api/admin/registrations", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         if (testResponse.status === 401) {
-          // Cookie expired or missing, clear session and show login
+          // Token invalid, clear session and show login
+          sessionStorage.removeItem("ff_admin_token")
           sessionStorage.removeItem("ff_admin_auth")
           setIsAuthenticated(false)
           setIsLoading(false)
           return
         }
-        // Cookie is valid, load all data
+        // Token is valid, set authenticated and load all data
         setIsAuthenticated(true)
-        const ttData = await testResponse.json()
-        if (ttData.registrations) {
-          setTableTalkRegistrations(ttData.registrations)
-        }
-        // Now fetch the rest
-        const [eventResponse, contactsResponse, donationsResponse] = await Promise.all([
-          fetch("/api/admin/event-registrations"),
-          fetch("/api/admin/contacts"),
-          fetch("/api/admin/donations"),
-        ])
-        const [eventData, contactsData, donationsData] = await Promise.all([
-          eventResponse.json(),
-          contactsResponse.json(),
-          donationsResponse.json(),
-        ])
-        if (eventData.registrations) setEventRegistrations(eventData.registrations)
-        if (contactsData.contacts) setContacts(contactsData.contacts)
-        if (donationsData.donations) setDonations(donationsData.donations)
-        setIsLoading(false)
+        await fetchAllData()
       } catch {
+        sessionStorage.removeItem("ff_admin_token")
         sessionStorage.removeItem("ff_admin_auth")
         setIsAuthenticated(false)
         setIsLoading(false)
@@ -179,10 +177,11 @@ export default function AdminDashboardPage() {
       })
       
       if (response.ok) {
+        const data = await response.json()
+        // Store the token in sessionStorage for Authorization header usage
+        sessionStorage.setItem("ff_admin_token", data.token)
         sessionStorage.setItem("ff_admin_auth", "authenticated")
         setIsAuthenticated(true)
-        // Small delay to ensure cookie is processed by the browser
-        await new Promise(resolve => setTimeout(resolve, 100))
         await fetchAllData()
       } else {
         setIsLoading(false)
@@ -194,7 +193,13 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await adminFetch("/api/admin/logout", { method: "POST" })
+    } catch {
+      // Continue with client-side logout even if API fails
+    }
+    sessionStorage.removeItem("ff_admin_token")
     sessionStorage.removeItem("ff_admin_auth")
     setIsAuthenticated(false)
     setTableTalkRegistrations([])
@@ -208,13 +213,13 @@ export default function AdminDashboardPage() {
     try {
       // Fetch all data in parallel for better performance
       const [ttResponse, eventResponse, contactsResponse, donationsResponse] = await Promise.all([
-        fetch("/api/admin/registrations"),
-        fetch("/api/admin/event-registrations"),
-        fetch("/api/admin/contacts"),
-        fetch("/api/admin/donations"),
+        adminFetch("/api/admin/registrations"),
+        adminFetch("/api/admin/event-registrations"),
+        adminFetch("/api/admin/contacts"),
+        adminFetch("/api/admin/donations"),
       ])
 
-      // Check if any response is 401 - means cookie expired or missing
+      // Check if any response is 401 - means token expired or invalid
       if (
         ttResponse.status === 401 ||
         eventResponse.status === 401 ||
@@ -222,6 +227,7 @@ export default function AdminDashboardPage() {
         donationsResponse.status === 401
       ) {
         console.error("Admin session expired or invalid. Logging out.")
+        sessionStorage.removeItem("ff_admin_token")
         sessionStorage.removeItem("ff_admin_auth")
         setIsAuthenticated(false)
         setTableTalkRegistrations([])
@@ -300,7 +306,7 @@ export default function AdminDashboardPage() {
   const handleTogglePayment = async (id: string, currentStatus: string, table: string) => {
     const newStatus = currentStatus === "paid" ? "pending" : "paid"
     try {
-      const response = await fetch("/api/admin/update-status", {
+      const response = await adminFetch("/api/admin/update-status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, table, field: "payment_status", value: newStatus }),
@@ -354,7 +360,7 @@ export default function AdminDashboardPage() {
     setIsSendingEmail(true)
     setEmailResult(null)
     try {
-      const response = await fetch("/api/admin/send-email", {
+      const response = await adminFetch("/api/admin/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
