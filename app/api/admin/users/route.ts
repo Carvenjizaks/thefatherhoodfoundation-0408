@@ -83,6 +83,59 @@ export async function POST(request: Request) {
   }
 }
 
+// PATCH - Update admin user password (owner can reset any, users can reset their own)
+export async function PATCH(request: Request) {
+  try {
+    const { id, newPassword, currentPassword } = await request.json()
+
+    if (!id || !newPassword) {
+      return NextResponse.json({ error: "User ID and new password required" }, { status: 400 })
+    }
+
+    const supabase = createAdminClient()
+
+    // Check if owner is making the request
+    const ownerCheck = await isOwner()
+
+    // Get the user being updated
+    const { data: targetUser } = await supabase
+      .from("admin_users")
+      .select("id, role, password_hash")
+      .eq("id", id)
+      .single()
+
+    if (!targetUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    // If not owner, user can only reset their own password and must provide current password
+    if (!ownerCheck) {
+      if (!currentPassword) {
+        return NextResponse.json({ error: "Current password required" }, { status: 400 })
+      }
+      if (targetUser.password_hash !== currentPassword) {
+        return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 })
+      }
+    }
+
+    // Update the password
+    const { error } = await supabase
+      .from("admin_users")
+      .update({ password_hash: newPassword, updated_at: new Date().toISOString() })
+      .eq("id", id)
+
+    if (error) {
+      console.error("Error updating password:", error)
+      return NextResponse.json({ error: "Failed to update password" }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, message: "Password updated successfully" })
+  } catch (error) {
+    console.error("Error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
 // DELETE - Delete/deactivate admin user (owner only)
 export async function DELETE(request: Request) {
   try {
