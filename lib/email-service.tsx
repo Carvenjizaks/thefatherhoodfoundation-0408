@@ -94,41 +94,57 @@ export async function createContact(params: CreateContactParams) {
   if (existingContact) {
     contactId = existingContact.id
     // Update source details if registering for new event
-    await getSupabaseAdmin()
+    const { error: updateError } = await getSupabaseAdmin()
       .from("contacts")
       .update({
+        first_name: firstName,
+        last_name: lastName,
+        name: `${firstName} ${lastName}`,
         source_details: sourceDetails,
         updated_at: new Date().toISOString(),
       })
       .eq("id", contactId)
+    
+    if (updateError) {
+      console.error("[v0] Error updating existing contact:", JSON.stringify(updateError))
+    }
   } else {
     // Create new contact
+    console.log("[v0] Inserting new contact:", { firstName, lastName, email: email.toLowerCase(), source })
     const { data: newContact, error } = await getSupabaseAdmin()
       .from("contacts")
       .insert({
         first_name: firstName,
         last_name: lastName,
+        name: `${firstName} ${lastName}`,
         email: email.toLowerCase(),
-        cellphone,
+        cellphone: cellphone || null,
         source,
         source_details: sourceDetails,
       })
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error("[v0] Supabase insert error:", JSON.stringify(error))
+      throw error
+    }
+    console.log("[v0] Contact created successfully:", newContact.id)
     contactId = newContact.id
     isNewContact = true
   }
 
   // Add spouse if provided
   if (spouseFirstName) {
-    await getSupabaseAdmin().from("contact_spouses").insert({
+    const { error: spouseError } = await getSupabaseAdmin().from("contact_spouses").insert({
       contact_id: contactId,
       first_name: spouseFirstName,
       email: spouseEmail?.toLowerCase(),
       cellphone: spouseCellphone,
     })
+    if (spouseError) {
+      console.error("[v0] Error adding spouse:", JSON.stringify(spouseError))
+    }
   }
 
   // Get the contact with confirmation token
