@@ -36,6 +36,8 @@ import {
   CalendarDays,
   TrendingUp,
   Lock,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react"
 
 interface TableTalkRegistration extends Record<string, unknown> {
@@ -133,6 +135,11 @@ export default function AdminDashboardPage() {
   })
   const [isAddingReg, setIsAddingReg] = useState(false)
   const [addRegResult, setAddRegResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
+
+  // Delete state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; table: string; name: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Helper to make authenticated fetch requests with Bearer token
   const adminFetch = (url: string, options?: RequestInit) => {
@@ -395,6 +402,45 @@ export default function AdminDashboardPage() {
       setAddRegResult({ message: "Failed to register. Please try again.", type: "error" })
     } finally {
       setIsAddingReg(false)
+    }
+  }
+
+  const openDeleteDialog = (id: string, table: string, name: string) => {
+    setDeleteTarget({ id, table, name })
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return
+    setIsDeleting(true)
+    try {
+      const response = await adminFetch("/api/admin/delete-registration", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: deleteTarget.id, table: deleteTarget.table }),
+      })
+      if (response.ok) {
+        // Remove from local state
+        if (deleteTarget.table === "event_registrations") {
+          setEventRegistrations(prev => prev.filter(r => r.id !== deleteTarget.id))
+          setSelectedEventRegs(prev => { const n = new Set(prev); n.delete(deleteTarget.id); return n })
+        } else if (deleteTarget.table === "table_talk_registrations") {
+          setTableTalkRegistrations(prev => prev.filter(r => r.id !== deleteTarget.id))
+          setSelectedTableTalkRegs(prev => { const n = new Set(prev); n.delete(deleteTarget.id); return n })
+        } else if (deleteTarget.table === "contacts") {
+          setContacts(prev => prev.filter(c => c.id !== deleteTarget.id))
+          setSelectedContacts(prev => { const n = new Set(prev); n.delete(deleteTarget.id); return n })
+        } else if (deleteTarget.table === "donations") {
+          setDonations(prev => prev.filter(d => d.id !== deleteTarget.id))
+          setSelectedDonations(prev => { const n = new Set(prev); n.delete(deleteTarget.id); return n })
+        }
+        setDeleteDialogOpen(false)
+        setDeleteTarget(null)
+      }
+    } catch (error) {
+      console.error("Failed to delete:", error)
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -813,6 +859,7 @@ export default function AdminDashboardPage() {
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Payment</TableHead>
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Check-in</TableHead>
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider w-16">Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -872,6 +919,15 @@ export default function AdminDashboardPage() {
                                 </button>
                               </TableCell>
                               <TableCell className="text-xs text-muted-foreground">{formatDateTime(reg.created_at)}</TableCell>
+                              <TableCell>
+                                <button
+                                  onClick={() => openDeleteDialog(reg.id, "table_talk_registrations", `${reg.first_name} ${reg.last_name}`)}
+                                  className="text-muted-foreground/50 hover:text-red-600 transition-colors p-1 rounded"
+                                  title="Delete registration"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -1046,6 +1102,7 @@ export default function AdminDashboardPage() {
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Payment</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Check-in</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider w-16">Actions</TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -1105,6 +1162,15 @@ export default function AdminDashboardPage() {
                                         </button>
                                       </TableCell>
                                       <TableCell className="text-xs text-muted-foreground">{formatDateTime(reg.created_at)}</TableCell>
+                                      <TableCell>
+                                        <button
+                                          onClick={() => openDeleteDialog(reg.id, "event_registrations", `${reg.first_name} ${reg.last_name}`)}
+                                          className="text-muted-foreground/50 hover:text-red-600 transition-colors p-1 rounded"
+                                          title="Delete registration"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -1281,6 +1347,7 @@ export default function AdminDashboardPage() {
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Details</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Confirmed</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider w-16">Actions</TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -1322,6 +1389,15 @@ export default function AdminDashboardPage() {
                                         )}
                                       </TableCell>
                                       <TableCell className="text-xs text-muted-foreground">{formatDateTime(contact.created_at)}</TableCell>
+                                      <TableCell>
+                                        <button
+                                          onClick={() => openDeleteDialog(contact.id, "contacts", `${contact.first_name} ${contact.last_name}`)}
+                                          className="text-muted-foreground/50 hover:text-red-600 transition-colors p-1 rounded"
+                                          title="Delete contact"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -1396,6 +1472,7 @@ export default function AdminDashboardPage() {
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Method</TableHead>
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</TableHead>
                             <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider w-16">Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -1441,6 +1518,15 @@ export default function AdminDashboardPage() {
                                 </button>
                               </TableCell>
                               <TableCell className="text-xs text-muted-foreground">{formatDateTime(donation.created_at)}</TableCell>
+                              <TableCell>
+                                <button
+                                  onClick={() => openDeleteDialog(donation.id, "donations", `${donation.first_name} ${donation.last_name}`)}
+                                  className="text-muted-foreground/50 hover:text-red-600 transition-colors p-1 rounded"
+                                  title="Delete donation"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -1663,6 +1749,52 @@ export default function AdminDashboardPage() {
                 )}
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={(open) => {
+        setDeleteDialogOpen(open)
+        if (!open) setDeleteTarget(null)
+      }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-500" />
+              Confirm Deletion
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this registration? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            {deleteTarget && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800 font-medium">{deleteTarget.name}</p>
+                <p className="text-xs text-red-600 mt-1">This record will be permanently removed.</p>
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => { setDeleteDialogOpen(false); setDeleteTarget(null) }} 
+              className="border-border"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {isDeleting ? (
+                <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Deleting...</>
+              ) : (
+                <><Trash2 className="w-4 h-4 mr-2" /> Delete</>
+              )}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
