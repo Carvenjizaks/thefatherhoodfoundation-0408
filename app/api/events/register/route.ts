@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       session_date: eventDate,
       dynamic_code: registrationCode,
       payment_amount: parseFloat(paymentAmount) || 0,
-      payment_status: "pending",
+      payment_status: "unpaid",
       spouse_name: spouseName,
       spouse_email: null,
       spouse_phone: null,

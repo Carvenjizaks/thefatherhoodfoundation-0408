@@ -2,7 +2,7 @@ import { createAdminClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { verifyAdminRequest, unauthorizedResponse } from "@/lib/admin-auth"
 
-const ALLOWED_TABLES = ["event_registrations", "table_talk_registrations"]
+const ALLOWED_TABLES = ["event_registrations", "table_talk_registrations", "donations"]
 const ALLOWED_FIELDS = ["payment_status", "checked_in"]
 
 export async function POST(request: Request) {

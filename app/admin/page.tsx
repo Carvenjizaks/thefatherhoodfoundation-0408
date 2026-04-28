@@ -117,6 +117,8 @@ export default function AdminDashboardPage() {
   // Bulk selection state
   const [selectedEventRegs, setSelectedEventRegs] = useState<Set<string>>(new Set())
   const [selectedTableTalkRegs, setSelectedTableTalkRegs] = useState<Set<string>>(new Set())
+  const [selectedContacts, setSelectedContacts] = useState<Set<string>>(new Set())
+  const [selectedDonations, setSelectedDonations] = useState<Set<string>>(new Set())
 
   // Helper to make authenticated fetch requests with Bearer token
   const adminFetch = (url: string, options?: RequestInit) => {
@@ -304,7 +306,7 @@ export default function AdminDashboardPage() {
   }
 
   const handleTogglePayment = async (id: string, currentStatus: string, table: string) => {
-    const newStatus = currentStatus === "paid" ? "pending" : "paid"
+    const newStatus = currentStatus === "paid" ? "unpaid" : "paid"
     try {
       const response = await adminFetch("/api/admin/update-status", {
         method: "POST",
@@ -316,6 +318,8 @@ export default function AdminDashboardPage() {
           setEventRegistrations(prev => prev.map(r => r.id === id ? { ...r, payment_status: newStatus } : r))
         } else if (table === "table_talk_registrations") {
           setTableTalkRegistrations(prev => prev.map(r => r.id === id ? { ...r, payment_status: newStatus } : r))
+        } else if (table === "donations") {
+          setDonations(prev => prev.map(r => r.id === id ? { ...r, payment_status: newStatus } : r))
         }
       }
     } catch (error) {
@@ -330,8 +334,10 @@ export default function AdminDashboardPage() {
         return <Badge className="bg-green-100 text-green-800">Paid</Badge>
       case "pending":
         return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+      case "unpaid":
+        return <Badge className="bg-red-100 text-red-800">Unpaid</Badge>
       default:
-        return <Badge className="bg-gray-100 text-gray-800">{status || "Unknown"}</Badge>
+        return <Badge className="bg-red-100 text-red-800">Unpaid</Badge>
     }
   }
 
@@ -376,6 +382,8 @@ export default function AdminDashboardPage() {
           setEmailDialogOpen(false)
           setSelectedEventRegs(new Set())
           setSelectedTableTalkRegs(new Set())
+          setSelectedContacts(new Set())
+          setSelectedDonations(new Set())
         }, 2000)
       } else {
         setEmailResult({ message: data.error || "Failed to send", type: "error" })
@@ -421,6 +429,42 @@ export default function AdminDashboardPage() {
       setSelectedTableTalkRegs(new Set())
     } else {
       setSelectedTableTalkRegs(new Set(regs.map(r => r.id)))
+    }
+  }
+
+  const toggleContactSelection = (id: string) => {
+    setSelectedContacts(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const toggleAllContacts = (items: Contact[]) => {
+    const allSelected = items.every(c => selectedContacts.has(c.id))
+    if (allSelected) {
+      setSelectedContacts(new Set())
+    } else {
+      setSelectedContacts(new Set(items.map(c => c.id)))
+    }
+  }
+
+  const toggleDonationSelection = (id: string) => {
+    setSelectedDonations(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const toggleAllDonations = (items: Donation[]) => {
+    const allSelected = items.every(d => selectedDonations.has(d.id))
+    if (allSelected) {
+      setSelectedDonations(new Set())
+    } else {
+      setSelectedDonations(new Set(items.map(d => d.id)))
     }
   }
 
@@ -952,13 +996,27 @@ export default function AdminDashboardPage() {
 
                 {/* Bulk Actions */}
                 <div className="flex justify-end gap-2">
+                  {selectedContacts.size > 0 && (
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        const selected = contacts.filter(c => selectedContacts.has(c.id))
+                        openEmailForBulk(selected.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
+                      }}
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                    >
+                      <Send className="w-4 h-4 mr-2" />
+                      Email Selected ({selectedContacts.size})
+                    </Button>
+                  )}
                   <Button
                     size="sm"
+                    variant="outline"
                     onClick={() => {
                       const filtered = filterData(contacts, searchTerm)
                       openEmailForBulk(filtered.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
                     }}
-                    className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                    className="border-[#8B2B3E] text-[#8B2B3E]"
                   >
                     <Send className="w-4 h-4 mr-2" />
                     Email All Contacts ({filterData(contacts, searchTerm).length})
@@ -1046,6 +1104,22 @@ export default function AdminDashboardPage() {
                               <Table>
                                 <TableHeader>
                                   <TableRow>
+                                    <TableHead className="w-10">
+                                      <Checkbox
+                                        checked={sourceContacts.every(c => selectedContacts.has(c.id))}
+                                        onCheckedChange={() => {
+                                          const allSelected = sourceContacts.every(c => selectedContacts.has(c.id))
+                                          setSelectedContacts(prev => {
+                                            const next = new Set(prev)
+                                            sourceContacts.forEach(c => {
+                                              if (allSelected) next.delete(c.id)
+                                              else next.add(c.id)
+                                            })
+                                            return next
+                                          })
+                                        }}
+                                      />
+                                    </TableHead>
                                     <TableHead>Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Phone</TableHead>
@@ -1057,6 +1131,12 @@ export default function AdminDashboardPage() {
                                 <TableBody>
                                   {sourceContacts.map((contact) => (
                                     <TableRow key={contact.id}>
+                                      <TableCell>
+                                        <Checkbox
+                                          checked={selectedContacts.has(contact.id)}
+                                          onCheckedChange={() => toggleContactSelection(contact.id)}
+                                        />
+                                      </TableCell>
                                       <TableCell className="font-medium">
                                         <div className="flex items-center gap-2">
                                           <span>{contact.first_name} {contact.last_name}</span>
@@ -1102,15 +1182,30 @@ export default function AdminDashboardPage() {
                     <CardTitle className="text-[#3D1F0F]">Donations</CardTitle>
                     <CardDescription>All donation pledges and payments</CardDescription>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
-                    className="border-[#8B2B3E] text-[#8B2B3E]"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Export CSV
-                  </Button>
+                  <div className="flex gap-2">
+                    {selectedDonations.size > 0 && (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          const selected = donations.filter(d => selectedDonations.has(d.id))
+                          openEmailForBulk(selected.map(d => ({ email: d.email, firstName: d.first_name, lastName: d.last_name })))
+                        }}
+                        className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                      >
+                        <Send className="w-4 h-4 mr-2" />
+                        Email Selected ({selectedDonations.size})
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
+                      className="border-[#8B2B3E] text-[#8B2B3E]"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {isLoading ? (
@@ -1123,6 +1218,12 @@ export default function AdminDashboardPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
+                            <TableHead className="w-10">
+                              <Checkbox
+                                checked={filterData(donations, searchTerm).length > 0 && filterData(donations, searchTerm).every(d => selectedDonations.has(d.id))}
+                                onCheckedChange={() => toggleAllDonations(filterData(donations, searchTerm))}
+                              />
+                            </TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Email</TableHead>
                             <TableHead>Phone</TableHead>
@@ -1136,6 +1237,12 @@ export default function AdminDashboardPage() {
                         <TableBody>
                           {filterData(donations, searchTerm).map((donation) => (
                             <TableRow key={donation.id}>
+                              <TableCell>
+                                <Checkbox
+                                  checked={selectedDonations.has(donation.id)}
+                                  onCheckedChange={() => toggleDonationSelection(donation.id)}
+                                />
+                              </TableCell>
                               <TableCell className="font-medium">
                                 <div className="flex items-center gap-2">
                                   <span>{donation.first_name} {donation.last_name}</span>
@@ -1155,7 +1262,15 @@ export default function AdminDashboardPage() {
                               </TableCell>
                               <TableCell><Badge variant="outline">{donation.frequency || "Once-off"}</Badge></TableCell>
                               <TableCell>{donation.payment_method || "-"}</TableCell>
-                              <TableCell>{getStatusBadge(donation.payment_status)}</TableCell>
+                              <TableCell>
+                                <button
+                                  onClick={() => handleTogglePayment(donation.id, donation.payment_status, "donations")}
+                                  className="cursor-pointer"
+                                  title="Click to toggle payment status"
+                                >
+                                  {getStatusBadge(donation.payment_status)}
+                                </button>
+                              </TableCell>
                               <TableCell className="text-sm text-gray-500">{formatDateTime(donation.created_at)}</TableCell>
                             </TableRow>
                           ))}
