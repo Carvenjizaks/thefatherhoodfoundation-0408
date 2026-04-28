@@ -112,6 +112,7 @@ export default function AdminDashboardPage() {
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
+  const [eventFilter, setEventFilter] = useState("all") // Filter by specific event for check-in
 
   // Email compose state
   const [emailDialogOpen, setEmailDialogOpen] = useState(false)
@@ -763,14 +764,34 @@ export default function AdminDashboardPage() {
 
           {/* Search Bar */}
           <div className="mb-6">
-            <div className="relative max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search all records..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-background border-border/60 h-10"
-              />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, email, phone..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-background border-border/60 h-10"
+                />
+              </div>
+              {activeTab === "events" && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">Event:</span>
+                  <select
+                    value={eventFilter}
+                    onChange={(e) => setEventFilter(e.target.value)}
+                    className="h-10 rounded-md border border-border/60 bg-background px-3 text-sm min-w-[200px]"
+                  >
+                    <option value="all">All Events</option>
+                    {(() => {
+                      const eventNames = [...new Set(eventRegistrations.map(r => r.event_name || "Unknown Event"))]
+                      return eventNames.map(name => (
+                        <option key={name} value={name}>{name} ({eventRegistrations.filter(r => (r.event_name || "Unknown Event") === name).length})</option>
+                      ))
+                    })()}
+                  </select>
+                </div>
+              )}
             </div>
           </div>
 
@@ -893,28 +914,30 @@ export default function AdminDashboardPage() {
                               <TableCell>
                                 <button
                                   onClick={() => handleTogglePayment(reg.id, reg.payment_status, "table_talk_registrations")}
-                                  className="cursor-pointer"
+                                  className={`cursor-pointer px-2 py-1 rounded-md text-xs font-medium transition-all ${
+                                    reg.payment_status === "paid" 
+                                      ? "bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200" 
+                                      : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
+                                  }`}
                                   title="Click to toggle payment status"
                                 >
-                                  {getStatusBadge(reg.payment_status)}
+                                  {reg.payment_status === "paid" ? "Paid" : "Unpaid"}
                                 </button>
                               </TableCell>
                               <TableCell>
                                 <button
                                   onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "table_talk_registrations")}
-                                  className="cursor-pointer group"
+                                  className={`cursor-pointer px-2 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${
+                                    reg.checked_in 
+                                      ? "bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200" 
+                                      : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300"
+                                  }`}
                                   title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
                                 >
                                   {reg.checked_in ? (
-                                    <div className="flex items-center gap-1.5">
-                                      <CheckCircle className="w-4 h-4 text-emerald-600" />
-                                      <span className="text-xs font-medium text-emerald-700">Yes</span>
-                                    </div>
+                                    <><CheckCircle className="w-3.5 h-3.5" /> Here</>
                                   ) : (
-                                    <div className="flex items-center gap-1.5 group-hover:text-emerald-600 transition-colors">
-                                      <XCircle className="w-4 h-4 text-muted-foreground/40 group-hover:text-emerald-500" />
-                                      <span className="text-xs text-muted-foreground group-hover:text-emerald-600">No</span>
-                                    </div>
+                                    <><XCircle className="w-3.5 h-3.5" /> Check In</>
                                   )}
                                 </button>
                               </TableCell>
@@ -1009,7 +1032,11 @@ export default function AdminDashboardPage() {
                   </div>
                 ) : (
                   (() => {
-                    const filteredEvents = filterData(eventRegistrations, searchTerm)
+                    // Apply both search filter and event filter
+                    let filteredEvents = filterData(eventRegistrations, searchTerm)
+                    if (eventFilter !== "all") {
+                      filteredEvents = filteredEvents.filter(r => (r.event_name || "Unknown Event") === eventFilter)
+                    }
                     const groupedEvents = filteredEvents.reduce((acc, reg) => {
                       const eventName = reg.event_name || "Unknown Event"
                       if (!acc[eventName]) acc[eventName] = []
@@ -1136,28 +1163,30 @@ export default function AdminDashboardPage() {
                                       <TableCell>
                                         <button
                                           onClick={() => handleTogglePayment(reg.id, reg.payment_status, "event_registrations")}
-                                          className="cursor-pointer"
+                                          className={`cursor-pointer px-2 py-1 rounded-md text-xs font-medium transition-all ${
+                                            reg.payment_status === "paid" 
+                                              ? "bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200" 
+                                              : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
+                                          }`}
                                           title="Click to toggle payment status"
                                         >
-                                          {getStatusBadge(reg.payment_status)}
+                                          {reg.payment_status === "paid" ? "Paid" : "Unpaid"}
                                         </button>
                                       </TableCell>
                                       <TableCell>
                                         <button
                                           onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "event_registrations")}
-                                          className="cursor-pointer group"
+                                          className={`cursor-pointer px-2 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${
+                                            reg.checked_in 
+                                              ? "bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200" 
+                                              : "bg-gray-100 text-gray-600 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300"
+                                          }`}
                                           title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
                                         >
                                           {reg.checked_in ? (
-                                            <div className="flex items-center gap-1.5">
-                                              <CheckCircle className="w-4 h-4 text-emerald-600" />
-                                              <span className="text-xs font-medium text-emerald-700">Yes</span>
-                                            </div>
+                                            <><CheckCircle className="w-3.5 h-3.5" /> Here</>
                                           ) : (
-                                            <div className="flex items-center gap-1.5 group-hover:text-emerald-600 transition-colors">
-                                              <XCircle className="w-4 h-4 text-muted-foreground/40 group-hover:text-emerald-500" />
-                                              <span className="text-xs text-muted-foreground group-hover:text-emerald-600">No</span>
-                                            </div>
+                                            <><XCircle className="w-3.5 h-3.5" /> Check In</>
                                           )}
                                         </button>
                                       </TableCell>
