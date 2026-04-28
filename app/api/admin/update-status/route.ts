@@ -27,9 +27,11 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient()
 
+    const updateData: Record<string, unknown> = { [field]: value }
+
     const { error } = await supabase
       .from(table)
-      .update({ [field]: value, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq("id", id)
 
     if (error) {
