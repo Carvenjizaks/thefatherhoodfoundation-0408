@@ -38,6 +38,8 @@ import {
   Lock,
   Trash2,
   AlertTriangle,
+  Settings,
+  UserCog,
 } from "lucide-react"
 
 interface TableTalkRegistration extends Record<string, unknown> {
@@ -100,6 +102,24 @@ interface Donation extends Record<string, unknown> {
   created_at: string
 }
 
+interface AdminUser {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  role: "owner" | "staff"
+}
+
+interface AdminStaffUser {
+  id: string
+  email: string
+  first_name: string
+  last_name: string
+  role: string
+  is_active: boolean
+  created_at: string
+}
+
 export default function AdminDashboardPage() {
   const [tableTalkRegistrations, setTableTalkRegistrations] = useState<TableTalkRegistration[]>([])
   const [eventRegistrations, setEventRegistrations] = useState<EventRegistration[]>([])
@@ -107,12 +127,19 @@ export default function AdminDashboardPage() {
   const [donations, setDonations] = useState<Donation[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [currentUser, setCurrentUser] = useState<AdminUser | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
   const [eventFilter, setEventFilter] = useState("all") // Filter by specific event for check-in
+
+  // Admin users management (owner only)
+  const [adminUsers, setAdminUsers] = useState<AdminStaffUser[]>([])
+  const [addUserDialogOpen, setAddUserDialogOpen] = useState(false)
+  const [addUserForm, setAddUserForm] = useState({ email: "", password: "", firstName: "", lastName: "" })
+  const [isAddingUser, setIsAddingUser] = useState(false)
 
   // Email compose state
   const [emailDialogOpen, setEmailDialogOpen] = useState(false)
@@ -168,16 +195,30 @@ export default function AdminDashboardPage() {
         if (testResponse.status === 401) {
           sessionStorage.removeItem("ff_admin_token")
           sessionStorage.removeItem("ff_admin_auth")
+          sessionStorage.removeItem("ff_admin_user")
           setIsAuthenticated(false)
+          setCurrentUser(null)
           setIsLoading(false)
           return
+        }
+        // Restore user info from sessionStorage
+        const savedUser = sessionStorage.getItem("ff_admin_user")
+        if (savedUser) {
+          const user = JSON.parse(savedUser)
+          setCurrentUser(user)
+          // If owner, also fetch admin users
+          if (user.role === "owner") {
+            fetchAdminUsers(token)
+          }
         }
         setIsAuthenticated(true)
         await fetchAllData()
       } catch {
         sessionStorage.removeItem("ff_admin_token")
         sessionStorage.removeItem("ff_admin_auth")
+        sessionStorage.removeItem("ff_admin_user")
         setIsAuthenticated(false)
+        setCurrentUser(null)
         setIsLoading(false)
       }
     } else {
@@ -201,8 +242,14 @@ export default function AdminDashboardPage() {
         const data = await response.json()
         sessionStorage.setItem("ff_admin_token", data.token)
         sessionStorage.setItem("ff_admin_auth", "authenticated")
+        sessionStorage.setItem("ff_admin_user", JSON.stringify(data.user))
+        setCurrentUser(data.user)
         setIsAuthenticated(true)
         await fetchAllData()
+        // If owner, also fetch admin users
+        if (data.user.role === "owner") {
+          fetchAdminUsers(data.token)
+        }
       } else {
         setIsLoading(false)
         setLoginError("Invalid username or password. Please try again.")
@@ -221,11 +268,66 @@ export default function AdminDashboardPage() {
     }
     sessionStorage.removeItem("ff_admin_token")
     sessionStorage.removeItem("ff_admin_auth")
+    sessionStorage.removeItem("ff_admin_user")
     setIsAuthenticated(false)
+    setCurrentUser(null)
     setTableTalkRegistrations([])
     setEventRegistrations([])
     setContacts([])
     setDonations([])
+    setAdminUsers([])
+  }
+
+  const fetchAdminUsers = async (token?: string) => {
+    try {
+      const authToken = token || sessionStorage.getItem("ff_admin_token")
+      const response = await fetch("/api/admin/users", {
+        headers: { Authorization: `Bearer ${authToken}` }
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setAdminUsers(data.users || [])
+      }
+    } catch (error) {
+      console.error("Error fetching admin users:", error)
+    }
+  }
+
+  const handleAddUser = async () => {
+    if (!addUserForm.email || !addUserForm.password || !addUserForm.firstName || !addUserForm.lastName) return
+    setIsAddingUser(true)
+    try {
+      const response = await adminFetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(addUserForm),
+      })
+      if (response.ok) {
+        setAddUserForm({ email: "", password: "", firstName: "", lastName: "" })
+        setAddUserDialogOpen(false)
+        fetchAdminUsers()
+      }
+    } catch (error) {
+      console.error("Error adding user:", error)
+    } finally {
+      setIsAddingUser(false)
+    }
+  }
+
+  const handleDeleteUser = async (userId: string) => {
+    if (!confirm("Are you sure you want to deactivate this user?")) return
+    try {
+      const response = await adminFetch("/api/admin/users", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: userId }),
+      })
+      if (response.ok) {
+        fetchAdminUsers()
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error)
+    }
   }
 
   const fetchAllData = async () => {
@@ -810,6 +912,12 @@ export default function AdminDashboardPage() {
               <TabsTrigger value="donations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Donations ({donations.length})
               </TabsTrigger>
+              {currentUser?.role === "owner" && (
+                <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
+                  <UserCog className="w-4 h-4 mr-1" />
+                  Manage Users
+                </TabsTrigger>
+              )}
             </TabsList>
 
             {/* ==================== TABLE TALK TAB ==================== */}
@@ -843,15 +951,17 @@ export default function AdminDashboardPage() {
                           Email ({selectedTableTalkRegs.size})
                         </Button>
                       )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
-                        className="border-border text-foreground h-8 text-xs"
-                      >
-                        <Download className="w-3.5 h-3.5 mr-1.5" />
-                        CSV
-                      </Button>
+                      {currentUser?.role === "owner" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
+                          className="border-border text-foreground h-8 text-xs"
+                        >
+                          <Download className="w-3.5 h-3.5 mr-1.5" />
+                          CSV
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
@@ -1013,15 +1123,17 @@ export default function AdminDashboardPage() {
                       Email ({selectedEventRegs.size})
                     </Button>
                   )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => exportToCSV(filterData(eventRegistrations, searchTerm), "all-event-registrations")}
-                    className="border-border text-foreground h-8 text-xs"
-                  >
-                    <Download className="w-3.5 h-3.5 mr-1.5" />
-                    Export All CSV
-                  </Button>
+                  {currentUser?.role === "owner" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportToCSV(filterData(eventRegistrations, searchTerm), "all-event-registrations")}
+                      className="border-border text-foreground h-8 text-xs"
+                    >
+                      <Download className="w-3.5 h-3.5 mr-1.5" />
+                      Export All CSV
+                    </Button>
+                  )}
                 </div>
 
                 {/* Segmented Event Cards */}
@@ -1088,15 +1200,17 @@ export default function AdminDashboardPage() {
                                   <Mail className="w-3 h-3 mr-1.5" />
                                   Email All
                                 </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, "-")}-registrations`)}
-                                  className="border-border text-foreground h-7 text-xs"
-                                >
-                                  <Download className="w-3 h-3 mr-1.5" />
-                                  Export
-                                </Button>
+                                {currentUser?.role === "owner" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, "-")}-registrations`)}
+                                    className="border-border text-foreground h-7 text-xs"
+                                  >
+                                    <Download className="w-3 h-3 mr-1.5" />
+                                    Export
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           </CardHeader>
@@ -1264,15 +1378,17 @@ export default function AdminDashboardPage() {
                     <Send className="w-3.5 h-3.5 mr-1.5" />
                     Email All ({filterData(contacts, searchTerm).length})
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => exportToCSV(filterData(contacts, searchTerm), "all-contacts-subscriptions")}
-                    className="border-border text-foreground h-8 text-xs"
-                  >
-                    <Download className="w-3.5 h-3.5 mr-1.5" />
-                    Export All CSV
-                  </Button>
+                  {currentUser?.role === "owner" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => exportToCSV(filterData(contacts, searchTerm), "all-contacts-subscriptions")}
+                      className="border-border text-foreground h-8 text-xs"
+                    >
+                      <Download className="w-3.5 h-3.5 mr-1.5" />
+                      Export All CSV
+                    </Button>
+                  )}
                 </div>
 
                 {/* Categorized by Source */}
@@ -1337,15 +1453,17 @@ export default function AdminDashboardPage() {
                                   <Mail className="w-3 h-3 mr-1.5" />
                                   Email All
                                 </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, "-")}-contacts`)}
-                                  className="border-border text-foreground h-7 text-xs"
-                                >
-                                  <Download className="w-3 h-3 mr-1.5" />
-                                  Export
-                                </Button>
+                                {currentUser?.role === "owner" && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, "-")}-contacts`)}
+                                    className="border-border text-foreground h-7 text-xs"
+                                  >
+                                    <Download className="w-3 h-3 mr-1.5" />
+                                    Export
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           </CardHeader>
@@ -1464,15 +1582,17 @@ export default function AdminDashboardPage() {
                           Email ({selectedDonations.size})
                         </Button>
                       )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
-                        className="border-border text-foreground h-8 text-xs"
-                      >
-                        <Download className="w-3.5 h-3.5 mr-1.5" />
-                        Export CSV
-                      </Button>
+                      {currentUser?.role === "owner" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
+                          className="border-border text-foreground h-8 text-xs"
+                        >
+                          <Download className="w-3.5 h-3.5 mr-1.5" />
+                          Export CSV
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
@@ -1571,6 +1691,85 @@ export default function AdminDashboardPage() {
                 </CardContent>
               </Card>
             </TabsContent>
+
+            {/* ==================== MANAGE USERS TAB (Owner Only) ==================== */}
+            {currentUser?.role === "owner" && (
+              <TabsContent value="users">
+                <Card className="border-border/60 shadow-sm">
+                  <CardHeader className="border-b border-border/40 bg-secondary/30">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <CardTitle className="text-foreground text-lg flex items-center gap-2">
+                          <UserCog className="w-5 h-5" />
+                          Admin User Management
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground text-sm">
+                          Add staff members who can manage registrations and check-ins (only you can export data)
+                        </CardDescription>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => setAddUserDialogOpen(true)}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                      >
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Add Staff User
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    {adminUsers.length === 0 ? (
+                      <div className="text-center py-12">
+                        <Users className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                        <p className="text-sm text-muted-foreground">No staff users yet. Add staff to help manage events.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {adminUsers.map((user) => (
+                          <div
+                            key={user.id}
+                            className={`flex items-center justify-between p-4 rounded-lg border ${
+                              user.role === "owner" ? "bg-primary/5 border-primary/20" : "bg-secondary/20 border-border/40"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                user.role === "owner" ? "bg-primary/20" : "bg-secondary"
+                              }`}>
+                                {user.role === "owner" ? (
+                                  <ShieldCheck className="w-5 h-5 text-primary" />
+                                ) : (
+                                  <Users className="w-5 h-5 text-muted-foreground" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-foreground">{user.first_name} {user.last_name}</p>
+                                <p className="text-sm text-muted-foreground">{user.email}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <Badge variant={user.role === "owner" ? "default" : "secondary"} className="capitalize">
+                                {user.role}
+                              </Badge>
+                              {user.role !== "owner" && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleDeleteUser(user.id)}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </main>
@@ -1822,6 +2021,84 @@ export default function AdminDashboardPage() {
                 <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Deleting...</>
               ) : (
                 <><Trash2 className="w-4 h-4 mr-2" /> Delete</>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Staff User Dialog (Owner Only) */}
+      <Dialog open={addUserDialogOpen} onOpenChange={setAddUserDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <UserPlus className="w-4 h-4 text-primary" />
+              </div>
+              Add Staff User
+            </DialogTitle>
+            <DialogDescription>
+              Staff users can manage registrations and check-ins but cannot export data.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="staff-first" className="text-foreground font-medium text-sm">First Name</Label>
+                <Input
+                  id="staff-first"
+                  value={addUserForm.firstName}
+                  onChange={(e) => setAddUserForm(prev => ({ ...prev, firstName: e.target.value }))}
+                  placeholder="First name"
+                  className="border-border bg-secondary/30"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="staff-last" className="text-foreground font-medium text-sm">Last Name</Label>
+                <Input
+                  id="staff-last"
+                  value={addUserForm.lastName}
+                  onChange={(e) => setAddUserForm(prev => ({ ...prev, lastName: e.target.value }))}
+                  placeholder="Last name"
+                  className="border-border bg-secondary/30"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="staff-email" className="text-foreground font-medium text-sm">Username / Email</Label>
+              <Input
+                id="staff-email"
+                value={addUserForm.email}
+                onChange={(e) => setAddUserForm(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="staff_username"
+                className="border-border bg-secondary/30"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="staff-password" className="text-foreground font-medium text-sm">Password</Label>
+              <Input
+                id="staff-password"
+                type="password"
+                value={addUserForm.password}
+                onChange={(e) => setAddUserForm(prev => ({ ...prev, password: e.target.value }))}
+                placeholder="Set a secure password"
+                className="border-border bg-secondary/30"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" onClick={() => setAddUserDialogOpen(false)} className="border-border">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddUser}
+              disabled={isAddingUser || !addUserForm.email || !addUserForm.password || !addUserForm.firstName || !addUserForm.lastName}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              {isAddingUser ? (
+                <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Adding...</>
+              ) : (
+                <><UserPlus className="w-4 h-4 mr-2" /> Add User</>
               )}
             </Button>
           </div>
