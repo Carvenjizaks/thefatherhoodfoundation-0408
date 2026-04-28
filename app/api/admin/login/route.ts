@@ -20,10 +20,8 @@ export async function POST(request: Request) {
       .single()
 
     if (adminUser && !error) {
-      // Check password - for now using simple comparison, in production use bcrypt
-      const isValidPassword = 
-        (adminUser.role === "owner" && password === OWNER_PASSWORD) ||
-        (adminUser.password_hash === password) // Staff uses their set password
+      // Check password against stored password_hash
+      const isValidPassword = adminUser.password_hash === password
 
       if (isValidPassword) {
         const cookieStore = await cookies()
