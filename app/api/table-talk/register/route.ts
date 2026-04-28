@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         phone,
         session_date: sessionDate,
         dynamic_code: dynamicCode,
+        payment_status: "unpaid",
       })
       .select()
       .single()
