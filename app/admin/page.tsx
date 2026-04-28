@@ -32,6 +32,10 @@ import {
   Clock,
   Loader2,
   UserPlus,
+  ShieldCheck,
+  CalendarDays,
+  TrendingUp,
+  Lock,
 } from "lucide-react"
 
 interface TableTalkRegistration extends Record<string, unknown> {
@@ -149,20 +153,17 @@ export default function AdminDashboardPage() {
   const checkAuth = async () => {
     const token = sessionStorage.getItem("ff_admin_token")
     if (token) {
-      // Verify the token is still valid by making a test request
       try {
         const testResponse = await fetch("/api/admin/registrations", {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (testResponse.status === 401) {
-          // Token invalid, clear session and show login
           sessionStorage.removeItem("ff_admin_token")
           sessionStorage.removeItem("ff_admin_auth")
           setIsAuthenticated(false)
           setIsLoading(false)
           return
         }
-        // Token is valid, set authenticated and load all data
         setIsAuthenticated(true)
         await fetchAllData()
       } catch {
@@ -190,7 +191,6 @@ export default function AdminDashboardPage() {
       
       if (response.ok) {
         const data = await response.json()
-        // Store the token in sessionStorage for Authorization header usage
         sessionStorage.setItem("ff_admin_token", data.token)
         sessionStorage.setItem("ff_admin_auth", "authenticated")
         setIsAuthenticated(true)
@@ -223,7 +223,6 @@ export default function AdminDashboardPage() {
   const fetchAllData = async () => {
     setIsLoading(true)
     try {
-      // Fetch all data in parallel for better performance
       const [ttResponse, eventResponse, contactsResponse, donationsResponse] = await Promise.all([
         adminFetch("/api/admin/registrations"),
         adminFetch("/api/admin/event-registrations"),
@@ -231,7 +230,6 @@ export default function AdminDashboardPage() {
         adminFetch("/api/admin/donations"),
       ])
 
-      // Check if any response is 401 - means token expired or invalid
       if (
         ttResponse.status === 401 ||
         eventResponse.status === 401 ||
@@ -256,18 +254,10 @@ export default function AdminDashboardPage() {
         donationsResponse.json(),
       ])
 
-      if (ttData.registrations) {
-        setTableTalkRegistrations(ttData.registrations)
-      }
-      if (eventData.registrations) {
-        setEventRegistrations(eventData.registrations)
-      }
-      if (contactsData.contacts) {
-        setContacts(contactsData.contacts)
-      }
-      if (donationsData.donations) {
-        setDonations(donationsData.donations)
-      }
+      if (ttData.registrations) setTableTalkRegistrations(ttData.registrations)
+      if (eventData.registrations) setEventRegistrations(eventData.registrations)
+      if (contactsData.contacts) setContacts(contactsData.contacts)
+      if (donationsData.donations) setDonations(donationsData.donations)
     } catch (error) {
       console.error("Error fetching data:", error)
     } finally {
@@ -395,7 +385,6 @@ export default function AdminDashboardPage() {
       if (response.ok) {
         setAddRegResult({ message: `${addRegForm.firstName} ${addRegForm.lastName} registered successfully!`, type: "success" })
         setAddRegForm({ firstName: "", lastName: "", email: "", phone: "", spouseName: "", eventName: "" })
-        // Refresh data
         await fetchAllData()
         setTimeout(() => setAddRegDialogOpen(false), 2000)
       } else {
@@ -413,17 +402,16 @@ export default function AdminDashboardPage() {
     switch (status?.toLowerCase()) {
       case "paid":
       case "confirmed":
-        return <Badge className="bg-green-100 text-green-800">Paid</Badge>
+        return <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium text-xs">Paid</Badge>
       case "pending":
-        return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+        return <Badge className="bg-amber-50 text-amber-700 border border-amber-200 font-medium text-xs">Pending</Badge>
       case "unpaid":
-        return <Badge className="bg-red-100 text-red-800">Unpaid</Badge>
+        return <Badge className="bg-red-50 text-red-600 border border-red-200 font-medium text-xs">Unpaid</Badge>
       default:
-        return <Badge className="bg-red-100 text-red-800">Unpaid</Badge>
+        return <Badge className="bg-red-50 text-red-600 border border-red-200 font-medium text-xs">Unpaid</Badge>
     }
   }
 
-  // Open email compose for a single recipient
   const openEmailForOne = (email: string, firstName: string, lastName: string) => {
     setEmailRecipients([{ email, firstName, lastName }])
     setEmailSubject("")
@@ -432,7 +420,6 @@ export default function AdminDashboardPage() {
     setEmailDialogOpen(true)
   }
 
-  // Open email compose for multiple recipients (bulk)
   const openEmailForBulk = (recipients: { email: string; firstName: string; lastName: string }[]) => {
     if (recipients.length === 0) return
     setEmailRecipients(recipients)
@@ -442,7 +429,6 @@ export default function AdminDashboardPage() {
     setEmailDialogOpen(true)
   }
 
-  // Send email via admin API
   const handleSendEmail = async () => {
     if (!emailSubject.trim() || !emailBody.trim()) return
     setIsSendingEmail(true)
@@ -477,7 +463,6 @@ export default function AdminDashboardPage() {
     }
   }
 
-  // Toggle bulk selection helpers
   const toggleEventRegSelection = (id: string) => {
     setSelectedEventRegs(prev => {
       const next = new Set(prev)
@@ -489,11 +474,8 @@ export default function AdminDashboardPage() {
 
   const toggleAllEventRegs = (regs: EventRegistration[]) => {
     const allSelected = regs.every(r => selectedEventRegs.has(r.id))
-    if (allSelected) {
-      setSelectedEventRegs(new Set())
-    } else {
-      setSelectedEventRegs(new Set(regs.map(r => r.id)))
-    }
+    if (allSelected) setSelectedEventRegs(new Set())
+    else setSelectedEventRegs(new Set(regs.map(r => r.id)))
   }
 
   const toggleTableTalkSelection = (id: string) => {
@@ -507,11 +489,8 @@ export default function AdminDashboardPage() {
 
   const toggleAllTableTalk = (regs: TableTalkRegistration[]) => {
     const allSelected = regs.every(r => selectedTableTalkRegs.has(r.id))
-    if (allSelected) {
-      setSelectedTableTalkRegs(new Set())
-    } else {
-      setSelectedTableTalkRegs(new Set(regs.map(r => r.id)))
-    }
+    if (allSelected) setSelectedTableTalkRegs(new Set())
+    else setSelectedTableTalkRegs(new Set(regs.map(r => r.id)))
   }
 
   const toggleContactSelection = (id: string) => {
@@ -525,11 +504,8 @@ export default function AdminDashboardPage() {
 
   const toggleAllContacts = (items: Contact[]) => {
     const allSelected = items.every(c => selectedContacts.has(c.id))
-    if (allSelected) {
-      setSelectedContacts(new Set())
-    } else {
-      setSelectedContacts(new Set(items.map(c => c.id)))
-    }
+    if (allSelected) setSelectedContacts(new Set())
+    else setSelectedContacts(new Set(items.map(c => c.id)))
   }
 
   const toggleDonationSelection = (id: string) => {
@@ -543,64 +519,93 @@ export default function AdminDashboardPage() {
 
   const toggleAllDonations = (items: Donation[]) => {
     const allSelected = items.every(d => selectedDonations.has(d.id))
-    if (allSelected) {
-      setSelectedDonations(new Set())
-    } else {
-      setSelectedDonations(new Set(items.map(d => d.id)))
-    }
+    if (allSelected) setSelectedDonations(new Set())
+    else setSelectedDonations(new Set(items.map(d => d.id)))
   }
 
-  // Login Form
+  const totalCount = tableTalkRegistrations.length + eventRegistrations.length + contacts.length + donations.length
+
+  // ==================== LOGIN SCREEN ====================
   if (!isAuthenticated) {
     return (
       <>
         <Header />
-        <main className="min-h-screen bg-[#FDF8F3] pt-24 pb-16">
-          <div className="max-w-md mx-auto px-6">
-            <Card className="border-[#e8d8c8]">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl text-[#3D1F0F]">Admin Dashboard</CardTitle>
-                <CardDescription>Sign in to access all registrations and leads</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#5C3D2E] mb-1">Username</label>
-                    <Input
-                      type="email"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Enter your email"
-                      className="border-[#e8d8c8]"
-                      required
-                    />
+        <main className="min-h-screen bg-background pt-20">
+          <div className="flex items-center justify-center min-h-[calc(100vh-5rem)]">
+            <div className="w-full max-w-md px-6">
+              {/* Top icon */}
+              <div className="flex justify-center mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <ShieldCheck className="w-8 h-8 text-primary" />
+                </div>
+              </div>
+
+              <Card className="border-border/60 shadow-lg">
+                <CardHeader className="text-center pb-2">
+                  <CardTitle className="text-2xl font-bold text-foreground">Admin Dashboard</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Sign in with your admin credentials to continue
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <form onSubmit={handleLogin} className="space-y-5">
+                    <div className="space-y-2">
+                      <Label htmlFor="login-email" className="text-foreground font-medium text-sm">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          id="login-email"
+                          type="email"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          placeholder="admin@fathersfound.org"
+                          className="pl-10 border-border bg-secondary/30 focus:bg-background transition-colors"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="login-password" className="text-foreground font-medium text-sm">Password</Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          id="login-password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Enter your password"
+                          className="pl-10 border-border bg-secondary/30 focus:bg-background transition-colors"
+                          required
+                        />
+                      </div>
+                    </div>
+                    {loginError && (
+                      <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg">
+                        <XCircle className="w-4 h-4 shrink-0" />
+                        <span>{loginError}</span>
+                      </div>
+                    )}
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-11"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Signing in...</>
+                      ) : (
+                        "Sign In"
+                      )}
+                    </Button>
+                  </form>
+                  <div className="flex items-center justify-center gap-1.5 mt-6 pt-4 border-t border-border/50">
+                    <Lock className="w-3 h-3 text-muted-foreground" />
+                    <p className="text-xs text-muted-foreground">
+                      Authorized personnel only
+                    </p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-[#5C3D2E] mb-1">Password</label>
-                    <Input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter password"
-                      className="border-[#e8d8c8]"
-                      required
-                    />
-                  </div>
-                  {loginError && (
-                    <p className="text-red-600 text-sm text-center bg-red-50 p-3 rounded-lg">{loginError}</p>
-                  )}
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
-                  >
-                    Sign In
-                  </Button>
-                </form>
-                <p className="text-xs text-center text-[#5C3D2E]/60 mt-4">
-                  Admin access only. For your eyes only.
-                </p>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </main>
         <Footer />
@@ -608,216 +613,236 @@ export default function AdminDashboardPage() {
     )
   }
 
+  // ==================== DASHBOARD ====================
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#FDF8F3] pt-24 pb-16">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-[#3D1F0F]">Admin Dashboard</h1>
-              <p className="text-[#5C3D2E]">View and manage all registrations and leads</p>
-            </div>
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={fetchAllData}
-                className="border-[#8B2B3E] text-[#8B2B3E]"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="border-red-500 text-red-500 hover:bg-red-50"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
+      <main className="min-h-screen bg-secondary/20 pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Dashboard Header */}
+          <div className="py-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Dashboard</h1>
+                  <Badge className="bg-primary/10 text-primary border-0 font-medium text-xs">Admin</Badge>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Manage registrations, contacts, and donations across all programs.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={fetchAllData}
+                  disabled={isLoading}
+                  className="border-border text-foreground hover:bg-secondary"
+                >
+                  <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+                  Refresh
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Stats Overview - Categorized Summary */}
+          {/* Stats Overview */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("table-talk")}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                    <Users className="w-6 h-6 text-[#8B2B3E]" />
+            <button onClick={() => setActiveTab("table-talk")} className="text-left">
+              <Card className={`border transition-all hover:shadow-md cursor-pointer ${activeTab === "table-talk" ? "border-primary/40 shadow-md ring-1 ring-primary/20" : "border-border/60 hover:border-border"}`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Users className="w-5 h-5 text-primary" />
+                    </div>
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#3D1F0F]">{tableTalkRegistrations.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Table Talk Registrations</p>
+                  <p className="text-2xl font-bold text-foreground">{tableTalkRegistrations.length}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">Table Talk</p>
+                </CardContent>
+              </Card>
+            </button>
+            <button onClick={() => setActiveTab("events")} className="text-left">
+              <Card className={`border transition-all hover:shadow-md cursor-pointer ${activeTab === "events" ? "border-primary/40 shadow-md ring-1 ring-primary/20" : "border-border/60 hover:border-border"}`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#D4A574]/15 flex items-center justify-center">
+                      <CalendarDays className="w-5 h-5 text-[#D4A574]" />
+                    </div>
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("events")}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#D4A574]/20 flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-[#D4A574]" />
+                  <p className="text-2xl font-bold text-foreground">{eventRegistrations.length}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">Events</p>
+                </CardContent>
+              </Card>
+            </button>
+            <button onClick={() => setActiveTab("contacts")} className="text-left">
+              <Card className={`border transition-all hover:shadow-md cursor-pointer ${activeTab === "contacts" ? "border-primary/40 shadow-md ring-1 ring-primary/20" : "border-border/60 hover:border-border"}`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+                      <Mail className="w-5 h-5 text-sky-600" />
+                    </div>
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#3D1F0F]">{eventRegistrations.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Event Registrations</p>
+                  <p className="text-2xl font-bold text-foreground">{contacts.length}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">Subscriptions</p>
+                </CardContent>
+              </Card>
+            </button>
+            <button onClick={() => setActiveTab("donations")} className="text-left">
+              <Card className={`border transition-all hover:shadow-md cursor-pointer ${activeTab === "donations" ? "border-primary/40 shadow-md ring-1 ring-primary/20" : "border-border/60 hover:border-border"}`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <DollarSign className="w-5 h-5 text-emerald-600" />
+                    </div>
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("contacts")}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#3D1F0F]">{contacts.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Subscriptions</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-[#e8d8c8] cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("donations")}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#3D1F0F]">{donations.length}</p>
-                    <p className="text-sm text-[#5C3D2E]">Donations</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  <p className="text-2xl font-bold text-foreground">{donations.length}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 font-medium">Donations</p>
+                </CardContent>
+              </Card>
+            </button>
           </div>
 
-          {/* Search */}
+          {/* Search Bar */}
           <div className="mb-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C3D2E]" />
+            <div className="relative max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search all records..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-[#e8d8c8]"
+                className="pl-10 bg-background border-border/60 h-10"
               />
             </div>
           </div>
 
-          {/* Tabs - Categorized Registrations & Subscriptions */}
+          {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white border border-[#e8d8c8] flex-wrap h-auto p-1">
-              <TabsTrigger value="table-talk" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
-                Table Talk Registrations ({tableTalkRegistrations.length})
+            <TabsList className="bg-background border border-border/60 p-1 h-auto flex-wrap">
+              <TabsTrigger value="table-talk" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
+                Table Talk ({tableTalkRegistrations.length})
               </TabsTrigger>
-              <TabsTrigger value="events" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
-                Event Registrations ({eventRegistrations.length})
+              <TabsTrigger value="events" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
+                Events ({eventRegistrations.length})
               </TabsTrigger>
-              <TabsTrigger value="contacts" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
+              <TabsTrigger value="contacts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Subscriptions ({contacts.length})
               </TabsTrigger>
-              <TabsTrigger value="donations" className="data-[state=active]:bg-[#8B2B3E] data-[state=active]:text-white">
+              <TabsTrigger value="donations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Donations ({donations.length})
               </TabsTrigger>
             </TabsList>
 
-            {/* Table Talk Registrations */}
+            {/* ==================== TABLE TALK TAB ==================== */}
             <TabsContent value="table-talk">
-              <Card className="border-[#e8d8c8]">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-[#3D1F0F]">Table Talk Registrations</CardTitle>
-                    <CardDescription>All Table Talk session sign-ups</CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => openAddRegistration("table-talk")}
-                      className="bg-green-600 hover:bg-green-700 text-white"
-                    >
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Add Walk-in
-                    </Button>
-                    {selectedTableTalkRegs.size > 0 && (
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader className="border-b border-border/40 bg-secondary/30">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <CardTitle className="text-foreground text-lg">Table Talk Registrations</CardTitle>
+                      <CardDescription className="text-muted-foreground text-sm">All Table Talk session sign-ups</CardDescription>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
                       <Button
                         size="sm"
-                        onClick={() => {
-                          const selected = tableTalkRegistrations.filter(r => selectedTableTalkRegs.has(r.id))
-                          openEmailForBulk(selected.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))
-                        }}
-                        className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                        onClick={() => openAddRegistration("table-talk")}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white h-8 text-xs"
                       >
-                        <Send className="w-4 h-4 mr-2" />
-                        Email Selected ({selectedTableTalkRegs.size})
+                        <UserPlus className="w-3.5 h-3.5 mr-1.5" />
+                        Walk-in
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
-                      className="border-[#8B2B3E] text-[#8B2B3E]"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Export CSV
-                    </Button>
+                      {selectedTableTalkRegs.size > 0 && (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            const selected = tableTalkRegistrations.filter(r => selectedTableTalkRegs.has(r.id))
+                            openEmailForBulk(selected.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))
+                          }}
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 text-xs"
+                        >
+                          <Send className="w-3.5 h-3.5 mr-1.5" />
+                          Email ({selectedTableTalkRegs.size})
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => exportToCSV(filterData(tableTalkRegistrations, searchTerm), "table-talk-registrations")}
+                        className="border-border text-foreground h-8 text-xs"
+                      >
+                        <Download className="w-3.5 h-3.5 mr-1.5" />
+                        CSV
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   {isLoading ? (
-                    <div className="text-center py-12">
-                      <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                      <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+                      <p className="text-sm text-muted-foreground">Loading registrations...</p>
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
                       <Table>
                         <TableHeader>
-                          <TableRow>
+                          <TableRow className="bg-secondary/20 hover:bg-secondary/20">
                             <TableHead className="w-10">
                               <Checkbox
                                 checked={filterData(tableTalkRegistrations, searchTerm).length > 0 && filterData(tableTalkRegistrations, searchTerm).every(r => selectedTableTalkRegs.has(r.id))}
                                 onCheckedChange={() => toggleAllTableTalk(filterData(tableTalkRegistrations, searchTerm))}
                               />
                             </TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Session Date</TableHead>
-                            <TableHead>Code</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Checked In</TableHead>
-                            <TableHead>Registered</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Session</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Code</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Payment</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Check-in</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {filterData(tableTalkRegistrations, searchTerm).map((reg) => (
-                            <TableRow key={reg.id}>
+                            <TableRow key={reg.id} className="hover:bg-secondary/10">
                               <TableCell>
                                 <Checkbox
                                   checked={selectedTableTalkRegs.has(reg.id)}
                                   onCheckedChange={() => toggleTableTalkSelection(reg.id)}
                                 />
                               </TableCell>
-                              <TableCell className="font-medium">
+                              <TableCell className="font-medium text-foreground">
                                 <div className="flex items-center gap-2">
-                                  <span>{reg.first_name} {reg.last_name}</span>
+                                  <span className="text-sm">{reg.first_name} {reg.last_name}</span>
                                   <button
                                     onClick={() => openEmailForOne(reg.email, reg.first_name, reg.last_name)}
-                                    className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                    className="text-primary/60 hover:text-primary transition-colors"
                                     title={`Email ${reg.first_name}`}
+                                    aria-label={`Email ${reg.first_name} ${reg.last_name}`}
                                   >
-                                    <Mail className="w-4 h-4" />
+                                    <Mail className="w-3.5 h-3.5" />
                                   </button>
                                 </div>
                               </TableCell>
-                              <TableCell>{reg.email}</TableCell>
-                              <TableCell>{reg.phone}</TableCell>
-                              <TableCell>{formatDate(reg.session_date)}</TableCell>
-                              <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
+                              <TableCell className="text-sm text-muted-foreground">{reg.email}</TableCell>
+                              <TableCell className="text-sm text-muted-foreground">{reg.phone}</TableCell>
+                              <TableCell className="text-sm text-muted-foreground">{formatDate(reg.session_date)}</TableCell>
+                              <TableCell>
+                                <code className="text-xs bg-secondary/50 text-foreground px-2 py-0.5 rounded-md font-mono">{reg.dynamic_code}</code>
+                              </TableCell>
                               <TableCell>
                                 <button
                                   onClick={() => handleTogglePayment(reg.id, reg.payment_status, "table_talk_registrations")}
@@ -830,29 +855,32 @@ export default function AdminDashboardPage() {
                               <TableCell>
                                 <button
                                   onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "table_talk_registrations")}
-                                  className="cursor-pointer"
+                                  className="cursor-pointer group"
                                   title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
                                 >
                                   {reg.checked_in ? (
-                                    <div className="flex items-center gap-1">
-                                      <CheckCircle className="w-5 h-5 text-green-600" />
-                                      <span className="text-xs text-green-700">Yes</span>
+                                    <div className="flex items-center gap-1.5">
+                                      <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                      <span className="text-xs font-medium text-emerald-700">Yes</span>
                                     </div>
                                   ) : (
-                                    <div className="flex items-center gap-1 hover:text-green-600 transition-colors">
-                                      <XCircle className="w-5 h-5 text-gray-400 hover:text-green-500" />
-                                      <span className="text-xs text-gray-500">No</span>
+                                    <div className="flex items-center gap-1.5 group-hover:text-emerald-600 transition-colors">
+                                      <XCircle className="w-4 h-4 text-muted-foreground/40 group-hover:text-emerald-500" />
+                                      <span className="text-xs text-muted-foreground group-hover:text-emerald-600">No</span>
                                     </div>
                                   )}
                                 </button>
                               </TableCell>
-                              <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
+                              <TableCell className="text-xs text-muted-foreground">{formatDateTime(reg.created_at)}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
                       </Table>
                       {filterData(tableTalkRegistrations, searchTerm).length === 0 && (
-                        <p className="text-center py-8 text-[#5C3D2E]">No registrations found</p>
+                        <div className="text-center py-12">
+                          <Users className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <p className="text-sm text-muted-foreground">No registrations found</p>
+                        </div>
                       )}
                     </div>
                   )}
@@ -860,38 +888,38 @@ export default function AdminDashboardPage() {
               </Card>
             </TabsContent>
 
-            {/* Event Registrations - Segmented by Event */}
+            {/* ==================== EVENTS TAB ==================== */}
             <TabsContent value="events">
               <div className="space-y-6">
-                {/* Event Overview Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {/* Event Overview Mini-Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(() => {
                     const eventCounts = filterData(eventRegistrations, searchTerm).reduce((acc, reg) => {
-                      const eventName = reg.event_name || 'Unknown Event'
+                      const eventName = reg.event_name || "Unknown Event"
                       acc[eventName] = (acc[eventName] || 0) + 1
                       return acc
                     }, {} as Record<string, number>)
                     
                     return Object.entries(eventCounts).map(([eventName, count]) => (
-                      <Card key={eventName} className="border-[#e8d8c8] bg-gradient-to-br from-white to-[#f5f0eb]">
+                      <Card key={eventName} className="border-border/60">
                         <CardContent className="p-4 text-center">
-                          <p className="text-2xl font-bold text-[#8B2B3E]">{count}</p>
-                          <p className="text-xs text-[#5C3D2E] font-medium">{eventName}</p>
+                          <p className="text-xl font-bold text-primary">{count}</p>
+                          <p className="text-xs text-muted-foreground font-medium mt-0.5 truncate">{eventName}</p>
                         </CardContent>
                       </Card>
                     ))
                   })()}
                 </div>
 
-                {/* Bulk Actions */}
-                <div className="flex justify-end gap-2">
+                {/* Bulk Actions Bar */}
+                <div className="flex flex-wrap justify-end gap-2">
                   <Button
                     size="sm"
                     onClick={() => openAddRegistration("event")}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white h-8 text-xs"
                   >
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Add Walk-in
+                    <UserPlus className="w-3.5 h-3.5 mr-1.5" />
+                    Walk-in
                   </Button>
                   {selectedEventRegs.size > 0 && (
                     <Button
@@ -900,40 +928,40 @@ export default function AdminDashboardPage() {
                         const selected = eventRegistrations.filter(r => selectedEventRegs.has(r.id))
                         openEmailForBulk(selected.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))
                       }}
-                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 text-xs"
                     >
-                      <Send className="w-4 h-4 mr-2" />
-                      Email Selected ({selectedEventRegs.size})
+                      <Send className="w-3.5 h-3.5 mr-1.5" />
+                      Email ({selectedEventRegs.size})
                     </Button>
                   )}
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => exportToCSV(filterData(eventRegistrations, searchTerm), "all-event-registrations")}
-                    className="border-[#8B2B3E] text-[#8B2B3E]"
+                    className="border-border text-foreground h-8 text-xs"
                   >
-                    <Download className="w-4 h-4 mr-2" />
-                    Export All Events CSV
+                    <Download className="w-3.5 h-3.5 mr-1.5" />
+                    Export All CSV
                   </Button>
                 </div>
 
                 {/* Segmented Event Cards */}
                 {isLoading ? (
-                  <div className="text-center py-12">
-                    <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                    <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+                    <p className="text-sm text-muted-foreground">Loading events...</p>
                   </div>
                 ) : (
                   (() => {
                     const filteredEvents = filterData(eventRegistrations, searchTerm)
                     const groupedEvents = filteredEvents.reduce((acc, reg) => {
-                      const eventName = reg.event_name || 'Unknown Event'
+                      const eventName = reg.event_name || "Unknown Event"
                       if (!acc[eventName]) acc[eventName] = []
                       acc[eventName].push(reg)
                       return acc
                     }, {} as Record<string, typeof eventRegistrations>)
 
-                    const eventOrder = ['MyGreatMarriage 2026', 'Gathering of Champions 2026', 'Table Talk']
+                    const eventOrder = ["MyGreatMarriage 2026", "Gathering of Champions 2026", "Table Talk"]
                     const sortedEventNames = Object.keys(groupedEvents).sort((a, b) => {
                       const indexA = eventOrder.findIndex(e => a.includes(e)) 
                       const indexB = eventOrder.findIndex(e => b.includes(e))
@@ -944,49 +972,56 @@ export default function AdminDashboardPage() {
                     })
 
                     if (sortedEventNames.length === 0) {
-                      return <p className="text-center py-8 text-[#5C3D2E]">No event registrations found</p>
+                      return (
+                        <div className="text-center py-12">
+                          <CalendarDays className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <p className="text-sm text-muted-foreground">No event registrations found</p>
+                        </div>
+                      )
                     }
 
                     return sortedEventNames.map((eventName) => {
                       const regs = groupedEvents[eventName]
-                      const eventColor = eventName.includes('Marriage') ? 'bg-pink-100 text-pink-800' 
-                        : eventName.includes('Champion') || eventName.includes('GOC') ? 'bg-blue-100 text-blue-800'
-                        : eventName.includes('Table') ? 'bg-amber-100 text-amber-800'
-                        : 'bg-gray-100 text-gray-800'
+                      const eventColor = eventName.includes("Marriage") ? "bg-pink-50 text-pink-700 border-pink-200" 
+                        : eventName.includes("Champion") || eventName.includes("GOC") ? "bg-sky-50 text-sky-700 border-sky-200"
+                        : eventName.includes("Table") ? "bg-amber-50 text-amber-700 border-amber-200"
+                        : "bg-secondary text-foreground border-border"
 
                       return (
-                        <Card key={eventName} className="border-[#e8d8c8]">
-                          <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#f5f0eb] to-white">
-                            <div className="flex items-center gap-3">
-                              <Badge className={eventColor}>{eventName}</Badge>
-                              <span className="text-sm text-[#5C3D2E]">{regs.length} registration{regs.length !== 1 ? 's' : ''}</span>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => openEmailForBulk(regs.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))}
-                                className="border-[#8B2B3E] text-[#8B2B3E]"
-                              >
-                                <Mail className="w-4 h-4 mr-2" />
-                                Email All
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, '-')}-registrations`)}
-                                className="border-[#8B2B3E] text-[#8B2B3E]"
-                              >
-                                <Download className="w-4 h-4 mr-2" />
-                                Export
-                              </Button>
+                        <Card key={eventName} className="border-border/60 shadow-sm overflow-hidden">
+                          <CardHeader className="border-b border-border/40 bg-secondary/30 py-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="flex items-center gap-3">
+                                <Badge className={`${eventColor} font-medium text-xs border`}>{eventName}</Badge>
+                                <span className="text-xs text-muted-foreground">{regs.length} registration{regs.length !== 1 ? "s" : ""}</span>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openEmailForBulk(regs.map(r => ({ email: r.email, firstName: r.first_name, lastName: r.last_name })))}
+                                  className="border-border text-foreground h-7 text-xs"
+                                >
+                                  <Mail className="w-3 h-3 mr-1.5" />
+                                  Email All
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => exportToCSV(regs, `${eventName.toLowerCase().replace(/\s+/g, "-")}-registrations`)}
+                                  className="border-border text-foreground h-7 text-xs"
+                                >
+                                  <Download className="w-3 h-3 mr-1.5" />
+                                  Export
+                                </Button>
+                              </div>
                             </div>
                           </CardHeader>
-                          <CardContent className="pt-4">
+                          <CardContent className="p-0">
                             <div className="overflow-x-auto">
                               <Table>
                                 <TableHeader>
-                                  <TableRow>
+                                  <TableRow className="bg-secondary/10 hover:bg-secondary/10">
                                     <TableHead className="w-10">
                                       <Checkbox
                                         checked={regs.every(r => selectedEventRegs.has(r.id))}
@@ -1003,41 +1038,44 @@ export default function AdminDashboardPage() {
                                         }}
                                       />
                                     </TableHead>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>Phone</TableHead>
-                                    <TableHead>Spouse</TableHead>
-                                    <TableHead>Code</TableHead>
-                                    <TableHead>Payment</TableHead>
-                                    <TableHead>Checked In</TableHead>
-                                    <TableHead>Registered</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Spouse</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Code</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Payment</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Check-in</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                   {regs.map((reg) => (
-                                    <TableRow key={reg.id}>
+                                    <TableRow key={reg.id} className="hover:bg-secondary/10">
                                       <TableCell>
                                         <Checkbox
                                           checked={selectedEventRegs.has(reg.id)}
                                           onCheckedChange={() => toggleEventRegSelection(reg.id)}
                                         />
                                       </TableCell>
-                                      <TableCell className="font-medium">
+                                      <TableCell className="font-medium text-foreground">
                                         <div className="flex items-center gap-2">
-                                          <span>{reg.first_name} {reg.last_name}</span>
+                                          <span className="text-sm">{reg.first_name} {reg.last_name}</span>
                                           <button
                                             onClick={() => openEmailForOne(reg.email, reg.first_name, reg.last_name)}
-                                            className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                            className="text-primary/60 hover:text-primary transition-colors"
                                             title={`Email ${reg.first_name}`}
+                                            aria-label={`Email ${reg.first_name} ${reg.last_name}`}
                                           >
-                                            <Mail className="w-4 h-4" />
+                                            <Mail className="w-3.5 h-3.5" />
                                           </button>
                                         </div>
                                       </TableCell>
-                                      <TableCell>{reg.email}</TableCell>
-                                      <TableCell>{reg.phone}</TableCell>
-                                      <TableCell>{reg.spouse_name || "-"}</TableCell>
-                                      <TableCell><code className="text-xs bg-gray-100 px-2 py-1 rounded">{reg.dynamic_code}</code></TableCell>
+                                      <TableCell className="text-sm text-muted-foreground">{reg.email}</TableCell>
+                                      <TableCell className="text-sm text-muted-foreground">{reg.phone}</TableCell>
+                                      <TableCell className="text-sm text-muted-foreground">{reg.spouse_name || "-"}</TableCell>
+                                      <TableCell>
+                                        <code className="text-xs bg-secondary/50 text-foreground px-2 py-0.5 rounded-md font-mono">{reg.dynamic_code}</code>
+                                      </TableCell>
                                       <TableCell>
                                         <button
                                           onClick={() => handleTogglePayment(reg.id, reg.payment_status, "event_registrations")}
@@ -1050,23 +1088,23 @@ export default function AdminDashboardPage() {
                                       <TableCell>
                                         <button
                                           onClick={() => handleToggleCheckin(reg.id, reg.checked_in, "event_registrations")}
-                                          className="cursor-pointer"
+                                          className="cursor-pointer group"
                                           title={reg.checked_in ? "Click to undo check-in" : "Click to check in"}
                                         >
                                           {reg.checked_in ? (
-                                            <div className="flex items-center gap-1">
-                                              <CheckCircle className="w-5 h-5 text-green-600" />
-                                              <span className="text-xs text-green-700">Yes</span>
+                                            <div className="flex items-center gap-1.5">
+                                              <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                              <span className="text-xs font-medium text-emerald-700">Yes</span>
                                             </div>
                                           ) : (
-                                            <div className="flex items-center gap-1 hover:text-green-600 transition-colors">
-                                              <XCircle className="w-5 h-5 text-gray-400 hover:text-green-500" />
-                                              <span className="text-xs text-gray-500">No</span>
+                                            <div className="flex items-center gap-1.5 group-hover:text-emerald-600 transition-colors">
+                                              <XCircle className="w-4 h-4 text-muted-foreground/40 group-hover:text-emerald-500" />
+                                              <span className="text-xs text-muted-foreground group-hover:text-emerald-600">No</span>
                                             </div>
                                           )}
                                         </button>
                                       </TableCell>
-                                      <TableCell className="text-sm text-gray-500">{formatDateTime(reg.created_at)}</TableCell>
+                                      <TableCell className="text-xs text-muted-foreground">{formatDateTime(reg.created_at)}</TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -1081,23 +1119,23 @@ export default function AdminDashboardPage() {
               </div>
             </TabsContent>
 
-            {/* Contacts / Subscriptions - Categorized by Source */}
+            {/* ==================== CONTACTS TAB ==================== */}
             <TabsContent value="contacts">
               <div className="space-y-6">
-                {/* Subscription Source Overview Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {/* Source Overview Mini-Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(() => {
                     const sourceCounts = filterData(contacts, searchTerm).reduce((acc, contact) => {
-                      const source = contact.source || 'Unknown'
+                      const source = contact.source || "Unknown"
                       acc[source] = (acc[source] || 0) + 1
                       return acc
                     }, {} as Record<string, number>)
                     
                     return Object.entries(sourceCounts).map(([source, count]) => (
-                      <Card key={source} className="border-[#e8d8c8] bg-gradient-to-br from-white to-[#f5f0eb]">
+                      <Card key={source} className="border-border/60">
                         <CardContent className="p-4 text-center">
-                          <p className="text-2xl font-bold text-blue-600">{count}</p>
-                          <p className="text-xs text-[#5C3D2E] font-medium capitalize">{source}</p>
+                          <p className="text-xl font-bold text-sky-600">{count}</p>
+                          <p className="text-xs text-muted-foreground font-medium mt-0.5 capitalize truncate">{source}</p>
                         </CardContent>
                       </Card>
                     ))
@@ -1105,7 +1143,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 {/* Bulk Actions */}
-                <div className="flex justify-end gap-2">
+                <div className="flex flex-wrap justify-end gap-2">
                   {selectedContacts.size > 0 && (
                     <Button
                       size="sm"
@@ -1113,10 +1151,10 @@ export default function AdminDashboardPage() {
                         const selected = contacts.filter(c => selectedContacts.has(c.id))
                         openEmailForBulk(selected.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
                       }}
-                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 text-xs"
                     >
-                      <Send className="w-4 h-4 mr-2" />
-                      Email Selected ({selectedContacts.size})
+                      <Send className="w-3.5 h-3.5 mr-1.5" />
+                      Email ({selectedContacts.size})
                     </Button>
                   )}
                   <Button
@@ -1126,39 +1164,39 @@ export default function AdminDashboardPage() {
                       const filtered = filterData(contacts, searchTerm)
                       openEmailForBulk(filtered.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
                     }}
-                    className="border-[#8B2B3E] text-[#8B2B3E]"
+                    className="border-border text-foreground h-8 text-xs"
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    Email All Contacts ({filterData(contacts, searchTerm).length})
+                    <Send className="w-3.5 h-3.5 mr-1.5" />
+                    Email All ({filterData(contacts, searchTerm).length})
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => exportToCSV(filterData(contacts, searchTerm), "all-contacts-subscriptions")}
-                    className="border-[#8B2B3E] text-[#8B2B3E]"
+                    className="border-border text-foreground h-8 text-xs"
                   >
-                    <Download className="w-4 h-4 mr-2" />
-                    Export All Contacts CSV
+                    <Download className="w-3.5 h-3.5 mr-1.5" />
+                    Export All CSV
                   </Button>
                 </div>
 
                 {/* Categorized by Source */}
                 {isLoading ? (
-                  <div className="text-center py-12">
-                    <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                    <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+                    <p className="text-sm text-muted-foreground">Loading contacts...</p>
                   </div>
                 ) : (
                   (() => {
                     const filteredContacts = filterData(contacts, searchTerm)
                     const groupedContacts = filteredContacts.reduce((acc, contact) => {
-                      const source = contact.source || 'Unknown'
+                      const source = contact.source || "Unknown"
                       if (!acc[source]) acc[source] = []
                       acc[source].push(contact)
                       return acc
                     }, {} as Record<string, typeof contacts>)
 
-                    const sourceOrder = ['Newsletter', 'Contact Form', 'Event Registration', 'Table Talk', 'Popup']
+                    const sourceOrder = ["Newsletter", "Contact Form", "Event Registration", "Table Talk", "Popup"]
                     const sortedSourceNames = Object.keys(groupedContacts).sort((a, b) => {
                       const indexA = sourceOrder.findIndex(s => a.toLowerCase().includes(s.toLowerCase()))
                       const indexB = sourceOrder.findIndex(s => b.toLowerCase().includes(s.toLowerCase()))
@@ -1169,51 +1207,58 @@ export default function AdminDashboardPage() {
                     })
 
                     if (sortedSourceNames.length === 0) {
-                      return <p className="text-center py-8 text-[#5C3D2E]">No contacts/subscriptions found</p>
+                      return (
+                        <div className="text-center py-12">
+                          <Mail className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <p className="text-sm text-muted-foreground">No contacts found</p>
+                        </div>
+                      )
                     }
 
                     return sortedSourceNames.map((source) => {
                       const sourceContacts = groupedContacts[source]
-                      const sourceColor = source.toLowerCase().includes('newsletter') ? 'bg-blue-100 text-blue-800'
-                        : source.toLowerCase().includes('contact') ? 'bg-green-100 text-green-800'
-                        : source.toLowerCase().includes('event') ? 'bg-pink-100 text-pink-800'
-                        : source.toLowerCase().includes('table') ? 'bg-amber-100 text-amber-800'
-                        : source.toLowerCase().includes('popup') ? 'bg-purple-100 text-purple-800'
-                        : 'bg-gray-100 text-gray-800'
+                      const sourceColor = source.toLowerCase().includes("newsletter") ? "bg-sky-50 text-sky-700 border-sky-200"
+                        : source.toLowerCase().includes("contact") ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : source.toLowerCase().includes("event") ? "bg-pink-50 text-pink-700 border-pink-200"
+                        : source.toLowerCase().includes("table") ? "bg-amber-50 text-amber-700 border-amber-200"
+                        : source.toLowerCase().includes("popup") ? "bg-violet-50 text-violet-700 border-violet-200"
+                        : "bg-secondary text-foreground border-border"
 
                       return (
-                        <Card key={source} className="border-[#e8d8c8]">
-                          <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#f5f0eb] to-white">
-                            <div className="flex items-center gap-3">
-                              <Badge className={sourceColor}>{source}</Badge>
-                              <span className="text-sm text-[#5C3D2E]">{sourceContacts.length} subscription{sourceContacts.length !== 1 ? 's' : ''}</span>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => openEmailForBulk(sourceContacts.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))}
-                                className="border-[#8B2B3E] text-[#8B2B3E]"
-                              >
-                                <Mail className="w-4 h-4 mr-2" />
-                                Email All
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, '-')}-contacts`)}
-                                className="border-[#8B2B3E] text-[#8B2B3E]"
-                              >
-                                <Download className="w-4 h-4 mr-2" />
-                                Export
-                              </Button>
+                        <Card key={source} className="border-border/60 shadow-sm overflow-hidden">
+                          <CardHeader className="border-b border-border/40 bg-secondary/30 py-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="flex items-center gap-3">
+                                <Badge className={`${sourceColor} font-medium text-xs border`}>{source}</Badge>
+                                <span className="text-xs text-muted-foreground">{sourceContacts.length} subscription{sourceContacts.length !== 1 ? "s" : ""}</span>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openEmailForBulk(sourceContacts.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))}
+                                  className="border-border text-foreground h-7 text-xs"
+                                >
+                                  <Mail className="w-3 h-3 mr-1.5" />
+                                  Email All
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, "-")}-contacts`)}
+                                  className="border-border text-foreground h-7 text-xs"
+                                >
+                                  <Download className="w-3 h-3 mr-1.5" />
+                                  Export
+                                </Button>
+                              </div>
                             </div>
                           </CardHeader>
-                          <CardContent className="pt-4">
+                          <CardContent className="p-0">
                             <div className="overflow-x-auto">
                               <Table>
                                 <TableHeader>
-                                  <TableRow>
+                                  <TableRow className="bg-secondary/10 hover:bg-secondary/10">
                                     <TableHead className="w-10">
                                       <Checkbox
                                         checked={sourceContacts.every(c => selectedContacts.has(c.id))}
@@ -1230,46 +1275,53 @@ export default function AdminDashboardPage() {
                                         }}
                                       />
                                     </TableHead>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>Phone</TableHead>
-                                    <TableHead>Details</TableHead>
-                                    <TableHead>Confirmed</TableHead>
-                                    <TableHead>Subscribed</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Details</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Confirmed</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                   {sourceContacts.map((contact) => (
-                                    <TableRow key={contact.id}>
+                                    <TableRow key={contact.id} className="hover:bg-secondary/10">
                                       <TableCell>
                                         <Checkbox
                                           checked={selectedContacts.has(contact.id)}
                                           onCheckedChange={() => toggleContactSelection(contact.id)}
                                         />
                                       </TableCell>
-                                      <TableCell className="font-medium">
+                                      <TableCell className="font-medium text-foreground">
                                         <div className="flex items-center gap-2">
-                                          <span>{contact.first_name} {contact.last_name}</span>
+                                          <span className="text-sm">{contact.first_name} {contact.last_name}</span>
                                           <button
                                             onClick={() => openEmailForOne(contact.email, contact.first_name, contact.last_name)}
-                                            className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                            className="text-primary/60 hover:text-primary transition-colors"
                                             title={`Email ${contact.first_name}`}
+                                            aria-label={`Email ${contact.first_name} ${contact.last_name}`}
                                           >
-                                            <Mail className="w-4 h-4" />
+                                            <Mail className="w-3.5 h-3.5" />
                                           </button>
                                         </div>
                                       </TableCell>
-                                      <TableCell>{contact.email}</TableCell>
-                                      <TableCell>{contact.cellphone || "-"}</TableCell>
-                                      <TableCell className="text-xs text-gray-500 max-w-[150px] truncate">{contact.source_details || "-"}</TableCell>
+                                      <TableCell className="text-sm text-muted-foreground">{contact.email}</TableCell>
+                                      <TableCell className="text-sm text-muted-foreground">{contact.cellphone || "-"}</TableCell>
+                                      <TableCell className="text-xs text-muted-foreground max-w-[150px] truncate">{contact.source_details || "-"}</TableCell>
                                       <TableCell>
                                         {contact.email_confirmed ? (
-                                          <CheckCircle className="w-5 h-5 text-green-600" />
+                                          <div className="flex items-center gap-1.5">
+                                            <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                            <span className="text-xs text-emerald-700 font-medium sr-only">Confirmed</span>
+                                          </div>
                                         ) : (
-                                          <Clock className="w-5 h-5 text-yellow-500" />
+                                          <div className="flex items-center gap-1.5">
+                                            <Clock className="w-4 h-4 text-amber-500" />
+                                            <span className="text-xs text-amber-600 sr-only">Pending</span>
+                                          </div>
                                         )}
                                       </TableCell>
-                                      <TableCell className="text-sm text-gray-500">{formatDateTime(contact.created_at)}</TableCell>
+                                      <TableCell className="text-xs text-muted-foreground">{formatDateTime(contact.created_at)}</TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -1284,94 +1336,101 @@ export default function AdminDashboardPage() {
               </div>
             </TabsContent>
 
-            {/* Donations */}
+            {/* ==================== DONATIONS TAB ==================== */}
             <TabsContent value="donations">
-              <Card className="border-[#e8d8c8]">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-[#3D1F0F]">Donations</CardTitle>
-                    <CardDescription>All donation pledges and payments</CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    {selectedDonations.size > 0 && (
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader className="border-b border-border/40 bg-secondary/30">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <CardTitle className="text-foreground text-lg">Donations</CardTitle>
+                      <CardDescription className="text-muted-foreground text-sm">All donation pledges and payments</CardDescription>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedDonations.size > 0 && (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            const selected = donations.filter(d => selectedDonations.has(d.id))
+                            openEmailForBulk(selected.map(d => ({ email: d.email, firstName: d.first_name, lastName: d.last_name })))
+                          }}
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 text-xs"
+                        >
+                          <Send className="w-3.5 h-3.5 mr-1.5" />
+                          Email ({selectedDonations.size})
+                        </Button>
+                      )}
                       <Button
+                        variant="outline"
                         size="sm"
-                        onClick={() => {
-                          const selected = donations.filter(d => selectedDonations.has(d.id))
-                          openEmailForBulk(selected.map(d => ({ email: d.email, firstName: d.first_name, lastName: d.last_name })))
-                        }}
-                        className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                        onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
+                        className="border-border text-foreground h-8 text-xs"
                       >
-                        <Send className="w-4 h-4 mr-2" />
-                        Email Selected ({selectedDonations.size})
+                        <Download className="w-3.5 h-3.5 mr-1.5" />
+                        Export CSV
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => exportToCSV(filterData(donations, searchTerm), "donations")}
-                      className="border-[#8B2B3E] text-[#8B2B3E]"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Export CSV
-                    </Button>
+                    </div>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                   {isLoading ? (
-                    <div className="text-center py-12">
-                      <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#8B2B3E]" />
-                      <p className="mt-2 text-[#5C3D2E]">Loading...</p>
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+                      <p className="text-sm text-muted-foreground">Loading donations...</p>
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
                       <Table>
                         <TableHeader>
-                          <TableRow>
+                          <TableRow className="bg-secondary/20 hover:bg-secondary/20">
                             <TableHead className="w-10">
                               <Checkbox
                                 checked={filterData(donations, searchTerm).length > 0 && filterData(donations, searchTerm).every(d => selectedDonations.has(d.id))}
                                 onCheckedChange={() => toggleAllDonations(filterData(donations, searchTerm))}
                               />
                             </TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Frequency</TableHead>
-                            <TableHead>Method</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Date</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Amount</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Frequency</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Method</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</TableHead>
+                            <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {filterData(donations, searchTerm).map((donation) => (
-                            <TableRow key={donation.id}>
+                            <TableRow key={donation.id} className="hover:bg-secondary/10">
                               <TableCell>
                                 <Checkbox
                                   checked={selectedDonations.has(donation.id)}
                                   onCheckedChange={() => toggleDonationSelection(donation.id)}
                                 />
                               </TableCell>
-                              <TableCell className="font-medium">
+                              <TableCell className="font-medium text-foreground">
                                 <div className="flex items-center gap-2">
-                                  <span>{donation.first_name} {donation.last_name}</span>
+                                  <span className="text-sm">{donation.first_name} {donation.last_name}</span>
                                   <button
                                     onClick={() => openEmailForOne(donation.email, donation.first_name, donation.last_name)}
-                                    className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                    className="text-primary/60 hover:text-primary transition-colors"
                                     title={`Email ${donation.first_name}`}
+                                    aria-label={`Email ${donation.first_name} ${donation.last_name}`}
                                   >
-                                    <Mail className="w-4 h-4" />
+                                    <Mail className="w-3.5 h-3.5" />
                                   </button>
                                 </div>
                               </TableCell>
-                              <TableCell>{donation.email}</TableCell>
-                              <TableCell>{donation.phone || "-"}</TableCell>
-                              <TableCell className="font-semibold text-green-700">
-                                {donation.currency} {donation.amount?.toLocaleString()}
+                              <TableCell className="text-sm text-muted-foreground">{donation.email}</TableCell>
+                              <TableCell className="text-sm text-muted-foreground">{donation.phone || "-"}</TableCell>
+                              <TableCell>
+                                <span className="font-semibold text-emerald-700 text-sm">
+                                  {donation.currency} {donation.amount?.toLocaleString()}
+                                </span>
                               </TableCell>
-                              <TableCell><Badge variant="outline">{donation.frequency || "Once-off"}</Badge></TableCell>
-                              <TableCell>{donation.payment_method || "-"}</TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className="text-xs font-medium border-border">{donation.frequency || "Once-off"}</Badge>
+                              </TableCell>
+                              <TableCell className="text-sm text-muted-foreground">{donation.payment_method || "-"}</TableCell>
                               <TableCell>
                                 <button
                                   onClick={() => handleTogglePayment(donation.id, donation.payment_status, "donations")}
@@ -1381,13 +1440,16 @@ export default function AdminDashboardPage() {
                                   {getStatusBadge(donation.payment_status)}
                                 </button>
                               </TableCell>
-                              <TableCell className="text-sm text-gray-500">{formatDateTime(donation.created_at)}</TableCell>
+                              <TableCell className="text-xs text-muted-foreground">{formatDateTime(donation.created_at)}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
                       </Table>
                       {filterData(donations, searchTerm).length === 0 && (
-                        <p className="text-center py-8 text-[#5C3D2E]">No donations found</p>
+                        <div className="text-center py-12">
+                          <DollarSign className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                          <p className="text-sm text-muted-foreground">No donations found</p>
+                        </div>
                       )}
                     </div>
                   )}
@@ -1399,27 +1461,28 @@ export default function AdminDashboardPage() {
       </main>
       <Footer />
 
-      {/* Email Compose Dialog */}
+      {/* ==================== EMAIL COMPOSE DIALOG ==================== */}
       <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-[#3D1F0F] flex items-center gap-2">
-              <Mail className="w-5 h-5 text-[#8B2B3E]" />
+            <DialogTitle className="text-foreground flex items-center gap-2 text-lg">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Mail className="w-4 h-4 text-primary" />
+              </div>
               {emailRecipients.length === 1 ? "Send Email" : `Broadcast to ${emailRecipients.length} Recipients`}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-muted-foreground">
               {emailRecipients.length === 1
                 ? `To: ${emailRecipients[0].firstName} ${emailRecipients[0].lastName} (${emailRecipients[0].email})`
                 : `Sending to ${emailRecipients.length} people`}
             </DialogDescription>
           </DialogHeader>
 
-          {/* Recipient list for bulk */}
           {emailRecipients.length > 1 && (
-            <div className="max-h-28 overflow-y-auto bg-[#f5f0eb] rounded-lg p-3">
+            <div className="max-h-24 overflow-y-auto bg-secondary/30 rounded-lg p-3 border border-border/40">
               <div className="flex flex-wrap gap-1.5">
                 {emailRecipients.map((r, i) => (
-                  <Badge key={i} variant="outline" className="text-xs bg-white">
+                  <Badge key={i} variant="outline" className="text-xs bg-background border-border">
                     {r.firstName} {r.lastName}
                   </Badge>
                 ))}
@@ -1427,39 +1490,40 @@ export default function AdminDashboardPage() {
             </div>
           )}
 
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="email-subject" className="text-[#5C3D2E]">Subject</Label>
+          <div className="space-y-4 mt-2">
+            <div className="space-y-2">
+              <Label htmlFor="email-subject" className="text-foreground font-medium text-sm">Subject</Label>
               <Input
                 id="email-subject"
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
                 placeholder="e.g. Payment Confirmation Required"
-                className="mt-1 border-[#e8d8c8]"
+                className="border-border bg-secondary/30 focus:bg-background"
               />
             </div>
-            <div>
-              <Label htmlFor="email-body" className="text-[#5C3D2E]">Message</Label>
+            <div className="space-y-2">
+              <Label htmlFor="email-body" className="text-foreground font-medium text-sm">Message</Label>
               <Textarea
                 id="email-body"
                 value={emailBody}
                 onChange={(e) => setEmailBody(e.target.value)}
                 placeholder="Write your message here..."
                 rows={6}
-                className="mt-1 border-[#e8d8c8] resize-none"
+                className="border-border bg-secondary/30 focus:bg-background resize-none"
               />
-              <p className="text-xs text-[#5C3D2E]/60 mt-1">
+              <p className="text-xs text-muted-foreground">
                 Each recipient will be addressed by name automatically.
               </p>
             </div>
 
             {emailResult && (
-              <div className={`p-3 rounded-lg text-sm ${
+              <div className={`flex items-center gap-2 p-3 rounded-lg text-sm border ${
                 emailResult.type === "success"
-                  ? "bg-green-50 text-green-800 border border-green-200"
-                  : "bg-red-50 text-red-800 border border-red-200"
+                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                  : "bg-red-50 text-red-800 border-red-200"
               }`}>
-                {emailResult.message}
+                {emailResult.type === "success" ? <CheckCircle className="w-4 h-4 shrink-0" /> : <XCircle className="w-4 h-4 shrink-0" />}
+                <span>{emailResult.message}</span>
               </div>
             )}
 
@@ -1467,14 +1531,14 @@ export default function AdminDashboardPage() {
               <Button
                 variant="outline"
                 onClick={() => setEmailDialogOpen(false)}
-                className="border-[#e8d8c8]"
+                className="border-border"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSendEmail}
                 disabled={isSendingEmail || !emailSubject.trim() || !emailBody.trim()}
-                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 {isSendingEmail ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</>
@@ -1487,27 +1551,29 @@ export default function AdminDashboardPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Walk-in Registration Dialog */}
+      {/* ==================== WALK-IN REGISTRATION DIALOG ==================== */}
       <Dialog open={addRegDialogOpen} onOpenChange={setAddRegDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-[#3D1F0F] flex items-center gap-2">
-              <UserPlus className="w-5 h-5 text-green-600" />
+            <DialogTitle className="text-foreground flex items-center gap-2 text-lg">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                <UserPlus className="w-4 h-4 text-emerald-700" />
+              </div>
               Add Walk-in Registration
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-muted-foreground">
               {addRegType === "event" ? "Register a walk-in attendee for an event" : "Register a walk-in attendee for Table Talk"}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-4 mt-2">
             {addRegType === "event" && (
               <div className="space-y-2">
-                <Label htmlFor="add-event">Event</Label>
+                <Label htmlFor="add-event" className="text-foreground font-medium text-sm">Event</Label>
                 <select
                   id="add-event"
                   value={addRegForm.eventName}
                   onChange={(e) => setAddRegForm(prev => ({ ...prev, eventName: e.target.value }))}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="w-full rounded-lg border border-border bg-secondary/30 px-3 py-2.5 text-sm text-foreground focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
                 >
                   <option value="">Select an event...</option>
                   <option value="MyGreatMarriage 2026">MyGreatMarriage 2026</option>
@@ -1518,71 +1584,77 @@ export default function AdminDashboardPage() {
             )}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="add-first">First Name *</Label>
+                <Label htmlFor="add-first" className="text-foreground font-medium text-sm">First Name *</Label>
                 <Input
                   id="add-first"
                   value={addRegForm.firstName}
                   onChange={(e) => setAddRegForm(prev => ({ ...prev, firstName: e.target.value }))}
                   placeholder="First name"
+                  className="border-border bg-secondary/30 focus:bg-background"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="add-last">Last Name *</Label>
+                <Label htmlFor="add-last" className="text-foreground font-medium text-sm">Last Name *</Label>
                 <Input
                   id="add-last"
                   value={addRegForm.lastName}
                   onChange={(e) => setAddRegForm(prev => ({ ...prev, lastName: e.target.value }))}
                   placeholder="Last name"
+                  className="border-border bg-secondary/30 focus:bg-background"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="add-email">Email *</Label>
+              <Label htmlFor="add-email" className="text-foreground font-medium text-sm">Email *</Label>
               <Input
                 id="add-email"
                 type="email"
                 value={addRegForm.email}
                 onChange={(e) => setAddRegForm(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="email@example.com"
+                className="border-border bg-secondary/30 focus:bg-background"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="add-phone">Phone</Label>
+              <Label htmlFor="add-phone" className="text-foreground font-medium text-sm">Phone</Label>
               <Input
                 id="add-phone"
                 value={addRegForm.phone}
                 onChange={(e) => setAddRegForm(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+264 81 234 5678"
+                className="border-border bg-secondary/30 focus:bg-background"
               />
             </div>
             {addRegType === "event" && (
               <div className="space-y-2">
-                <Label htmlFor="add-spouse">Spouse Name (optional)</Label>
+                <Label htmlFor="add-spouse" className="text-foreground font-medium text-sm">Spouse Name (optional)</Label>
                 <Input
                   id="add-spouse"
                   value={addRegForm.spouseName}
                   onChange={(e) => setAddRegForm(prev => ({ ...prev, spouseName: e.target.value }))}
                   placeholder="Spouse full name"
+                  className="border-border bg-secondary/30 focus:bg-background"
                 />
               </div>
             )}
 
             {addRegResult && (
-              <div className={`p-3 rounded-md text-sm ${
-                addRegResult.type === "success" ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"
+              <div className={`flex items-center gap-2 p-3 rounded-lg text-sm border ${
+                addRegResult.type === "success" ? "bg-emerald-50 text-emerald-800 border-emerald-200" : "bg-red-50 text-red-800 border-red-200"
               }`}>
-                {addRegResult.message}
+                {addRegResult.type === "success" ? <CheckCircle className="w-4 h-4 shrink-0" /> : <XCircle className="w-4 h-4 shrink-0" />}
+                <span>{addRegResult.message}</span>
               </div>
             )}
 
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setAddRegDialogOpen(false)}>
+            <div className="flex justify-end gap-3 pt-2">
+              <Button variant="outline" onClick={() => setAddRegDialogOpen(false)} className="border-border">
                 Cancel
               </Button>
               <Button
                 onClick={handleAddRegistration}
                 disabled={isAddingReg || !addRegForm.firstName.trim() || !addRegForm.lastName.trim() || !addRegForm.email.trim()}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
               >
                 {isAddingReg ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Registering...</>
