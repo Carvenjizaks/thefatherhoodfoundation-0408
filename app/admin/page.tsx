@@ -40,6 +40,7 @@ import {
   AlertTriangle,
   Settings,
   UserCog,
+  Key,
 } from "lucide-react"
 
 interface TableTalkRegistration extends Record<string, unknown> {
@@ -140,6 +141,14 @@ export default function AdminDashboardPage() {
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false)
   const [addUserForm, setAddUserForm] = useState({ email: "", password: "", firstName: "", lastName: "" })
   const [isAddingUser, setIsAddingUser] = useState(false)
+  
+  // Password reset state
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false)
+  const [resetPasswordTarget, setResetPasswordTarget] = useState<{ id: string; name: string } | null>(null)
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [isResettingPassword, setIsResettingPassword] = useState(false)
+  const [passwordResetResult, setPasswordResetResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
 
   // Email compose state
   const [emailDialogOpen, setEmailDialogOpen] = useState(false)
@@ -327,6 +336,50 @@ export default function AdminDashboardPage() {
       }
     } catch (error) {
       console.error("Error deleting user:", error)
+    }
+  }
+
+  const openResetPassword = (userId: string, userName: string) => {
+    setResetPasswordTarget({ id: userId, name: userName })
+    setNewPassword("")
+    setConfirmPassword("")
+    setPasswordResetResult(null)
+    setResetPasswordDialogOpen(true)
+  }
+
+  const handleResetPassword = async () => {
+    if (!resetPasswordTarget || !newPassword) return
+    if (newPassword !== confirmPassword) {
+      setPasswordResetResult({ message: "Passwords do not match", type: "error" })
+      return
+    }
+    if (newPassword.length < 6) {
+      setPasswordResetResult({ message: "Password must be at least 6 characters", type: "error" })
+      return
+    }
+    setIsResettingPassword(true)
+    setPasswordResetResult(null)
+    try {
+      const response = await adminFetch("/api/admin/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: resetPasswordTarget.id, newPassword }),
+      })
+      if (response.ok) {
+        setPasswordResetResult({ message: "Password updated successfully!", type: "success" })
+        setTimeout(() => {
+          setResetPasswordDialogOpen(false)
+          setResetPasswordTarget(null)
+        }, 1500)
+      } else {
+        const data = await response.json()
+        setPasswordResetResult({ message: data.error || "Failed to update password", type: "error" })
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error)
+      setPasswordResetResult({ message: "Failed to update password", type: "error" })
+    } finally {
+      setIsResettingPassword(false)
     }
   }
 
@@ -1751,12 +1804,22 @@ export default function AdminDashboardPage() {
                               <Badge variant={user.role === "owner" ? "default" : "secondary"} className="capitalize">
                                 {user.role}
                               </Badge>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openResetPassword(user.id, `${user.first_name} ${user.last_name}`)}
+                                className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                                title="Reset password"
+                              >
+                                <Key className="w-4 h-4" />
+                              </Button>
                               {user.role !== "owner" && (
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDeleteUser(user.id)}
                                   className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  title="Deactivate user"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -2099,6 +2162,80 @@ export default function AdminDashboardPage() {
                 <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Adding...</>
               ) : (
                 <><UserPlus className="w-4 h-4 mr-2" /> Add User</>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetPasswordDialogOpen} onOpenChange={(open) => {
+        setResetPasswordDialogOpen(open)
+        if (!open) {
+          setResetPasswordTarget(null)
+          setNewPassword("")
+          setConfirmPassword("")
+          setPasswordResetResult(null)
+        }
+      }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                <Key className="w-4 h-4 text-amber-600" />
+              </div>
+              Reset Password
+            </DialogTitle>
+            <DialogDescription>
+              Set a new password for {resetPasswordTarget?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="new-password" className="text-foreground font-medium text-sm">New Password</Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="border-border bg-secondary/30"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password" className="text-foreground font-medium text-sm">Confirm Password</Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                className="border-border bg-secondary/30"
+              />
+            </div>
+            {passwordResetResult && (
+              <div className={`p-3 rounded-lg text-sm ${
+                passwordResetResult.type === "success" 
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                  : "bg-red-50 text-red-700 border border-red-200"
+              }`}>
+                {passwordResetResult.message}
+              </div>
+            )}
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" onClick={() => setResetPasswordDialogOpen(false)} className="border-border">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleResetPassword}
+              disabled={isResettingPassword || !newPassword || !confirmPassword}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              {isResettingPassword ? (
+                <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Updating...</>
+              ) : (
+                <><Key className="w-4 h-4 mr-2" /> Update Password</>
               )}
             </Button>
           </div>
