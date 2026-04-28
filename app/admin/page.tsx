@@ -950,8 +950,19 @@ export default function AdminDashboardPage() {
                   })()}
                 </div>
 
-                {/* Export All Button */}
-                <div className="flex justify-end">
+                {/* Bulk Actions */}
+                <div className="flex justify-end gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const filtered = filterData(contacts, searchTerm)
+                      openEmailForBulk(filtered.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
+                    }}
+                    className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Email All Contacts ({filterData(contacts, searchTerm).length})
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
@@ -1009,15 +1020,26 @@ export default function AdminDashboardPage() {
                               <Badge className={sourceColor}>{source}</Badge>
                               <span className="text-sm text-[#5C3D2E]">{sourceContacts.length} subscription{sourceContacts.length !== 1 ? 's' : ''}</span>
                             </div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, '-')}-contacts`)}
-                              className="border-[#8B2B3E] text-[#8B2B3E]"
-                            >
-                              <Download className="w-4 h-4 mr-2" />
-                              Export
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => openEmailForBulk(sourceContacts.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))}
+                                className="border-[#8B2B3E] text-[#8B2B3E]"
+                              >
+                                <Mail className="w-4 h-4 mr-2" />
+                                Email All
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => exportToCSV(sourceContacts, `${source.toLowerCase().replace(/\s+/g, '-')}-contacts`)}
+                                className="border-[#8B2B3E] text-[#8B2B3E]"
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export
+                              </Button>
+                            </div>
                           </CardHeader>
                           <CardContent className="pt-4">
                             <div className="overflow-x-auto">
@@ -1114,7 +1136,18 @@ export default function AdminDashboardPage() {
                         <TableBody>
                           {filterData(donations, searchTerm).map((donation) => (
                             <TableRow key={donation.id}>
-                              <TableCell className="font-medium">{donation.first_name} {donation.last_name}</TableCell>
+                              <TableCell className="font-medium">
+                                <div className="flex items-center gap-2">
+                                  <span>{donation.first_name} {donation.last_name}</span>
+                                  <button
+                                    onClick={() => openEmailForOne(donation.email, donation.first_name, donation.last_name)}
+                                    className="text-[#8B2B3E] hover:text-[#6d2230] transition-colors"
+                                    title={`Email ${donation.first_name}`}
+                                  >
+                                    <Mail className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </TableCell>
                               <TableCell>{donation.email}</TableCell>
                               <TableCell>{donation.phone || "-"}</TableCell>
                               <TableCell className="font-semibold text-green-700">
