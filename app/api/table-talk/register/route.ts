@@ -51,6 +51,9 @@ export async function POST(request: Request) {
 
     // Create contact and send emails
     try {
+      console.log("[v0] ===== TABLE TALK REGISTRATION EMAIL FLOW START =====")
+      console.log("[v0] Creating contact for:", email)
+      
       const { contact, isNewContact } = await createContact({
         firstName,
         lastName,
@@ -60,13 +63,18 @@ export async function POST(request: Request) {
         sourceDetails: `Table Talk for Men - ${sessionDate}`,
       })
 
+      console.log("[v0] Contact created:", contact?.id, "isNew:", isNewContact)
+
       // Send welcome email for new contacts
       if (isNewContact && contact) {
-        await sendWelcomeEmail(contact.id)
+        console.log("[v0] Sending welcome email to new contact...")
+        const welcomeResult = await sendWelcomeEmail(contact.id)
+        console.log("[v0] Welcome email result:", welcomeResult)
       }
 
       // Send registration confirmation email
-      await sendRegistrationConfirmationEmail({
+      console.log("[v0] Sending registration confirmation email to:", email)
+      const confirmResult = await sendRegistrationConfirmationEmail({
         email,
         firstName,
         lastName,
@@ -77,9 +85,11 @@ export async function POST(request: Request) {
         dynamicCode,
         paymentAmount: "NAD 50",
       })
+      console.log("[v0] Registration confirmation email result:", confirmResult)
 
       // Send admin notification
-      await sendAdminNotification({
+      console.log("[v0] Sending admin notification...")
+      const adminResult = await sendAdminNotification({
         eventName: "Table Talk for Men",
         registrantName: `${firstName} ${lastName}`,
         registrantEmail: email,
@@ -87,8 +97,10 @@ export async function POST(request: Request) {
         paymentAmount: "NAD 50",
         registrationCode: dynamicCode,
       })
+      console.log("[v0] Admin notification result:", adminResult)
+      console.log("[v0] ===== TABLE TALK REGISTRATION EMAIL FLOW END =====")
     } catch (emailError) {
-      console.error("[v0] Error sending emails:", emailError)
+      console.error("[v0] TABLE TALK EMAIL ERROR:", emailError)
       // Don't fail the registration if email fails
     }
 

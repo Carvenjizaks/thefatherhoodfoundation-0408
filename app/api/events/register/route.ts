@@ -107,6 +107,9 @@ export async function POST(request: Request) {
 
     // Create contact and send emails
     try {
+      console.log("[v0] ===== REGISTRATION EMAIL FLOW START =====")
+      console.log("[v0] Creating contact for:", email)
+      
       const { contact, isNewContact } = await createContact({
         firstName,
         lastName,
@@ -116,13 +119,18 @@ export async function POST(request: Request) {
         sourceDetails: `${eventName} - ${eventDate}`,
       })
 
+      console.log("[v0] Contact created:", contact?.id, "isNew:", isNewContact)
+
       // Send welcome email for new contacts
       if (isNewContact && contact) {
-        await sendWelcomeEmail(contact.id)
+        console.log("[v0] Sending welcome email to new contact...")
+        const welcomeResult = await sendWelcomeEmail(contact.id)
+        console.log("[v0] Welcome email result:", welcomeResult)
       }
 
       // Send registration confirmation email
-      await sendRegistrationConfirmationEmail({
+      console.log("[v0] Sending registration confirmation email to:", email)
+      const confirmResult = await sendRegistrationConfirmationEmail({
         email,
         firstName,
         lastName,
@@ -133,13 +141,15 @@ export async function POST(request: Request) {
         dynamicCode: registrationCode,
         paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
       })
+      console.log("[v0] Registration confirmation email result:", confirmResult)
 
       // Send admin notification
       const spouseFullName = spouseFirstName && spouseLastName 
         ? `${spouseFirstName} ${spouseLastName}` 
         : spouseFirstName || undefined
 
-      await sendAdminNotification({
+      console.log("[v0] Sending admin notification...")
+      const adminResult = await sendAdminNotification({
         eventName,
         registrantName: `${firstName} ${lastName}`,
         registrantEmail: email,
@@ -148,8 +158,10 @@ export async function POST(request: Request) {
         paymentAmount: paymentAmount ? `NAD ${paymentAmount}` : "Free",
         registrationCode,
       })
+      console.log("[v0] Admin notification result:", adminResult)
+      console.log("[v0] ===== REGISTRATION EMAIL FLOW END =====")
     } catch (emailError) {
-      console.error("[v0] Error sending emails:", emailError)
+      console.error("[v0] REGISTRATION EMAIL ERROR:", emailError)
       // Don't fail registration if email fails
     }
 

@@ -176,11 +176,17 @@ async function sendEmailViaSMTP(
 ): Promise<boolean> {
   const config = getEmailConfig()
   
-  console.log("[v0] Email config check - SMTP_API_KEY exists:", !!config.SMTP_API_KEY, "FROM_EMAIL:", config.FROM_EMAIL)
+  console.log("[v0] ========== EMAIL SEND ATTEMPT ==========")
+  console.log("[v0] To:", to)
+  console.log("[v0] Subject:", subject)
+  console.log("[v0] SMTP_API_KEY exists:", !!config.SMTP_API_KEY)
+  console.log("[v0] SMTP_CHANNEL:", config.SMTP_CHANNEL)
+  console.log("[v0] FROM_EMAIL:", config.FROM_EMAIL)
+  console.log("[v0] FROM_NAME:", config.FROM_NAME)
   
   // Try SMTP.com API first (preferred method)
   if (config.SMTP_API_KEY) {
-    console.log("[v0] Using SMTP.com API to send email to:", to)
+    console.log("[v0] Using SMTP.com API to send email...")
     try {
       const apiUrl = "https://api.smtp.com/v4/messages"
       const body = {
@@ -203,6 +209,9 @@ async function sendEmailViaSMTP(
         },
       }
 
+      console.log("[v0] SMTP.com API request body (channel):", body.channel)
+      console.log("[v0] SMTP.com API request recipients:", JSON.stringify(body.recipients))
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -212,16 +221,21 @@ async function sendEmailViaSMTP(
         body: JSON.stringify(body),
       })
 
+      const responseText = await response.text()
+      console.log("[v0] SMTP.com API response status:", response.status)
+      console.log("[v0] SMTP.com API response body:", responseText)
+
       if (!response.ok) {
-        const errorData = await response.json()
-        console.error("[v0] SMTP.com API error:", errorData)
+        console.error("[v0] SMTP.com API FAILED - Status:", response.status, "Response:", responseText)
         return false
       }
 
-      console.log("[v0] Email sent successfully via SMTP.com API to:", to)
+      console.log("[v0] EMAIL SENT SUCCESSFULLY via SMTP.com API to:", to)
+      console.log("[v0] ==========================================")
       return true
     } catch (error) {
-      console.error("[v0] SMTP.com API error:", error)
+      console.error("[v0] SMTP.com API EXCEPTION:", error)
+      console.log("[v0] ==========================================")
       return false
     }
   }
@@ -229,10 +243,12 @@ async function sendEmailViaSMTP(
   // Fallback to nodemailer
   if (!config.SMTP_USER || !config.SMTP_PASS) {
     console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
+    console.log("[v0] ==========================================")
     return false
   }
 
   try {
+    console.log("[v0] Falling back to Nodemailer SMTP...")
     const nodemailer = await import("nodemailer")
     
     const transporter = nodemailer.default.createTransport({
@@ -245,7 +261,7 @@ async function sendEmailViaSMTP(
       },
     })
 
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: `"${config.FROM_NAME}" <${config.FROM_EMAIL}>`,
       to: `"${toName}" <${to}>`,
       subject,
@@ -253,9 +269,12 @@ async function sendEmailViaSMTP(
       html,
     })
 
+    console.log("[v0] EMAIL SENT SUCCESSFULLY via Nodemailer. MessageId:", info.messageId)
+    console.log("[v0] ==========================================")
     return true
   } catch (error) {
-    console.error("[v0] Nodemailer error:", error)
+    console.error("[v0] Nodemailer EXCEPTION:", error)
+    console.log("[v0] ==========================================")
     return false
   }
 }
