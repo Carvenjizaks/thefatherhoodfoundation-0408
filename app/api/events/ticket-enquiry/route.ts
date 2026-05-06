@@ -1,14 +1,5 @@
 import { NextResponse } from "next/server"
-
-// SMTP.com API Configuration
-function getSmtpConfig() {
-  return {
-    apiKey: process.env.SMTP_API_KEY,
-    senderEmail: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
-    senderName: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
-    channel: process.env.SMTP_CHANNEL,
-  }
-}
+import { sendEmail } from "../../send-email/route"
 
 interface TicketEnquiryRequest {
   name: string
@@ -35,16 +26,6 @@ export async function POST(request: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
-    }
-
-    const { apiKey, senderEmail, senderName, channel } = getSmtpConfig()
-    
-    if (!apiKey) {
-      console.error("[v0] SMTP_API_KEY not configured")
-      return NextResponse.json(
-        { error: "Email service not configured" },
-        { status: 500 }
-      )
     }
 
     // Email to Rodger (ticket coordinator)
@@ -112,49 +93,15 @@ ${message ? `Message: ${message}` : ''}
 Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
 `
 
-    // Send via SMTP.com API
-    const apiUrl = "https://api.smtp.com/v4/messages"
-    const emailBody = {
-      channel: channel || "default",
-      recipients: {
-        to: [{ address: recipientEmail, name: "Rodger Beukes" }],
-      },
-      originator: {
-        from: {
-          address: senderEmail,
-          name: senderName,
-        },
-        reply_to: {
-          address: email,
-          name: name,
-        },
-      },
+    // Send email using the internal sendEmail function
+    await sendEmail({
+      to: recipientEmail,
+      toName: "Rodger Beukes",
       subject,
-      body: {
-        parts: [
-          { type: "text/plain", content: text },
-          { type: "text/html", content: html },
-        ],
-      },
-    }
-
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(emailBody),
+      html,
+      text,
+      replyTo: email,
     })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error("[v0] SMTP.com API error:", errorText)
-      return NextResponse.json(
-        { error: "Failed to send enquiry" },
-        { status: 500 }
-      )
-    }
 
     console.log("[v0] Ticket enquiry sent successfully to:", recipientEmail)
 
