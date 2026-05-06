@@ -45,6 +45,13 @@ type RegistrationFormData = {
   ticketType: string
 }
 
+type EnquiryFormData = {
+  name: string
+  email: string
+  phone: string
+  message: string
+}
+
 const carouselImages = [
   { src: "/images/couples/couple-together-1.jpg", alt: "Happy couple sharing an intimate moment" },
   { src: "/images/couples/couple-1.jpg", alt: "Happy couple together" },
@@ -179,6 +186,18 @@ export default function MyGreatMarriageEventPage() {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Enquiry form state
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false)
+  const [enquirySubmitting, setEnquirySubmitting] = useState(false)
+  const [enquirySuccess, setEnquirySuccess] = useState(false)
+  const [enquiryData, setEnquiryData] = useState<EnquiryFormData>({
+    name: "",
+    email: "",
+    phone: "",
+    message: "I would like to enquire about ticket availability for the MyGreatMarriage Conference 2026.",
+  })
+  const [enquiryErrors, setEnquiryErrors] = useState<Record<string, string>>({})
+
   useEffect(() => {
     const imageInterval = setInterval(() => setCurrentImageIndex((prev) => (prev + 1) % carouselImages.length), 5000)
     return () => clearInterval(imageInterval)
@@ -249,6 +268,38 @@ export default function MyGreatMarriageEventPage() {
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }))
+  }
+
+  const handleEnquiryInputChange = (field: string, value: string) => {
+    setEnquiryData((prev) => ({ ...prev, [field]: value }))
+    if (enquiryErrors[field]) setEnquiryErrors((prev) => ({ ...prev, [field]: "" }))
+  }
+
+  const validateEnquiryForm = () => {
+    const newErrors: Record<string, string> = {}
+    if (!enquiryData.name.trim()) newErrors.name = "Name is required"
+    if (!enquiryData.email.trim()) newErrors.email = "Email is required"
+    else if (!validateEmail(enquiryData.email)) newErrors.email = "Invalid email address"
+    if (!enquiryData.phone.trim()) newErrors.phone = "Phone number is required"
+    else if (!validatePhone(enquiryData.phone)) newErrors.phone = "Invalid phone number"
+    setEnquiryErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleEnquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateEnquiryForm()) return
+    setEnquirySubmitting(true)
+    
+    // Create mailto link with form data
+    const subject = encodeURIComponent("MyGreatMarriage Conference 2026 - Ticket Enquiry")
+    const body = encodeURIComponent(
+      `Name: ${enquiryData.name}\nEmail: ${enquiryData.email}\nPhone: ${enquiryData.phone}\n\nMessage:\n${enquiryData.message}`
+    )
+    window.location.href = `mailto:rodgerbeukes73@gmail.com?subject=${subject}&body=${body}`
+    
+    setEnquirySubmitting(false)
+    setEnquirySuccess(true)
   }
 
   const scrollToSection = (id: string) => {
@@ -530,12 +581,12 @@ export default function MyGreatMarriageEventPage() {
                 <p className="text-[#3D2314]/80 text-base mb-6">
                   To enquire about ticket availability:
                 </p>
-                <a 
-                  href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
+                <button 
+                  onClick={() => setIsEnquiryOpen(true)}
                   className="inline-flex items-center gap-2 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold rounded-full px-6 py-3 transition-colors mb-8"
                 >
                   Email Rodger
-                </a>
+                </button>
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
                   <Clock className="w-4 h-4 text-[#8B2B3E]" />
                   <span className="text-[#3D2314]/70 text-sm">Thank you for your interest!</span>
@@ -633,12 +684,12 @@ export default function MyGreatMarriageEventPage() {
                 <p className="text-white/80 text-base mb-6 max-w-xl mx-auto">
                   To enquire about ticket availability:
                 </p>
-                <a 
-                  href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
+                <button 
+                  onClick={() => setIsEnquiryOpen(true)}
                   className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#8B2B3E] font-semibold rounded-full px-6 py-3 transition-colors mb-10"
                 >
                   Email Rodger
-                </a>
+                </button>
                 <div className="inline-flex items-center gap-2 bg-white/20 text-white rounded-full px-8 py-4 text-lg font-medium">
                   <Heart className="w-5 h-5" />
                   See you at the conference!
@@ -858,6 +909,119 @@ export default function MyGreatMarriageEventPage() {
                   className="flex-1 bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full"
                 >
                   {isSubmitting ? "Processing..." : "Complete Registration"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Ticket Enquiry Dialog */}
+      <Dialog open={isEnquiryOpen} onOpenChange={(open) => {
+        setIsEnquiryOpen(open)
+        if (!open) {
+          setEnquirySuccess(false)
+          setEnquiryData({
+            name: "",
+            email: "",
+            phone: "",
+            message: "I would like to enquire about ticket availability for the MyGreatMarriage Conference 2026.",
+          })
+          setEnquiryErrors({})
+        }
+      }}>
+        <DialogContent className="sm:max-w-md bg-[#FDF8F3] border-[#D4A574]/30">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-[#1E3A5F]" style={{ fontFamily: 'Georgia, serif' }}>
+              Request Tickets
+            </DialogTitle>
+            <DialogDescription className="text-[#1E3A5F]/60">
+              Fill in your details and we&apos;ll get back to you about ticket availability.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {enquirySuccess ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">Email Ready!</h3>
+              <p className="text-[#1E3A5F]/70 mb-6">
+                Your email app should have opened with your enquiry details. If not, please email rodgerbeukes73@gmail.com directly.
+              </p>
+              <Button
+                onClick={() => setIsEnquiryOpen(false)}
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8"
+              >
+                Done
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleEnquirySubmit} className="space-y-4 mt-4">
+              <div>
+                <Label htmlFor="enquiry-name" className="text-[#1E3A5F]/80 text-sm">Your Name</Label>
+                <Input 
+                  id="enquiry-name" 
+                  value={enquiryData.name} 
+                  onChange={(e) => handleEnquiryInputChange("name", e.target.value)} 
+                  placeholder="John Doe"
+                  className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
+                />
+                {enquiryErrors.name && <p className="text-xs text-red-400 mt-1">{enquiryErrors.name}</p>}
+              </div>
+              
+              <div>
+                <Label htmlFor="enquiry-email" className="text-[#1E3A5F]/80 text-sm">Email</Label>
+                <Input 
+                  id="enquiry-email" 
+                  type="email" 
+                  value={enquiryData.email} 
+                  onChange={(e) => handleEnquiryInputChange("email", e.target.value)} 
+                  placeholder="john@example.com"
+                  className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
+                />
+                {enquiryErrors.email && <p className="text-xs text-red-400 mt-1">{enquiryErrors.email}</p>}
+              </div>
+              
+              <div>
+                <Label htmlFor="enquiry-phone" className="text-[#1E3A5F]/80 text-sm">Phone Number</Label>
+                <Input 
+                  id="enquiry-phone" 
+                  type="tel" 
+                  value={enquiryData.phone} 
+                  onChange={(e) => handleEnquiryInputChange("phone", e.target.value)} 
+                  placeholder="+264 81 234 5678"
+                  className="mt-1 bg-white border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40" 
+                />
+                {enquiryErrors.phone && <p className="text-xs text-red-400 mt-1">{enquiryErrors.phone}</p>}
+              </div>
+              
+              <div>
+                <Label htmlFor="enquiry-message" className="text-[#1E3A5F]/80 text-sm">Message (Optional)</Label>
+                <textarea 
+                  id="enquiry-message" 
+                  value={enquiryData.message} 
+                  onChange={(e) => handleEnquiryInputChange("message", e.target.value)} 
+                  rows={3}
+                  className="mt-1 w-full rounded-md bg-white border border-[#1E3A5F]/20 text-[#1E3A5F] placeholder:text-[#1E3A5F]/40 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4A574]" 
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsEnquiryOpen(false)} 
+                  className="flex-1 rounded-full border-[#1E3A5F]/30 text-[#1E3A5F] hover:bg-[#1E3A5F]/10"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={enquirySubmitting} 
+                  className="flex-1 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-bold rounded-full"
+                >
+                  {enquirySubmitting ? "Opening Email..." : "Email Rodger"}
                 </Button>
               </div>
             </form>
