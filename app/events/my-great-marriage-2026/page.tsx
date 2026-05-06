@@ -393,48 +393,66 @@ export default function MyGreatMarriageEventPage() {
 
         {/* Schedule Section */}
         <section id="schedule" className="py-24 bg-[#D4B896]">
-          <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-6 lg:px-8">
             <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-12" style={{ fontFamily: 'Georgia, serif' }}>
               Schedule
             </h2>
 
-            {/* Day Tabs */}
-            <div className="flex gap-2 mb-8 border-b border-[#8B2B3E]/20">
-              {(["thursday", "friday", "saturday"] as const).map((day) => (
-                <button
-                  key={day}
-                  onClick={() => setActiveDay(day)}
-                  className={`px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all ${
-                    activeDay === day 
-                      ? "text-[#3D2314] border-b-2 border-[#8B2B3E]" 
-                      : "text-[#3D2314]/50 hover:text-[#3D2314]/80"
-                  }`}
-                >
-                  {day === "thursday" ? "Thu Evening" : day === "friday" ? "Fri Evening" : "Sat (Closes 1pm)"}
-                </button>
-              ))}
-            </div>
-
-            {/* Schedule Items */}
-            <div className="space-y-1">
-              {schedule[activeDay].map((item, idx) => (
-                <div 
-                  key={idx}
-                  className={`flex items-center gap-6 p-5 rounded-lg transition-colors ${
-                    idx % 2 === 0 ? "bg-white/30" : ""
-                  }`}
-                >
-                  <div className="w-40 flex-shrink-0">
-                    <span className="text-[#3D2314]/60 text-sm font-mono">{item.time}</span>
-                  </div>
-                  <div className="flex items-center gap-4 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/20 flex items-center justify-center">
-                      <item.icon className="w-5 h-5 text-[#8B2B3E]" />
-                    </div>
-                    <span className="text-[#3D2314] font-medium">{item.title}</span>
-                  </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              {/* Schedule Content */}
+              <div>
+                {/* Day Tabs */}
+                <div className="flex gap-2 mb-8 border-b border-[#8B2B3E]/20">
+                  {(["thursday", "friday", "saturday"] as const).map((day) => (
+                    <button
+                      key={day}
+                      onClick={() => setActiveDay(day)}
+                      className={`px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all ${
+                        activeDay === day 
+                          ? "text-[#3D2314] border-b-2 border-[#8B2B3E]" 
+                          : "text-[#3D2314]/50 hover:text-[#3D2314]/80"
+                      }`}
+                    >
+                      {day === "thursday" ? "Thu Evening" : day === "friday" ? "Fri Evening" : "Sat (Closes 1pm)"}
+                    </button>
+                  ))}
                 </div>
-              ))}
+
+                {/* Schedule Items */}
+                <div className="space-y-1">
+                  {schedule[activeDay].map((item, idx) => (
+                    <div 
+                      key={idx}
+                      className={`flex items-center gap-6 p-5 rounded-lg transition-colors ${
+                        idx % 2 === 0 ? "bg-white/30" : ""
+                      }`}
+                    >
+                      <div className="w-40 flex-shrink-0">
+                        <span className="text-[#3D2314]/60 text-sm font-mono">{item.time}</span>
+                      </div>
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/20 flex items-center justify-center">
+                          <item.icon className="w-5 h-5 text-[#8B2B3E]" />
+                        </div>
+                        <span className="text-[#3D2314] font-medium">{item.title}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Speakers Image */}
+              <div className="lg:sticky lg:top-24">
+                <div className="rounded-2xl overflow-hidden shadow-xl">
+                  <Image
+                    src="/images/mgm-speakers.jpeg"
+                    alt="MyGreatMarriage Conference Speakers: Carven Izaks, Mokgethoa De Almeida, and Bruce Hansen"
+                    width={600}
+                    height={600}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
