@@ -56,7 +56,7 @@ const events = [
     subtitle: "Marriage Enrichment Event for Couples",
     dates: "7, 8 & 9 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
-    location: "Venue: To be Announced",
+    location: "WHS (Windhoek High School)",
     banner: "/images/couples/couple-together-1.jpg",
     registrationOpen: true,
     requiresSpouse: true,

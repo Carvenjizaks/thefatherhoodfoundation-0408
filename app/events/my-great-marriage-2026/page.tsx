@@ -222,7 +222,7 @@ export default function MyGreatMarriageEventPage() {
           eventName: "MyGreatMarriage Conference 2026",
           eventDate: "7, 8 & 9 May 2026",
           eventTime: "Thu & Fri: 18:30 - 21:00, Sat: 08:00 - 13:00",
-          eventLocation: "Windhoek, Namibia",
+          eventLocation: "WHS (Windhoek High School)",
           paymentAmount: selectedOption?.price?.toString() || "0",
           spouseFirstName: spouseNameParts[0] || "",
           spouseLastName: spouseNameParts.slice(1).join(" ") || "",
@@ -342,7 +342,7 @@ export default function MyGreatMarriageEventPage() {
                 <div className="flex flex-wrap items-center gap-8 lg:gap-16">
                   <div>
                     <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">LOCATION</p>
-                    <p className="text-[#3D2314] font-medium">Windhoek, Namibia</p>
+                    <p className="text-[#3D2314] font-medium">WHS (Windhoek High School)</p>
                   </div>
                   <div>
                     <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
