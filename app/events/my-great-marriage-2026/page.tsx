@@ -527,15 +527,15 @@ export default function MyGreatMarriageEventPage() {
                 <p className="text-[#3D2314]/70 text-lg mb-4">
                   Registration for MyGreatMarriage Conference 2026 is now closed.
                 </p>
-                <p className="text-[#3D2314]/80 text-base mb-8">
-                  To enquire about ticket availability, contact Rodger at{" "}
-                  <a 
-                    href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
-                    className="text-[#8B2B3E] font-semibold underline hover:text-[#6d2230] transition-colors"
-                  >
-                    rodgerbeukes73@gmail.com
-                  </a>
+                <p className="text-[#3D2314]/80 text-base mb-6">
+                  To enquire about ticket availability:
                 </p>
+                <a 
+                  href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
+                  className="inline-flex items-center gap-2 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold rounded-full px-6 py-3 transition-colors mb-8"
+                >
+                  Email Rodger
+                </a>
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
                   <Clock className="w-4 h-4 text-[#8B2B3E]" />
                   <span className="text-[#3D2314]/70 text-sm">Thank you for your interest!</span>
@@ -630,15 +630,15 @@ export default function MyGreatMarriageEventPage() {
                 <p className="text-white/70 text-lg mb-4 max-w-xl mx-auto">
                   Thank you for your interest in MyGreatMarriage Conference 2026. We look forward to seeing registered couples at the event!
                 </p>
-                <p className="text-white/80 text-base mb-10 max-w-xl mx-auto">
-                  To enquire about ticket availability, contact Rodger at{" "}
-                  <a 
-                    href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
-                    className="text-white font-semibold underline hover:text-white/80 transition-colors"
-                  >
-                    rodgerbeukes73@gmail.com
-                  </a>
+                <p className="text-white/80 text-base mb-6 max-w-xl mx-auto">
+                  To enquire about ticket availability:
                 </p>
+                <a 
+                  href="mailto:rodgerbeukes73@gmail.com?subject=MyGreatMarriage%20Conference%202026%20-%20Ticket%20Enquiry"
+                  className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#8B2B3E] font-semibold rounded-full px-6 py-3 transition-colors mb-10"
+                >
+                  Email Rodger
+                </a>
                 <div className="inline-flex items-center gap-2 bg-white/20 text-white rounded-full px-8 py-4 text-lg font-medium">
                   <Heart className="w-5 h-5" />
                   See you at the conference!
