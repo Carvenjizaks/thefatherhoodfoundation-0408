@@ -291,24 +291,30 @@ export default function MyGreatMarriageEventPage() {
     if (!validateEnquiryForm()) return
     setEnquirySubmitting(true)
     
-    // Create mailto link with form data and open via anchor click
-    const subject = encodeURIComponent("MyGreatMarriage Conference 2026 - Ticket Enquiry")
-    const body = encodeURIComponent(
-      `Name: ${enquiryData.name}\nEmail: ${enquiryData.email}\nPhone: ${enquiryData.phone}\n\nMessage:\n${enquiryData.message}`
-    )
-    const mailtoUrl = `mailto:rodgerbeukes73@gmail.com?subject=${subject}&body=${body}`
-    
-    // Use anchor element to trigger email client (avoids browser blocking)
-    const link = document.createElement('a')
-    link.href = mailtoUrl
-    link.target = '_blank'
-    link.rel = 'noopener noreferrer'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    
-    setEnquirySubmitting(false)
-    setEnquirySuccess(true)
+    try {
+      const response = await fetch("/api/events/ticket-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: enquiryData.name,
+          email: enquiryData.email,
+          phone: enquiryData.phone,
+          message: enquiryData.message,
+          eventName: "MyGreatMarriage Conference 2026",
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to send enquiry")
+      }
+
+      setEnquirySuccess(true)
+    } catch (error) {
+      console.error("[v0] Enquiry submission error:", error)
+      alert("Failed to send enquiry. Please try again or contact us directly.")
+    } finally {
+      setEnquirySubmitting(false)
+    }
   }
 
   const scrollToSection = (id: string) => {
@@ -954,9 +960,9 @@ export default function MyGreatMarriageEventPage() {
               <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Check className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">Email Ready!</h3>
+              <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">Enquiry Sent!</h3>
               <p className="text-[#1E3A5F]/70 mb-6">
-                Your email app should have opened with your enquiry details. If not, please email rodgerbeukes73@gmail.com directly.
+                Thank you for your enquiry. Rodger will get back to you shortly about ticket availability.
               </p>
               <Button
                 onClick={() => setIsEnquiryOpen(false)}
