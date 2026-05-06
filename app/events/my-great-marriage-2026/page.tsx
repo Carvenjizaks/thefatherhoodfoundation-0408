@@ -81,6 +81,9 @@ const conferenceHighlights = [
 // Early Bird ends on 24 April 2026 (disappears on 25 April)
 const EARLY_BIRD_END_DATE = new Date("2026-04-25T00:00:00")
 
+// Registration is now closed
+const REGISTRATION_CLOSED = true
+
 const getTicketOptions = () => {
   const now = new Date()
   const isEarlyBirdActive = now < EARLY_BIRD_END_DATE
@@ -275,13 +278,19 @@ export default function MyGreatMarriageEventPage() {
                   TICKETS
                 </button>
               </div>
-              <Button 
-                onClick={() => setIsOpen(true)}
-                size="sm" 
-                className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full px-6"
-              >
-                GET TICKETS
-              </Button>
+              {REGISTRATION_CLOSED ? (
+                <span className="text-white/70 text-sm font-medium bg-white/10 rounded-full px-6 py-2">
+                  Registration Closed
+                </span>
+              ) : (
+                <Button 
+                  onClick={() => setIsOpen(true)}
+                  size="sm" 
+                  className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full px-6"
+                >
+                  GET TICKETS
+                </Button>
+              )}
             </div>
           </div>
         </nav>
@@ -363,14 +372,20 @@ export default function MyGreatMarriageEventPage() {
                     </div>
                   )}
                 </div>
-                <Button 
-                  onClick={() => setIsOpen(true)}
-                  size="lg" 
-                  className="bg-[#8B2B3E] text-white hover:bg-[#8B2B3E]/90 font-bold rounded-full px-8 group"
-                >
-                  GET TICKETS
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                {REGISTRATION_CLOSED ? (
+                  <div className="bg-[#8B2B3E]/50 text-white font-bold rounded-full px-8 py-3">
+                    Registration Closed
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={() => setIsOpen(true)}
+                    size="lg" 
+                    className="bg-[#8B2B3E] text-white hover:bg-[#8B2B3E]/90 font-bold rounded-full px-8 group"
+                  >
+                    GET TICKETS
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -486,98 +501,132 @@ export default function MyGreatMarriageEventPage() {
         {/* Tickets Section */}
         <section id="tickets" className="py-24 bg-[#D4B896]">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-4" style={{ fontFamily: 'Georgia, serif' }}>
-                Select Your Ticket
-              </h2>
-              <p className="text-[#3D2314]/70 text-lg">
-                Seating is limited. Register early to secure your spot.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {getTicketOptions().map((ticket) => (
-                <button
-                  key={ticket.id}
-                  onClick={() => {
-                    setSelectedTicket(ticket.id)
-                    setFormData(prev => ({ ...prev, ticketType: ticket.id }))
-                    setIsOpen(true)
-                  }}
-                  className={`relative text-left p-8 rounded-2xl border-2 transition-all duration-300 ${
-                    ticket.popular
-                      ? "bg-white border-[#D4A574] shadow-xl"
-                      : "bg-white/60 border-[#8B2B3E]/20 hover:border-[#8B2B3E]/40"
-                  }`}
-                >
-                  {ticket.popular && (
-                    <span className="absolute -top-3 left-6 bg-[#D4A574] text-white text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full">
-                      Best Value
-                    </span>
-                  )}
-                  
-                  <h3 className={`text-xl font-bold mb-2 ${ticket.popular ? "text-[#1a0a0e]" : "text-[#3D2314]"}`}>
-                    {ticket.title}
-                  </h3>
-                  
-                  <div className="mb-6">
-                    <span className={`text-4xl font-bold ${ticket.popular ? "text-[#8B2B3E]" : "text-[#3D2314]"}`}>
-                      {ticket.priceDisplay}
-                    </span>
-                    <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/60"}`}>
-                      per couple
-                    </span>
-                  </div>
-                  
-                  <ul className="space-y-3">
-                    {ticket.features.map((feature, idx) => (
-                      <li key={idx} className={`flex items-center gap-3 text-sm ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/70"}`}>
-                        <Check className={`w-4 h-4 ${ticket.popular ? "text-[#8B2B3E]" : "text-[#D4A574]"}`} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <div className={`mt-6 py-3 px-6 rounded-full text-center font-bold transition-colors ${
-                    ticket.popular 
-                      ? "bg-[#8B2B3E] text-white" 
-                      : "bg-[#8B2B3E]/20 text-[#3D2314] hover:bg-[#8B2B3E]/30"
-                  }`}>
-                    Select & Register
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Closing Date */}
-            <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
-                <Clock className="w-4 h-4 text-[#8B2B3E]" />
-                <span className="text-[#3D2314]/70 text-sm">Registration closes:</span>
-                <span className="text-[#8B2B3E] font-bold">1 May 2026</span>
+            {REGISTRATION_CLOSED ? (
+              <div className="text-center">
+                <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                  Registration Closed
+                </h2>
+                <p className="text-[#3D2314]/70 text-lg mb-8">
+                  Registration for MyGreatMarriage Conference 2026 is now closed.
+                </p>
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
+                  <Clock className="w-4 h-4 text-[#8B2B3E]" />
+                  <span className="text-[#3D2314]/70 text-sm">Thank you for your interest!</span>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="text-center mb-16">
+                  <h2 className="text-4xl lg:text-5xl font-bold text-[#3D2314] mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                    Select Your Ticket
+                  </h2>
+                  <p className="text-[#3D2314]/70 text-lg">
+                    Seating is limited. Register early to secure your spot.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  {getTicketOptions().map((ticket) => (
+                    <button
+                      key={ticket.id}
+                      onClick={() => {
+                        setSelectedTicket(ticket.id)
+                        setFormData(prev => ({ ...prev, ticketType: ticket.id }))
+                        setIsOpen(true)
+                      }}
+                      className={`relative text-left p-8 rounded-2xl border-2 transition-all duration-300 ${
+                        ticket.popular
+                          ? "bg-white border-[#D4A574] shadow-xl"
+                          : "bg-white/60 border-[#8B2B3E]/20 hover:border-[#8B2B3E]/40"
+                      }`}
+                    >
+                      {ticket.popular && (
+                        <span className="absolute -top-3 left-6 bg-[#D4A574] text-white text-xs font-bold uppercase tracking-wider px-4 py-1 rounded-full">
+                          Best Value
+                        </span>
+                      )}
+                      
+                      <h3 className={`text-xl font-bold mb-2 ${ticket.popular ? "text-[#1a0a0e]" : "text-[#3D2314]"}`}>
+                        {ticket.title}
+                      </h3>
+                      
+                      <div className="mb-6">
+                        <span className={`text-4xl font-bold ${ticket.popular ? "text-[#8B2B3E]" : "text-[#3D2314]"}`}>
+                          {ticket.priceDisplay}
+                        </span>
+                        <span className={`text-sm ml-2 ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/60"}`}>
+                          per couple
+                        </span>
+                      </div>
+                      
+                      <ul className="space-y-3">
+                        {ticket.features.map((feature, idx) => (
+                          <li key={idx} className={`flex items-center gap-3 text-sm ${ticket.popular ? "text-[#6b4c52]" : "text-[#3D2314]/70"}`}>
+                            <Check className={`w-4 h-4 ${ticket.popular ? "text-[#8B2B3E]" : "text-[#D4A574]"}`} />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                      
+                      <div className={`mt-6 py-3 px-6 rounded-full text-center font-bold transition-colors ${
+                        ticket.popular 
+                          ? "bg-[#8B2B3E] text-white" 
+                          : "bg-[#8B2B3E]/20 text-[#3D2314] hover:bg-[#8B2B3E]/30"
+                      }`}>
+                        Select & Register
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Closing Date */}
+                <div className="mt-12 text-center">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
+                    <Clock className="w-4 h-4 text-[#8B2B3E]" />
+                    <span className="text-[#3D2314]/70 text-sm">Registration closes:</span>
+                    <span className="text-[#8B2B3E] font-bold">1 May 2026</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </section>
 
         {/* Final CTA */}
         <section className="py-24 bg-gradient-to-br from-[#8B2B3E] to-[#6d2230]">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Georgia, serif' }}>
-              Ready to Transform Your Marriage?
-            </h2>
-            <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
-              Join hundreds of couples who have discovered the secret to a thriving marriage.
-            </p>
-            <Button
-              onClick={() => setIsOpen(true)}
-              size="lg"
-              className="bg-white text-[#8B2B3E] hover:bg-white/90 rounded-full px-10 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105 group"
-            >
-              <Heart className="w-5 h-5 mr-2" />
-              Secure Your Spot
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            {REGISTRATION_CLOSED ? (
+              <>
+                <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                  Registration Has Closed
+                </h2>
+                <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
+                  Thank you for your interest in MyGreatMarriage Conference 2026. We look forward to seeing registered couples at the event!
+                </p>
+                <div className="inline-flex items-center gap-2 bg-white/20 text-white rounded-full px-8 py-4 text-lg font-medium">
+                  <Heart className="w-5 h-5" />
+                  See you at the conference!
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-3xl lg:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+                  Ready to Transform Your Marriage?
+                </h2>
+                <p className="text-white/70 text-lg mb-10 max-w-xl mx-auto">
+                  Join hundreds of couples who have discovered the secret to a thriving marriage.
+                </p>
+                <Button
+                  onClick={() => setIsOpen(true)}
+                  size="lg"
+                  className="bg-white text-[#8B2B3E] hover:bg-white/90 rounded-full px-10 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105 group"
+                >
+                  <Heart className="w-5 h-5 mr-2" />
+                  Secure Your Spot
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </>
+            )}
           </div>
         </section>
       </div>
