@@ -135,17 +135,15 @@ export default function MyGreatMarriagePage() {
                     Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
                   </p>
                   <p className="text-sm text-white/90 font-medium bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 inline-block mb-4">
-                    Early Bird registration closes 24 April 2026 - Total (per couple) Includes Follow-Up Resources
+                    Registration for MyGreatMarriage Conference 2026 is now closed
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <Button
                       size="lg"
-                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
-                      asChild
+                      className="bg-[#8B2B3E]/50 text-white rounded-full px-8 font-semibold cursor-default"
+                      disabled
                     >
-                      <Link href="/events/my-great-marriage-2026" className="flex items-center gap-2">
-                        Register Now <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      Registration Closed
                     </Button>
                     <Button
                       size="lg"
@@ -229,13 +227,11 @@ export default function MyGreatMarriagePage() {
                 </FadeIn>
                 <FadeIn direction="left" delay={0.5}>
                   <Button
-                    asChild
                     size="lg"
-                    className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white rounded-full px-8 shadow-lg hover:shadow-xl"
+                    className="bg-[#8B2B3E]/50 text-white rounded-full px-8 shadow-lg cursor-default"
+                    disabled
                   >
-                    <Link href="/events/my-great-marriage-2026" className="flex items-center gap-2">
-                      Strengthen Your Marriage <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    Registration Closed
                   </Button>
                 </FadeIn>
               </div>
@@ -349,13 +345,11 @@ export default function MyGreatMarriagePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
               <Button
-                asChild
                 size="lg"
-                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
+                className="bg-[#8B2B3E]/50 text-white rounded-full px-8 font-semibold cursor-default"
+                disabled
               >
-                <Link href="/events/my-great-marriage-2026" className="flex items-center gap-2">
-                  Join MyGreatMarriage <ArrowRight className="w-4 h-4" />
-                </Link>
+                Registration Closed
               </Button>
               <Button
                 asChild
