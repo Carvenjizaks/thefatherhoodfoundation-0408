@@ -291,12 +291,21 @@ export default function MyGreatMarriageEventPage() {
     if (!validateEnquiryForm()) return
     setEnquirySubmitting(true)
     
-    // Create mailto link with form data
+    // Create mailto link with form data and open via anchor click
     const subject = encodeURIComponent("MyGreatMarriage Conference 2026 - Ticket Enquiry")
     const body = encodeURIComponent(
       `Name: ${enquiryData.name}\nEmail: ${enquiryData.email}\nPhone: ${enquiryData.phone}\n\nMessage:\n${enquiryData.message}`
     )
-    window.location.href = `mailto:rodgerbeukes73@gmail.com?subject=${subject}&body=${body}`
+    const mailtoUrl = `mailto:rodgerbeukes73@gmail.com?subject=${subject}&body=${body}`
+    
+    // Use anchor element to trigger email client (avoids browser blocking)
+    const link = document.createElement('a')
+    link.href = mailtoUrl
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
     
     setEnquirySubmitting(false)
     setEnquirySuccess(true)
