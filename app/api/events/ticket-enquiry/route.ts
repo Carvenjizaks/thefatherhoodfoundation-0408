@@ -215,18 +215,104 @@ ${message ? `Message: ${message}` : ''}
 Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
 `
 
+    // Confirmation email sent back to the requestant
+    const confirmationSubject = `We received your ticket enquiry – ${eventName}`
+
+    const confirmationHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #8B2B3E; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;">Ticket Enquiry Received</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              <p style="color: #333333; font-size: 16px; margin: 0 0 16px 0;">Dear ${name},</p>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
+                Thank you for reaching out regarding <strong>${eventName}</strong>. We have received your ticket enquiry and will get back to you as soon as possible.
+              </p>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
+                Please note that our team is quite busy with preparations at the moment, so we kindly ask that you be a little patient with us. We appreciate your understanding and look forward to connecting with you soon.
+              </p>
+              <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f4f5; border-left: 4px solid #8B2B3E; border-radius: 4px; margin: 20px 0;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <p style="margin: 0 0 6px 0; color: #555555; font-size: 13px;"><strong>Your Enquiry Details</strong></p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Name:</strong> ${name}</p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Email:</strong> ${email}</p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Phone:</strong> ${phone}</p>
+                    ${message ? `<p style="margin: 0; color: #555555; font-size: 13px;"><strong>Message:</strong> ${message.replace(/\n/g, '<br>')}</p>` : ''}
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 24px 0 4px 0;">
+                Warm regards,
+              </p>
+              <p style="color: #8B2B3E; font-size: 15px; font-weight: bold; margin: 0;">
+                The Fatherhood Foundation Help Desk
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f8f4f5; padding: 16px 30px; text-align: center;">
+              <p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation &mdash; Building Stronger Families</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+    const confirmationText = `
+Dear ${name},
+
+Thank you for reaching out regarding ${eventName}. We have received your ticket enquiry and will get back to you as soon as possible.
+
+Please note that our team is quite busy with preparations at the moment, so we kindly ask that you be a little patient with us. We appreciate your understanding and look forward to connecting with you soon.
+
+Your Enquiry Details:
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+${message ? `Message: ${message}` : ''}
+
+Warm regards,
+The Fatherhood Foundation Help Desk
+`
+
     // Recipients for ticket enquiries
     const recipients = [
       { email: "rodgerbeukes73@gmail.com", name: "Rodger Beukes" },
       { email: "carven@fathersfound.org", name: "Carven Izaks" },
     ]
 
-    // Send email to both recipients
-    const results = await Promise.all(
-      recipients.map(recipient => 
-        sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
-      )
-    )
+    // Send email to both internal recipients and a confirmation to the requestant
+    const [results, confirmationResult] = await Promise.all([
+      Promise.all(
+        recipients.map(recipient =>
+          sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
+        )
+      ),
+      sendEmailViaSMTP(email, name, confirmationSubject, confirmationHtml, confirmationText),
+    ])
+
+    if (!confirmationResult) {
+      console.warn("[v0] Confirmation email to requestant failed, but continuing...")
+    } else {
+      console.log("[v0] Confirmation email sent to requestant:", email)
+    }
 
     const allSucceeded = results.every(r => r === true)
     const anySucceeded = results.some(r => r === true)
