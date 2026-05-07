@@ -36,15 +36,15 @@ export async function POST(request: Request) {
       )
     }
 
+    // Determine if this is an authenticated admin request (checked once, reused below)
+    const isAdmin = await verifyAdminRequest()
+
     // Block public registrations for closed events — admins can still register walk-ins
-    if (CLOSED_EVENT_SLUGS.includes(eventSlug)) {
-      const isAdmin = await verifyAdminRequest()
-      if (!isAdmin) {
-        return NextResponse.json(
-          { error: "Registration for this event is closed." },
-          { status: 403 }
-        )
-      }
+    if (CLOSED_EVENT_SLUGS.includes(eventSlug) && !isAdmin) {
+      return NextResponse.json(
+        { error: "Registration for this event is closed." },
+        { status: 403 }
+      )
     }
 
     // Use provided date or default to today for walk-in registrations
@@ -81,7 +81,8 @@ export async function POST(request: Request) {
       .eq("event_id", eventSlug)
       .single()
 
-    if (existingRegistration) {
+    // Block duplicate public registrations; admins can register walk-ins regardless
+    if (existingRegistration && !isAdmin) {
       return NextResponse.json(
         { error: "You have already registered for this event" },
         { status: 400 }
