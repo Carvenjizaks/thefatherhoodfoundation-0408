@@ -19,9 +19,13 @@ export async function POST(request: Request) {
       .eq("is_active", true)
       .single()
 
+    console.error("[v0] Login: adminUser =", adminUser, "error =", error)
+
     if (adminUser && !error) {
       // Check password against stored password_hash
       const isValidPassword = adminUser.password_hash === password
+
+      console.error("[v0] Login: isValidPassword =", isValidPassword, "stored =", adminUser.password_hash, "provided =", password)
 
       if (isValidPassword) {
         const cookieStore = await cookies()
