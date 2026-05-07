@@ -20,17 +20,21 @@ export async function POST(request: Request) {
       paymentAmount,
       spouseFirstName,
       spouseLastName,
+      spouseName,
       numberOfAttendees,
       specialRequirements,
     } = body
 
-    // Validate required fields
-    if (!firstName || !lastName || !email || !eventSlug || !eventName || !eventDate) {
+    // Validate required fields (eventDate is optional — defaults to today for walk-ins)
+    if (!firstName || !lastName || !email || !eventSlug || !eventName) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       )
     }
+
+    // Use provided date or default to today for walk-in registrations
+    const resolvedEventDate = eventDate || new Date().toISOString().split("T")[0]
 
     const supabase = await createClient()
 
@@ -70,10 +74,10 @@ export async function POST(request: Request) {
       )
     }
 
-    // Build spouse name if provided
-    const spouseName = spouseFirstName && spouseLastName 
-      ? `${spouseFirstName} ${spouseLastName}` 
-      : spouseFirstName || null
+    // Build spouse name if provided — support both combined spouseName or split first/last
+    const resolvedSpouseName = spouseName
+      || (spouseFirstName && spouseLastName ? `${spouseFirstName} ${spouseLastName}` : spouseFirstName)
+      || null
 
     // Insert registration (matching actual database schema)
     const insertData = {
@@ -83,11 +87,11 @@ export async function POST(request: Request) {
       phone,
       event_id: eventSlug,
       event_name: eventName,
-      session_date: eventDate,
+      session_date: resolvedEventDate,
       dynamic_code: registrationCode,
       payment_amount: parseFloat(paymentAmount) || 0,
       payment_status: "unpaid",
-      spouse_name: spouseName,
+      spouse_name: resolvedSpouseName,
       spouse_email: null,
       spouse_phone: null,
       checked_in: false,
@@ -116,7 +120,7 @@ export async function POST(request: Request) {
         email,
         cellphone: phone,
         source: "event_registration",
-        sourceDetails: `${eventName} - ${eventDate}`,
+        sourceDetails: `${eventName} - ${resolvedEventDate}`,
       })
 
       console.log("[v0] Contact created:", contact?.id, "isNew:", isNewContact)
@@ -135,7 +139,7 @@ export async function POST(request: Request) {
         firstName,
         lastName,
         eventName,
-        sessionDate: eventDate,
+        sessionDate: resolvedEventDate,
         sessionTime: eventTime || "See event details",
         location: eventLocation || "See event details",
         dynamicCode: registrationCode,

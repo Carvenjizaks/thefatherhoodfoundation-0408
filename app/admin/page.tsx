@@ -521,6 +521,14 @@ export default function AdminDashboardPage() {
     if (!addRegForm.firstName || !addRegForm.lastName || !addRegForm.email) return
     setIsAddingReg(true)
     setAddRegResult(null)
+
+    // Map event display name to event slug used in the API
+    const eventSlugMap: Record<string, { slug: string; date: string }> = {
+      "MyGreatMarriage 2026": { slug: "my-great-marriage-2026", date: "2026-08-01" },
+      "Gathering of Champions 2026": { slug: "gathering-of-champions-2026", date: "2026-08-01" },
+    }
+    const selectedEvent = eventSlugMap[addRegForm.eventName]
+
     try {
       const endpoint = addRegType === "event" ? "/api/events/register" : "/api/table-talk/register"
       const body = addRegType === "event"
@@ -531,7 +539,8 @@ export default function AdminDashboardPage() {
             phone: addRegForm.phone,
             spouseName: addRegForm.spouseName,
             eventName: addRegForm.eventName || "Walk-in Registration",
-            eventId: "walk-in",
+            eventSlug: selectedEvent?.slug || "walk-in",
+            eventDate: selectedEvent?.date || new Date().toISOString().split("T")[0],
           }
         : {
             firstName: addRegForm.firstName,
