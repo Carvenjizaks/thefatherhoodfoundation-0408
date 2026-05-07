@@ -101,7 +101,7 @@ Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesbu
     // Recipients for ticket enquiries
     const recipients = [
       { email: "rodgerbeukes73@gmail.com", name: "Rodger Beukes" },
-      { email: "carven@fathersfound.org", name: "Carven Izaks" },
+      { email: "support@nexiumbi.com", name: "Carven Izaks" },
     ]
 
     console.log("[v0] Sending to recipients:", recipients.map(r => r.email).join(", "))
