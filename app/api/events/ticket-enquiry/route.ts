@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { sendEmail } from "@/app/api/send-email/route"
 
 interface TicketEnquiryRequest {
   name: string
@@ -8,136 +9,19 @@ interface TicketEnquiryRequest {
   eventName: string
 }
 
-// SMTP Configuration - read at runtime to ensure env vars are loaded
-function getEmailConfig() {
-  return {
-    SMTP_API_KEY: process.env.SMTP_API_KEY,
-    SMTP_CHANNEL: process.env.SMTP_CHANNEL || "default",
-    SMTP_HOST: "send.smtp.com",
-    SMTP_PORT: 587,
-    SMTP_USER: process.env.SMTP_USERNAME,
-    SMTP_PASS: process.env.SMTP_PASSWORD,
-    FROM_EMAIL: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
-    FROM_NAME: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
-  }
-}
-
-async function sendEmailViaSMTP(
-  to: string,
-  toName: string,
-  subject: string,
-  html: string,
-  text: string,
-  replyTo?: string
-): Promise<boolean> {
-  const config = getEmailConfig()
-  
-  console.log("[v0] ========== TICKET ENQUIRY EMAIL ATTEMPT ==========")
-  console.log("[v0] To:", to)
-  console.log("[v0] Subject:", subject)
-  console.log("[v0] SMTP_API_KEY exists:", !!config.SMTP_API_KEY)
-  console.log("[v0] SMTP_CHANNEL:", config.SMTP_CHANNEL)
-  
-  // Try SMTP.com API first (preferred method)
-  if (config.SMTP_API_KEY) {
-    console.log("[v0] Using SMTP.com API to send email...")
-    try {
-      const apiUrl = "https://api.smtp.com/v4/messages"
-      const body: Record<string, unknown> = {
-        channel: config.SMTP_CHANNEL,
-        recipients: {
-          to: [{ address: to, name: toName }],
-        },
-        originator: {
-          from: {
-            address: config.FROM_EMAIL,
-            name: config.FROM_NAME,
-          },
-        },
-        subject,
-        body: {
-          parts: [
-            { type: "text/plain", content: text },
-            { type: "text/html", content: html },
-          ],
-        },
-      }
-
-      // Add reply-to if provided
-      if (replyTo) {
-        (body.originator as Record<string, unknown>).reply_to = { address: replyTo }
-      }
-
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${config.SMTP_API_KEY}`,
-        },
-        body: JSON.stringify(body),
-      })
-
-      const responseText = await response.text()
-      console.log("[v0] SMTP.com API response status:", response.status)
-      console.log("[v0] SMTP.com API response body:", responseText)
-
-      if (!response.ok) {
-        console.error("[v0] SMTP.com API FAILED - falling back to nodemailer")
-        // Fall through to nodemailer
-      } else {
-        console.log("[v0] EMAIL SENT SUCCESSFULLY via SMTP.com API to:", to)
-        return true
-      }
-    } catch (error) {
-      console.error("[v0] SMTP.com API EXCEPTION:", error)
-      // Fall through to nodemailer
-    }
-  }
-
-  // Fallback to nodemailer
-  if (!config.SMTP_USER || !config.SMTP_PASS) {
-    console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
-    return false
-  }
-
-  try {
-    console.log("[v0] Falling back to Nodemailer SMTP...")
-    const nodemailer = await import("nodemailer")
-    
-    const transporter = nodemailer.default.createTransport({
-      host: config.SMTP_HOST,
-      port: config.SMTP_PORT,
-      secure: false,
-      auth: {
-        user: config.SMTP_USER,
-        pass: config.SMTP_PASS,
-      },
-    })
-
-    const info = await transporter.sendMail({
-      from: `"${config.FROM_NAME}" <${config.FROM_EMAIL}>`,
-      to: `"${toName}" <${to}>`,
-      subject,
-      text,
-      html,
-      replyTo,
-    })
-
-    console.log("[v0] EMAIL SENT SUCCESSFULLY via Nodemailer. MessageId:", info.messageId)
-    return true
-  } catch (error) {
-    console.error("[v0] Nodemailer EXCEPTION:", error)
-    return false
-  }
-}
-
 export async function POST(request: Request) {
+  console.log("[v0] ========== TICKET ENQUIRY REQUEST ==========")
+  
   try {
     const body: TicketEnquiryRequest = await request.json()
     const { name, email, phone, message, eventName } = body
 
+    console.log("[v0] Enquiry from:", name, email, phone)
+    console.log("[v0] Event:", eventName)
+
     // Validate required fields
     if (!name || !email || !phone) {
+      console.log("[v0] Missing required fields")
       return NextResponse.json(
         { error: "Missing required fields: name, email, phone" },
         { status: 400 }
@@ -147,6 +31,7 @@ export async function POST(request: Request) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
+      console.log("[v0] Invalid email format")
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
     }
 
@@ -219,33 +104,56 @@ Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesbu
       { email: "carven@fathersfound.org", name: "Carven Izaks" },
     ]
 
-    // Send email to both recipients
-    const results = await Promise.all(
-      recipients.map(recipient => 
-        sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
-      )
+    console.log("[v0] Sending to recipients:", recipients.map(r => r.email).join(", "))
+
+    // Send email to both recipients using the internal sendEmail function
+    const results = await Promise.allSettled(
+      recipients.map(async (recipient) => {
+        console.log("[v0] Sending to:", recipient.email)
+        try {
+          const result = await sendEmail({
+            to: recipient.email,
+            toName: recipient.name,
+            subject,
+            html,
+            text,
+            replyTo: email,
+          })
+          console.log("[v0] Success for", recipient.email, ":", result)
+          return { recipient: recipient.email, success: true, result }
+        } catch (error) {
+          console.error("[v0] Failed for", recipient.email, ":", error)
+          throw error
+        }
+      })
     )
 
-    const allSucceeded = results.every(r => r === true)
-    const anySucceeded = results.some(r => r === true)
+    const succeeded = results.filter(r => r.status === "fulfilled")
+    const failed = results.filter(r => r.status === "rejected")
 
-    if (!anySucceeded) {
+    console.log("[v0] Results - Succeeded:", succeeded.length, "Failed:", failed.length)
+
+    if (succeeded.length === 0) {
       console.error("[v0] Failed to send ticket enquiry to any recipient")
       return NextResponse.json(
-        { error: "Failed to send enquiry" },
+        { error: "Failed to send enquiry. Please try again or contact us directly." },
         { status: 500 }
       )
     }
 
-    console.log("[v0] Ticket enquiry sent. Results:", results)
+    console.log("[v0] ========== TICKET ENQUIRY SENT ==========")
 
     return NextResponse.json({
       success: true,
-      message: allSucceeded ? "Enquiry sent to all recipients" : "Enquiry sent to some recipients",
+      message: succeeded.length === recipients.length 
+        ? "Enquiry sent to all recipients" 
+        : "Enquiry sent to some recipients",
+      sentTo: succeeded.length,
+      totalRecipients: recipients.length,
     })
   } catch (error: unknown) {
     const err = error as { message?: string }
-    console.error("[v0] Error sending ticket enquiry:", err.message)
+    console.error("[v0] Error processing ticket enquiry:", err.message)
     return NextResponse.json(
       { error: "Failed to send enquiry", details: err.message },
       { status: 500 }
