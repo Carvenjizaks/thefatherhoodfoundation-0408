@@ -549,7 +549,7 @@ export default function AdminDashboardPage() {
             phone: addRegForm.phone,
             sessionDate: new Date().toISOString().split("T")[0],
           }
-      const response = await fetch(endpoint, {
+      const response = await adminFetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

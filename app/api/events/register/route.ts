@@ -2,7 +2,10 @@ import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
 import { generateRegistrationCode, extractCodeNumber } from "@/lib/registration-code"
+import { verifyAdminRequest } from "@/lib/admin-auth"
 
+// Events that are closed for public registration (admin walk-in still allowed)
+const CLOSED_EVENT_SLUGS = ["my-great-marriage-2026"]
 
 export async function POST(request: Request) {
   try {
@@ -31,6 +34,17 @@ export async function POST(request: Request) {
         { error: "Missing required fields" },
         { status: 400 }
       )
+    }
+
+    // Block public registrations for closed events — admins can still register walk-ins
+    if (CLOSED_EVENT_SLUGS.includes(eventSlug)) {
+      const isAdmin = await verifyAdminRequest()
+      if (!isAdmin) {
+        return NextResponse.json(
+          { error: "Registration for this event is closed." },
+          { status: 403 }
+        )
+      }
     }
 
     // Use provided date or default to today for walk-in registrations
