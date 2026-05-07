@@ -39,7 +39,9 @@ async function sendEmailViaSMTP(
   console.log("[v0] SMTP_CHANNEL:", config.SMTP_CHANNEL)
   
   // Try SMTP.com API first (preferred method)
-  if (config.SMTP_API_KEY) {
+  // Only use SMTP.com API if we have a valid channel name (not the host URL)
+  const hasValidChannel = config.SMTP_API_KEY && config.SMTP_CHANNEL && config.SMTP_CHANNEL !== "send.smtp.com" && config.SMTP_CHANNEL !== "default"
+  if (hasValidChannel && config.SMTP_API_KEY) {
     console.log("[v0] Using SMTP.com API to send email...")
     try {
       const apiUrl = "https://api.smtp.com/v4/messages"
