@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
 import { generateRegistrationCode, extractCodeNumber } from "@/lib/registration-code"
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     // Use provided date or default to today for walk-in registrations
     const resolvedEventDate = eventDate || new Date().toISOString().split("T")[0]
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Get the current max registration number for this event
     const { data: existingCodes } = await supabase
