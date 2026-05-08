@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { buildWelcomeEmail, buildAdminNotificationEmail } from "@/lib/mgm/email-templates"
 import { sendMgmEmail } from "@/lib/mgm/send"
-import { computeNextSendAt } from "@/lib/mgm/schedule"
+import { getNextNurtureSendAt } from "@/lib/mgm/schedule"
 
 export type SignupFormData = {
   husbandFirstName: string
@@ -41,7 +41,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       .maybeSingle()
 
     if (existing) {
-      // Resend welcome email rather than creating a duplicate
+      // Resend welcome email — do not create duplicate
       const welcomeEmail = buildWelcomeEmail({
         husbandFirstName: data.husbandFirstName,
         wifeFirstName: data.wifeFirstName,
@@ -52,8 +52,9 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       return { success: true, alreadyExists: true }
     }
 
-    // Create new subscription
-    const nextSendAt = computeNextSendAt()
+    // Compute next nurture send day (next Tuesday JHB time)
+    const signupDate = new Date()
+    const nextSendAt = getNextNurtureSendAt(signupDate)
 
     const { data: newSub, error: insertError } = await supabase
       .from("mgm_subscriptions")
@@ -83,7 +84,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       return { success: false, error: "Failed to save your subscription. Please try again." }
     }
 
-    // Send welcome email
+    // Send welcome email immediately regardless of nurture send day
     const welcomeEmail = buildWelcomeEmail({
       husbandFirstName: data.husbandFirstName,
       wifeFirstName: data.wifeFirstName,
@@ -91,7 +92,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       wifeToken: newSub.wife_preference_token,
     })
 
-    await sendMgmEmail({ to: [hEmail, wEmail], ...welcomeEmail })
+    const welcomeResult = await sendMgmEmail({ to: [hEmail, wEmail], ...welcomeEmail })
 
     // Log welcome email
     await supabase.from("mgm_email_logs").insert({
@@ -100,7 +101,9 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       recipient_type: "BOTH",
       recipient_email: `${hEmail}, ${wEmail}`,
       subject: welcomeEmail.subject,
-      status: "sent",
+      status: welcomeResult.success ? "sent" : "failed",
+      provider_message_id: welcomeResult.messageId || null,
+      error_message: welcomeResult.error || null,
     })
 
     // Admin notification
