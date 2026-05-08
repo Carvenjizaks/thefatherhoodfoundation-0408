@@ -13,8 +13,8 @@ const cards = [
   },
   {
     icon: Cross,
-    title: "Grow Spiritually",
-    body: "Keep Jesus at the center of your home, not only your Sunday life.",
+    title: "Build on Principles and Values",
+    body: "Focus on the principles and values that sustain and build a healthy, strong marriage.",
   },
   {
     icon: Home,
