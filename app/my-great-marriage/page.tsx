@@ -53,12 +53,16 @@ const focusAreas = [
 
 const offerings = [
   {
-    title: "Marriage Workshops",
-    desc: "6-week courses covering essential marriage skills, from communication to finances to intimacy.",
+    title: "Workshops: Finances",
+    desc: "Practical sessions to help couples align on money, build a shared budget, and make financial decisions together — without the tension. Because financial unity is a marriage issue.",
   },
   {
-    title: "Couples Retreats",
-    desc: "Weekend getaways designed to help you reconnect, refresh, and reignite your relationship.",
+    title: "Workshops: Start Out Life Together",
+    desc: "Designed for newlyweds and newly committed couples, this workshop lays the foundation — expectations, roles, communication, and values — before bad habits take root.",
+  },
+  {
+    title: "Workshops: Restore & Refresh",
+    desc: "For couples who feel stuck, distant, or worn down. A safe space to rediscover each other, address unresolved tension, and rebuild connection with practical tools and guided conversation.",
   },
   {
     title: "Small Groups",
@@ -334,7 +338,7 @@ export default function MyGreatMarriagePage() {
               <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Programme Offerings</h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {offerings.map((item) => (
                 <div
                   key={item.title}

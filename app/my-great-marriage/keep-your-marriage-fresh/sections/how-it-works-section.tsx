@@ -2,7 +2,7 @@ const steps = [
   {
     number: "01",
     title: "Sign Up as a Couple",
-    body: "Both you and your spouse add your names and emails. Takes less than two minutes.",
+    body: "Both you and your spouse add join. Takes less than two minutes. You will get regular updates, advise, guidance on relationships as it pertains to marriage.",
   },
   {
     number: "02",
