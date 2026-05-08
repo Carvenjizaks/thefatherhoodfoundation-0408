@@ -3,12 +3,19 @@ import { createClient } from "@/lib/supabase/server"
 import { getEmailContent } from "@/lib/mgm/email-content"
 import { buildNurtureEmail } from "@/lib/mgm/email-templates"
 import { sendMgmEmail } from "@/lib/mgm/send"
-import { advanceProgress, computeNextSendAt } from "@/lib/mgm/schedule"
+import {
+  advanceProgress,
+  computeNextSendAt,
+  resolveEmailForState,
+  shouldSendToHusband,
+  shouldSendToWife,
+  markInactiveIfNoStreamsEnabled,
+} from "@/lib/mgm/schedule"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodfoundation.org"
 
 export async function GET(request: NextRequest) {
-  // Verify cron secret
+  // Authenticate cron request
   const authHeader = request.headers.get("Authorization")
   const querySecret = request.nextUrl.searchParams.get("secret")
   const cronSecret = process.env.CRON_SECRET
@@ -20,13 +27,13 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient()
   const now = new Date()
 
-  // Fetch due subscriptions
+  // Fetch all active subscriptions that are due
   const { data: subscriptions, error } = await supabase
     .from("mgm_subscriptions")
     .select("*")
     .eq("is_active", true)
     .lte("next_send_at", now.toISOString())
-    .limit(50)
+    .limit(100)
 
   if (error) {
     console.error("[MGM Cron] Fetch error:", error)
@@ -38,53 +45,108 @@ export async function GET(request: NextRequest) {
   }
 
   let processed = 0
+  let skipped = 0
   let errors = 0
 
   for (const sub of subscriptions) {
     try {
+      const streamType = resolveEmailForState(sub.current_week_in_cycle)
       const content = getEmailContent(sub.current_month)
+
       if (!content) {
-        console.error(`[MGM Cron] No content for month ${sub.current_month}`)
+        console.error(`[MGM Cron] No content for month ${sub.current_month}, skipping ${sub.id}`)
+        skipped++
         continue
       }
 
-      const week = sub.current_week_in_cycle
-      const logs: Promise<any>[] = []
+      // ── IDEMPOTENCY: check if this cycle was already sent ──────────────
+      const { data: recentLog } = await supabase
+        .from("mgm_email_logs")
+        .select("id")
+        .eq("subscription_id", sub.id)
+        .eq("stream_type", streamType)
+        .gte("sent_at", new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString()) // within 3 days
+        .maybeSingle()
 
-      // Week 1: Couples email
-      if (week === 1 && sub.receive_couple_emails && !sub.unsubscribed_couple) {
-        const email = buildNurtureEmail({
-          recipientName: sub.husband_first_name,
-          partnerName: sub.wife_first_name,
-          emailBlock: content.couples1,
-          theme: content.theme,
-          month: content.month,
-          ctaUrl: `${SITE_URL}/my-great-marriage/check-in`,
-          preferenceToken: sub.couple_preference_token,
-          recipientLabel: "couple emails",
-          isCouple: true,
-        })
+      if (recentLog) {
+        console.warn(`[MGM Cron] Already sent ${streamType} for ${sub.id} recently, skipping duplicate`)
+        skipped++
+        continue
+      }
 
-        const recipients: string[] = []
-        if (!sub.unsubscribed_husband) recipients.push(sub.husband_email)
-        if (!sub.unsubscribed_wife) recipients.push(sub.wife_email)
+      // ── RECIPIENT RESOLUTION ───────────────────────────────────────────
+      const husbandReceives = shouldSendToHusband(sub, streamType)
+      const wifeReceives = shouldSendToWife(sub, streamType)
 
-        if (recipients.length > 0) {
-          const result = await sendMgmEmail({ to: recipients, ...email })
-          logs.push(supabase.from("mgm_email_logs").insert({
-            subscription_id: sub.id,
-            stream_type: "COUPLES_1",
-            recipient_type: "BOTH",
-            recipient_email: recipients.join(", "),
-            subject: email.subject,
-            status: result.success ? "sent" : "failed",
-            error_message: result.error || null,
-          }))
+      const logEntries: Promise<any>[] = []
+      let anySent = false
+
+      // ── COUPLES_1 and COUPLES_2 ────────────────────────────────────────
+      if (streamType === "COUPLES_1" || streamType === "COUPLES_2") {
+        const emailBlock = streamType === "COUPLES_1" ? content.couples1 : content.couples2
+        const ctaUrl = `${SITE_URL}/my-great-marriage/check-in`
+
+        // Send to husband individually if enabled
+        if (husbandReceives) {
+          const email = buildNurtureEmail({
+            recipientName: sub.husband_first_name,
+            partnerName: sub.wife_first_name,
+            emailBlock,
+            theme: content.theme,
+            month: content.month,
+            ctaUrl,
+            preferenceToken: sub.husband_preference_token,
+            recipientLabel: "couple emails",
+            isCouple: true,
+          })
+          const result = await sendMgmEmail({ to: sub.husband_email, ...email })
+          logEntries.push(
+            supabase.from("mgm_email_logs").insert({
+              subscription_id: sub.id,
+              stream_type: streamType,
+              recipient_type: "HUSBAND",
+              recipient_email: sub.husband_email,
+              subject: email.subject,
+              status: result.success ? "sent" : "failed",
+              provider_message_id: result.messageId || null,
+              error_message: result.error || null,
+            })
+          )
+          if (result.success) anySent = true
+        }
+
+        // Send to wife individually if enabled
+        if (wifeReceives) {
+          const email = buildNurtureEmail({
+            recipientName: sub.wife_first_name,
+            partnerName: sub.husband_first_name,
+            emailBlock,
+            theme: content.theme,
+            month: content.month,
+            ctaUrl,
+            preferenceToken: sub.wife_preference_token,
+            recipientLabel: "couple emails",
+            isCouple: true,
+          })
+          const result = await sendMgmEmail({ to: sub.wife_email, ...email })
+          logEntries.push(
+            supabase.from("mgm_email_logs").insert({
+              subscription_id: sub.id,
+              stream_type: streamType,
+              recipient_type: "WIFE",
+              recipient_email: sub.wife_email,
+              subject: email.subject,
+              status: result.success ? "sent" : "failed",
+              provider_message_id: result.messageId || null,
+              error_message: result.error || null,
+            })
+          )
+          if (result.success) anySent = true
         }
       }
 
-      // Week 2: Husband email
-      if (week === 2 && sub.receive_husband_emails && !sub.unsubscribed_husband) {
+      // ── HUSBANDS ───────────────────────────────────────────────────────
+      if (streamType === "HUSBANDS" && husbandReceives) {
         const email = buildNurtureEmail({
           recipientName: sub.husband_first_name,
           emailBlock: content.husbands,
@@ -95,21 +157,24 @@ export async function GET(request: NextRequest) {
           recipientLabel: "husband emails",
           isCouple: false,
         })
-
         const result = await sendMgmEmail({ to: sub.husband_email, ...email })
-        logs.push(supabase.from("mgm_email_logs").insert({
-          subscription_id: sub.id,
-          stream_type: "HUSBANDS",
-          recipient_type: "HUSBAND",
-          recipient_email: sub.husband_email,
-          subject: email.subject,
-          status: result.success ? "sent" : "failed",
-          error_message: result.error || null,
-        }))
+        logEntries.push(
+          supabase.from("mgm_email_logs").insert({
+            subscription_id: sub.id,
+            stream_type: "HUSBANDS",
+            recipient_type: "HUSBAND",
+            recipient_email: sub.husband_email,
+            subject: email.subject,
+            status: result.success ? "sent" : "failed",
+            provider_message_id: result.messageId || null,
+            error_message: result.error || null,
+          })
+        )
+        if (result.success) anySent = true
       }
 
-      // Week 3: Wife email
-      if (week === 3 && sub.receive_wife_emails && !sub.unsubscribed_wife) {
+      // ── WIVES ──────────────────────────────────────────────────────────
+      if (streamType === "WIVES" && wifeReceives) {
         const email = buildNurtureEmail({
           recipientName: sub.wife_first_name,
           emailBlock: content.wives,
@@ -120,57 +185,38 @@ export async function GET(request: NextRequest) {
           recipientLabel: "wife emails",
           isCouple: false,
         })
-
         const result = await sendMgmEmail({ to: sub.wife_email, ...email })
-        logs.push(supabase.from("mgm_email_logs").insert({
-          subscription_id: sub.id,
-          stream_type: "WIVES",
-          recipient_type: "WIFE",
-          recipient_email: sub.wife_email,
-          subject: email.subject,
-          status: result.success ? "sent" : "failed",
-          error_message: result.error || null,
-        }))
-      }
-
-      // Week 4: Couples check-in reminder
-      if (week === 4 && sub.receive_couple_emails && !sub.unsubscribed_couple) {
-        const email = buildNurtureEmail({
-          recipientName: sub.husband_first_name,
-          partnerName: sub.wife_first_name,
-          emailBlock: content.couples2,
-          theme: content.theme,
-          month: content.month,
-          ctaUrl: `${SITE_URL}/my-great-marriage/check-in`,
-          preferenceToken: sub.couple_preference_token,
-          recipientLabel: "couple emails",
-          isCouple: true,
-        })
-
-        const recipients: string[] = []
-        if (!sub.unsubscribed_husband) recipients.push(sub.husband_email)
-        if (!sub.unsubscribed_wife) recipients.push(sub.wife_email)
-
-        if (recipients.length > 0) {
-          const result = await sendMgmEmail({ to: recipients, ...email })
-          logs.push(supabase.from("mgm_email_logs").insert({
+        logEntries.push(
+          supabase.from("mgm_email_logs").insert({
             subscription_id: sub.id,
-            stream_type: "COUPLES_2",
-            recipient_type: "BOTH",
-            recipient_email: recipients.join(", "),
+            stream_type: "WIVES",
+            recipient_type: "WIFE",
+            recipient_email: sub.wife_email,
             subject: email.subject,
             status: result.success ? "sent" : "failed",
+            provider_message_id: result.messageId || null,
             error_message: result.error || null,
-          }))
-        }
+          })
+        )
+        if (result.success) anySent = true
       }
 
-      // Flush logs
-      await Promise.all(logs)
+      // Flush logs in parallel
+      await Promise.all(logEntries)
 
-      // Advance progress
-      const { nextMonth, nextWeek, isCompleted } = advanceProgress(sub.current_month, sub.current_week_in_cycle)
-      const nextSendAt = computeNextSendAt(now)
+      // ── ADVANCE JOURNEY STATE ──────────────────────────────────────────
+      const { nextMonth, nextWeek, isCompleted } = advanceProgress(
+        sub.current_month,
+        sub.current_week_in_cycle
+      )
+
+      // nextSendAt = current nextSendAt + 7 days (not now + 7 days)
+      const currentSendAt = new Date(sub.next_send_at)
+      const nextSendAt = computeNextSendAt(currentSendAt)
+
+      // Check if all streams are now disabled — mark inactive if so
+      const shouldDeactivate =
+        isCompleted || markInactiveIfNoStreamsEnabled(sub)
 
       await supabase
         .from("mgm_subscriptions")
@@ -179,7 +225,7 @@ export async function GET(request: NextRequest) {
           current_week_in_cycle: nextWeek,
           last_sent_at: now.toISOString(),
           next_send_at: nextSendAt.toISOString(),
-          is_active: !isCompleted,
+          is_active: !shouldDeactivate,
         })
         .eq("id", sub.id)
 
@@ -190,5 +236,11 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ message: "Cron complete", processed, errors })
+  return NextResponse.json({
+    message: "Cron complete",
+    processed,
+    skipped,
+    errors,
+    checkedAt: now.toISOString(),
+  })
 }
