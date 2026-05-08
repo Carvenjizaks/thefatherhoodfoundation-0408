@@ -11,9 +11,9 @@ function emailWrapper(content: string, previewText: string = ""): string {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${FROM_NAME}</title>
-  ${previewText ? `<div style="display:none;max-height:0;overflow:hidden;">${previewText}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>` : ""}
 </head>
 <body style="margin:0;padding:0;background:#f5ede4;font-family:Georgia,'Times New Roman',serif;">
+  ${previewText ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${previewText}${"&nbsp;&zwnj;".repeat(60)}</div>` : ""}
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5ede4;padding:32px 16px;">
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
