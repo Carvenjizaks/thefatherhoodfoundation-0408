@@ -338,21 +338,31 @@ export default function MyGreatMarriagePage() {
               <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e]">Programme Offerings</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {offerings.map((item) => (
                 <div
                   key={item.title}
-                  className="border-t-2 border-[#8B2B3E] pt-8 space-y-4"
+                  className="group relative overflow-hidden rounded-2xl bg-white border border-[#e8d8c8] hover:border-[#8B2B3E] transition-all duration-500 hover:shadow-xl cursor-default min-h-[220px]"
                 >
-                  <h3 className="text-xl font-bold text-[#1a0a0e]">{item.title}</h3>
-                  <p className="text-[#6b4c52] leading-relaxed">{item.desc}</p>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full mt-2 bg-transparent"
-                  >
-                    <Link href="/events/my-great-marriage-2026">Learn More</Link>
-                  </Button>
+                  {/* Default state */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-between transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-4">
+                    <div className="w-10 h-1 bg-[#8B2B3E] rounded-full mb-6" />
+                    <h3 className="text-xl font-bold text-[#1a0a0e] leading-snug">{item.title}</h3>
+                    <span className="text-xs uppercase tracking-widest text-[#D4A574] font-semibold mt-4">Hover to learn more</span>
+                  </div>
+
+                  {/* Hover state */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-between bg-[#8B2B3E] opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+                    <h3 className="text-lg font-bold text-white leading-snug">{item.title}</h3>
+                    <p className="text-white/80 text-sm leading-relaxed mt-3 flex-1">{item.desc}</p>
+                    <Button
+                      asChild
+                      size="sm"
+                      className="mt-4 bg-white text-[#8B2B3E] hover:bg-white/90 rounded-full font-semibold w-fit"
+                    >
+                      <Link href="/my-great-marriage">Learn More</Link>
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
