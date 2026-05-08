@@ -132,7 +132,7 @@ export default function AdminDashboardClient({
             Search
           </Button>
           {search && (
-            <Button type="button" variant="outline" onClick={() => { setSearchInput(""); router.push("/admin/mygreatmarriage") }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
+            <Button type="button" variant="outline" onClick={() => { setSearchInput(""); startTransition(() => { router.push("/admin/mygreatmarriage") }) }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
               Clear
             </Button>
           )}
