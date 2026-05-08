@@ -304,6 +304,28 @@ export default function MyGreatMarriagePage() {
           </div>
         </section>
 
+        {/* Keep Your Marriage Fresh Banner */}
+        <section className="py-16 bg-[#3D1520] px-6">
+          <div className="max-w-5xl mx-auto text-center">
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">New</span>
+            <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-white text-balance mb-4" style={{ fontFamily: "Georgia, serif" }}>
+              Keep Your Marriage Fresh
+            </h2>
+            <p className="text-white/75 max-w-xl mx-auto mb-8 leading-relaxed">
+              Get a free Monthly Marriage Check-In template and weekly encouragement for husbands, wives, and couples — designed to help you stay connected and build a stronger Christ-centered marriage.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="bg-[#D4A574] hover:bg-[#c4955e] text-[#1a0a0e] rounded-full px-8 font-semibold"
+            >
+              <Link href="/my-great-marriage/keep-your-marriage-fresh">
+                Get the Free Marriage Check-In <ArrowRight className="ml-2 w-4 h-4 inline" />
+              </Link>
+            </Button>
+          </div>
+        </section>
+
         {/* Program Offerings */}
         <section className="py-20 lg:py-28 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
