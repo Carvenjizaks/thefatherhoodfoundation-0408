@@ -611,7 +611,7 @@ export default function MyGreatMarriageEventPage() {
                   onClick={() => setIsEnquiryOpen(true)}
                   className="inline-flex items-center gap-2 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold rounded-full px-6 py-3 transition-colors mb-8"
                 >
-                  Email Rodger
+                  Request Ticket
                 </button>
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/50 border border-[#8B2B3E]/20">
                   <Clock className="w-4 h-4 text-[#8B2B3E]" />
@@ -714,7 +714,7 @@ export default function MyGreatMarriageEventPage() {
                   onClick={() => setIsEnquiryOpen(true)}
                   className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#8B2B3E] font-semibold rounded-full px-6 py-3 transition-colors mb-10"
                 >
-                  Email Rodger
+                  Request Ticket
                 </button>
                 <div className="inline-flex items-center gap-2 bg-white/20 text-white rounded-full px-8 py-4 text-lg font-medium">
                   <Heart className="w-5 h-5" />
@@ -1047,7 +1047,7 @@ export default function MyGreatMarriageEventPage() {
                   disabled={enquirySubmitting} 
                   className="flex-1 bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-bold rounded-full"
                 >
-                  {enquirySubmitting ? "Opening Email..." : "Email Rodger"}
+                  {enquirySubmitting ? "Sending..." : "Send Enquiry"}
                 </Button>
               </div>
             </form>

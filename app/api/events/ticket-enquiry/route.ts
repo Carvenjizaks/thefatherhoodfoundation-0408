@@ -9,6 +9,131 @@ interface TicketEnquiryRequest {
   eventName: string
 }
 
+// SMTP Configuration - read at runtime to ensure env vars are loaded
+function getEmailConfig() {
+  return {
+    SMTP_API_KEY: process.env.SMTP_API_KEY,
+    SMTP_CHANNEL: process.env.SMTP_CHANNEL || "default",
+    SMTP_HOST: "send.smtp.com",
+    SMTP_PORT: 587,
+    SMTP_USER: process.env.SMTP_USERNAME,
+    SMTP_PASS: process.env.SMTP_PASSWORD,
+    FROM_EMAIL: process.env.SMTP_SENDER_EMAIL || "noreply@thefathersfoundations.org",
+    FROM_NAME: process.env.SMTP_SENDER_NAME || "The Fatherhood Foundation",
+  }
+}
+
+async function sendEmailViaSMTP(
+  to: string,
+  toName: string,
+  subject: string,
+  html: string,
+  text: string,
+  replyTo?: string
+): Promise<boolean> {
+  const config = getEmailConfig()
+  
+  console.log("[v0] ========== TICKET ENQUIRY EMAIL ATTEMPT ==========")
+  console.log("[v0] To:", to)
+  console.log("[v0] Subject:", subject)
+  console.log("[v0] SMTP_API_KEY exists:", !!config.SMTP_API_KEY)
+  console.log("[v0] SMTP_CHANNEL:", config.SMTP_CHANNEL)
+  
+  // Try SMTP.com API first (preferred method)
+  // Only use SMTP.com API if we have a valid channel name (not the host URL)
+  const hasValidChannel = config.SMTP_API_KEY && config.SMTP_CHANNEL && config.SMTP_CHANNEL !== "send.smtp.com" && config.SMTP_CHANNEL !== "default"
+  if (hasValidChannel && config.SMTP_API_KEY) {
+    console.log("[v0] Using SMTP.com API to send email...")
+    try {
+      const apiUrl = "https://api.smtp.com/v4/messages"
+      const body: Record<string, unknown> = {
+        channel: config.SMTP_CHANNEL,
+        recipients: {
+          to: [{ address: to, name: toName }],
+        },
+        originator: {
+          from: {
+            address: config.FROM_EMAIL,
+            name: config.FROM_NAME,
+          },
+        },
+        subject,
+        body: {
+          parts: [
+            { type: "text/plain", content: text },
+            { type: "text/html", content: html },
+          ],
+        },
+      }
+
+      // Add reply-to if provided
+      if (replyTo) {
+        (body.originator as Record<string, unknown>).reply_to = { address: replyTo }
+      }
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${config.SMTP_API_KEY}`,
+        },
+        body: JSON.stringify(body),
+      })
+
+      const responseText = await response.text()
+      console.log("[v0] SMTP.com API response status:", response.status)
+      console.log("[v0] SMTP.com API response body:", responseText)
+
+      if (!response.ok) {
+        console.error("[v0] SMTP.com API FAILED - falling back to nodemailer")
+        // Fall through to nodemailer
+      } else {
+        console.log("[v0] EMAIL SENT SUCCESSFULLY via SMTP.com API to:", to)
+        return true
+      }
+    } catch (error) {
+      console.error("[v0] SMTP.com API EXCEPTION:", error)
+      // Fall through to nodemailer
+    }
+  }
+
+  // Fallback to nodemailer
+  if (!config.SMTP_USER || !config.SMTP_PASS) {
+    console.error("[v0] No email credentials configured (SMTP_API_KEY or SMTP_USERNAME/SMTP_PASSWORD)")
+    return false
+  }
+
+  try {
+    console.log("[v0] Falling back to Nodemailer SMTP...")
+    const nodemailer = await import("nodemailer")
+    
+    const transporter = nodemailer.default.createTransport({
+      host: config.SMTP_HOST,
+      port: config.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: config.SMTP_USER,
+        pass: config.SMTP_PASS,
+      },
+    })
+
+    const info = await transporter.sendMail({
+      from: `"${config.FROM_NAME}" <${config.FROM_EMAIL}>`,
+      to: `"${toName}" <${to}>`,
+      subject,
+      text,
+      html,
+      replyTo,
+    })
+
+    console.log("[v0] EMAIL SENT SUCCESSFULLY via Nodemailer. MessageId:", info.messageId)
+    return true
+  } catch (error) {
+    console.error("[v0] Nodemailer EXCEPTION:", error)
+    return false
+  }
+}
+
 export async function POST(request: Request) {
   console.log("[v0] ========== TICKET ENQUIRY REQUEST ==========")
   
@@ -98,6 +223,83 @@ ${message ? `Message: ${message}` : ''}
 Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
 `
 
+    // Confirmation email sent back to the requestant
+    const confirmationSubject = `We received your ticket enquiry – ${eventName}`
+
+    const confirmationHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #8B2B3E; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px;">Ticket Enquiry Received</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              <p style="color: #333333; font-size: 16px; margin: 0 0 16px 0;">Dear ${name},</p>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
+                Thank you for reaching out regarding <strong>${eventName}</strong>. We have received your ticket enquiry and will get back to you as soon as possible.
+              </p>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
+                Please note that our team is quite busy with preparations at the moment, so we kindly ask that you be a little patient with us. We appreciate your understanding and look forward to connecting with you soon.
+              </p>
+              <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f4f5; border-left: 4px solid #8B2B3E; border-radius: 4px; margin: 20px 0;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <p style="margin: 0 0 6px 0; color: #555555; font-size: 13px;"><strong>Your Enquiry Details</strong></p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Name:</strong> ${name}</p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Email:</strong> ${email}</p>
+                    <p style="margin: 0 0 4px 0; color: #555555; font-size: 13px;"><strong>Phone:</strong> ${phone}</p>
+                    ${message ? `<p style="margin: 0; color: #555555; font-size: 13px;"><strong>Message:</strong> ${message.replace(/\n/g, '<br>')}</p>` : ''}
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 24px 0 4px 0;">
+                Warm regards,
+              </p>
+              <p style="color: #8B2B3E; font-size: 15px; font-weight: bold; margin: 0;">
+                The Fatherhood Foundation Help Desk
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f8f4f5; padding: 16px 30px; text-align: center;">
+              <p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation &mdash; Building Stronger Families</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+    const confirmationText = `
+Dear ${name},
+
+Thank you for reaching out regarding ${eventName}. We have received your ticket enquiry and will get back to you as soon as possible.
+
+Please note that our team is quite busy with preparations at the moment, so we kindly ask that you be a little patient with us. We appreciate your understanding and look forward to connecting with you soon.
+
+Your Enquiry Details:
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+${message ? `Message: ${message}` : ''}
+
+Warm regards,
+The Fatherhood Foundation Help Desk
+`
+
     // Recipients for ticket enquiries
     const recipients = [
       { email: "rodgerbeukes73@gmail.com", name: "Rodger Beukes" },
@@ -127,6 +329,21 @@ Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesbu
         }
       })
     )
+    // Send email to both internal recipients and a confirmation to the requestant
+    const [results, confirmationResult] = await Promise.all([
+      Promise.all(
+        recipients.map(recipient =>
+          sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
+        )
+      ),
+      sendEmailViaSMTP(email, name, confirmationSubject, confirmationHtml, confirmationText),
+    ])
+
+    if (!confirmationResult) {
+      console.warn("[v0] Confirmation email to requestant failed, but continuing...")
+    } else {
+      console.log("[v0] Confirmation email sent to requestant:", email)
+    }
 
     const succeeded = results.filter(r => r.status === "fulfilled")
     const failed = results.filter(r => r.status === "rejected")

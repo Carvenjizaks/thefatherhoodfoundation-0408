@@ -17,9 +17,16 @@ export async function POST(request: Request) {
       .select("id, email, first_name, last_name, role, is_active, password_hash")
       .eq("email", username)
       .eq("is_active", true)
-      .single()
+      .maybeSingle()
 
-    if (adminUser && !error) {
+    console.error("[v0] Login query error:", error)
+
+    if (error && error.code !== "PGRST116") {
+      // Only log non-"no rows" errors as actual errors
+      console.error("[v0] Supabase query error:", error)
+    }
+
+    if (adminUser) {
       // Check password against stored password_hash
       const isValidPassword = adminUser.password_hash === password
 

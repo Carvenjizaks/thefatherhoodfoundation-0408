@@ -139,8 +139,10 @@ export default function AdminDashboardPage() {
   // Admin users management (owner only)
   const [adminUsers, setAdminUsers] = useState<AdminStaffUser[]>([])
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false)
-  const [addUserForm, setAddUserForm] = useState({ email: "", password: "", firstName: "", lastName: "" })
+  const [addUserForm, setAddUserForm] = useState({ email: "", password: "", firstName: "", lastName: "", role: "staff" })
   const [isAddingUser, setIsAddingUser] = useState(false)
+  const [addUserError, setAddUserError] = useState("")
+  const [addUserSuccess, setAddUserSuccess] = useState("")
   
   // Password reset state
   const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false)
@@ -305,19 +307,35 @@ export default function AdminDashboardPage() {
   const handleAddUser = async () => {
     if (!addUserForm.email || !addUserForm.password || !addUserForm.firstName || !addUserForm.lastName) return
     setIsAddingUser(true)
+    setAddUserError("")
+    setAddUserSuccess("")
     try {
       const response = await adminFetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(addUserForm),
+        body: JSON.stringify({
+          email: addUserForm.email,
+          password: addUserForm.password,
+          firstName: addUserForm.firstName,
+          lastName: addUserForm.lastName,
+          role: addUserForm.role,
+        }),
       })
+      const data = await response.json()
       if (response.ok) {
-        setAddUserForm({ email: "", password: "", firstName: "", lastName: "" })
-        setAddUserDialogOpen(false)
+        setAddUserSuccess(`${addUserForm.firstName} ${addUserForm.lastName} added successfully!`)
+        setAddUserForm({ email: "", password: "", firstName: "", lastName: "", role: "staff" })
         fetchAdminUsers()
+        setTimeout(() => {
+          setAddUserDialogOpen(false)
+          setAddUserSuccess("")
+        }, 1800)
+      } else {
+        setAddUserError(data.error || "Failed to add user. Please try again.")
       }
     } catch (error) {
       console.error("Error adding user:", error)
+      setAddUserError("Network error. Please try again.")
     } finally {
       setIsAddingUser(false)
     }
@@ -521,6 +539,14 @@ export default function AdminDashboardPage() {
     if (!addRegForm.firstName || !addRegForm.lastName || !addRegForm.email) return
     setIsAddingReg(true)
     setAddRegResult(null)
+
+    // Map event display name to event slug used in the API
+    const eventSlugMap: Record<string, { slug: string; date: string }> = {
+      "MyGreatMarriage 2026": { slug: "my-great-marriage-2026", date: "2026-08-01" },
+      "Gathering of Champions 2026": { slug: "gathering-of-champions-2026", date: "2026-08-01" },
+    }
+    const selectedEvent = eventSlugMap[addRegForm.eventName]
+
     try {
       const endpoint = addRegType === "event" ? "/api/events/register" : "/api/table-talk/register"
       const body = addRegType === "event"
@@ -531,7 +557,8 @@ export default function AdminDashboardPage() {
             phone: addRegForm.phone,
             spouseName: addRegForm.spouseName,
             eventName: addRegForm.eventName || "Walk-in Registration",
-            eventId: "walk-in",
+            eventSlug: selectedEvent?.slug || "walk-in",
+            eventDate: selectedEvent?.date || new Date().toISOString().split("T")[0],
           }
         : {
             firstName: addRegForm.firstName,
@@ -540,7 +567,7 @@ export default function AdminDashboardPage() {
             phone: addRegForm.phone,
             sessionDate: new Date().toISOString().split("T")[0],
           }
-      const response = await fetch(endpoint, {
+      const response = await adminFetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -1757,12 +1784,12 @@ export default function AdminDashboardPage() {
                           Admin User Management
                         </CardTitle>
                         <CardDescription className="text-muted-foreground text-sm">
-                          Add staff members who can manage registrations and check-ins (only you can export data)
+                          Staff members can manage registrations, update payment statuses, and handle attendance check-ins. Only the owner can export data.
                         </CardDescription>
                       </div>
                       <Button
                         size="sm"
-                        onClick={() => setAddUserDialogOpen(true)}
+                        onClick={() => { setAddUserDialogOpen(true); setAddUserError(""); setAddUserSuccess("") }}
                         className="bg-primary hover:bg-primary/90 text-primary-foreground"
                       >
                         <UserPlus className="w-4 h-4 mr-2" />
@@ -2091,17 +2118,20 @@ export default function AdminDashboardPage() {
       </Dialog>
 
       {/* Add Staff User Dialog (Owner Only) */}
-      <Dialog open={addUserDialogOpen} onOpenChange={setAddUserDialogOpen}>
+      <Dialog open={addUserDialogOpen} onOpenChange={(open) => {
+        setAddUserDialogOpen(open)
+        if (!open) { setAddUserError(""); setAddUserSuccess("") }
+      }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <UserPlus className="w-4 h-4 text-primary" />
               </div>
-              Add Staff User
+              Add Admin User
             </DialogTitle>
             <DialogDescription>
-              Staff users can manage registrations and check-ins but cannot export data.
+              Add a staff member who can handle registrations, payments, and attendance check-ins.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -2133,7 +2163,7 @@ export default function AdminDashboardPage() {
                 id="staff-email"
                 value={addUserForm.email}
                 onChange={(e) => setAddUserForm(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="staff_username"
+                placeholder="e.g. staff@fathersfound.org or a username"
                 className="border-border bg-secondary/30"
               />
             </div>
@@ -2148,6 +2178,31 @@ export default function AdminDashboardPage() {
                 className="border-border bg-secondary/30"
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="staff-role" className="text-foreground font-medium text-sm">Role</Label>
+              <select
+                id="staff-role"
+                value={addUserForm.role}
+                onChange={(e) => setAddUserForm(prev => ({ ...prev, role: e.target.value }))}
+                className="w-full rounded-md border border-border bg-secondary/30 px-3 py-2 text-sm text-foreground focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+              >
+                <option value="staff">Staff — can manage registrations, payments &amp; attendance</option>
+              </select>
+              <p className="text-xs text-muted-foreground">All staff members can manage registrations, update payment status, and mark attendance check-ins.</p>
+            </div>
+
+            {addUserError && (
+              <div className="flex items-center gap-2 p-3 rounded-lg text-sm bg-red-50 text-red-700 border border-red-200">
+                <XCircle className="w-4 h-4 shrink-0" />
+                <span>{addUserError}</span>
+              </div>
+            )}
+            {addUserSuccess && (
+              <div className="flex items-center gap-2 p-3 rounded-lg text-sm bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <CheckCircle className="w-4 h-4 shrink-0" />
+                <span>{addUserSuccess}</span>
+              </div>
+            )}
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" onClick={() => setAddUserDialogOpen(false)} className="border-border">
