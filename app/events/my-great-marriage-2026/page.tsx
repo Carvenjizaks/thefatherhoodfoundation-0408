@@ -291,27 +291,38 @@ export default function MyGreatMarriageEventPage() {
     if (!validateEnquiryForm()) return
     setEnquirySubmitting(true)
     
+    console.log("[v0] Submitting enquiry form...")
+    
     try {
+      const payload = {
+        name: enquiryData.name,
+        email: enquiryData.email,
+        phone: enquiryData.phone,
+        message: enquiryData.message,
+        eventName: "MyGreatMarriage Conference 2026",
+      }
+      
+      console.log("[v0] Request payload:", payload)
+      
       const response = await fetch("/api/events/ticket-enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: enquiryData.name,
-          email: enquiryData.email,
-          phone: enquiryData.phone,
-          message: enquiryData.message,
-          eventName: "MyGreatMarriage Conference 2026",
-        }),
+        body: JSON.stringify(payload),
       })
 
+      const data = await response.json()
+      console.log("[v0] Response status:", response.status)
+      console.log("[v0] Response data:", data)
+
       if (!response.ok) {
-        throw new Error("Failed to send enquiry")
+        throw new Error(data.error || "Failed to send enquiry")
       }
 
+      console.log("[v0] Enquiry sent successfully!")
       setEnquirySuccess(true)
     } catch (error) {
       console.error("[v0] Enquiry submission error:", error)
-      alert("Failed to send enquiry. Please try again or contact us directly.")
+      alert("Failed to send enquiry. Please try again or contact us directly at rodgerbeukes73@gmail.com")
     } finally {
       setEnquirySubmitting(false)
     }

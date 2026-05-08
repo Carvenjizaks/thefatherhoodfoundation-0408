@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { sendEmail } from "@/app/api/send-email/route"
 
 interface TicketEnquiryRequest {
   name: string
@@ -134,12 +135,18 @@ async function sendEmailViaSMTP(
 }
 
 export async function POST(request: Request) {
+  console.log("[v0] ========== TICKET ENQUIRY REQUEST ==========")
+  
   try {
     const body: TicketEnquiryRequest = await request.json()
     const { name, email, phone, message, eventName } = body
 
+    console.log("[v0] Enquiry from:", name, email, phone)
+    console.log("[v0] Event:", eventName)
+
     // Validate required fields
     if (!name || !email || !phone) {
+      console.log("[v0] Missing required fields")
       return NextResponse.json(
         { error: "Missing required fields: name, email, phone" },
         { status: 400 }
@@ -149,6 +156,7 @@ export async function POST(request: Request) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
+      console.log("[v0] Invalid email format")
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
     }
 
@@ -295,9 +303,32 @@ The Fatherhood Foundation Help Desk
     // Recipients for ticket enquiries
     const recipients = [
       { email: "rodgerbeukes73@gmail.com", name: "Rodger Beukes" },
-      { email: "carven@fathersfound.org", name: "Carven Izaks" },
+      { email: "support@nexiumbi.com", name: "Carven Izaks" },
     ]
 
+    console.log("[v0] Sending to recipients:", recipients.map(r => r.email).join(", "))
+
+    // Send email to both recipients using the internal sendEmail function
+    const results = await Promise.allSettled(
+      recipients.map(async (recipient) => {
+        console.log("[v0] Sending to:", recipient.email)
+        try {
+          const result = await sendEmail({
+            to: recipient.email,
+            toName: recipient.name,
+            subject,
+            html,
+            text,
+            replyTo: email,
+          })
+          console.log("[v0] Success for", recipient.email, ":", result)
+          return { recipient: recipient.email, success: true, result }
+        } catch (error) {
+          console.error("[v0] Failed for", recipient.email, ":", error)
+          throw error
+        }
+      })
+    )
     // Send email to both internal recipients and a confirmation to the requestant
     const [results, confirmationResult] = await Promise.all([
       Promise.all(
@@ -314,26 +345,32 @@ The Fatherhood Foundation Help Desk
       console.log("[v0] Confirmation email sent to requestant:", email)
     }
 
-    const allSucceeded = results.every(r => r === true)
-    const anySucceeded = results.some(r => r === true)
+    const succeeded = results.filter(r => r.status === "fulfilled")
+    const failed = results.filter(r => r.status === "rejected")
 
-    if (!anySucceeded) {
+    console.log("[v0] Results - Succeeded:", succeeded.length, "Failed:", failed.length)
+
+    if (succeeded.length === 0) {
       console.error("[v0] Failed to send ticket enquiry to any recipient")
       return NextResponse.json(
-        { error: "Failed to send enquiry" },
+        { error: "Failed to send enquiry. Please try again or contact us directly." },
         { status: 500 }
       )
     }
 
-    console.log("[v0] Ticket enquiry sent. Results:", results)
+    console.log("[v0] ========== TICKET ENQUIRY SENT ==========")
 
     return NextResponse.json({
       success: true,
-      message: allSucceeded ? "Enquiry sent to all recipients" : "Enquiry sent to some recipients",
+      message: succeeded.length === recipients.length 
+        ? "Enquiry sent to all recipients" 
+        : "Enquiry sent to some recipients",
+      sentTo: succeeded.length,
+      totalRecipients: recipients.length,
     })
   } catch (error: unknown) {
     const err = error as { message?: string }
-    console.error("[v0] Error sending ticket enquiry:", err.message)
+    console.error("[v0] Error processing ticket enquiry:", err.message)
     return NextResponse.json(
       { error: "Failed to send enquiry", details: err.message },
       { status: 500 }

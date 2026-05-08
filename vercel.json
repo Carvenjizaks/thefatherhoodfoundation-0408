@@ -1,3 +1,10 @@
 {
-  "installCommand": "pnpm install --no-frozen-lockfile"
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "crons": [
+    {
+      "path": "/api/cron/mgm-nurture",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }
+
