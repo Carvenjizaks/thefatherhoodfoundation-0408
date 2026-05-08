@@ -100,10 +100,10 @@ export default function SignupSection() {
         <div className="text-center mb-10">
           <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">Sign Up Free</span>
           <h2 className="mt-3 text-3xl font-bold text-[#1a0a0e] text-balance" style={{ fontFamily: "Georgia, serif" }}>
-            Join the My Great Marriage Email Journey
+            Join the My Great Marriage Journey
           </h2>
           <p className="mt-4 text-[#6b4c52]">
-            Sign up to receive your free Monthly Marriage Check-In template, plus practical weekly encouragement for husbands, wives, and couples.
+            Sign up to receive tools, tips and guidance for Marriage, plus practical weekly or monthly encouragement for husbands, wives, and couples.
           </p>
         </div>
 
