@@ -1,5 +1,14 @@
 import { FROM_ADDRESS } from "./email-templates"
 
+const SMTP_API_URL = "https://api.smtp.com/v4/messages"
+
+function parseSender(from: string): { address: string; name: string } {
+  // Parse "Name <email>" format
+  const match = from.match(/^(.+?)\s*<([^>]+)>$/)
+  if (match) return { name: match[1].trim(), address: match[2].trim() }
+  return { name: from, address: from }
+}
+
 export interface SendEmailParams {
   to: string | string[]
   subject: string
@@ -8,37 +17,50 @@ export interface SendEmailParams {
   replyTo?: string
 }
 
-export async function sendMgmEmail(params: SendEmailParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
-  const { to, subject, html, text } = params
+export async function sendMgmEmail(
+  params: SendEmailParams
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const { to, subject, html, text, replyTo } = params
   const recipients = Array.isArray(to) ? to : [to]
+  const sender = parseSender(FROM_ADDRESS)
 
-  const smtpApiKey = process.env.SMTP_API_KEY
-  const smtpChannel = process.env.SMTP_CHANNEL
+  const apiKey = process.env.SMTP_API_KEY
+  const channel = process.env.SMTP_CHANNEL
 
-  // Try SMTP.com first
-  if (smtpApiKey && smtpChannel) {
+  // Try SMTP.com API first
+  if (apiKey && channel) {
     try {
-      const payload = {
-        key: smtpApiKey,
-        message: {
-          channel: smtpChannel,
-          recipients: { to: recipients.map((email) => ({ address: { email } })) },
-          originator: { from: { address: { email: FROM_ADDRESS } } },
-          subject,
-          body: { parts: [{ type: "text/html", content: html }, { type: "text/plain", content: text }] },
+      const body: Record<string, unknown> = {
+        channel,
+        recipients: {
+          to: recipients.map((email) => ({ address: email, name: email })),
+        },
+        originator: {
+          from: sender,
+          ...(replyTo ? { reply_to: { address: replyTo } } : {}),
+        },
+        subject,
+        body: {
+          parts: [
+            { type: "text/plain", content: text },
+            { type: "text/html", content: html },
+          ],
         },
       }
 
-      const res = await fetch("https://api.smtp.com/v4/messages", {
+      const res = await fetch(SMTP_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
       })
 
       const data = await res.json()
 
-      if (data?.status === "success") {
-        return { success: true, messageId: data?.data?.message_id }
+      if (res.ok) {
+        return { success: true, messageId: data?.message_id }
       }
 
       console.error("[MGM Email] SMTP.com failed:", JSON.stringify(data))
@@ -47,24 +69,30 @@ export async function sendMgmEmail(params: SendEmailParams): Promise<{ success: 
     }
   }
 
-  // Fallback: nodemailer via internal send-email route
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    const res = await fetch(`${baseUrl}/api/send-email`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to: recipients.join(","), subject, html, text, from: FROM_ADDRESS }),
-    })
+  // Fallback: send one by one via internal /api/send-email (supports single address)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  let lastError = ""
 
-    if (res.ok) {
-      return { success: true }
+  for (const email of recipients) {
+    try {
+      const res = await fetch(`${baseUrl}/api/send-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: email, subject, html, text, replyTo }),
+      })
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        lastError = JSON.stringify(err)
+        console.error(`[MGM Email] Fallback failed for ${email}:`, lastError)
+      }
+    } catch (err) {
+      lastError = String(err)
+      console.error(`[MGM Email] Fallback error for ${email}:`, lastError)
     }
-
-    const errData = await res.json().catch(() => ({}))
-    console.error("[MGM Email] Fallback send failed:", errData)
-    return { success: false, error: JSON.stringify(errData) }
-  } catch (err) {
-    console.error("[MGM Email] Fallback error:", err)
-    return { success: false, error: String(err) }
   }
+
+  return lastError
+    ? { success: false, error: lastError }
+    : { success: true }
 }
