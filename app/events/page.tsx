@@ -92,7 +92,7 @@ const events = [
   {
     id: "mgm-sept-2026",
     slug: "mgm-sept-2026",
-    title: "MyGreatMarriage Conference",
+    title: "MyGreatMarriage Seminar - \"Connect\"",
     subtitle: "Marriage Enrichment Event for Couples - Upcoming",
     dates: "September 2026",
     time: "To be Announced",
@@ -101,7 +101,7 @@ const events = [
     registrationOpen: false,
     requiresSpouse: true,
     isUpcoming: true,
-    description: "Join us for the next MyGreatMarriage Conference in September 2026. A powerful conference for couples to reconnect, rediscover, and reignite their marriage. Registration opening soon!",
+    description: "Join us for the MyGreatMarriage Seminar - \"Connect\" in September 2026. A powerful seminar for couples to reconnect, rediscover, and reignite their marriage. Registration opening soon!",
     price: "TBA",
     priceAmount: 0,
     detailsPage: "/my-great-marriage",
