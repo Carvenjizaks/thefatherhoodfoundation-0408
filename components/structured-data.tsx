@@ -148,3 +148,171 @@ export function FAQSchema({ faqs }: { faqs: { question: string; answer: string }
     />
   )
 }
+
+// AEO: Speakable Schema for Voice Assistants (Google Assistant, Alexa, Siri)
+export function SpeakableSchema({
+  headline,
+  summary,
+  url,
+}: {
+  headline: string
+  summary: string
+  url: string
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: headline,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".speakable-headline", ".speakable-summary"],
+    },
+    url,
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+// AEO: HowTo Schema for instructional content
+export function HowToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string
+  description: string
+  steps: { name: string; text: string }[]
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+// AEO: Service Schema for programs
+export function ServiceSchema({
+  name,
+  description,
+  provider,
+  areaServed,
+  audience,
+}: {
+  name: string
+  description: string
+  provider?: string
+  areaServed?: string
+  audience?: string
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    description,
+    provider: {
+      "@type": "Organization",
+      name: provider || "The Fatherhood Foundation",
+      url: "https://thefatherhoodfoundation.org",
+    },
+    areaServed: {
+      "@type": "Country",
+      name: areaServed || "Namibia",
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: audience || "Married Couples",
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+// AEO: Course Schema for programs/curriculum
+export function CourseSchema({
+  name,
+  description,
+  provider,
+  duration,
+}: {
+  name: string
+  description: string
+  provider?: string
+  duration?: string
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name,
+    description,
+    provider: {
+      "@type": "Organization",
+      name: provider || "The Fatherhood Foundation",
+      url: "https://thefatherhoodfoundation.org",
+    },
+    ...(duration && { timeRequired: duration }),
+    isAccessibleForFree: true,
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
+// AEO: Person Schema for author/founder quotes
+export function PersonSchema({
+  name,
+  jobTitle,
+  affiliation,
+  image,
+}: {
+  name: string
+  jobTitle?: string
+  affiliation?: string
+  image?: string
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    jobTitle: jobTitle || "Founder",
+    affiliation: {
+      "@type": "Organization",
+      name: affiliation || "The Fatherhood Foundation",
+    },
+    ...(image && { image }),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}

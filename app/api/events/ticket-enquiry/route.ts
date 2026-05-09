@@ -301,30 +301,9 @@ The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA
 
     console.log("[v0] Sending to recipients:", recipients.map(r => r.email).join(", "))
 
-    // Send email to both recipients using the internal sendEmail function
-    const results = await Promise.allSettled(
-      recipients.map(async (recipient) => {
-        console.log("[v0] Sending to:", recipient.email)
-        try {
-          const result = await sendEmail({
-            to: recipient.email,
-            toName: recipient.name,
-            subject,
-            html,
-            text,
-            replyTo: email,
-          })
-          console.log("[v0] Success for", recipient.email, ":", result)
-          return { recipient: recipient.email, success: true, result }
-        } catch (error) {
-          console.error("[v0] Failed for", recipient.email, ":", error)
-          throw error
-        }
-      })
-    )
     // Send email to both internal recipients and a confirmation to the requestant
     const [results, confirmationResult] = await Promise.all([
-      Promise.all(
+      Promise.allSettled(
         recipients.map(recipient =>
           sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
         )
