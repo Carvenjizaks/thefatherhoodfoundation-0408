@@ -129,16 +129,19 @@ export async function GET(request: NextRequest) {
           })
           const result = await sendMgmEmail({ to: sub.husband_email, ...email })
           logEntries.push(
-            supabase.from("mgm_email_logs").insert({
-              subscription_id: sub.id,
-              stream_type: streamType,
-              recipient_type: "HUSBAND",
-              recipient_email: sub.husband_email,
-              subject: email.subject,
-              status: result.success ? "sent" : "failed",
-              provider_message_id: result.messageId || null,
-              error_message: result.error || null,
-            }).then()
+            supabase
+              .from("mgm_email_logs")
+              .insert({
+                subscription_id: sub.id,
+                stream_type: streamType,
+                recipient_type: "HUSBAND",
+                recipient_email: sub.husband_email,
+                subject: email.subject,
+                status: result.success ? "sent" : "failed",
+                provider_message_id: result.messageId || null,
+                error_message: result.error || null,
+              })
+              .then(() => ({}))
           )
           if (result.success) anySent = true
         }
@@ -157,16 +160,19 @@ export async function GET(request: NextRequest) {
           })
           const result = await sendMgmEmail({ to: sub.wife_email, ...email })
           logEntries.push(
-            supabase.from("mgm_email_logs").insert({
-              subscription_id: sub.id,
-              stream_type: streamType,
-              recipient_type: "WIFE",
-              recipient_email: sub.wife_email,
-              subject: email.subject,
-              status: result.success ? "sent" : "failed",
-              provider_message_id: result.messageId || null,
-              error_message: result.error || null,
-            }).then()
+            supabase
+              .from("mgm_email_logs")
+              .insert({
+                subscription_id: sub.id,
+                stream_type: streamType,
+                recipient_type: "WIFE",
+                recipient_email: sub.wife_email,
+                subject: email.subject,
+                status: result.success ? "sent" : "failed",
+                provider_message_id: result.messageId || null,
+                error_message: result.error || null,
+              })
+              .then(() => ({}))
           )
           if (result.success) anySent = true
         }
@@ -186,16 +192,19 @@ export async function GET(request: NextRequest) {
         })
         const result = await sendMgmEmail({ to: sub.husband_email, ...email })
         logEntries.push(
-          supabase.from("mgm_email_logs").insert({
-            subscription_id: sub.id,
-            stream_type: "HUSBANDS",
-            recipient_type: "HUSBAND",
-            recipient_email: sub.husband_email,
-            subject: email.subject,
-            status: result.success ? "sent" : "failed",
-            provider_message_id: result.messageId || null,
-            error_message: result.error || null,
-          }).then()
+          supabase
+            .from("mgm_email_logs")
+            .insert({
+              subscription_id: sub.id,
+              stream_type: "HUSBANDS",
+              recipient_type: "HUSBAND",
+              recipient_email: sub.husband_email,
+              subject: email.subject,
+              status: result.success ? "sent" : "failed",
+              provider_message_id: result.messageId || null,
+              error_message: result.error || null,
+            })
+            .then(() => ({}))
         )
         if (result.success) anySent = true
       }
@@ -214,16 +223,19 @@ export async function GET(request: NextRequest) {
         })
         const result = await sendMgmEmail({ to: sub.wife_email, ...email })
         logEntries.push(
-          supabase.from("mgm_email_logs").insert({
-            subscription_id: sub.id,
-            stream_type: "WIVES",
-            recipient_type: "WIFE",
-            recipient_email: sub.wife_email,
-            subject: email.subject,
-            status: result.success ? "sent" : "failed",
-            provider_message_id: result.messageId || null,
-            error_message: result.error || null,
-          }).then()
+          supabase
+            .from("mgm_email_logs")
+            .insert({
+              subscription_id: sub.id,
+              stream_type: "WIVES",
+              recipient_type: "WIFE",
+              recipient_email: sub.wife_email,
+              subject: email.subject,
+              status: result.success ? "sent" : "failed",
+              provider_message_id: result.messageId || null,
+              error_message: result.error || null,
+            })
+            .then(() => ({}))
         )
         if (result.success) anySent = true
       }

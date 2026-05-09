@@ -303,7 +303,7 @@ The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA
 
     // Send email to both internal recipients and a confirmation to the requestant
     const [results, confirmationResult] = await Promise.all([
-      Promise.all(
+      Promise.allSettled(
         recipients.map(recipient =>
           sendEmailViaSMTP(recipient.email, recipient.name, subject, html, text, email)
         )
