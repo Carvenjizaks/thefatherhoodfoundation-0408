@@ -58,17 +58,17 @@ function emailWrapper(content: string, previewText: string = ""): string {
 }
 
 function footerLinks(husbandToken: string, wifeToken: string): string {
-  return `<a href="${safeUrl(`/my-great-marriage/preferences/${husbandToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Husband Preferences</a>
+  return `<a href="${safeUrl(`/my-great-marriage/preferences/${husbandToken}`)}" style="color:#C9956C;font-size:11px;font-family:Arial,sans-serif;">Husband Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/my-great-marriage/preferences/${wifeToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Wife Preferences</a>
+  <a href="${safeUrl(`/my-great-marriage/preferences/${wifeToken}`)}" style="color:#C9956C;font-size:11px;font-family:Arial,sans-serif;">Wife Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/unsubscribe/${husbandToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
+  <a href="${safeUrl(`/unsubscribe/${husbandToken}`)}" style="color:#C9956C;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
 }
 
 function singleFooterLinks(token: string, label: string): string {
-  return `<a href="${safeUrl(`/my-great-marriage/preferences/${token}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Manage Preferences</a>
+  return `<a href="${safeUrl(`/my-great-marriage/preferences/${token}`)}" style="color:#C9956C;font-size:11px;font-family:Arial,sans-serif;">Manage Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/unsubscribe/${token}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe ${label}</a>`
+  <a href="${safeUrl(`/unsubscribe/${token}`)}" style="color:#C9956C;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe ${label}</a>`
 }
 
 export function buildWelcomeEmail(params: {
@@ -92,7 +92,7 @@ export function buildWelcomeEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #8B2B3E;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:15px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;Unless the Lord builds the house, those who build it labor in vain.&rdquo;
           </p>
@@ -110,13 +110,13 @@ export function buildWelcomeEmail(params: {
 
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-        <tr><td style="background:#8B2B3E;border-radius:50px;padding:14px 32px;">
+        <tr><td style="background:#C9956C;border-radius:50px;padding:14px 32px;">
           <a href="${safeUrl("/my-great-marriage/check-in")}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">View Your Marriage Check-In</a>
         </td></tr>
       </table>
 
       <p style="margin:0 0 4px;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">
-        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#8B2B3E;">Manage Preferences</a>
+        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#C9956C;">Manage Preferences</a>
       </p>
 
       <p style="margin:32px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
@@ -173,7 +173,7 @@ export function buildNurtureEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #8B2B3E;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:15px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;${params.emailBlock.scripture}&rdquo;
           </p>
@@ -209,7 +209,7 @@ export function buildNurtureEmail(params: {
 
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-        <tr><td style="background:#8B2B3E;border-radius:50px;padding:14px 32px;">
+        <tr><td style="background:#C9956C;border-radius:50px;padding:14px 32px;">
           <a href="${params.ctaUrl}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">
             ${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage"}
           </a>
@@ -293,7 +293,7 @@ export function buildAnniversaryEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #8B2B3E;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:16px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres. Love never fails.&rdquo;
           </p>
@@ -411,7 +411,7 @@ export function buildAdminNotificationEmail(params: {
         <tr><td style="padding:10px 0;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">Signed Up</td><td style="padding:10px 0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;">${new Date().toLocaleDateString("en-ZA", { dateStyle: "full" })}</td></tr>
       </table>
       <p style="margin:24px 0 0;font-size:14px;color:#3D2314;font-family:Arial,sans-serif;">
-        <a href="${safeUrl("/admin/mygreatmarriage")}" style="color:#8B2B3E;font-weight:bold;">View Admin Dashboard</a>
+        <a href="${safeUrl("/admin/mygreatmarriage")}" style="color:#C9956C;font-weight:bold;">View Admin Dashboard</a>
       </p>
     </td></tr>
   `
