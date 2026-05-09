@@ -10,6 +10,7 @@ import {
   shouldSendToHusband,
   shouldSendToWife,
   markInactiveIfNoStreamsEnabled,
+  isInPausePeriod,
 } from "@/lib/mgm/schedule"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodfoundation.org"
@@ -46,12 +47,40 @@ export async function GET(request: NextRequest) {
 
   let processed = 0
   let skipped = 0
+  let paused = 0
   let errors = 0
 
   for (const sub of subscriptions) {
     try {
+      const pauseWeeksRemaining = sub.pause_weeks_remaining || 0
+
+      // ── CHECK IF IN PAUSE PERIOD ───────────────────────────────────────
+      if (isInPausePeriod(sub.current_month, pauseWeeksRemaining)) {
+        // Decrement pause weeks and schedule next check
+        const { pauseWeeksRemaining: newPauseWeeks } = advanceProgress(
+          sub.current_month,
+          sub.current_week_in_cycle,
+          pauseWeeksRemaining
+        )
+
+        const currentSendAt = new Date(sub.next_send_at)
+        const nextSendAt = computeNextSendAt(currentSendAt)
+
+        await supabase
+          .from("mgm_subscriptions")
+          .update({
+            pause_weeks_remaining: newPauseWeeks,
+            next_send_at: nextSendAt.toISOString(),
+          })
+          .eq("id", sub.id)
+
+        console.log(`[MGM Cron] Subscription ${sub.id} in pause period, ${newPauseWeeks} weeks remaining`)
+        paused++
+        continue
+      }
+
       const streamType = resolveEmailForState(sub.current_week_in_cycle)
-      const content = getEmailContent(sub.current_month)
+      const content = getEmailContent(sub.current_month, streamType)
 
       if (!content) {
         console.error(`[MGM Cron] No content for month ${sub.current_month}, skipping ${sub.id}`)
@@ -65,7 +94,7 @@ export async function GET(request: NextRequest) {
         .select("id")
         .eq("subscription_id", sub.id)
         .eq("stream_type", streamType)
-        .gte("sent_at", new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString()) // within 3 days
+        .gte("sent_at", new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString())
         .maybeSingle()
 
       if (recentLog) {
@@ -83,17 +112,16 @@ export async function GET(request: NextRequest) {
 
       // ── COUPLES_1 and COUPLES_2 ────────────────────────────────────────
       if (streamType === "COUPLES_1" || streamType === "COUPLES_2") {
-        const emailBlock = streamType === "COUPLES_1" ? content.couples1 : content.couples2
+        const emailBlock = content.block
         const ctaUrl = `${SITE_URL}/my-great-marriage/check-in`
 
-        // Send to husband individually if enabled
         if (husbandReceives) {
           const email = buildNurtureEmail({
             recipientName: sub.husband_first_name,
             partnerName: sub.wife_first_name,
             emailBlock,
-            theme: content.theme,
-            month: content.month,
+            theme: content.track.theme,
+            month: content.track.month,
             ctaUrl,
             preferenceToken: sub.husband_preference_token,
             recipientLabel: "couple emails",
@@ -115,14 +143,13 @@ export async function GET(request: NextRequest) {
           if (result.success) anySent = true
         }
 
-        // Send to wife individually if enabled
         if (wifeReceives) {
           const email = buildNurtureEmail({
             recipientName: sub.wife_first_name,
             partnerName: sub.husband_first_name,
             emailBlock,
-            theme: content.theme,
-            month: content.month,
+            theme: content.track.theme,
+            month: content.track.month,
             ctaUrl,
             preferenceToken: sub.wife_preference_token,
             recipientLabel: "couple emails",
@@ -149,9 +176,9 @@ export async function GET(request: NextRequest) {
       if (streamType === "HUSBANDS" && husbandReceives) {
         const email = buildNurtureEmail({
           recipientName: sub.husband_first_name,
-          emailBlock: content.husbands,
-          theme: content.theme,
-          month: content.month,
+          emailBlock: content.block,
+          theme: content.track.theme,
+          month: content.track.month,
           ctaUrl: `${SITE_URL}/my-great-marriage`,
           preferenceToken: sub.husband_preference_token,
           recipientLabel: "husband emails",
@@ -177,9 +204,9 @@ export async function GET(request: NextRequest) {
       if (streamType === "WIVES" && wifeReceives) {
         const email = buildNurtureEmail({
           recipientName: sub.wife_first_name,
-          emailBlock: content.wives,
-          theme: content.theme,
-          month: content.month,
+          emailBlock: content.block,
+          theme: content.track.theme,
+          month: content.track.month,
           ctaUrl: `${SITE_URL}/my-great-marriage`,
           preferenceToken: sub.wife_preference_token,
           recipientLabel: "wife emails",
@@ -205,24 +232,23 @@ export async function GET(request: NextRequest) {
       await Promise.all(logEntries)
 
       // ── ADVANCE JOURNEY STATE ──────────────────────────────────────────
-      const { nextMonth, nextWeek, isCompleted } = advanceProgress(
+      const { nextMonth, nextWeek, pauseWeeksRemaining: newPauseWeeks, isCompleted } = advanceProgress(
         sub.current_month,
-        sub.current_week_in_cycle
+        sub.current_week_in_cycle,
+        0 // Not in pause currently
       )
 
-      // nextSendAt = current nextSendAt + 7 days (not now + 7 days)
       const currentSendAt = new Date(sub.next_send_at)
       const nextSendAt = computeNextSendAt(currentSendAt)
 
-      // Check if all streams are now disabled — mark inactive if so
-      const shouldDeactivate =
-        isCompleted || markInactiveIfNoStreamsEnabled(sub)
+      const shouldDeactivate = isCompleted || markInactiveIfNoStreamsEnabled(sub)
 
       await supabase
         .from("mgm_subscriptions")
         .update({
           current_month: nextMonth,
           current_week_in_cycle: nextWeek,
+          pause_weeks_remaining: newPauseWeeks,
           last_sent_at: now.toISOString(),
           next_send_at: nextSendAt.toISOString(),
           is_active: !shouldDeactivate,
@@ -240,6 +266,7 @@ export async function GET(request: NextRequest) {
     message: "Cron complete",
     processed,
     skipped,
+    paused,
     errors,
     checkedAt: now.toISOString(),
   })

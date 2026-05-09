@@ -116,17 +116,6 @@ export default function MyGreatMarriagePage() {
           <div className="relative z-10 h-full flex flex-col justify-center px-6 lg:px-8">
             <div className="max-w-6xl mx-auto w-full">
               <div className="flex flex-col lg:flex-row lg:items-center gap-8">
-                {/* Logo - positioned left */}
-                <div className="flex-shrink-0">
-                  <Image
-                    src="/images/mgm-logo.png"
-                    alt="My Great Marriage Logo"
-                    width={200}
-                    height={200}
-                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain animate-spin-slow"
-                  />
-                </div>
-                
                 {/* Text content */}
                 <div className="flex-1 text-center lg:text-left">
                   <h1 className="text-4xl lg:text-5xl xl:text-6xl font-semibold text-white leading-tight mb-4">

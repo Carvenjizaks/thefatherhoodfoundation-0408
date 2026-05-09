@@ -393,19 +393,6 @@ export default function MyGreatMarriageEventPage() {
           <Parallax speed={0.3} className="absolute top-40 right-20 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
           <Parallax speed={0.5} className="absolute bottom-40 left-20 w-96 h-96 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
 
-          {/* Logo */}
-          <FadeIn direction="left" delay={0.1}>
-            <div className="absolute top-32 left-8 lg:left-16 z-10">
-              <Image
-                src="/images/mgm-logo.png"
-                alt="My Great Marriage Logo"
-                width={140}
-                height={140}
-                className="w-24 h-24 lg:w-32 lg:h-32 object-contain animate-spin-slow hover:[animation-play-state:paused] hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          </FadeIn>
-
           {/* Main Content - Positioned at bottom */}
           <div className="relative z-10 min-h-screen flex flex-col justify-end px-8 lg:px-16 pb-32">
             <div className="max-w-4xl mb-24">

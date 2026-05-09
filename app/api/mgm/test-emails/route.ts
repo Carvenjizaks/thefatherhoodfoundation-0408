@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { getEmailContent } from "@/lib/mgm/email-content"
+import { getEmailContent, MGM_EMAIL_CONTENT } from "@/lib/mgm/email-content"
 import { buildWelcomeEmail, buildNurtureEmail, buildAnniversaryEmail } from "@/lib/mgm/email-templates"
 import { sendMgmEmail } from "@/lib/mgm/send"
+import { CYCLES } from "@/lib/mgm/schedule"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodfoundation.org"
 
 /**
  * TEST ENDPOINT: Sends all email types in sequence with delays for testing
+ * 
+ * JOURNEY STRUCTURE (9 months total):
+ * - Cycle 1 (Months 1-3): FOUNDATION — Build your marriage on Christ
+ * - 4-week pause
+ * - Cycle 2 (Months 4-6): CONNECTION — Deepen intimacy and communication
+ * - 4-week pause
+ * - Cycle 3 (Months 7-9): GROWTH — Sustain and strengthen your marriage
  * 
  * EMAIL SEQUENCE (Per Month - 4 weeks):
  * - Week 1: COUPLES_1 - Shared encouragement (both receive)
@@ -16,11 +24,6 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodf
  * - Week 4: COUPLES_2 - Monthly check-in reminder (both receive)
  * 
  * TIMING: Every Tuesday at 06:00 South African Time (UTC+2 = 04:00 UTC)
- * 
- * SPECIAL: Anniversary email sent on anniversary date
- * 
- * Usage: POST /api/mgm/test-emails
- * Body: { "subscriptionId": "uuid" } or { "testEmail": "email@example.com" }
  */
 export async function POST(request: NextRequest) {
   try {
@@ -31,6 +34,18 @@ export async function POST(request: NextRequest) {
     const adminSecret = request.headers.get("x-admin-secret")
     if (adminSecret !== process.env.CRON_SECRET && !testEmail) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Validate month is within 1-9
+    if (month < 1 || month > 9) {
+      return NextResponse.json({ 
+        error: "Month must be between 1 and 9",
+        journeyStructure: {
+          cycle1: "Months 1-3: Foundation",
+          cycle2: "Months 4-6: Connection", 
+          cycle3: "Months 7-9: Growth",
+        }
+      }, { status: 400 })
     }
 
     const supabase = await createClient()
@@ -71,10 +86,17 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const content = getEmailContent(month)
-    if (!content) {
+    // Get content for all stream types
+    const couples1Content = getEmailContent(month, "COUPLES_1")
+    const husbandsContent = getEmailContent(month, "HUSBANDS")
+    const wivesContent = getEmailContent(month, "WIVES")
+    const couples2Content = getEmailContent(month, "COUPLES_2")
+
+    if (!couples1Content || !husbandsContent || !wivesContent || !couples2Content) {
       return NextResponse.json({ error: `No content for month ${month}` }, { status: 400 })
     }
+
+    const track = couples1Content.track
 
     const results: Array<{
       emailType: string
@@ -113,7 +135,7 @@ export async function POST(request: NextRequest) {
       error: welcomeResult.error,
     })
 
-    await delay(2000) // 2 second delay between emails
+    await delay(2000)
 
     // ═══════════════════════════════════════════════════════════════════════
     // EMAIL 2: COUPLES_1 - Week 1 (Tuesday 06:00 SA Time)
@@ -121,9 +143,9 @@ export async function POST(request: NextRequest) {
     const couples1Email = buildNurtureEmail({
       recipientName: subscription.husband_first_name,
       partnerName: subscription.wife_first_name,
-      emailBlock: content.couples1,
-      theme: content.theme,
-      month: content.month,
+      emailBlock: couples1Content.block,
+      theme: track.theme,
+      month: track.month,
       ctaUrl: `${SITE_URL}/my-great-marriage/check-in`,
       preferenceToken: subscription.husband_preference_token,
       recipientLabel: "couple emails",
@@ -134,7 +156,7 @@ export async function POST(request: NextRequest) {
       ...couples1Email 
     })
     results.push({
-      emailType: "COUPLES_1 (Shared Encouragement)",
+      emailType: `COUPLES_1 (Cycle ${track.cycle}: ${track.cycleName})`,
       week: 1,
       recipient: `${subscription.husband_email}, ${subscription.wife_email}`,
       scheduledTime: "Tuesday Week 1 - 06:00 SA Time",
@@ -151,9 +173,9 @@ export async function POST(request: NextRequest) {
     // ═══════════════════════════════════════════════════════════════════════
     const husbandsEmail = buildNurtureEmail({
       recipientName: subscription.husband_first_name,
-      emailBlock: content.husbands,
-      theme: content.theme,
-      month: content.month,
+      emailBlock: husbandsContent.block,
+      theme: track.theme,
+      month: track.month,
       ctaUrl: `${SITE_URL}/my-great-marriage`,
       preferenceToken: subscription.husband_preference_token,
       recipientLabel: "husband emails",
@@ -164,7 +186,7 @@ export async function POST(request: NextRequest) {
       ...husbandsEmail 
     })
     results.push({
-      emailType: "HUSBANDS (Men's Encouragement)",
+      emailType: `HUSBANDS (Cycle ${track.cycle}: ${track.cycleName})`,
       week: 2,
       recipient: subscription.husband_email,
       scheduledTime: "Tuesday Week 2 - 06:00 SA Time",
@@ -181,9 +203,9 @@ export async function POST(request: NextRequest) {
     // ═══════════════════════════════════════════════════════════════════════
     const wivesEmail = buildNurtureEmail({
       recipientName: subscription.wife_first_name,
-      emailBlock: content.wives,
-      theme: content.theme,
-      month: content.month,
+      emailBlock: wivesContent.block,
+      theme: track.theme,
+      month: track.month,
       ctaUrl: `${SITE_URL}/my-great-marriage`,
       preferenceToken: subscription.wife_preference_token,
       recipientLabel: "wife emails",
@@ -194,7 +216,7 @@ export async function POST(request: NextRequest) {
       ...wivesEmail 
     })
     results.push({
-      emailType: "WIVES (Women's Encouragement)",
+      emailType: `WIVES (Cycle ${track.cycle}: ${track.cycleName})`,
       week: 3,
       recipient: subscription.wife_email,
       scheduledTime: "Tuesday Week 3 - 06:00 SA Time",
@@ -212,9 +234,9 @@ export async function POST(request: NextRequest) {
     const couples2Email = buildNurtureEmail({
       recipientName: subscription.husband_first_name,
       partnerName: subscription.wife_first_name,
-      emailBlock: content.couples2,
-      theme: content.theme,
-      month: content.month,
+      emailBlock: couples2Content.block,
+      theme: track.theme,
+      month: track.month,
       ctaUrl: `${SITE_URL}/my-great-marriage/check-in`,
       preferenceToken: subscription.husband_preference_token,
       recipientLabel: "couple emails",
@@ -225,7 +247,7 @@ export async function POST(request: NextRequest) {
       ...couples2Email 
     })
     results.push({
-      emailType: "COUPLES_2 (Monthly Check-In)",
+      emailType: `COUPLES_2 (Cycle ${track.cycle}: ${track.cycleName})`,
       week: 4,
       recipient: `${subscription.husband_email}, ${subscription.wife_email}`,
       scheduledTime: "Tuesday Week 4 - 06:00 SA Time",
@@ -243,7 +265,7 @@ export async function POST(request: NextRequest) {
     const anniversaryEmail = buildAnniversaryEmail({
       husbandFirstName: subscription.husband_first_name,
       wifeFirstName: subscription.wife_first_name,
-      yearsMarried: 5, // Test with 5 years
+      yearsMarried: 5,
       anniversaryDate: subscription.anniversary_date || new Date().toISOString().split('T')[0],
       husbandToken: subscription.husband_preference_token,
       wifeToken: subscription.wife_preference_token,
@@ -263,7 +285,6 @@ export async function POST(request: NextRequest) {
       error: anniversaryResult.error,
     })
 
-    // Summary
     const successCount = results.filter(r => r.status === "SENT").length
     const failedCount = results.filter(r => r.status === "FAILED").length
 
@@ -277,11 +298,27 @@ export async function POST(request: NextRequest) {
         currentMonth: subscription.current_month,
         currentWeek: subscription.current_week_in_cycle,
       },
+      testedMonth: {
+        month: track.month,
+        cycle: track.cycle,
+        cycleName: track.cycleName,
+        theme: track.theme,
+      },
+      journeyStructure: {
+        cycle1: "Months 1-3: FOUNDATION — Build your marriage on Christ",
+        pause1: "4 weeks rest",
+        cycle2: "Months 4-6: CONNECTION — Deepen intimacy and communication",
+        pause2: "4 weeks rest",
+        cycle3: "Months 7-9: GROWTH — Sustain and strengthen your marriage",
+        complete: "Journey complete after Month 9",
+      },
       emailSchedule: {
         timezone: "Africa/Johannesburg (UTC+2)",
         sendTime: "06:00 SA Time (04:00 UTC)",
         sendDay: "Every Tuesday",
-        cycleLength: "12 months (48 weekly emails + welcome + anniversaries)",
+        totalActiveWeeks: 36,
+        totalPauseWeeks: 8,
+        totalJourneyWeeks: 44,
       },
       results,
     })
@@ -304,8 +341,23 @@ export async function GET() {
     sendTime: "06:00 SA Time (04:00 UTC)",
     sendDay: "Every Tuesday",
     
+    journeyStructure: {
+      totalMonths: 9,
+      totalActiveWeeks: 36,
+      pauseWeeksBetweenCycles: 4,
+      totalPauseWeeks: 8,
+      totalJourneyWeeks: 44,
+      cycles: CYCLES.map((c, i) => ({
+        cycle: i + 1,
+        months: `${c.start}-${c.end}`,
+        theme: c.theme,
+        description: c.description,
+        followedByPause: i < 2,
+      })),
+    },
+
     emailSequence: {
-      description: "12-month marriage enrichment journey with 4 emails per month",
+      description: "9-month marriage enrichment journey across 3 cycles, with 4-week pauses between cycles",
       monthlySchedule: [
         {
           week: 1,
@@ -319,21 +371,21 @@ export async function GET() {
           type: "HUSBANDS",
           recipients: "Husband only",
           purpose: "Men's specific encouragement and action",
-          timing: "Tuesday 06:00 SA Time (Week 2)",
+          timing: "Tuesday 06:00 SA Time",
         },
         {
           week: 3,
           type: "WIVES",
           recipients: "Wife only", 
           purpose: "Women's specific encouragement and action",
-          timing: "Tuesday 06:00 SA Time (Week 3)",
+          timing: "Tuesday 06:00 SA Time",
         },
         {
           week: 4,
           type: "COUPLES_2",
           recipients: "Both husband and wife",
           purpose: "Monthly check-in reminder and reflection",
-          timing: "Tuesday 06:00 SA Time (Week 4)",
+          timing: "Tuesday 06:00 SA Time",
         },
       ],
     },
@@ -351,29 +403,21 @@ export async function GET() {
       },
     },
 
-    monthlyThemes: [
-      { month: 1, theme: "Build your marriage on Christ" },
-      { month: 2, theme: "Learn to hear each other well" },
-      { month: 3, theme: "Love must be demonstrated" },
-      { month: 4, theme: "Stay united under stress" },
-      { month: 5, theme: "Fight for resolution, not victory" },
-      { month: 6, theme: "Stay close, not just committed" },
-      { month: 7, theme: "Build as one team" },
-      { month: 8, theme: "Grow together before God" },
-      { month: 9, theme: "Build the kind of home you want to leave behind" },
-      { month: 10, theme: "Extend grace as a way of life" },
-      { month: 11, theme: "Sex is a gift—steward it well" },
-      { month: 12, theme: "Finish well and keep going" },
-    ],
+    monthlyContent: MGM_EMAIL_CONTENT.map((m) => ({
+      month: m.month,
+      cycle: m.cycle,
+      cycleName: m.cycleName,
+      theme: m.theme,
+    })),
 
     testEndpoint: {
       method: "POST",
       url: "/api/mgm/test-emails",
       body: {
         testEmail: "your-email@example.com",
-        month: 1,
+        month: "1-9 (defaults to 1)",
       },
-      description: "Fires all 6 email types to test the complete sequence",
+      description: "Fires all 6 email types to test the complete sequence for a specific month",
     },
 
     cronEndpoints: {

@@ -1,27 +1,60 @@
 /**
  * MGM Email Journey — Schedule Utilities
  *
+ * Journey Structure:
+ * - Cycle 1 (Months 1-3): Foundation — Build your marriage on Christ
+ * - 4-week pause
+ * - Cycle 2 (Months 4-6): Connection — Deepen intimacy and communication
+ * - 4-week pause
+ * - Cycle 3 (Months 7-9): Growth — Sustain and strengthen your marriage
+ *
  * Nurture send day: Tuesday
  * Timezone for business logic: Africa/Johannesburg (UTC+2)
  * nextSendAt is always stored as UTC in Supabase.
  */
 
-export const LOOP_AFTER_MONTH_12 = true
-
 // Nurture send day: 2 = Tuesday (0=Sun, 1=Mon, 2=Tue...)
 const NURTURE_WEEKDAY = 2
 const TIMEZONE = "Africa/Johannesburg"
+
+// Total active months (3 cycles x 3 months)
+export const TOTAL_ACTIVE_MONTHS = 9
+
+// Pause weeks between cycles
+export const PAUSE_WEEKS = 4
+
+// Cycle definitions
+export const CYCLES = [
+  { start: 1, end: 3, theme: "Foundation", description: "Build your marriage on Christ" },
+  { start: 4, end: 6, theme: "Connection", description: "Deepen intimacy and communication" },
+  { start: 7, end: 9, theme: "Growth", description: "Sustain and strengthen your marriage" },
+]
+
+/**
+ * Determines which cycle a month belongs to
+ */
+export function getCycleForMonth(month: number): { cycle: number; theme: string; description: string } | null {
+  for (let i = 0; i < CYCLES.length; i++) {
+    if (month >= CYCLES[i].start && month <= CYCLES[i].end) {
+      return { cycle: i + 1, ...CYCLES[i] }
+    }
+  }
+  return null
+}
+
+/**
+ * Check if the subscription is currently in a pause period
+ */
+export function isInPausePeriod(currentMonth: number, pauseWeeksRemaining: number): boolean {
+  return pauseWeeksRemaining > 0
+}
 
 /**
  * Returns the next occurrence of the nurture send day (Tuesday)
  * from a given signup date, calculated in Africa/Johannesburg time,
  * then returned as a UTC Date.
- *
- * If today IS the nurture day but it's before 6am JHB, we use today.
- * Otherwise we find the next occurrence.
  */
 export function getNextNurtureSendAt(signupDate: Date = new Date()): Date {
-  // Work in JHB time — get the current weekday in that timezone
   const jhbFormatter = new Intl.DateTimeFormat("en-ZA", {
     timeZone: TIMEZONE,
     weekday: "short",
@@ -32,37 +65,21 @@ export function getNextNurtureSendAt(signupDate: Date = new Date()): Date {
     minute: "2-digit",
   })
 
-  // Parse current JHB date parts
   const parts = jhbFormatter.formatToParts(signupDate)
   const jhbYear = parseInt(parts.find((p) => p.type === "year")!.value)
   const jhbMonth = parseInt(parts.find((p) => p.type === "month")!.value) - 1
   const jhbDay = parseInt(parts.find((p) => p.type === "day")!.value)
   const jhbHour = parseInt(parts.find((p) => p.type === "hour")!.value)
 
-  // Build a Date object representing midnight JHB on signup day
-  // We do this by finding what UTC time corresponds to 06:00 JHB on the target day
-  const candidateDate = new Date(signupDate)
-  candidateDate.setUTCHours(0, 0, 0, 0)
-
-  // Find the JHB weekday for today
-  const todayJhb = new Date(
-    Date.UTC(jhbYear, jhbMonth, jhbDay)
-  )
+  const todayJhb = new Date(Date.UTC(jhbYear, jhbMonth, jhbDay))
   const todayWeekday = todayJhb.getDay()
 
-  // Days until next Tuesday
   let daysUntilTuesday = (NURTURE_WEEKDAY - todayWeekday + 7) % 7
 
-  // If today is already Tuesday but past 06:00 JHB, push to next Tuesday
   if (daysUntilTuesday === 0 && jhbHour >= 6) {
     daysUntilTuesday = 7
   }
-  // If today is Tuesday and before 06:00 JHB, use today
-  if (daysUntilTuesday === 0 && jhbHour < 6) {
-    daysUntilTuesday = 0
-  }
 
-  // Target day: signup day + daysUntilTuesday, at 06:00 JHB = 04:00 UTC
   const targetUtc = new Date(
     Date.UTC(jhbYear, jhbMonth, jhbDay + daysUntilTuesday, 4, 0, 0, 0)
   )
@@ -81,26 +98,89 @@ export function computeNextSendAt(prevSendAt: Date): Date {
 
 /**
  * Advance the journey state after a successful send.
+ * Handles the 3-cycle structure with 4-week pauses between cycles.
  */
 export function advanceProgress(
   currentMonth: number,
-  currentWeek: number
-): { nextMonth: number; nextWeek: number; isCompleted: boolean } {
+  currentWeek: number,
+  pauseWeeksRemaining: number = 0
+): { 
+  nextMonth: number
+  nextWeek: number
+  pauseWeeksRemaining: number
+  isCompleted: boolean
+  isPaused: boolean
+} {
+  // If currently in pause period, decrement pause weeks
+  if (pauseWeeksRemaining > 0) {
+    const newPauseWeeks = pauseWeeksRemaining - 1
+    if (newPauseWeeks > 0) {
+      // Still in pause
+      return { 
+        nextMonth: currentMonth, 
+        nextWeek: 1, 
+        pauseWeeksRemaining: newPauseWeeks, 
+        isCompleted: false,
+        isPaused: true
+      }
+    } else {
+      // Pause ended, continue to next month
+      return { 
+        nextMonth: currentMonth, 
+        nextWeek: 1, 
+        pauseWeeksRemaining: 0, 
+        isCompleted: false,
+        isPaused: false
+      }
+    }
+  }
+
+  // Normal progression within a month
   if (currentWeek < 4) {
-    return { nextMonth: currentMonth, nextWeek: currentWeek + 1, isCompleted: false }
+    return { 
+      nextMonth: currentMonth, 
+      nextWeek: currentWeek + 1, 
+      pauseWeeksRemaining: 0, 
+      isCompleted: false,
+      isPaused: false
+    }
   }
 
-  // Week 4 done — advance month
-  if (currentMonth < 12) {
-    return { nextMonth: currentMonth + 1, nextWeek: 1, isCompleted: false }
+  // Week 4 done — check if at end of a cycle
+  const isEndOfCycle1 = currentMonth === 3
+  const isEndOfCycle2 = currentMonth === 6
+  const isEndOfCycle3 = currentMonth === 9
+
+  if (isEndOfCycle1 || isEndOfCycle2) {
+    // Start 4-week pause, then advance to next month
+    return { 
+      nextMonth: currentMonth + 1, 
+      nextWeek: 1, 
+      pauseWeeksRemaining: PAUSE_WEEKS, 
+      isCompleted: false,
+      isPaused: true
+    }
   }
 
-  // Month 12 Week 4 done
-  if (LOOP_AFTER_MONTH_12) {
-    return { nextMonth: 1, nextWeek: 1, isCompleted: false }
+  if (isEndOfCycle3) {
+    // Journey complete!
+    return { 
+      nextMonth: 9, 
+      nextWeek: 4, 
+      pauseWeeksRemaining: 0, 
+      isCompleted: true,
+      isPaused: false
+    }
   }
 
-  return { nextMonth: 12, nextWeek: 4, isCompleted: true }
+  // Normal month advancement within a cycle
+  return { 
+    nextMonth: currentMonth + 1, 
+    nextWeek: 1, 
+    pauseWeeksRemaining: 0, 
+    isCompleted: false,
+    isPaused: false
+  }
 }
 
 /**
@@ -167,4 +247,23 @@ export function resolveEmailForState(
     4: "COUPLES_2",
   }
   return map[week] ?? "COUPLES_1"
+}
+
+/**
+ * Get a friendly description of the current journey status
+ */
+export function getJourneyStatus(
+  currentMonth: number,
+  currentWeek: number,
+  pauseWeeksRemaining: number
+): string {
+  if (pauseWeeksRemaining > 0) {
+    const cycle = getCycleForMonth(currentMonth - 1)
+    return `Rest period — ${pauseWeeksRemaining} week(s) remaining before next cycle`
+  }
+  
+  const cycle = getCycleForMonth(currentMonth)
+  if (!cycle) return "Journey complete"
+  
+  return `Cycle ${cycle.cycle}: ${cycle.theme} — Month ${currentMonth}, Week ${currentWeek}`
 }
