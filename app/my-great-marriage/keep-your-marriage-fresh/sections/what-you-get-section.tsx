@@ -1,63 +1,89 @@
 'use client'
 
-import { CheckCircle2 } from "lucide-react"
-import { useState } from "react"
+import Image from "next/image"
+import { useEffect, useState } from "react"
 
-const items = [
-  { label: "Free Monthly Marriage Check-In Template", desc: "A printable and downloadable tool for your monthly conversation." },
-  { label: "Weekly Couples Email", desc: "Encouragement and a practical action for both of you together." },
-  { label: "Weekly Husband Encouragement", desc: "Tailored content sent directly to the husband." },
-  { label: "Weekly Wife Encouragement", desc: "Tailored content sent directly to the wife." },
-  { label: "Monthly Reminder to Review and Reconnect", desc: "A gentle nudge to complete your check-in each month." },
-  { label: "Practical Faith-Based Marriage Tools", desc: "Biblically grounded, practically useful guidance for real life." },
-  { label: "Short Prayer Prompts", desc: "Simple prayers you can use together or individually." },
-  { label: "Date Night and Reflection Prompts", desc: "Ideas to help you stay connected and enjoy each other." },
+const coupleImages = [
+  "/images/couples/couple-african.jpg",
+  "/images/couples/couple-asian.jpg",
+  "/images/couples/couple-hispanic.jpg",
+  "/images/couples/couple-mixed.jpg",
 ]
 
-function ItemCard({ item }: { item: typeof items[0] }) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div
-      className="bg-white rounded-xl border border-[#e8d8c8] overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <div className="flex items-start gap-4 p-6">
-        <CheckCircle2 className="flex-shrink-0 w-5 h-5 text-[#8B2B3E] mt-0.5" />
-        <p className="font-semibold text-[#1a0a0e]">{item.label}</p>
-      </div>
-      
-      <div
-        className="overflow-hidden transition-all duration-300"
-        style={{
-          maxHeight: isOpen ? "200px" : "0px",
-          opacity: isOpen ? 1 : 0,
-        }}
-      >
-        <div className="px-6 pb-4 border-t border-[#e8d8c8]">
-          <p className="text-sm text-[#6b4c52] leading-relaxed">{item.desc}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
+const benefits = [
+  "Weekly encouragement for you and your spouse",
+  "Monthly check-in template to stay connected",
+  "Practical tools for real conversations",
+]
 
 export default function WhatYouGetSection() {
-  return (
-    <section className="py-20 lg:py-28 bg-[#FDF8F3] px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">What You Get</span>
-          <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e] text-balance" style={{ fontFamily: "Georgia, serif" }}>
-            Everything You Need to Keep Your Marriage Alive
-          </h2>
-        </div>
+  const [currentImage, setCurrentImage] = useState(0)
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {items.map((item) => (
-            <ItemCard key={item.label} item={item} />
-          ))}
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % coupleImages.length)
+    }, 3500)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <section className="py-20 lg:py-28 bg-[#FDF8F3] px-6 overflow-hidden">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Sliding Images */}
+          <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden order-2 lg:order-1">
+            {coupleImages.map((src, i) => (
+              <div
+                key={src}
+                className={`absolute inset-0 transition-opacity duration-1000 ${i === currentImage ? "opacity-100" : "opacity-0"}`}
+              >
+                <Image
+                  src={src}
+                  alt="Couple"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+            {/* Dots */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10">
+              {coupleImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentImage(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${i === currentImage ? "bg-white w-6" : "bg-white/50"}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="order-1 lg:order-2 space-y-8">
+            <div>
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4A574]">What You Get</span>
+              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-[#1a0a0e] leading-snug" style={{ fontFamily: "Georgia, serif" }}>
+                Simple tools.<br />Real results.
+              </h2>
+            </div>
+
+            <p className="text-lg text-[#6b4c52] leading-relaxed">
+              No fluff. No overwhelm. Just practical encouragement that meets you where you are — 
+              and helps you build something lasting.
+            </p>
+
+            <div className="space-y-4">
+              {benefits.map((benefit) => (
+                <div key={benefit} className="flex items-center gap-4">
+                  <div className="w-2 h-2 rounded-full bg-[#8B2B3E]" />
+                  <p className="text-[#1a0a0e] font-medium">{benefit}</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-sm text-[#8B6B5A] italic border-l-2 border-[#D4A574] pl-4">
+              &ldquo;Healing begins where honesty is met with mercy.&rdquo; — Carven Izaks
+            </p>
+          </div>
         </div>
       </div>
     </section>
