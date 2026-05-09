@@ -56,10 +56,10 @@ export default function CheckInClient() {
           {/* Intro */}
           <div className="px-10 py-8 border-b border-[#e8d8c8] bg-[#fdf8f3]">
             <p className="text-[#3D2314] leading-relaxed text-sm">
-              Set aside 20–30 minutes once a month. Sit together, be honest, listen well, pray, and use this conversation to strengthen your marriage.
+              Set aside 20–30 minutes once a month or go sit at a quiet place. Sit together, be honest, listen well, lean in to focus on each other, and use this conversation to strengthen your marriage.
             </p>
             <p className="mt-3 text-xs text-[#8B6B5A] italic">
-              &ldquo;Let all that you do be done in love.&rdquo; — 1 Corinthians 16:14
+              &ldquo;Let all that you do be done in love and out of love - It&apos;s a decision&rdquo;.
             </p>
 
             {/* Date field */}

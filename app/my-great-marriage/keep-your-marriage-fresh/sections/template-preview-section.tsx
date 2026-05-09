@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Printer } from "lucide-react"
 
 const questions = [
   "What went well for us this month?",
@@ -25,7 +24,7 @@ export default function TemplatePreviewSection() {
             Monthly Marriage Check-In
           </h2>
           <p className="mt-4 text-[#6b4c52] max-w-xl mx-auto">
-            Set aside 20–30 minutes once a month. Sit together, be honest, listen well, pray, and use this conversation to strengthen your marriage.
+            Set aside 20–30 minutes once a month or go sit at a quiet place. Sit together, be honest, listen well, lean in to focus on each other, and use this conversation to strengthen your marriage.
           </p>
         </div>
 
@@ -37,7 +36,7 @@ export default function TemplatePreviewSection() {
           </div>
 
           <div className="p-8">
-            <p className="text-xs italic text-[#8B6B5A] mb-6 text-center">&ldquo;Let all that you do be done in love.&rdquo; — 1 Corinthians 16:14</p>
+            <p className="text-xs italic text-[#8B6B5A] mb-6 text-center">&ldquo;Let all that you do be done in love and out of love - It&apos;s a decision&rdquo;.</p>
             <div className="space-y-5">
               {questions.slice(0, 5).map((q, i) => (
                 <div key={i} className="flex items-start gap-3">
@@ -59,13 +58,7 @@ export default function TemplatePreviewSection() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <Button asChild className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold">
-            <Link href="/my-great-marriage/check-in" target="_blank">
-              <Printer className="w-4 h-4 mr-2" />
-              Print or Save PDF
-            </Link>
-          </Button>
+        <div className="flex justify-center mt-8">
           <Button asChild variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full px-8 bg-transparent">
             <Link href="#signup">Sign Up for Weekly Emails</Link>
           </Button>
