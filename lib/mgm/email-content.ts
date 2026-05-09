@@ -15,7 +15,6 @@ export type EmailBlock = {
   focus: string
   action: string
   reflection: string
-  prayer: string
 }
 
 export const MGM_EMAIL_CONTENT: EmailTrack[] = [
@@ -30,7 +29,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Put Jesus back at the center of your home, your choices, and your love.",
       action: "Pray together for 3 minutes this week.",
       reflection: "What is currently shaping our marriage more than Christ?",
-      prayer: "Lord Jesus, be the center of our home and teach us to build wisely.",
     },
     husbands: {
       subject: "Lead with Love, Not Control",
@@ -40,7 +38,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Husband leadership is expressed through love, sacrifice, consistency, and service.",
       action: "Do one practical act of service for your wife this week without being asked.",
       reflection: "Does my wife experience me as safe, loving, and servant-hearted?",
-      prayer: "Lord, teach me to love like Christ and lead with humility.",
     },
     wives: {
       subject: "Strengthen Your Marriage with Wisdom and Warmth",
@@ -50,7 +47,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "A wise wife strengthens the atmosphere of the home through grace, truth, and intentional love.",
       action: "Encourage your husband with one specific affirmation this week.",
       reflection: "What kind of atmosphere am I helping create in our marriage?",
-      prayer: "Lord, make me wise, gracious, and strong in the way I build my home.",
     },
     couples2: {
       subject: "Your Monthly Marriage Check-In Starts Here",
@@ -60,7 +56,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Pause and review how you are doing together.",
       action: "Schedule 20 minutes this week and complete your check-in together.",
       reflection: "What do we need to pay attention to right now?",
-      prayer: "Lord, help us walk in unity and support one another well.",
     },
   },
   {
@@ -74,7 +69,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Healthy communication requires listening, gentleness, and timing.",
       action: "Have one 10-minute conversation with no phones and no interrupting.",
       reflection: "Do I listen to understand or to respond?",
-      prayer: "Lord, teach us to be quick to listen, slow to speak, and full of grace.",
     },
     husbands: {
       subject: "She Needs to Feel Heard",
@@ -84,7 +78,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Listening well is one of the clearest ways a husband loves his wife.",
       action: "Ask your wife, \"How are you really doing?\" and listen fully.",
       reflection: "Does my wife feel emotionally heard by me?",
-      prayer: "Lord, help me listen with patience and love.",
     },
     wives: {
       subject: "Speak Life into Your Marriage",
@@ -94,7 +87,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Your words can strengthen, heal, and build connection.",
       action: "Replace one repeated complaint with one calm, honest request.",
       reflection: "Do my words build peace or pressure?",
-      prayer: "Lord, make my words gracious, wise, and life-giving.",
     },
     couples2: {
       subject: "Pause, Listen, and Check In Together This Month",
@@ -104,7 +96,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Reflect on how you are communicating and where you need grace.",
       action: "Complete your monthly check-in and ask, \"How can I support you better?\"",
       reflection: "What conversation have we been postponing?",
-      prayer: "Lord, help us communicate with truth and tenderness.",
     },
   },
   {
@@ -118,7 +109,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Love is strengthened when it is expressed through action, not assumption.",
       action: "Each spouse do one thoughtful act of love this week.",
       reflection: "What makes my spouse feel most loved right now?",
-      prayer: "Lord, help us show love in practical ways.",
     },
     husbands: {
       subject: "5 Simple Ways to Demonstrate Love This Week",
@@ -128,7 +118,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Love your wife with gentleness, attention, and practical care.",
       action: "Plan one simple act of intentional kindness or connection.",
       reflection: "Is my love visible, or only assumed?",
-      prayer: "Lord, make my love practical, gentle, and consistent.",
     },
     wives: {
       subject: "Honor Has the Power to Strengthen a Man",
@@ -138,7 +127,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Honor helps create safety, confidence, and warmth in marriage.",
       action: "Express one sincere appreciation for your husband's effort or character.",
       reflection: "Does my husband feel respected and valued by me?",
-      prayer: "Lord, help me honor well and love deeply.",
     },
     couples2: {
       subject: "What Helped Your Marriage This Month?",
@@ -148,7 +136,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Notice which actions increased closeness this month.",
       action: "Complete your check-in and share one thing each that made you feel loved.",
       reflection: "What practical habit should we keep building?",
-      prayer: "Lord, teach us to love in ways that are felt and received.",
     },
   },
   {
@@ -162,7 +149,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Pressure reveals patterns. Face stress as a team.",
       action: "Name the biggest pressure you are each carrying this week.",
       reflection: "When stress rises, do we move toward each other or away?",
-      prayer: "Lord, keep us united under pressure.",
     },
     husbands: {
       subject: "How a Man Protects Peace at Home",
@@ -172,7 +158,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Strength includes steadiness, patience, and self-control.",
       action: "Slow down one reaction this week and respond calmly.",
       reflection: "Does my presence bring peace or tension?",
-      prayer: "Lord, make me steady, gentle, and strong.",
     },
     wives: {
       subject: "Bringing Peace into a Pressured Season",
@@ -182,7 +167,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Peace grows through prayer, wisdom, and calm strength.",
       action: "Ask your husband one supportive question this week instead of assuming.",
       reflection: "What helps me stay soft and strong under stress?",
-      prayer: "Lord, fill my heart with peace and wisdom.",
     },
     couples2: {
       subject: "What Pressure Are You Carrying Right Now?",
@@ -192,7 +176,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Carry each other's burdens with honesty and grace.",
       action: "Complete the monthly check-in and name your current pressure points.",
       reflection: "Where do we most need support right now?",
-      prayer: "Lord, teach us to carry one another with love.",
     },
   },
   {
@@ -206,7 +189,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Conflict handled well can deepen maturity and trust.",
       action: "Practice one calm repair conversation this week.",
       reflection: "Do we fight to understand, or to win?",
-      prayer: "Lord, help us pursue peace and truth together.",
     },
     husbands: {
       subject: "Strength Is Not in Winning the Argument",
@@ -216,7 +198,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "A strong husband knows how to stay gentle and own his part.",
       action: "Say, \"I was wrong for…\" where needed this week.",
       reflection: "Am I easy to approach after tension?",
-      prayer: "Lord, give me humility and self-control.",
     },
     wives: {
       subject: "How to Respond Without Tearing Down Connection",
@@ -226,7 +207,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Wise responses protect connection even in hard moments.",
       action: "Choose a softer opening line in one hard conversation this week.",
       reflection: "How can I speak honestly without attacking?",
-      prayer: "Lord, help me respond with wisdom and grace.",
     },
     couples2: {
       subject: "Take a Marriage Reset This Month",
@@ -236,7 +216,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Use your monthly review to identify what needs healing and repair.",
       action: "Complete your check-in and ask, \"Is there anything unresolved between us?\"",
       reflection: "What needs forgiveness, clarity, or repair?",
-      prayer: "Lord, heal what is strained and soften our hearts.",
     },
   },
   {
@@ -250,7 +229,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Friendship is part of the strength of marriage.",
       action: "Share one enjoyable moment together this week.",
       reflection: "Are we still making room for laughter and closeness?",
-      prayer: "Lord, renew joy and friendship in our marriage.",
     },
     husbands: {
       subject: "Pursue Her Again",
@@ -260,7 +238,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Keep showing interest, tenderness, and initiative.",
       action: "Plan one intentional moment of connection this week.",
       reflection: "Am I still pursuing my wife with affection and attention?",
-      prayer: "Lord, help me love my wife with warmth and intention.",
     },
     wives: {
       subject: "Keep the Warmth Alive in Your Marriage",
@@ -270,7 +247,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Marriage thrives where warmth and intentionality are nurtured.",
       action: "Create one simple moment of affection or appreciation this week.",
       reflection: "What helps our connection feel alive?",
-      prayer: "Lord, keep our marriage warm, tender, and alive.",
     },
     couples2: {
       subject: "When Is Your Next Date Night?",
@@ -280,7 +256,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Connection needs space and intention.",
       action: "Complete your check-in and put a date moment on the calendar.",
       reflection: "What keeps getting in the way of our connection?",
-      prayer: "Lord, teach us to prioritize each other.",
     },
   },
   {
@@ -294,7 +269,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Financial clarity and unity reduce fear and confusion.",
       action: "Set aside 20 minutes to discuss one financial priority.",
       reflection: "Are we facing money as partners or opponents?",
-      prayer: "Lord, give us wisdom, discipline, and unity in stewardship.",
     },
     husbands: {
       subject: "Lead with Responsibility in Financial Matters",
@@ -304,7 +278,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Financial leadership includes honesty, planning, and responsibility.",
       action: "Start or review one practical money plan with your wife.",
       reflection: "Am I transparent, responsible, and steady in this area?",
-      prayer: "Lord, help me steward well and lead responsibly.",
     },
     wives: {
       subject: "Wisdom, Peace, and Partnership in Your Finances",
@@ -314,7 +287,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Wisdom in the home includes peace, prudence, and partnership.",
       action: "Have one calm conversation about a priority, not a complaint.",
       reflection: "How can I bring wisdom and peace into our financial conversations?",
-      prayer: "Lord, give me wisdom and grace in the area of finances.",
     },
     couples2: {
       subject: "Have the Money Conversation You've Been Avoiding",
@@ -324,7 +296,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Agreement grows through honest conversation and shared priorities.",
       action: "Complete your check-in and identify one shared next step financially.",
       reflection: "What financial habit needs attention right now?",
-      prayer: "Lord, align our hearts and help us build wisely.",
     },
   },
   {
@@ -338,7 +309,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "A marriage grows deeper when both spouses seek God together.",
       action: "Pray together twice this week, even if briefly.",
       reflection: "What keeps us from praying together more often?",
-      prayer: "Lord Jesus, draw us close to You and closer to each other.",
     },
     husbands: {
       subject: "Lead Spiritually by Walking Closely with Jesus",
@@ -348,7 +318,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Spiritual leadership starts with personal surrender, not performance.",
       action: "Spend time with Jesus this week and share one takeaway with your wife.",
       reflection: "Is my private walk with God shaping my marriage?",
-      prayer: "Lord, anchor me in You so I can lead with authenticity.",
     },
     wives: {
       subject: "Strengthen Your Home Through Prayer and Presence",
@@ -358,7 +327,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "A wife's spiritual strength blesses the atmosphere of the home.",
       action: "Pray intentionally for your husband this week and tell him one thing you prayed.",
       reflection: "How can I bring Christ's peace into our home?",
-      prayer: "Lord, make me steady, prayerful, and full of grace.",
     },
     couples2: {
       subject: "What Is God Saying to Your Marriage Right Now?",
@@ -368,7 +336,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Reflect together on what God is shaping in your marriage.",
       action: "Complete your check-in and include one shared prayer request.",
       reflection: "Where do we sense God inviting growth?",
-      prayer: "Lord, teach us to abide in You together.",
     },
   },
   {
@@ -382,7 +349,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Every home is shaped by repeated values, words, and habits.",
       action: "Name 3 values you want to define your home.",
       reflection: "What atmosphere are we creating daily?",
-      prayer: "Lord, help us build a home that honors You.",
     },
     husbands: {
       subject: "The Kind of Home a Husband Helps Create",
@@ -392,7 +358,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Presence, consistency, and integrity shape the culture of a home.",
       action: "Do one thing this week that increases peace and stability at home.",
       reflection: "What kind of atmosphere follows my presence?",
-      prayer: "Lord, help me shape my home with integrity and love.",
     },
     wives: {
       subject: "Your Influence Shapes the Atmosphere of the Home",
@@ -402,7 +367,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Your words, tone, and wisdom help define the home culture.",
       action: "Speak one life-giving word into your home each day this week.",
       reflection: "What atmosphere am I reinforcing?",
-      prayer: "Lord, use me to build peace, strength, and warmth.",
     },
     couples2: {
       subject: "What Kind of Home Are You Building Together?",
@@ -412,7 +376,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Review the values and rhythms shaping your home.",
       action: "Complete your check-in and choose one family value to strengthen.",
       reflection: "What needs to start or stop in our home?",
-      prayer: "Lord, shape our home for Your glory and our family's good.",
     },
   },
   {
@@ -426,7 +389,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Healing grows where repentance, grace, and truth are welcomed.",
       action: "Ask if there is anything that still needs healing between you.",
       reflection: "Are we carrying anything unresolved?",
-      prayer: "Lord, heal the places that are still tender or strained.",
     },
     husbands: {
       subject: "A Real Man Knows How to Repent",
@@ -436,7 +398,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Repentance is a strength that rebuilds trust.",
       action: "Offer one clear apology where needed this week.",
       reflection: "Am I willing to own my wrong without excuses?",
-      prayer: "Lord, make me humble, honest, and teachable.",
     },
     wives: {
       subject: "Healing Your Marriage Without Hardening Your Heart",
@@ -446,7 +407,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Healing does not mean pretending; it means letting grace do its work wisely.",
       action: "Bring one hurt to God and one honest conversation to your husband.",
       reflection: "Where do I need God's healing in my heart?",
-      prayer: "Lord, keep my heart soft, wise, and whole.",
     },
     couples2: {
       subject: "Is There Anything We Still Need to Heal?",
@@ -456,7 +416,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Use this month's check-in to make room for healing.",
       action: "Complete your check-in and name one area needing grace or repair.",
       reflection: "What wound or pattern still needs attention?",
-      prayer: "Lord, restore what has been bruised between us.",
     },
   },
   {
@@ -470,7 +429,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Emotional closeness and gentle affection matter deeply.",
       action: "Share one affectionate, intentional moment this week.",
       reflection: "Do we feel emotionally close right now?",
-      prayer: "Lord, renew tenderness and trust between us.",
     },
     husbands: {
       subject: "Love Her with Tenderness, Patience, and Care",
@@ -480,7 +438,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Emotional safety, gentleness, and honor deepen intimacy.",
       action: "Offer affection and attention in a way your wife receives well.",
       reflection: "Does my wife feel safe, cherished, and pursued?",
-      prayer: "Lord, teach me tenderness and honor.",
     },
     wives: {
       subject: "Nurture Closeness in Your Marriage with Warmth",
@@ -490,7 +447,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Warmth, openness, and affection help maintain closeness.",
       action: "Create one moment of warmth and connection this week.",
       reflection: "What helps us feel near to each other?",
-      prayer: "Lord, keep our bond tender, healthy, and strong.",
     },
     couples2: {
       subject: "How Can We Grow Closer This Month?",
@@ -500,7 +456,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Review emotional and relational closeness with honesty.",
       action: "Complete your check-in and plan one step toward deeper connection.",
       reflection: "What would help us feel closer right now?",
-      prayer: "Lord, draw us nearer to each other in love.",
     },
   },
   {
@@ -514,7 +469,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Your marriage shapes future generations and leaves a legacy.",
       action: "Talk about the kind of legacy you want your home to leave.",
       reflection: "What do we want our marriage to pass on?",
-      prayer: "Lord, make our marriage fruitful beyond ourselves.",
     },
     husbands: {
       subject: "The Legacy of a Faithful Husband",
@@ -524,7 +478,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Faithfulness in small things builds a lasting legacy.",
       action: "Choose one consistent habit to keep building next year.",
       reflection: "What kind of husband am I becoming over time?",
-      prayer: "Lord, make me faithful, steady, and fruitful.",
     },
     wives: {
       subject: "The Legacy of a Wise and Strong Wife",
@@ -534,7 +487,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "A wise and faithful wife leaves strength, grace, and blessing behind.",
       action: "Name one quality you want to strengthen for the next season.",
       reflection: "What legacy is my life creating in my home?",
-      prayer: "Lord, make my life fruitful, wise, and full of grace.",
     },
     couples2: {
       subject: "End the Year Strong and Start Fresh Together",
@@ -544,7 +496,6 @@ export const MGM_EMAIL_CONTENT: EmailTrack[] = [
       focus: "Reflect with gratitude and enter the next season with fresh faith.",
       action: "Complete your year-end check-in and write one shared goal for the next season.",
       reflection: "What is God inviting us into next?",
-      prayer: "Lord, thank You for Your mercy and for the work You are doing in our marriage.",
     },
   },
 ]

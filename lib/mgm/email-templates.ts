@@ -108,7 +108,7 @@ export function buildWelcomeEmail(params: {
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
         <tr><td style="background:#8B6F47;border-radius:50px;padding:14px 32px;">
-          <a href="${safeUrl("/my-great-marriage/check-in")}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">View Your Marriage Check-In</a>
+          <a href="${SITE_URL}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">Return to My Great Marriage</a>
         </td></tr>
       </table>
 
@@ -135,7 +135,7 @@ Welcome to My Great Marriage. Strong marriages do not stay strong by accident. T
 
 "Unless the Lord builds the house, those who build it labor in vain." — Psalm 127:1
 
-View your Marriage Check-In: ${safeUrl("/my-great-marriage/check-in")}
+Return to My Great Marriage: ${SITE_URL}
 Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
 
 We are honored to serve your marriage.
@@ -147,7 +147,7 @@ The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
 export function buildNurtureEmail(params: {
   recipientName: string
-  emailBlock: { subject: string; title: string; scripture: string; scriptureRef: string; focus: string; action: string; reflection: string; prayer: string }
+  emailBlock: { subject: string; title: string; scripture: string; scriptureRef: string; focus: string; action: string; reflection: string }
   theme: string
   month: number
   ctaUrl: string
@@ -184,32 +184,24 @@ export function buildNurtureEmail(params: {
       <!-- Action -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
         <tr><td style="background:#f0e8e0;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">This Week&#39;s Action</p>
+          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">This Week&#39;s Action Step</p>
           <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;line-height:1.6;">${params.emailBlock.action}</p>
         </td></tr>
       </table>
 
       <!-- Reflection -->
-      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
         <tr><td style="border:1px solid #e8d8c8;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">Reflection</p>
+          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">Reflect & Diary</p>
           <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;font-style:italic;line-height:1.6;">${params.emailBlock.reflection}</p>
         </td></tr>
       </table>
 
-      <!-- Prayer -->
-      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-        <tr><td style="background:#8B6F47;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">A Short Prayer</p>
-          <p style="margin:0;font-size:14px;color:#ffffff;font-family:Georgia,serif;font-style:italic;line-height:1.7;">${params.emailBlock.prayer}</p>
-        </td></tr>
-      </table>
-
-      <!-- CTA Button -->
-      <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      <!-- CTA Button - Return to Website -->
+      <table cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
         <tr><td style="background:#8B6F47;border-radius:50px;padding:14px 32px;">
-          <a href="${params.ctaUrl}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">
-            ${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage"}
+          <a href="${SITE_URL}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">
+            Return to My Great Marriage
           </a>
         </td></tr>
       </table>
@@ -234,13 +226,11 @@ Month ${params.month} — ${params.theme}
 
 ${params.emailBlock.focus}
 
-This Week's Action: ${params.emailBlock.action}
+This Week's Action Step: ${params.emailBlock.action}
 
-Reflection: ${params.emailBlock.reflection}
+Reflect & Diary: ${params.emailBlock.reflection}
 
-Prayer: ${params.emailBlock.prayer}
-
-${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage"}: ${params.ctaUrl}
+Return to My Great Marriage: ${SITE_URL}
 
 Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.preferenceToken}`)}
 Unsubscribe: ${safeUrl(`/unsubscribe/${params.preferenceToken}`)}
@@ -317,25 +307,24 @@ export function buildAnniversaryEmail(params: {
       </p>
 
       <!-- Ideas box -->
-      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
         <tr><td style="background:#fdf8f3;border-radius:8px;padding:20px 24px;">
           <p style="margin:0 0 12px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;font-weight:bold;">Ways to Celebrate Today</p>
           <ul style="margin:0;padding-left:20px;font-size:14px;color:#3D2314;font-family:Arial,sans-serif;line-height:2;">
             <li>Share your favorite memory from this past year</li>
             <li>Write each other a short note of appreciation</li>
-            <li>Pray together and thank God for your marriage</li>
+            <li>Reflect together on God's faithfulness in your marriage</li>
             <li>Plan something special, even if it is simple</li>
           </ul>
         </td></tr>
       </table>
 
-      <!-- Prayer -->
-      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-        <tr><td style="background:#8B6F47;border-radius:8px;padding:20px 24px;">
-          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">Our Prayer for You</p>
-          <p style="margin:0;font-size:14px;color:#ffffff;font-family:Georgia,serif;font-style:italic;line-height:1.7;">
-            Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} and for the gift of their marriage. Bless them on this anniversary and in the year ahead. Deepen their love, strengthen their bond, and fill their home with Your peace. May their marriage continue to reflect Your faithfulness. Amen.
-          </p>
+      <!-- CTA Button - Return to Website -->
+      <table cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+        <tr><td style="background:#8B6F47;border-radius:50px;padding:14px 32px;">
+          <a href="${SITE_URL}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">
+            Return to My Great Marriage
+          </a>
         </td></tr>
       </table>
 
@@ -369,13 +358,12 @@ Celebrating ${params.yearsMarried} ${params.yearsMarried === 1 ? "Year" : "Years
 Ways to Celebrate Today:
 - Share your favorite memory from this past year
 - Write each other a short note of appreciation
-- Pray together and thank God for your marriage
+- Reflect together on God's faithfulness in your marriage
 - Plan something special, even if it is simple
 
-Our Prayer for You:
-Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} and for the gift of their marriage. Bless them on this anniversary and in the year ahead. Deepen their love, strengthen their bond, and fill their home with Your peace. May their marriage continue to reflect Your faithfulness. Amen.
-
 Here's to many more years of love, laughter, and growing together in Christ!
+
+Return to My Great Marriage: ${SITE_URL}
 
 With love and celebration,
 My Great Marriage
