@@ -396,11 +396,11 @@ export default function MyGreatMarriageEventPage() {
           <FadeIn direction="left" delay={0.1}>
             <div className="absolute top-32 left-8 lg:left-16 z-10">
               <Image
-                src="/images/mgm-logo.jpg"
+                src="/images/mgm-logo.png"
                 alt="My Great Marriage Logo"
                 width={140}
                 height={140}
-                className="w-24 h-24 lg:w-32 lg:h-32 object-contain mix-blend-screen hover:scale-105 transition-transform duration-500"
+                className="w-24 h-24 lg:w-32 lg:h-32 object-contain hover:scale-105 transition-transform duration-500"
               />
             </div>
           </FadeIn>
