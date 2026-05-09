@@ -400,7 +400,7 @@ export default function MyGreatMarriageEventPage() {
                 alt="My Great Marriage Logo"
                 width={140}
                 height={140}
-                className="w-24 h-24 lg:w-32 lg:h-32 object-contain hover:scale-105 transition-transform duration-500"
+                className="w-24 h-24 lg:w-32 lg:h-32 object-contain animate-spin-slow hover:[animation-play-state:paused] hover:scale-105 transition-transform duration-500"
               />
             </div>
           </FadeIn>
