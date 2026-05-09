@@ -572,6 +572,24 @@ html {
   box-shadow: 0 0 0 3px rgba(139, 43, 62, 0.3), 0 0 0 6px rgba(139, 43, 62, 0.1);
 }
 
+/* Slow continuous rotation for the MGM logo ring */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow {
+    animation: none;
+  }
+}
+
 /* Smooth image zoom */
 .img-zoom {
   overflow: hidden;
