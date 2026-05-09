@@ -54,18 +54,12 @@ function emailWrapper(content: string, previewText: string = ""): string {
 </html>`
 }
 
-function footerLinks(husbandToken: string, wifeToken: string): string {
-  return `<a href="${safeUrl(`/my-great-marriage/preferences/${husbandToken}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Husband Preferences</a>
-  &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/my-great-marriage/preferences/${wifeToken}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Wife Preferences</a>
-  &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/unsubscribe/${husbandToken}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
+function footerLinks(husbandToken: string, _wifeToken: string): string {
+  return `<a href="${safeUrl(`/unsubscribe/${husbandToken}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
 }
 
-function singleFooterLinks(token: string, label: string): string {
-  return `<a href="${safeUrl(`/my-great-marriage/preferences/${token}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Manage Preferences</a>
-  &nbsp;&bull;&nbsp;
-  <a href="${safeUrl(`/unsubscribe/${token}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe ${label}</a>`
+function singleFooterLinks(token: string, _label: string): string {
+  return `<a href="${safeUrl(`/unsubscribe/${token}`)}" style="color:#ffffff;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
 }
 
 export function buildWelcomeEmail(params: {
@@ -112,11 +106,7 @@ export function buildWelcomeEmail(params: {
         </td></tr>
       </table>
 
-      <p style="margin:0 0 4px;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">
-        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#8B6F47;">Manage Preferences</a>
-      </p>
-
-      <p style="margin:32px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
+      <p style="margin:16px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
         We are honored to serve your marriage.<br/>
         <strong>With you for stronger homes,</strong><br/>
         <em>The Fatherhood Foundation</em>
@@ -136,9 +126,10 @@ Welcome to My Great Marriage. Strong marriages do not stay strong by accident. T
 "Unless the Lord builds the house, those who build it labor in vain." — Psalm 127:1
 
 Return to My Great Marriage: ${SITE_URL}
-Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
 
 We are honored to serve your marriage.
+
+Unsubscribe: ${safeUrl(`/unsubscribe/${params.husbandToken}`)}
 
 The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
@@ -181,19 +172,19 @@ export function buildNurtureEmail(params: {
 
       <p style="margin:0 0 16px;font-size:15px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">${params.emailBlock.focus}</p>
 
-      <!-- Action -->
+      <!-- Reflection -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-        <tr><td style="background:#f0e8e0;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">This Week&#39;s Action Step</p>
-          <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;line-height:1.6;">${params.emailBlock.action}</p>
+        <tr><td style="border:1px solid #e8d8c8;border-radius:8px;padding:18px 24px;">
+          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">Reflect on This</p>
+          <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;font-style:italic;line-height:1.6;">${params.emailBlock.reflection}</p>
         </td></tr>
       </table>
 
-      <!-- Reflection -->
+      <!-- Action Step — always last before CTA -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-        <tr><td style="border:1px solid #e8d8c8;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">Reflect & Diary</p>
-          <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;font-style:italic;line-height:1.6;">${params.emailBlock.reflection}</p>
+        <tr><td style="background:#3D1520;border-radius:8px;padding:20px 24px;">
+          <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">Your Action Step — Diary It Now</p>
+          <p style="margin:0;font-size:15px;color:#ffffff;font-family:Georgia,serif;font-style:italic;line-height:1.7;">${params.emailBlock.action}</p>
         </td></tr>
       </table>
 
@@ -206,7 +197,7 @@ export function buildNurtureEmail(params: {
         </td></tr>
       </table>
 
-      <p style="margin:24px 0 0;font-size:13px;color:#8B6B5A;font-family:Arial,sans-serif;line-height:1.6;">
+      <p style="margin:0 0 0;font-size:13px;color:#8B6B5A;font-family:Arial,sans-serif;line-height:1.6;">
         With you for stronger homes,<br/><strong>The Fatherhood Foundation</strong>
       </p>
     </td></tr>
@@ -226,13 +217,13 @@ Month ${params.month} — ${params.theme}
 
 ${params.emailBlock.focus}
 
-This Week's Action Step: ${params.emailBlock.action}
+Reflect on This: ${params.emailBlock.reflection}
 
-Reflect & Diary: ${params.emailBlock.reflection}
+YOUR ACTION STEP — DIARY IT NOW:
+${params.emailBlock.action}
 
 Return to My Great Marriage: ${SITE_URL}
 
-Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.preferenceToken}`)}
 Unsubscribe: ${safeUrl(`/unsubscribe/${params.preferenceToken}`)}
 
 The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
@@ -368,8 +359,7 @@ Return to My Great Marriage: ${SITE_URL}
 With love and celebration,
 My Great Marriage
 
-Husband Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
-Wife Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.wifeToken}`)}
+Unsubscribe: ${safeUrl(`/unsubscribe/${params.husbandToken}`)}
 
 The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
