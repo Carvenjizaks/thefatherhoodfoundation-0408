@@ -4,6 +4,12 @@ const FROM_NAME = process.env.SMTP_SENDER_NAME || process.env.EMAIL_FROM_NAME ||
 
 export const FROM_ADDRESS = `${FROM_NAME} <${FROM_EMAIL}>`
 
+// Helper to safely build URLs for emails (ensure no special chars break SMTP parsing)
+function safeUrl(path: string): string {
+  // Remove any trailing/leading whitespace and ensure clean URL
+  return `${SITE_URL}${path.trim()}`
+}
+
 function emailWrapper(content: string, previewText: string = ""): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -52,17 +58,17 @@ function emailWrapper(content: string, previewText: string = ""): string {
 }
 
 function footerLinks(husbandToken: string, wifeToken: string): string {
-  return `<a href="${SITE_URL}/my-great-marriage/preferences/${husbandToken}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Husband Preferences</a>
+  return `<a href="${safeUrl(`/my-great-marriage/preferences/${husbandToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Husband Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${SITE_URL}/my-great-marriage/preferences/${wifeToken}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Wife Preferences</a>
+  <a href="${safeUrl(`/my-great-marriage/preferences/${wifeToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Wife Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${SITE_URL}/unsubscribe/${husbandToken}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
+  <a href="${safeUrl(`/unsubscribe/${husbandToken}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe</a>`
 }
 
 function singleFooterLinks(token: string, label: string): string {
-  return `<a href="${SITE_URL}/my-great-marriage/preferences/${token}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Manage Preferences</a>
+  return `<a href="${safeUrl(`/my-great-marriage/preferences/${token}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Manage Preferences</a>
   &nbsp;&bull;&nbsp;
-  <a href="${SITE_URL}/unsubscribe/${token}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe ${label}</a>`
+  <a href="${safeUrl(`/unsubscribe/${token}`)}" style="color:#8B2B3E;font-size:11px;font-family:Arial,sans-serif;">Unsubscribe ${label}</a>`
 }
 
 export function buildWelcomeEmail(params: {
@@ -105,12 +111,12 @@ export function buildWelcomeEmail(params: {
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
         <tr><td style="background:#8B2B3E;border-radius:50px;padding:14px 32px;">
-          <a href="${SITE_URL}/my-great-marriage/check-in" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">View Your Marriage Check-In</a>
+          <a href="${safeUrl("/my-great-marriage/check-in")}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">View Your Marriage Check-In</a>
         </td></tr>
       </table>
 
       <p style="margin:0 0 4px;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">
-        <a href="${SITE_URL}/my-great-marriage/preferences/${params.husbandToken}" style="color:#8B2B3E;">Manage Preferences</a>
+        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#8B2B3E;">Manage Preferences</a>
       </p>
 
       <p style="margin:32px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
@@ -132,8 +138,8 @@ Welcome to My Great Marriage. Strong marriages do not stay strong by accident. T
 
 "Unless the Lord builds the house, those who build it labor in vain." — Psalm 127:1
 
-View your Marriage Check-In: ${SITE_URL}/my-great-marriage/check-in
-Manage Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.husbandToken}
+View your Marriage Check-In: ${safeUrl("/my-great-marriage/check-in")}
+Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
 
 We are honored to serve your marriage.
 The Fatherhood Foundation`
@@ -180,7 +186,7 @@ export function buildNurtureEmail(params: {
       <!-- Action -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
         <tr><td style="background:#f0e8e0;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">This Week&apos;s Action</p>
+          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;">This Week&#39;s Action</p>
           <p style="margin:0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;line-height:1.6;">${params.emailBlock.action}</p>
         </td></tr>
       </table>
@@ -238,8 +244,8 @@ Prayer: ${params.emailBlock.prayer}
 
 ${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage"}: ${params.ctaUrl}
 
-Manage Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.preferenceToken}
-Unsubscribe: ${SITE_URL}/unsubscribe/${params.preferenceToken}
+Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.preferenceToken}`)}
+Unsubscribe: ${safeUrl(`/unsubscribe/${params.preferenceToken}`)}
 
 The Fatherhood Foundation`
 
@@ -295,9 +301,9 @@ export function buildAnniversaryEmail(params: {
         </td></tr>
       </table>
 
-      <p style="margin:0 0 20px;font-size:15px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
-        ${params.husbandFirstName} and ${params.wifeFirstName}, your marriage is a testimony of God&apos;s faithfulness. Every challenge you have faced together, every joy you have celebrated, and every ordinary moment you have shared has woven a story of grace and love.
-      </p>
+        <p style="margin:0 0 20px;font-size:15px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
+          ${params.husbandFirstName} and ${params.wifeFirstName}, your marriage is a testimony of God&#39;s faithfulness. Every challenge you have faced together, every joy you have celebrated, and every ordinary moment you have shared has woven a story of grace and love.
+        </p>
 
       <!-- Celebration box -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
@@ -336,7 +342,7 @@ export function buildAnniversaryEmail(params: {
       </table>
 
       <p style="margin:0 0 24px;font-size:16px;color:#1a0a0e;font-family:Georgia,serif;text-align:center;font-style:italic;">
-        Here&apos;s to many more years of love, laughter, and growing together in Christ!
+        Here&#39;s to many more years of love, laughter, and growing together in Christ!
       </p>
 
       <p style="margin:24px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;text-align:center;">
@@ -377,8 +383,8 @@ With love and celebration,
 The Fatherhood Foundation
 My Great Marriage
 
-Husband Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.husbandToken}
-Wife Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.wifeToken}`
+Husband Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
+Wife Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.wifeToken}`)}`
 
   return { subject, html, text }
 }
@@ -405,7 +411,7 @@ export function buildAdminNotificationEmail(params: {
         <tr><td style="padding:10px 0;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">Signed Up</td><td style="padding:10px 0;font-size:14px;color:#1a0a0e;font-family:Arial,sans-serif;">${new Date().toLocaleDateString("en-ZA", { dateStyle: "full" })}</td></tr>
       </table>
       <p style="margin:24px 0 0;font-size:14px;color:#3D2314;font-family:Arial,sans-serif;">
-        <a href="${SITE_URL}/admin/mygreatmarriage" style="color:#8B2B3E;font-weight:bold;">View Admin Dashboard</a>
+        <a href="${safeUrl("/admin/mygreatmarriage")}" style="color:#8B2B3E;font-weight:bold;">View Admin Dashboard</a>
       </p>
     </td></tr>
   `

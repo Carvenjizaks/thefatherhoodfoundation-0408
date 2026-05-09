@@ -55,6 +55,24 @@ export default function PreferencesClient({ sub, token, role }: { sub: Sub; toke
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-[#e8d8c8] p-8 shadow-sm space-y-6">
+            {/* Quick link to Marriage Check-In */}
+            <div className="bg-[#fdf8f3] rounded-xl p-5 border border-[#e8d8c8]">
+              <p className="text-sm font-semibold text-[#1a0a0e] mb-2">Your Marriage Check-In</p>
+              <p className="text-sm text-[#6b4c52] mb-4">
+                Use our free monthly check-in tool to reconnect and strengthen your relationship.
+              </p>
+              <Link
+                href="/my-great-marriage/check-in"
+                className="inline-flex items-center gap-2 bg-[#8B2B3E] hover:bg-[#6d2230] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors"
+              >
+                View Your Marriage Check-In
+              </Link>
+            </div>
+
+            <div className="border-t border-[#e8d8c8] pt-6">
+              <p className="text-sm font-semibold text-[#1a0a0e] mb-4">Email Preferences</p>
+            </div>
+
             {(role === "husband" || role === "couple") && (
               <label className="flex items-start gap-4 cursor-pointer">
                 <input type="checkbox" checked={role === "couple" ? coupleEmails : husbandEmails} onChange={(e) => role === "couple" ? setCoupleEmails(e.target.checked) : setHusbandEmails(e.target.checked)} className="mt-1 w-5 h-5 accent-[#8B2B3E] rounded" />
