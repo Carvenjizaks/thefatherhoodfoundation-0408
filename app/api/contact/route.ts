@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sendEmail } from "@/lib/email-service"
+import { sendMgmEmail } from "@/lib/mgm/send"
 
 const NOTIFICATION_EMAILS = [
   "carvenjizaks@gmail.com",
@@ -198,7 +198,7 @@ The Fatherhood Foundation | Windhoek, Namibia
     // Send notification emails to all recipients
     const notificationResults = await Promise.allSettled(
       NOTIFICATION_EMAILS.map((recipient) =>
-        sendEmail({
+        sendMgmEmail({
           to: recipient,
           subject: notificationSubject,
           html: notificationHtml,
@@ -209,9 +209,8 @@ The Fatherhood Foundation | Windhoek, Namibia
     )
 
     // Send confirmation email to the sender
-    const confirmationResult = await sendEmail({
+    const confirmationResult = await sendMgmEmail({
       to: email,
-      toName: name,
       subject: confirmationSubject,
       html: confirmationHtml,
       text: confirmationText,
