@@ -139,15 +139,15 @@ export default function MyGreatMarriagePage() {
                     Through proven principles, expert guidance, and a supportive community, discover how to strengthen your bond and thrive together.
                   </p>
                   <p className="text-sm text-white/90 font-medium bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 inline-block mb-4">
-                    Registration for MyGreatMarriage Conference 2026 is now closed
+                    Next Conference: September 2026
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <Button
                       size="lg"
-                      className="bg-[#8B2B3E]/50 text-white rounded-full px-8 font-semibold cursor-default"
-                      disabled
+                      className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
+                      asChild
                     >
-                      Registration Closed
+                      <Link href="/events">View Upcoming Events</Link>
                     </Button>
                     <Button
                       size="lg"
@@ -232,10 +232,10 @@ export default function MyGreatMarriagePage() {
                 <FadeIn direction="left" delay={0.5}>
                   <Button
                     size="lg"
-                    className="bg-[#8B2B3E]/50 text-white rounded-full px-8 shadow-lg cursor-default"
-                    disabled
+                    className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 shadow-lg"
+                    asChild
                   >
-                    Registration Closed
+                    <Link href="/events">View Upcoming Events</Link>
                   </Button>
                 </FadeIn>
               </div>
@@ -382,10 +382,10 @@ export default function MyGreatMarriagePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
               <Button
                 size="lg"
-                className="bg-[#8B2B3E]/50 text-white rounded-full px-8 font-semibold cursor-default"
-                disabled
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full px-8 font-semibold"
+                asChild
               >
-                Registration Closed
+                <Link href="/events">View Upcoming Events</Link>
               </Button>
               <Button
                 asChild
