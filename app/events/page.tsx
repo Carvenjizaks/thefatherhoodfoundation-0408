@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight } from "lucide-react"
+import { CheckCircle, X, Calendar, Clock, MapPin, ArrowRight, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -705,10 +705,17 @@ function TableTalkRegistrationModal({
 
             <Button 
               type="submit" 
-              className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white py-3 h-12"
+              className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white py-3 h-12 active:scale-[0.98] transition-transform"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Processing..." : "Complete Registration"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Complete Registration"
+              )}
             </Button>
           </form>
         )}

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 import { submitMgmSignup, type SignupFormData } from "../actions"
 
 const initialForm: SignupFormData = {
@@ -227,9 +228,16 @@ export default function SignupSection() {
           <Button
             type="submit"
             disabled={submitting}
-            className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full py-3 font-semibold text-base disabled:opacity-60"
+            className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full py-3 font-semibold text-base disabled:opacity-60 active:scale-[0.98] transition-transform"
           >
-            {submitting ? "Sending..." : "Send Us the Free Marriage Check-In"}
+            {submitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              "Send Us the Free Marriage Check-In"
+            )}
           </Button>
         </form>
       </div>
