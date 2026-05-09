@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition } from "react"
 import Image from "next/image"
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -218,10 +219,17 @@ export function NewsletterPopup() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-[#8B2B3E] hover:bg-[#6B1F2E] text-white py-3"
+                className="w-full bg-[#8B2B3E] hover:bg-[#6B1F2E] text-white py-3 active:scale-[0.98] transition-transform"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Subscribing..." : "Subscribe"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Subscribing...
+                  </>
+                ) : (
+                  "Subscribe"
+                )}
               </Button>
 
               <p className="text-xs text-center text-gray-500">
