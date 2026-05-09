@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
               status: result.success ? "sent" : "failed",
               provider_message_id: result.messageId || null,
               error_message: result.error || null,
-            })
+            }).then()
           )
           if (result.success) anySent = true
         }
@@ -166,7 +166,7 @@ export async function GET(request: NextRequest) {
               status: result.success ? "sent" : "failed",
               provider_message_id: result.messageId || null,
               error_message: result.error || null,
-            })
+            }).then()
           )
           if (result.success) anySent = true
         }
@@ -195,7 +195,7 @@ export async function GET(request: NextRequest) {
             status: result.success ? "sent" : "failed",
             provider_message_id: result.messageId || null,
             error_message: result.error || null,
-          })
+          }).then()
         )
         if (result.success) anySent = true
       }
@@ -223,7 +223,7 @@ export async function GET(request: NextRequest) {
             status: result.success ? "sent" : "failed",
             provider_message_id: result.messageId || null,
             error_message: result.error || null,
-          })
+          }).then()
         )
         if (result.success) anySent = true
       }
