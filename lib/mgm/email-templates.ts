@@ -26,8 +26,8 @@ function emailWrapper(content: string, previewText: string = ""): string {
 
         <!-- Header -->
         <tr>
-          <td style="background:#3D1520;padding:28px 40px;text-align:center;">
-            <p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">The Fatherhood Foundation</p>
+          <td style="background:#8B6F47;padding:28px 40px;text-align:center;">
+            <p style="margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">The Fatherhood Foundation</p>
             <p style="margin:6px 0 0;font-size:22px;font-weight:bold;color:#ffffff;font-family:Georgia,serif;">My Great Marriage</p>
           </td>
         </tr>
@@ -37,7 +37,7 @@ function emailWrapper(content: string, previewText: string = ""): string {
 
         <!-- Footer -->
         <tr>
-          <td style="background:#8B2B3E;padding:28px 40px;border-top:1px solid #e8d8c8;">
+          <td style="background:#8B6F47;padding:28px 40px;border-top:1px solid #e8d8c8;">
             <p style="margin:0 0 12px;font-size:11px;color:#ffffff;font-family:Arial,sans-serif;text-align:center;">
               PLACEHOLDER_FOOTER_LINKS
             </p>
@@ -89,7 +89,7 @@ export function buildWelcomeEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #8B6F47;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:15px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;Unless the Lord builds the house, those who build it labor in vain.&rdquo;
           </p>
@@ -107,13 +107,13 @@ export function buildWelcomeEmail(params: {
 
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-        <tr><td style="background:#8B2B3E;border-radius:50px;padding:14px 32px;">
+        <tr><td style="background:#8B6F47;border-radius:50px;padding:14px 32px;">
           <a href="${safeUrl("/my-great-marriage/check-in")}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">View Your Marriage Check-In</a>
         </td></tr>
       </table>
 
       <p style="margin:0 0 4px;font-size:14px;color:#8B6B5A;font-family:Arial,sans-serif;">
-        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#8B2B3E;">Manage Preferences</a>
+        <a href="${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}" style="color:#8B6F47;">Manage Preferences</a>
       </p>
 
       <p style="margin:32px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
@@ -171,7 +171,7 @@ export function buildNurtureEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #8B6F47;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:15px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;${params.emailBlock.scripture}&rdquo;
           </p>
@@ -199,15 +199,15 @@ export function buildNurtureEmail(params: {
 
       <!-- Prayer -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-        <tr><td style="background:#3D1520;border-radius:8px;padding:18px 24px;">
-          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">A Short Prayer</p>
-          <p style="margin:0;font-size:14px;color:#f5e8d8;font-family:Georgia,serif;font-style:italic;line-height:1.7;">${params.emailBlock.prayer}</p>
+        <tr><td style="background:#8B6F47;border-radius:8px;padding:18px 24px;">
+          <p style="margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">A Short Prayer</p>
+          <p style="margin:0;font-size:14px;color:#ffffff;font-family:Georgia,serif;font-style:italic;line-height:1.7;">${params.emailBlock.prayer}</p>
         </td></tr>
       </table>
 
       <!-- CTA Button -->
       <table cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-        <tr><td style="background:#8B2B3E;border-radius:50px;padding:14px 32px;">
+        <tr><td style="background:#8B6F47;border-radius:50px;padding:14px 32px;">
           <a href="${params.ctaUrl}" style="color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;font-family:Arial,sans-serif;">
             ${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage"}
           </a>
@@ -273,7 +273,7 @@ export function buildAnniversaryEmail(params: {
       <div style="text-align:center;margin-bottom:24px;">
         <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
           <tr>
-            <td style="background:linear-gradient(135deg, #8B2B3E 0%, #D4A574 100%);border-radius:50%;width:80px;height:80px;text-align:center;vertical-align:middle;">
+            <td style="background:linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);border-radius:50%;width:80px;height:80px;text-align:center;vertical-align:middle;">
               <span style="font-size:36px;line-height:80px;">&#10084;</span>
             </td>
           </tr>
@@ -291,7 +291,7 @@ export function buildAnniversaryEmail(params: {
 
       <!-- Scripture block -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#fdf8f3;border-left:4px solid #C9956C;padding:20px 24px;border-radius:0 8px 8px 0;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #8B6F47;padding:20px 24px;border-radius:0 8px 8px 0;">
           <p style="margin:0 0 6px;font-size:16px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
             &ldquo;Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres. Love never fails.&rdquo;
           </p>
@@ -305,8 +305,8 @@ export function buildAnniversaryEmail(params: {
 
       <!-- Celebration box -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
-        <tr><td style="background:#3D1520;border-radius:12px;padding:24px;text-align:center;">
-          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">Celebrating</p>
+        <tr><td style="background:#8B6F47;border-radius:12px;padding:24px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">Celebrating</p>
           <p style="margin:0 0 4px;font-size:32px;color:#ffffff;font-family:Georgia,serif;font-weight:bold;">${params.yearsMarried} ${params.yearsMarried === 1 ? "Year" : "Years"}</p>
           <p style="margin:0;font-size:14px;color:#f5e8d8;font-family:Arial,sans-serif;">of Marriage &bull; ${formattedDate}</p>
         </td></tr>
@@ -331,9 +331,9 @@ export function buildAnniversaryEmail(params: {
 
       <!-- Prayer -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
-        <tr><td style="background:#3D1520;border-radius:8px;padding:20px 24px;">
-          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">Our Prayer for You</p>
-          <p style="margin:0;font-size:14px;color:#f5e8d8;font-family:Georgia,serif;font-style:italic;line-height:1.7;">
+        <tr><td style="background:#8B6F47;border-radius:8px;padding:20px 24px;">
+          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;font-family:Arial,sans-serif;">Our Prayer for You</p>
+          <p style="margin:0;font-size:14px;color:#ffffff;font-family:Georgia,serif;font-style:italic;line-height:1.7;">
             Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} and for the gift of their marriage. Bless them on this anniversary and in the year ahead. Deepen their love, strengthen their bond, and fill their home with Your peace. May their marriage continue to reflect Your faithfulness. Amen.
           </p>
         </td></tr>
