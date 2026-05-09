@@ -1,6 +1,6 @@
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodfoundation.org"
-const FROM_EMAIL = process.env.EMAIL_FROM_ADDRESS || "marriage@updates.thefatherhoodfoundation.org"
-const FROM_NAME = process.env.EMAIL_FROM_NAME || "My Great Marriage"
+const FROM_EMAIL = process.env.SMTP_SENDER_EMAIL || process.env.EMAIL_FROM_ADDRESS || "marriage@updates.thefatherhoodfoundation.org"
+const FROM_NAME = process.env.SMTP_SENDER_NAME || process.env.EMAIL_FROM_NAME || "My Great Marriage"
 
 export const FROM_ADDRESS = `${FROM_NAME} <${FROM_EMAIL}>`
 
