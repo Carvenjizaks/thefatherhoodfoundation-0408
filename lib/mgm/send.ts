@@ -27,8 +27,6 @@ export async function sendMgmEmail(
   const apiKey = process.env.SMTP_API_KEY
   const channel = process.env.SMTP_CHANNEL
 
-  console.log("[v0] MGM sendMgmEmail — from:", sender.address, "to:", recipients, "subject:", subject)
-
   // Try SMTP.com API first
   if (apiKey && channel) {
     try {
@@ -60,8 +58,6 @@ export async function sendMgmEmail(
       })
 
       const data = await res.json()
-
-      console.log("[v0] SMTP.com response status:", res.status, "body:", JSON.stringify(data))
 
       if (res.ok) {
         // Extract message ID from response like: {"status": "success", "data": {"message": "accepted, msg_id: xxx"}}
