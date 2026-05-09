@@ -1867,7 +1867,7 @@ export default function AdminDashboardPage() {
 
       {/* ==================== EMAIL COMPOSE DIALOG ==================== */}
       <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2 text-lg">
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -1906,17 +1906,39 @@ export default function AdminDashboardPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email-body" className="text-foreground font-medium text-sm">Message</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="email-body" className="text-foreground font-medium text-sm">Message</Label>
+                <div className="flex gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-6 text-xs px-2 border-border"
+                    onClick={() => setEmailBody(prev => prev + "{firstName}")}
+                  >
+                    + First Name
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-6 text-xs px-2 border-border"
+                    onClick={() => setEmailBody(prev => prev + "{lastName}")}
+                  >
+                    + Last Name
+                  </Button>
+                </div>
+              </div>
               <Textarea
                 id="email-body"
                 value={emailBody}
                 onChange={(e) => setEmailBody(e.target.value)}
-                placeholder="Write your message here..."
+                placeholder="Write your message here... Use {firstName} and {lastName} for personalization."
                 rows={6}
                 className="border-border bg-secondary/30 focus:bg-background resize-none"
               />
               <p className="text-xs text-muted-foreground">
-                Each recipient will be addressed by name automatically.
+                Use <code className="bg-muted px-1 rounded">{"{firstName}"}</code> and <code className="bg-muted px-1 rounded">{"{lastName}"}</code> to personalize the message for each recipient.
               </p>
             </div>
 
@@ -1931,7 +1953,7 @@ export default function AdminDashboardPage() {
               </div>
             )}
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex justify-end gap-3 pt-2 sticky bottom-0 bg-background pb-1">
               <Button
                 variant="outline"
                 onClick={() => setEmailDialogOpen(false)}
