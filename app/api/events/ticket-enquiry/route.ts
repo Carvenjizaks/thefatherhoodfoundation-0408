@@ -262,17 +262,11 @@ Received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesbu
                   </td>
                 </tr>
               </table>
-              <p style="color: #333333; font-size: 15px; line-height: 1.6; margin: 24px 0 4px 0;">
-                Warm regards,
-              </p>
-              <p style="color: #8B2B3E; font-size: 15px; font-weight: bold; margin: 0;">
-                The Fatherhood Foundation Help Desk
-              </p>
             </td>
           </tr>
           <tr>
             <td style="background-color: #f8f4f5; padding: 16px 30px; text-align: center;">
-              <p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation &mdash; Building Stronger Families</p>
+              <p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA</p>
             </td>
           </tr>
         </table>
@@ -296,8 +290,7 @@ Email: ${email}
 Phone: ${phone}
 ${message ? `Message: ${message}` : ''}
 
-Warm regards,
-The Fatherhood Foundation Help Desk
+The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA
 `
 
     // Recipients for ticket enquiries

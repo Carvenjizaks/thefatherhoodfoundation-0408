@@ -66,10 +66,8 @@ function buildEmailHTML(subject: string, body: string, recipientName: string) {
                 ${body.split('\n').map(line => `<p style="margin:0 0 12px 0;">${line}</p>`).join('')}
               </div>
               <hr style="border:none;border-top:1px solid #eee;margin:25px 0;" />
-              <p style="margin:0;font-size:13px;color:#999999;">
-                Warm regards,<br/>
-                <strong>The Fatherhood Foundation</strong><br/>
-                Building Stronger Families
+              <p style="margin:0;font-size:12px;color:#999999;">
+                The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA
               </p>
             </td>
           </tr>
@@ -105,7 +103,7 @@ export async function POST(request: Request) {
           .replace(/\{firstName\}/g, recipient.firstName || "")
           .replace(/\{lastName\}/g, recipient.lastName || "")
         const html = buildEmailHTML(subject, personalizedBody, recipientName)
-        const text = `Dear ${recipientName},\n\n${personalizedBody}\n\nWarm regards,\nThe Fatherhood Foundation`
+        const text = `Dear ${recipientName},\n\n${personalizedBody}\n\nThe Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
         await sendEmailSMTP(recipient.email, recipientName, subject, html, text)
         results.push({ email: recipient.email, success: true })
