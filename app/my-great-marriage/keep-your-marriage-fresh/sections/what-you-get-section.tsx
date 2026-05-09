@@ -1,4 +1,7 @@
+'use client'
+
 import { CheckCircle2 } from "lucide-react"
+import { useState } from "react"
 
 const items = [
   { label: "Free Monthly Marriage Check-In Template", desc: "A printable and downloadable tool for your monthly conversation." },
@@ -10,6 +13,35 @@ const items = [
   { label: "Short Prayer Prompts", desc: "Simple prayers you can use together or individually." },
   { label: "Date Night and Reflection Prompts", desc: "Ideas to help you stay connected and enjoy each other." },
 ]
+
+function ItemCard({ item }: { item: typeof items[0] }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div
+      className="bg-white rounded-xl border border-[#e8d8c8] overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <div className="flex items-start gap-4 p-6">
+        <CheckCircle2 className="flex-shrink-0 w-5 h-5 text-[#8B2B3E] mt-0.5" />
+        <p className="font-semibold text-[#1a0a0e]">{item.label}</p>
+      </div>
+      
+      <div
+        className="overflow-hidden transition-all duration-300"
+        style={{
+          maxHeight: isOpen ? "200px" : "0px",
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div className="px-6 pb-4 border-t border-[#e8d8c8]">
+          <p className="text-sm text-[#6b4c52] leading-relaxed">{item.desc}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function WhatYouGetSection() {
   return (
@@ -24,13 +56,7 @@ export default function WhatYouGetSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {items.map((item) => (
-            <div key={item.label} className="flex items-start gap-4 bg-white rounded-xl p-6 border border-[#e8d8c8] hover:shadow-sm transition-shadow">
-              <CheckCircle2 className="flex-shrink-0 w-5 h-5 text-[#8B2B3E] mt-0.5" />
-              <div>
-                <p className="font-semibold text-[#1a0a0e] mb-1">{item.label}</p>
-                <p className="text-sm text-[#6b4c52] leading-relaxed">{item.desc}</p>
-              </div>
-            </div>
+            <ItemCard key={item.label} item={item} />
           ))}
         </div>
       </div>
