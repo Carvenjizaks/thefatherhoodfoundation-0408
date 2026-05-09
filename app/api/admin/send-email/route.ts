@@ -100,8 +100,12 @@ export async function POST(request: Request) {
     for (const recipient of recipients) {
       try {
         const recipientName = `${recipient.firstName} ${recipient.lastName}`.trim() || recipient.email
-        const html = buildEmailHTML(subject, body, recipientName)
-        const text = `Dear ${recipientName},\n\n${body}\n\nWarm regards,\nThe Fatherhood Foundation`
+        // Replace placeholders {firstName} and {lastName} in the body
+        const personalizedBody = body
+          .replace(/\{firstName\}/g, recipient.firstName || "")
+          .replace(/\{lastName\}/g, recipient.lastName || "")
+        const html = buildEmailHTML(subject, personalizedBody, recipientName)
+        const text = `Dear ${recipientName},\n\n${personalizedBody}\n\nWarm regards,\nThe Fatherhood Foundation`
 
         await sendEmailSMTP(recipient.email, recipientName, subject, html, text)
         results.push({ email: recipient.email, success: true })
