@@ -45,8 +45,8 @@ const events = [
     isTableTalk: true,
     nextSession: "6 June 2026",
     description: "A monthly breakfast gathering where men rub shoulders, share life experiences, and engage in meaningful conversations about the 'Matters of Life' — as men, husbands, and fathers. Build lasting connections and grow together.",
-    price: "NAD 50 per person",
-    priceAmount: 50,
+    price: "NAD 65 per person",
+    priceAmount: 65,
     detailsPage: "/mentoring-men",
   },
   {
@@ -92,7 +92,7 @@ const events = [
   {
     id: "mgm-sept-2026",
     slug: "mgm-sept-2026",
-    title: "MyGreatMarriage Seminar - \"Connect\"",
+    title: "MyGreatMarriage Conference",
     subtitle: "Marriage Enrichment Event for Couples - Upcoming",
     dates: "September 2026",
     time: "To be Announced",
@@ -101,7 +101,7 @@ const events = [
     registrationOpen: false,
     requiresSpouse: true,
     isUpcoming: true,
-    description: "Join us for the MyGreatMarriage Seminar - \"Connect\" in September 2026. A powerful seminar for couples to reconnect, rediscover, and reignite their marriage. Registration opening soon!",
+    description: "Join us for the next MyGreatMarriage Conference in September 2026. A powerful conference for couples to reconnect, rediscover, and reignite their marriage. Registration opening soon!",
     price: "TBA",
     priceAmount: 0,
     detailsPage: "/my-great-marriage",
@@ -584,7 +584,7 @@ function TableTalkRegistrationModal({
                 <p><strong>Date:</strong> {selectedSession?.date}</p>
                 <p><strong>Time:</strong> 8:30am - 10:30am</p>
                 <p><strong>Location:</strong> Scouts Hall, Suiderhof, Windhoek</p>
-                <p><strong>Amount Due:</strong> NAD 50</p>
+                <p><strong>Amount Due:</strong> NAD 65</p>
               </div>
               <div className="border-t pt-3 mt-3">
                 <p className="font-medium mb-2">Banking Details (EFT):</p>
@@ -697,7 +697,7 @@ function TableTalkRegistrationModal({
             {/* Registration Fee */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-semibold mb-2">Registration Fee</h4>
-              <p className="text-2xl font-bold text-[#8B2B3E]">NAD 50 per person</p>
+              <p className="text-2xl font-bold text-[#8B2B3E]">NAD 65 per person</p>
               <p className="text-sm text-gray-600 mt-2">
                 Payment instructions will be provided after registration.
               </p>

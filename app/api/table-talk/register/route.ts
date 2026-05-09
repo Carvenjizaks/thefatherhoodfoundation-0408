@@ -84,7 +84,7 @@ export async function POST(request: Request) {
         sessionTime: "8:30am - 10:30am",
         location: "Scouts Hall, Suiderhof, Windhoek",
         dynamicCode,
-        paymentAmount: "NAD 50",
+        paymentAmount: "NAD 65",
       })
       console.log("[v0] Registration confirmation email result:", confirmResult)
 
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
         registrantName: `${firstName} ${lastName}`,
         registrantEmail: email,
         registrantPhone: phone,
-        paymentAmount: "NAD 50",
+        paymentAmount: "NAD 65",
         registrationCode: dynamicCode,
       })
       console.log("[v0] Admin notification result:", adminResult)
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
         sessionDate,
         sessionTime: "8:30am - 10:30am",
         location: "Scouts Hall, Suiderhof, Windhoek",
-        paymentAmount: "NAD 50",
+        paymentAmount: "NAD 65",
         paymentEmail: "finance@fathersfound.org",
       },
     })
