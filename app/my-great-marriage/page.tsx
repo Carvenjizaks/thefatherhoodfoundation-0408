@@ -119,11 +119,11 @@ export default function MyGreatMarriagePage() {
                 {/* Logo - positioned left */}
                 <div className="flex-shrink-0">
                   <Image
-                    src="/images/mgm-logo.jpg"
+                    src="/images/mgm-logo.png"
                     alt="My Great Marriage Logo"
                     width={200}
                     height={200}
-                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain mix-blend-screen"
+                    className="w-36 h-36 lg:w-48 lg:h-48 object-contain"
                   />
                 </div>
                 
