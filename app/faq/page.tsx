@@ -94,7 +94,7 @@ const faqs = [
   {
     question: "What is Table Talk for Men?",
     answer:
-      "Table Talk for Men is a monthly gathering where men come together for honest conversation, mutual encouragement, and shared meals. Sessions are held at Scouts Hall, Suiderhof, Windhoek from 8:30am to 10:30am. Registration costs NAD 50 per person, which includes a light meal and drinks. You can register through our Get Involved page.",
+      "Table Talk for Men is a monthly gathering where men come together for honest conversation, mutual encouragement, and shared meals. Sessions are held at Scouts Hall, Suiderhof, Windhoek from 8:30am to 10:30am. Registration costs NAD 65 per person, which includes a light meal and drinks. You can register through our Get Involved page.",
   },
   {
     question: "How much does the MyGreatMarriage Conference cost?",
@@ -109,7 +109,7 @@ const faqs = [
   {
     question: "How do I register for Table Talk for Men?",
     answer:
-      "To register for Table Talk for Men, visit our Get Involved page and fill out the registration form in the Sign Up Today section. Select your preferred session date, provide your contact details, and complete the registration. You will receive a unique Dynamic Code for payment reference. The registration fee is NAD 50 per person.",
+      "To register for Table Talk for Men, visit our Get Involved page and fill out the registration form in the Sign Up Today section. Select your preferred session date, provide your contact details, and complete the registration. You will receive a unique Dynamic Code for payment reference. The registration fee is NAD 65 per person.",
   },
   {
     question: "What is the Missions for Men program?",

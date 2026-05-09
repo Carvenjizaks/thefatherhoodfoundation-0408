@@ -590,7 +590,7 @@ export default function MentoringMenPage() {
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-10 max-w-md mx-auto">
                 <p className="text-white/70 text-sm mb-2">Registration Fee</p>
                 <p className="text-4xl font-bold text-white mb-2">
-                  NAD 50 <span className="text-lg font-normal text-white/60">per person</span>
+                  NAD 65 <span className="text-lg font-normal text-white/60">per person</span>
                 </p>
                 <p className="text-white/60 text-sm">Includes breakfast and materials</p>
               </div>
