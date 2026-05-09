@@ -38,14 +38,11 @@ function emailWrapper(content: string, previewText: string = ""): string {
         <!-- Footer -->
         <tr>
           <td style="background:#fdf8f3;padding:28px 40px;border-top:1px solid #e8d8c8;">
-            <p style="margin:0 0 8px;font-size:12px;color:#8B6B5A;font-family:Arial,sans-serif;text-align:center;">
-              My Great Marriage &mdash; The Fatherhood Foundation
-            </p>
-            <p style="margin:0 0 12px;font-size:11px;color:#B09080;font-family:Arial,sans-serif;text-align:center;line-height:1.6;">
-              Strengthening marriages through practical tools, biblical truth, and supportive community.
-            </p>
-            <p style="margin:0;font-size:11px;color:#B09080;font-family:Arial,sans-serif;text-align:center;">
+            <p style="margin:0 0 12px;font-size:11px;color:#B09080;font-family:Arial,sans-serif;text-align:center;">
               PLACEHOLDER_FOOTER_LINKS
+            </p>
+            <p style="margin:0;font-size:11px;color:#8B6B5A;font-family:Arial,sans-serif;text-align:center;">
+              The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA
             </p>
           </td>
         </tr>
@@ -142,7 +139,8 @@ View your Marriage Check-In: ${safeUrl("/my-great-marriage/check-in")}
 Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
 
 We are honored to serve your marriage.
-The Fatherhood Foundation`
+
+The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
   return { subject, html, text }
 }
@@ -247,7 +245,7 @@ ${params.isCouple ? "Complete Your Marriage Check-In" : "Visit My Great Marriage
 Manage Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.preferenceToken}`)}
 Unsubscribe: ${safeUrl(`/unsubscribe/${params.preferenceToken}`)}
 
-The Fatherhood Foundation`
+The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
   return { subject: params.emailBlock.subject, html, text }
 }
@@ -380,11 +378,12 @@ Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} an
 Here's to many more years of love, laughter, and growing together in Christ!
 
 With love and celebration,
-The Fatherhood Foundation
 My Great Marriage
 
 Husband Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.husbandToken}`)}
-Wife Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.wifeToken}`)}`
+Wife Preferences: ${safeUrl(`/my-great-marriage/preferences/${params.wifeToken}`)}
+
+The Fatherhood Foundation@2026 - 18 Liliencron street, Eros, Windhoek, NA`
 
   return { subject, html, text }
 }
