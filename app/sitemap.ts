@@ -134,6 +134,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
+
+    // My Great Marriage Sub-pages
+    {
+      url: `${baseUrl}/my-great-marriage/keep-your-marriage-fresh`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/my-great-marriage/check-in`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
   ]
 
   return routes
