@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import {
@@ -415,7 +416,7 @@ export default function MyGreatMarriageEventPage() {
               </FadeIn>
               <FadeIn direction="up" delay={0.3}>
                 <p className="text-xl lg:text-2xl text-[#1E3A5F]/80 max-w-xl leading-relaxed">
-                  A transformative conference for couples seeking deeper connection and renewed love.
+                  Thank you to all couples who attended our May 2026 conference! Join us for the next MyGreatMarriage Conference in September 2026.
                 </p>
               </FadeIn>
             </div>
@@ -431,8 +432,8 @@ export default function MyGreatMarriageEventPage() {
                     <p className="text-[#3D2314] font-medium">WHS (Windhoek High School)</p>
                   </div>
                   <div>
-                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">DATE</p>
-                    <p className="text-[#3D2314] font-medium">7, 8 & 9 May 2026</p>
+                    <p className="text-[#3D2314]/60 text-xs font-medium tracking-wider uppercase mb-1">EVENT DATE</p>
+                    <p className="text-[#3D2314] font-medium">7, 8 & 9 May 2026 (Completed)</p>
                   </div>
                   {new Date() < EARLY_BIRD_END_DATE ? (
                     <div>
@@ -449,20 +450,16 @@ export default function MyGreatMarriageEventPage() {
                     </div>
                   )}
                 </div>
-                {REGISTRATION_CLOSED ? (
-                  <div className="bg-[#8B2B3E]/50 text-white font-bold rounded-full px-8 py-3">
-                    Registration Closed
-                  </div>
-                ) : (
-                  <Button 
-                    onClick={() => setIsOpen(true)}
-                    size="lg" 
-                    className="bg-[#8B2B3E] text-white hover:bg-[#8B2B3E]/90 font-bold rounded-full px-8 group"
-                  >
-                    GET TICKETS
+                <Button 
+                  asChild
+                  size="lg" 
+                  className="bg-[#D4A574] hover:bg-[#c4956a] text-[#1E3A5F] font-bold rounded-full px-8 group"
+                >
+                  <Link href="/events">
+                    View Upcoming Events
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                )}
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>

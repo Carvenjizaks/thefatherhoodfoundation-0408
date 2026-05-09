@@ -53,19 +53,17 @@ const events = [
     id: "mgm-may-2026",
     slug: "mgm-may-2026",
     title: "MyGreatMarriage Conference",
-    subtitle: "Marriage Enrichment Event for Couples",
+    subtitle: "Marriage Enrichment Event for Couples (Past Event)",
     dates: "7, 8 & 9 May 2026",
     time: "Thursday: 7:00pm-9:00pm | Friday: 7:00pm-9:00pm | Saturday: 8:30am-1:00pm",
     location: "WHS (Windhoek High School)",
     banner: "/images/couples/couple-together-1.jpg",
-    registrationOpen: true,
+    registrationOpen: false,
     requiresSpouse: true,
-    description: "A powerful 3-day conference for couples to reconnect, rediscover, and reignite their marriage. Practical tools, inspiring sessions, and meaningful time together.",
+    isPastEvent: true,
+    description: "This event has concluded. Thank you to all couples who attended! Join us for the next MyGreatMarriage Conference in September 2026.",
     price: "NAD 550 per couple",
     priceAmount: 550,
-    earlyBirdPrice: "NAD 400 per couple",
-    earlyBirdAmount: 400,
-    earlyBirdEndDate: "2026-05-01",
     detailsPage: "/events/my-great-marriage-2026",
   },
 
@@ -94,17 +92,19 @@ const events = [
   {
     id: "mgm-sept-2026",
     slug: "mgm-sept-2026",
-    title: "MyGreatMarriage Follow-Up",
-    subtitle: "Marriage Enrichment Continuation",
-    dates: "3, 4 & 5 September 2026",
-    time: "Evening Session: 6:00pm - 9:00pm",
+    title: "MyGreatMarriage Conference",
+    subtitle: "Marriage Enrichment Event for Couples - Upcoming",
+    dates: "September 2026",
+    time: "To be Announced",
     location: "Venue: To be Announced",
     banner: "/images/couples/couple-1.jpg",
     registrationOpen: false,
     requiresSpouse: true,
-    description: "Follow-up session for couples who attended the May conference to continue their marriage journey.",
+    isUpcoming: true,
+    description: "Join us for the next MyGreatMarriage Conference in September 2026. A powerful conference for couples to reconnect, rediscover, and reignite their marriage. Registration opening soon!",
     price: "TBA",
     priceAmount: 0,
+    detailsPage: "/my-great-marriage",
   },
 ]
 
@@ -765,8 +765,22 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           )}
           
           <div className="absolute top-4 right-4 z-10">
-            <Badge className={`${event.registrationOpen ? 'bg-blue-600 animate-pulse' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
-              {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
+            <Badge className={`${
+              (event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent 
+                ? 'bg-gray-500' 
+                : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming 
+                  ? 'bg-[#D4A574]' 
+                  : event.registrationOpen 
+                    ? 'bg-blue-600 animate-pulse' 
+                    : 'bg-[#8B2B3E]'
+            } text-white px-3 py-1 text-sm shadow-lg`}>
+              {(event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent 
+                ? 'Past Event' 
+                : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming 
+                  ? 'Coming Soon' 
+                  : event.registrationOpen 
+                    ? 'Registration Open' 
+                    : 'Registration Opening Soon'}
             </Badge>
           </div>
         </div>
@@ -821,8 +835,22 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           )}
           
           <div className="absolute top-4 right-4 z-10">
-            <Badge className={`${event.registrationOpen ? 'bg-blue-600' : 'bg-[#8B2B3E]'} text-white px-3 py-1 text-sm shadow-lg`}>
-              {event.registrationOpen ? 'Registration Open' : 'Registration Opening Soon'}
+            <Badge className={`${
+              (event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent 
+                ? 'bg-gray-500' 
+                : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming 
+                  ? 'bg-[#D4A574]' 
+                  : event.registrationOpen 
+                    ? 'bg-blue-600' 
+                    : 'bg-[#8B2B3E]'
+            } text-white px-3 py-1 text-sm shadow-lg`}>
+              {(event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent 
+                ? 'Past Event' 
+                : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming 
+                  ? 'Coming Soon' 
+                  : event.registrationOpen 
+                    ? 'Registration Open' 
+                    : 'Registration Opening Soon'}
             </Badge>
           </div>
         </div>
@@ -878,7 +906,21 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           )}
         </div>
 
-        {event.registrationOpen ? (
+        {(event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent ? (
+          <Button
+            disabled
+            className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed"
+          >
+            Event Completed
+          </Button>
+        ) : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming ? (
+          <Button
+            disabled
+            className="w-full bg-[#D4A574]/50 text-[#3D2314] py-3 text-lg cursor-not-allowed"
+          >
+            Registration Opening Soon
+          </Button>
+        ) : event.registrationOpen ? (
           <Button
             onClick={onRegister}
             className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] py-3 text-lg"
