@@ -246,6 +246,143 @@ The Fatherhood Foundation`
   return { subject: params.emailBlock.subject, html, text }
 }
 
+export function buildAnniversaryEmail(params: {
+  husbandFirstName: string
+  wifeFirstName: string
+  yearsMarried: number
+  anniversaryDate: string // Format: YYYY-MM-DD
+  husbandToken: string
+  wifeToken: string
+}): { subject: string; html: string; text: string } {
+  const formattedDate = new Date(params.anniversaryDate).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  })
+  
+  const yearWord = params.yearsMarried === 1 ? "year" : "years"
+  const subject = `Happy Anniversary, ${params.husbandFirstName} & ${params.wifeFirstName}! Celebrating ${params.yearsMarried} ${yearWord} Together`
+  const previewText = `Wishing you both a beautiful anniversary celebration filled with love and gratitude.`
+
+  const body = `
+    <tr><td style="padding:40px 40px 24px;">
+      <!-- Anniversary Heart Icon -->
+      <div style="text-align:center;margin-bottom:24px;">
+        <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+          <tr>
+            <td style="background:linear-gradient(135deg, #8B2B3E 0%, #D4A574 100%);border-radius:50%;width:80px;height:80px;text-align:center;vertical-align:middle;">
+              <span style="font-size:36px;line-height:80px;">&#10084;</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;text-align:center;">Happy Anniversary</p>
+      <h1 style="margin:0 0 24px;font-size:28px;color:#1a0a0e;font-family:Georgia,serif;font-weight:bold;line-height:1.3;text-align:center;">
+        ${params.husbandFirstName} & ${params.wifeFirstName}
+      </h1>
+
+      <p style="margin:0 0 20px;font-size:16px;color:#3D2314;line-height:1.8;font-family:Arial,sans-serif;text-align:center;">
+        Today marks <strong>${params.yearsMarried} ${yearWord}</strong> of walking together in love, faith, and commitment. What a beautiful journey you have shared!
+      </p>
+
+      <!-- Scripture block -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+        <tr><td style="background:#fdf8f3;border-left:4px solid #8B2B3E;padding:20px 24px;border-radius:0 8px 8px 0;">
+          <p style="margin:0 0 6px;font-size:16px;color:#1a0a0e;font-family:Georgia,serif;font-style:italic;">
+            &ldquo;Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres. Love never fails.&rdquo;
+          </p>
+          <p style="margin:0;font-size:12px;color:#8B6B5A;font-family:Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">1 Corinthians 13:4-8</p>
+        </td></tr>
+      </table>
+
+      <p style="margin:0 0 20px;font-size:15px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
+        ${params.husbandFirstName} and ${params.wifeFirstName}, your marriage is a testimony of God&apos;s faithfulness. Every challenge you have faced together, every joy you have celebrated, and every ordinary moment you have shared has woven a story of grace and love.
+      </p>
+
+      <!-- Celebration box -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+        <tr><td style="background:#3D1520;border-radius:12px;padding:24px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">Celebrating</p>
+          <p style="margin:0 0 4px;font-size:32px;color:#ffffff;font-family:Georgia,serif;font-weight:bold;">${params.yearsMarried} ${params.yearsMarried === 1 ? "Year" : "Years"}</p>
+          <p style="margin:0;font-size:14px;color:#f5e8d8;font-family:Arial,sans-serif;">of Marriage &bull; ${formattedDate}</p>
+        </td></tr>
+      </table>
+
+      <p style="margin:0 0 20px;font-size:15px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;">
+        As you celebrate today, we encourage you to take a moment to reflect on your journey together. Thank God for bringing you this far, and look forward with hope to the years ahead.
+      </p>
+
+      <!-- Ideas box -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+        <tr><td style="background:#fdf8f3;border-radius:8px;padding:20px 24px;">
+          <p style="margin:0 0 12px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8B6B5A;font-family:Arial,sans-serif;font-weight:bold;">Ways to Celebrate Today</p>
+          <ul style="margin:0;padding-left:20px;font-size:14px;color:#3D2314;font-family:Arial,sans-serif;line-height:2;">
+            <li>Share your favorite memory from this past year</li>
+            <li>Write each other a short note of appreciation</li>
+            <li>Pray together and thank God for your marriage</li>
+            <li>Plan something special, even if it is simple</li>
+          </ul>
+        </td></tr>
+      </table>
+
+      <!-- Prayer -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+        <tr><td style="background:#3D1520;border-radius:8px;padding:20px 24px;">
+          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#D4A574;font-family:Arial,sans-serif;">Our Prayer for You</p>
+          <p style="margin:0;font-size:14px;color:#f5e8d8;font-family:Georgia,serif;font-style:italic;line-height:1.7;">
+            Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} and for the gift of their marriage. Bless them on this anniversary and in the year ahead. Deepen their love, strengthen their bond, and fill their home with Your peace. May their marriage continue to reflect Your faithfulness. Amen.
+          </p>
+        </td></tr>
+      </table>
+
+      <p style="margin:0 0 24px;font-size:16px;color:#1a0a0e;font-family:Georgia,serif;text-align:center;font-style:italic;">
+        Here&apos;s to many more years of love, laughter, and growing together in Christ!
+      </p>
+
+      <p style="margin:24px 0 0;font-size:14px;color:#3D2314;line-height:1.7;font-family:Arial,sans-serif;text-align:center;">
+        With love and celebration,<br/>
+        <strong>The Fatherhood Foundation</strong><br/>
+        <em>My Great Marriage</em>
+      </p>
+    </td></tr>
+  `
+
+  const html = emailWrapper(body, previewText).replace(
+    "PLACEHOLDER_FOOTER_LINKS",
+    footerLinks(params.husbandToken, params.wifeToken)
+  )
+
+  const text = `Happy Anniversary, ${params.husbandFirstName} and ${params.wifeFirstName}!
+
+Today marks ${params.yearsMarried} ${yearWord} of walking together in love, faith, and commitment. What a beautiful journey you have shared!
+
+"Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres. Love never fails." — 1 Corinthians 13:4-8
+
+${params.husbandFirstName} and ${params.wifeFirstName}, your marriage is a testimony of God's faithfulness. Every challenge you have faced together, every joy you have celebrated, and every ordinary moment you have shared has woven a story of grace and love.
+
+Celebrating ${params.yearsMarried} ${params.yearsMarried === 1 ? "Year" : "Years"} of Marriage • ${formattedDate}
+
+Ways to Celebrate Today:
+- Share your favorite memory from this past year
+- Write each other a short note of appreciation
+- Pray together and thank God for your marriage
+- Plan something special, even if it is simple
+
+Our Prayer for You:
+Lord, we thank You for ${params.husbandFirstName} and ${params.wifeFirstName} and for the gift of their marriage. Bless them on this anniversary and in the year ahead. Deepen their love, strengthen their bond, and fill their home with Your peace. May their marriage continue to reflect Your faithfulness. Amen.
+
+Here's to many more years of love, laughter, and growing together in Christ!
+
+With love and celebration,
+The Fatherhood Foundation
+My Great Marriage
+
+Husband Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.husbandToken}
+Wife Preferences: ${SITE_URL}/my-great-marriage/preferences/${params.wifeToken}`
+
+  return { subject, html, text }
+}
+
 export function buildAdminNotificationEmail(params: {
   husbandFirstName: string
   husbandLastName: string

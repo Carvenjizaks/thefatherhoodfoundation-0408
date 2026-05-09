@@ -14,7 +14,7 @@ export type SignupFormData = {
   wifeEmail: string
   country: string
   city?: string
-  anniversaryMonth?: number
+  anniversaryDate?: string // Format: YYYY-MM-DD
   receiveCoupleEmails: boolean
   receiveHusbandEmails: boolean
   receiveWifeEmails: boolean
@@ -67,7 +67,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
         wife_email: wEmail,
         country: data.country,
         city: data.city?.trim() || null,
-        anniversary_month: data.anniversaryMonth || null,
+        anniversary_date: data.anniversaryDate || null,
         receive_couple_emails: data.receiveCoupleEmails,
         receive_husband_emails: data.receiveHusbandEmails,
         receive_wife_emails: data.receiveWifeEmails,
