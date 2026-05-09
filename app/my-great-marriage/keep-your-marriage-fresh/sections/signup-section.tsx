@@ -4,11 +4,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { submitMgmSignup, type SignupFormData } from "../actions"
 
-const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-]
-
 const initialForm: SignupFormData = {
   husbandFirstName: "",
   husbandLastName: "",
@@ -18,7 +13,7 @@ const initialForm: SignupFormData = {
   wifeEmail: "",
   country: "Namibia",
   city: "",
-  anniversaryMonth: undefined,
+  anniversaryDate: undefined,
   receiveCoupleEmails: true,
   receiveHusbandEmails: true,
   receiveWifeEmails: true,
@@ -173,11 +168,15 @@ export default function SignupSection() {
           </div>
 
           <div>
-            <label htmlFor="anniversaryMonth" className="block text-sm font-semibold text-[#1a0a0e] mb-1">Anniversary Month <span className="text-[#8B6B5A] font-normal">(optional)</span></label>
-            <select id="anniversaryMonth" value={form.anniversaryMonth ?? ""} onChange={(e) => set("anniversaryMonth", e.target.value ? parseInt(e.target.value) : undefined)} className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] bg-white focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40">
-              <option value="">Select month</option>
-              {months.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
-            </select>
+            <label htmlFor="anniversaryDate" className="block text-sm font-semibold text-[#1a0a0e] mb-1">Anniversary Date <span className="text-[#8B6B5A] font-normal">(optional)</span></label>
+            <input 
+              id="anniversaryDate" 
+              type="date" 
+              value={form.anniversaryDate ?? ""} 
+              onChange={(e) => set("anniversaryDate", e.target.value || undefined)} 
+              className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] bg-white focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
+            />
+            <p className="text-xs text-[#8B6B5A] mt-1">We&apos;ll send you a special congratulations on your anniversary</p>
           </div>
 
           <div className="border-t border-[#e8d8c8]" />
