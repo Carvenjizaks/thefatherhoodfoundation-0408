@@ -27,11 +27,6 @@ export async function sendMgmEmail(
   const apiKey = process.env.SMTP_API_KEY
   const channel = process.env.SMTP_CHANNEL
 
-  console.log("[MGM Email] Sending email to:", recipients.join(", "))
-  console.log("[MGM Email] Subject:", subject)
-  console.log("[MGM Email] SMTP_API_KEY exists:", !!apiKey)
-  console.log("[MGM Email] SMTP_CHANNEL:", channel)
-
   // Try SMTP.com API first
   if (apiKey && channel) {
     try {
@@ -53,8 +48,6 @@ export async function sendMgmEmail(
         },
       }
 
-      console.log("[MGM Email] Sending via SMTP.com API...")
-
       const res = await fetch(SMTP_API_URL, {
         method: "POST",
         headers: {
@@ -66,14 +59,10 @@ export async function sendMgmEmail(
 
       const data = await res.json()
 
-      console.log("[MGM Email] SMTP.com response status:", res.status)
-      console.log("[MGM Email] SMTP.com response:", JSON.stringify(data))
-
       if (res.ok) {
         // Extract message ID from response like: {"status": "success", "data": {"message": "accepted, msg_id: xxx"}}
         const msgIdMatch = data?.data?.message?.match(/msg_id:\s*([^\s]+)/)
         const messageId = msgIdMatch ? msgIdMatch[1] : data?.message_id
-        console.log("[MGM Email] SUCCESS - Email sent to:", recipients.join(", "), "messageId:", messageId)
         return { success: true, messageId }
       }
 
@@ -81,8 +70,6 @@ export async function sendMgmEmail(
     } catch (err) {
       console.error("[MGM Email] SMTP.com error:", err)
     }
-  } else {
-    console.log("[MGM Email] SMTP_API_KEY or SMTP_CHANNEL not set, using fallback")
   }
 
   // Fallback: send one by one via internal /api/send-email (supports single address)

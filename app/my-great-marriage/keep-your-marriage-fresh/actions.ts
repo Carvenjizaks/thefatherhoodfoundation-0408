@@ -85,9 +85,6 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
     }
 
     // Send welcome email immediately regardless of nurture send day
-    console.log("[MGM Signup] New subscription created:", newSub.id)
-    console.log("[MGM Signup] Sending welcome email to:", hEmail, wEmail)
-
     const welcomeEmail = buildWelcomeEmail({
       husbandFirstName: data.husbandFirstName,
       wifeFirstName: data.wifeFirstName,
@@ -96,7 +93,6 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
     })
 
     const welcomeResult = await sendMgmEmail({ to: [hEmail, wEmail], ...welcomeEmail })
-    console.log("[MGM Signup] Welcome email result:", JSON.stringify(welcomeResult))
 
     // Log welcome email
     await supabase.from("mgm_email_logs").insert({
@@ -112,7 +108,6 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
 
     // Admin notification
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "support@nexiumbi.com"
-    console.log("[MGM Signup] Sending admin notification to:", adminEmail)
     const adminNotif = buildAdminNotificationEmail({
       husbandFirstName: data.husbandFirstName,
       husbandLastName: data.husbandLastName,
@@ -123,8 +118,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
       country: data.country,
       city: data.city,
     })
-    const adminResult = await sendMgmEmail({ to: adminEmail, ...adminNotif })
-    console.log("[MGM Signup] Admin notification result:", JSON.stringify(adminResult))
+    await sendMgmEmail({ to: adminEmail, ...adminNotif })
 
     return { success: true }
   } catch (err) {
