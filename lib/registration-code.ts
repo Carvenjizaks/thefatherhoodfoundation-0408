@@ -44,7 +44,7 @@ export function getEventAbbreviation(eventSlug: string): string {
 
 /**
  * Generates a sequential registration code
- * Format: PREFIX-XXX (e.g., MGM-001, TT4M-102)
+ * Format: PREFIX-XX (e.g., MGM-01, TT4M-02)
  * 
  * @param eventSlug - The event slug to generate abbreviation from
  * @param currentMax - The current highest registration number for this event
@@ -53,7 +53,7 @@ export function getEventAbbreviation(eventSlug: string): string {
 export function generateRegistrationCode(eventSlug: string, currentMax: number = 0): string {
   const prefix = getEventAbbreviation(eventSlug)
   const nextNumber = currentMax + 1
-  const paddedNumber = String(nextNumber).padStart(3, '0')
+  const paddedNumber = String(nextNumber).padStart(2, '0')
   
   return `${prefix}-${paddedNumber}`
 }
@@ -74,8 +74,8 @@ export function extractCodeNumber(code: string): number | null {
  * Validates the format of a registration code
  */
 export function isValidCodeFormat(code: string): boolean {
-  // Format: 2-4 letter prefix, dash, 3+ digits (e.g., MGM-001, TT4M-102)
-  const codePattern = /^[A-Z0-9]{2,4}-\d{3,}$/
+  // Format: 2-4 letter prefix, dash, 2+ digits (e.g., MGM-01, TT4M-02)
+  const codePattern = /^[A-Z0-9]{2,4}-\d{2,}$/
   return codePattern.test(code.toUpperCase())
 }
 
