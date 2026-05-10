@@ -10,12 +10,14 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.thefatherhoodf
 /**
  * TEST ENDPOINT: Sends all email types in sequence with delays for testing
  * 
- * JOURNEY STRUCTURE (9 months total):
+ * JOURNEY STRUCTURE (12 months total):
  * - Cycle 1 (Months 1-3): FOUNDATION — Build your marriage on Christ
  * - 4-week pause
  * - Cycle 2 (Months 4-6): CONNECTION — Deepen intimacy and communication
  * - 4-week pause
  * - Cycle 3 (Months 7-9): GROWTH — Sustain and strengthen your marriage
+ * - 4-week pause
+ * - Cycle 4 (Months 10-12): TRUST — Restore, rebuild, and strengthen trust
  * 
  * EMAIL SEQUENCE (Per Month - 4 weeks):
  * - Week 1: COUPLES_1 - Shared encouragement (both receive)
@@ -36,14 +38,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Validate month is within 1-9
-    if (month < 1 || month > 9) {
+    // Validate month is within 1-12
+    if (month < 1 || month > 12) {
       return NextResponse.json({ 
-        error: "Month must be between 1 and 9",
+        error: "Month must be between 1 and 12",
         journeyStructure: {
           cycle1: "Months 1-3: Foundation",
           cycle2: "Months 4-6: Connection", 
           cycle3: "Months 7-9: Growth",
+          cycle4: "Months 10-12: Trust",
         }
       }, { status: 400 })
     }
