@@ -7,6 +7,8 @@
  * - Cycle 2 (Months 4-6): Connection — Deepen intimacy and communication
  * - 4-week pause
  * - Cycle 3 (Months 7-9): Growth — Sustain and strengthen your marriage
+ * - 4-week pause
+ * - Cycle 4 (Months 10-12): Trust — Restore, rebuild, and strengthen trust
  *
  * Nurture send day: Tuesday
  * Timezone for business logic: Africa/Johannesburg (UTC+2)
@@ -17,8 +19,8 @@
 const NURTURE_WEEKDAY = 2
 const TIMEZONE = "Africa/Johannesburg"
 
-// Total active months (3 cycles x 3 months)
-export const TOTAL_ACTIVE_MONTHS = 9
+// Total active months (4 cycles x 3 months)
+export const TOTAL_ACTIVE_MONTHS = 12
 
 // Pause weeks between cycles
 export const PAUSE_WEEKS = 4
@@ -28,6 +30,7 @@ export const CYCLES = [
   { start: 1, end: 3, theme: "Foundation", description: "Build your marriage on Christ" },
   { start: 4, end: 6, theme: "Connection", description: "Deepen intimacy and communication" },
   { start: 7, end: 9, theme: "Growth", description: "Sustain and strengthen your marriage" },
+  { start: 10, end: 12, theme: "Trust", description: "Restore, rebuild, and strengthen trust" },
 ]
 
 /**
