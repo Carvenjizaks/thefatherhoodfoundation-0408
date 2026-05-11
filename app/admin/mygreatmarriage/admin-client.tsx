@@ -3,7 +3,8 @@
 import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { Download, RefreshCw, UserX, Search, Mail } from "lucide-react"
+import { Download, RefreshCw, UserX, Search, Mail, Send } from "lucide-react"
+import EmailComposer from "@/components/admin/email-composer"
 
 type Subscription = Record<string, any>
 type EmailLog = Record<string, any>
@@ -39,6 +40,8 @@ export default function AdminDashboardClient({
   const [searchInput, setSearchInput] = useState(search)
   const [isPending, startTransition] = useTransition()
   const [actionMsg, setActionMsg] = useState("")
+  const [selectedSubs, setSelectedSubs] = useState<Set<string>>(new Set())
+  const [emailComposerOpen, setEmailComposerOpen] = useState(false)
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -81,6 +84,57 @@ export default function AdminDashboardClient({
     window.location.href = "/api/mgm/export-csv"
   }
 
+  function toggleSelectSub(subId: string) {
+    setSelectedSubs(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(subId)) {
+        newSet.delete(subId)
+      } else {
+        newSet.add(subId)
+      }
+      return newSet
+    })
+  }
+
+  function toggleSelectAll() {
+    if (selectedSubs.size === subscriptions.length) {
+      setSelectedSubs(new Set())
+    } else {
+      setSelectedSubs(new Set(subscriptions.map(s => s.id)))
+    }
+  }
+
+  const selectedRecipients = subscriptions
+    .filter(s => selectedSubs.has(s.id))
+    .flatMap(s => [
+      { id: s.id, email: s.husband_email, name: `${s.husband_first_name} ${s.husband_last_name}` },
+      { id: s.id, email: s.wife_email, name: `${s.wife_first_name} ${s.husband_last_name}` },
+    ])
+
+  async function handleSendEmail(data: { subject: string; body: string; fontFamily: string; fontSize: string; scheduledAt: string | null; recipients: string[] }) {
+    setActionMsg("")
+    const res = await fetch("/api/mgm/admin-actions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "send_bulk_email",
+        subIds: data.recipients,
+        subject: data.subject,
+        body: data.body,
+        scheduledAt: data.scheduledAt,
+      }),
+    })
+    if (res.ok) {
+      const scheduledMsg = data.scheduledAt 
+        ? `Email scheduled for ${new Date(data.scheduledAt).toLocaleString()}`
+        : `Email sent to ${selectedSubs.size} subscription(s)`
+      setActionMsg(scheduledMsg)
+      setSelectedSubs(new Set())
+    } else {
+      throw new Error("Failed to send email")
+    }
+  }
+
   return (
     <main className="min-h-screen bg-[#FDF8F3] py-12 px-6">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -91,10 +145,21 @@ export default function AdminDashboardClient({
             <p className="text-xs font-bold tracking-widest uppercase text-[#D4A574]">Admin</p>
             <h1 className="text-2xl font-bold text-[#1a0a0e]" style={{ fontFamily: "Georgia, serif" }}>My Great Marriage Dashboard</h1>
           </div>
-          <Button onClick={handleExportCsv} variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full bg-transparent flex items-center gap-2">
-            <Download className="w-4 h-4" />
-            Export CSV
-          </Button>
+          <div className="flex items-center gap-3">
+            {selectedSubs.size > 0 && (
+              <Button 
+                onClick={() => setEmailComposerOpen(true)} 
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full flex items-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                Email {selectedSubs.size} Selected
+              </Button>
+            )}
+            <Button onClick={handleExportCsv} variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full bg-transparent flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Export CSV
+            </Button>
+          </div>
         </div>
 
         {actionMsg && (
@@ -144,8 +209,16 @@ export default function AdminDashboardClient({
           <div className="bg-white rounded-2xl border border-[#e8d8c8] overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-[#e8d8c8] bg-[#fdf8f3]">
+<thead>
+                <tr className="border-b border-[#e8d8c8] bg-[#fdf8f3]">
+                    <th className="px-3 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedSubs.size === subscriptions.length && subscriptions.length > 0}
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 rounded border-[#e8d8c8] text-[#8B2B3E] accent-[#8B2B3E]"
+                      />
+                    </th>
                     <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Couple</th>
                     <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Location</th>
                     <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Progress</th>
@@ -155,9 +228,17 @@ export default function AdminDashboardClient({
                 </thead>
                 <tbody>
                   {subscriptions.length === 0 ? (
-                    <tr><td colSpan={5} className="text-center py-10 text-[#8B6B5A]">No subscriptions found</td></tr>
+                    <tr><td colSpan={6} className="text-center py-10 text-[#8B6B5A]">No subscriptions found</td></tr>
                   ) : subscriptions.map((sub) => (
-                    <tr key={sub.id} className="border-b border-[#f0e8e0] last:border-none hover:bg-[#fdf8f3]">
+                    <tr key={sub.id} className={`border-b border-[#f0e8e0] last:border-none hover:bg-[#fdf8f3] ${selectedSubs.has(sub.id) ? 'bg-[#8B2B3E]/5' : ''}`}>
+                      <td className="px-3 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedSubs.has(sub.id)}
+                          onChange={() => toggleSelectSub(sub.id)}
+                          className="w-4 h-4 rounded border-[#e8d8c8] text-[#8B2B3E] accent-[#8B2B3E]"
+                        />
+                      </td>
                       <td className="px-5 py-4">
                         <p className="font-semibold text-[#1a0a0e]">{sub.husband_first_name} &amp; {sub.wife_first_name} {sub.husband_last_name}</p>
                         <p className="text-xs text-[#8B6B5A]">{sub.husband_email}</p>
@@ -238,9 +319,16 @@ export default function AdminDashboardClient({
               </table>
             </div>
           </div>
-        </div>
+</div>
+  
+  </div>
 
-      </div>
+      <EmailComposer
+        open={emailComposerOpen}
+        onOpenChange={setEmailComposerOpen}
+        recipients={selectedRecipients}
+        onSend={handleSendEmail}
+      />
     </main>
   )
 }

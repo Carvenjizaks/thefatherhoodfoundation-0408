@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
-import { buildWelcomeEmail } from "@/lib/mgm/email-templates"
+import { buildWelcomeEmail, FROM_ADDRESS } from "@/lib/mgm/email-templates"
 import { sendMgmEmail } from "@/lib/mgm/send"
 
 async function isAdmin() {
@@ -12,7 +12,8 @@ async function isAdmin() {
 export async function POST(request: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const { action, subId } = await request.json()
+  const body = await request.json()
+  const { action, subId, subIds, subject, body: emailBody, scheduledAt } = body
   const supabase = await createClient()
 
   if (action === "mark_inactive") {
@@ -34,6 +35,112 @@ export async function POST(request: NextRequest) {
 
     await sendMgmEmail({ to: [sub.husband_email, sub.wife_email], ...email })
     return NextResponse.json({ success: true })
+  }
+
+  if (action === "send_bulk_email") {
+    if (!subIds || !subject || !emailBody) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    // Get all subscription details
+    const { data: subs } = await supabase
+      .from("mgm_subscriptions")
+      .select("*")
+      .in("id", subIds)
+
+    if (!subs || subs.length === 0) {
+      return NextResponse.json({ error: "No subscriptions found" }, { status: 404 })
+    }
+
+    // If scheduled, store in database for later processing
+    if (scheduledAt) {
+      const { error: insertError } = await supabase.from("scheduled_emails").insert({
+        subject,
+        html_body: emailBody,
+        text_body: emailBody.replace(/<[^>]*>/g, ""), // Strip HTML for text version
+        scheduled_at: scheduledAt,
+        subscription_ids: subIds,
+        status: "pending",
+        created_at: new Date().toISOString(),
+      })
+
+      if (insertError) {
+        console.error("[MGM] Failed to schedule email:", insertError)
+        return NextResponse.json({ error: "Failed to schedule email" }, { status: 500 })
+      }
+
+      return NextResponse.json({ success: true, scheduled: true })
+    }
+
+    // Send immediately
+    const recipients = subs.flatMap(sub => [sub.husband_email, sub.wife_email])
+    
+    // Build full HTML email with wrapper
+    const fullHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="background-color: #8B2B3E; padding: 30px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold;">My Great Marriage</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 30px;">
+              ${emailBody}
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f8f8f8; padding: 20px 30px; text-align: center;">
+              <p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation - Strengthening marriages, building families.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+    const textBody = emailBody.replace(/<[^>]*>/g, "")
+
+    const result = await sendMgmEmail({
+      to: recipients,
+      subject,
+      html: fullHtml,
+      text: textBody,
+    })
+
+    // Log the email
+    for (const sub of subs) {
+      await supabase.from("mgm_email_log").insert([
+        {
+          subscription_id: sub.id,
+          recipient_email: sub.husband_email,
+          stream_type: "ADMIN",
+          subject,
+          status: result.success ? "sent" : "failed",
+        },
+        {
+          subscription_id: sub.id,
+          recipient_email: sub.wife_email,
+          stream_type: "ADMIN",
+          subject,
+          status: result.success ? "sent" : "failed",
+        },
+      ])
+    }
+
+    return NextResponse.json({ success: result.success })
   }
 
   return NextResponse.json({ error: "Unknown action" }, { status: 400 })
