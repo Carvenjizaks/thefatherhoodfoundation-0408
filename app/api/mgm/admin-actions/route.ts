@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const body = await request.json()
-  const { action, subId, subIds, subject, body: emailBody, scheduledAt } = body
+  const { action, subId, subIds, subject, body: emailBody, scheduledAt, recipientType } = body
   const supabase = await createClient()
 
   if (action === "mark_inactive") {
@@ -72,8 +72,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, scheduled: true })
     }
 
-    // Send immediately
-    const recipients = subs.flatMap(sub => [sub.husband_email, sub.wife_email])
+    // Send immediately - filter by recipient type
+    let recipients: string[] = []
+    if (recipientType === "men") {
+      recipients = subs.map(sub => sub.husband_email)
+    } else if (recipientType === "women") {
+      recipients = subs.map(sub => sub.wife_email)
+    } else {
+      recipients = subs.flatMap(sub => [sub.husband_email, sub.wife_email])
+    }
     
     // Build full HTML email with wrapper
     const fullHtml = `
@@ -120,24 +127,30 @@ export async function POST(request: NextRequest) {
       text: textBody,
     })
 
-    // Log the email
+    // Log the email based on recipient type
     for (const sub of subs) {
-      await supabase.from("mgm_email_log").insert([
-        {
+      const logs = []
+      if (recipientType !== "women") {
+        logs.push({
           subscription_id: sub.id,
           recipient_email: sub.husband_email,
           stream_type: "ADMIN",
           subject,
           status: result.success ? "sent" : "failed",
-        },
-        {
+        })
+      }
+      if (recipientType !== "men") {
+        logs.push({
           subscription_id: sub.id,
           recipient_email: sub.wife_email,
           stream_type: "ADMIN",
           subject,
           status: result.success ? "sent" : "failed",
-        },
-      ])
+        })
+      }
+      if (logs.length > 0) {
+        await supabase.from("mgm_email_log").insert(logs)
+      }
     }
 
     return NextResponse.json({ success: result.success })

@@ -107,11 +107,11 @@ export default function AdminDashboardClient({
   const selectedRecipients = subscriptions
     .filter(s => selectedSubs.has(s.id))
     .flatMap(s => [
-      { id: s.id, email: s.husband_email, name: `${s.husband_first_name} ${s.husband_last_name}` },
-      { id: s.id, email: s.wife_email, name: `${s.wife_first_name} ${s.husband_last_name}` },
+      { id: s.id, email: s.husband_email, name: `${s.husband_first_name} ${s.husband_last_name}`, gender: "male" as const },
+      { id: s.id, email: s.wife_email, name: `${s.wife_first_name} ${s.husband_last_name}`, gender: "female" as const },
     ])
 
-  async function handleSendEmail(data: { subject: string; body: string; fontFamily: string; fontSize: string; scheduledAt: string | null; recipients: string[] }) {
+  async function handleSendEmail(data: { subject: string; body: string; fontFamily: string; fontSize: string; fontColor: string; scheduledAt: string | null; recipients: string[]; recipientType: "all" | "men" | "women" }) {
     setActionMsg("")
     const res = await fetch("/api/mgm/admin-actions", {
       method: "POST",
@@ -122,12 +122,14 @@ export default function AdminDashboardClient({
         subject: data.subject,
         body: data.body,
         scheduledAt: data.scheduledAt,
+        recipientType: data.recipientType,
       }),
     })
     if (res.ok) {
+      const recipientLabel = data.recipientType === "men" ? "men" : data.recipientType === "women" ? "women" : "participants"
       const scheduledMsg = data.scheduledAt 
-        ? `Email scheduled for ${new Date(data.scheduledAt).toLocaleString()}`
-        : `Email sent to ${selectedSubs.size} subscription(s)`
+        ? `Email scheduled for ${new Date(data.scheduledAt).toLocaleString()} (${recipientLabel})`
+        : `Email sent to ${data.recipients.length} subscription(s) (${recipientLabel})`
       setActionMsg(scheduledMsg)
       setSelectedSubs(new Set())
     } else {
