@@ -194,7 +194,7 @@ export default function AdminDashboardPage() {
   const [showDocDialog, setShowDocDialog] = useState(false)
   const [docName, setDocName] = useState("")
   const [docUrl, setDocUrl] = useState("")
-  const emailTextareaRef = useRef<HTMLTextAreaElement>(null)
+  const emailEditorRef = useRef<HTMLDivElement>(null)
 
   // Bulk selection state
   const [selectedEventRegs, setSelectedEventRegs] = useState<Set<string>>(new Set())
@@ -712,27 +712,55 @@ export default function AdminDashboardPage() {
     { value: "{{email}}", label: "Email" },
   ]
 
-  // Insert content at cursor position in email body
-  const insertAtCursor = (content: string) => {
-    const textarea = emailTextareaRef.current
-    if (!textarea) {
-      setEmailBody(prev => prev + content)
-      return
+  // Insert plain text at cursor in contenteditable editor
+  const insertAtCursor = (text: string) => {
+    const el = emailEditorRef.current
+    if (!el) return
+    el.focus()
+    const sel = window.getSelection()
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0)
+      range.deleteContents()
+      const node = document.createTextNode(text)
+      range.insertNode(node)
+      range.setStartAfter(node)
+      range.collapse(true)
+      sel.removeAllRanges()
+      sel.addRange(range)
+    } else {
+      el.innerHTML += text
     }
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const newBody = emailBody.substring(0, start) + content + emailBody.substring(end)
-    setEmailBody(newBody)
-    setTimeout(() => {
-      textarea.focus()
-      textarea.setSelectionRange(start + content.length, start + content.length)
-    }, 0)
+    setEmailBody(el.innerHTML)
+  }
+
+  // Insert HTML (links/docs) at cursor — renders visually, not as raw HTML string
+  const insertHtmlAtCursor = (html: string) => {
+    const el = emailEditorRef.current
+    if (!el) return
+    el.focus()
+    const sel = window.getSelection()
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0)
+      range.deleteContents()
+      const frag = document.createRange().createContextualFragment(html)
+      const lastNode = frag.lastChild
+      range.insertNode(frag)
+      if (lastNode) {
+        const after = document.createRange()
+        after.setStartAfter(lastNode)
+        after.collapse(true)
+        sel.removeAllRanges()
+        sel.addRange(after)
+      }
+    } else {
+      el.innerHTML += html
+    }
+    setEmailBody(el.innerHTML)
   }
 
   const insertLink = () => {
     if (!linkText.trim() || !linkUrl.trim()) return
-    const linkHtml = `<a href="${linkUrl}" style="color: #2563eb; text-decoration: underline;">${linkText}</a>`
-    insertAtCursor(linkHtml)
+    insertHtmlAtCursor(`<a href="${linkUrl}" style="color:#2563eb;text-decoration:underline;" target="_blank">${linkText}</a>`)
     setLinkText("")
     setLinkUrl("")
     setShowLinkDialog(false)
@@ -740,19 +768,15 @@ export default function AdminDashboardPage() {
 
   const insertDocLink = () => {
     if (!docName.trim() || !docUrl.trim()) return
-    const docHtml = `<a href="${docUrl}" style="color: #8B2B3E; text-decoration: underline;">📄 ${docName}</a>`
-    insertAtCursor(docHtml)
+    insertHtmlAtCursor(`<a href="${docUrl}" style="color:#8B2B3E;text-decoration:underline;" target="_blank">📄 ${docName}</a>`)
     setDocName("")
     setDocUrl("")
     setShowDocDialog(false)
   }
 
-  const openEmailForOne = (email: string, firstName: string, lastName: string) => {
-    setEmailRecipients([{ email, firstName, lastName }])
-    setEmailSubject("")
+  const resetEmailEditor = () => {
     setEmailBody("")
-    setEmailResult(null)
-    // Reset font settings
+    if (emailEditorRef.current) emailEditorRef.current.innerHTML = ""
     setFontFamily("Arial, sans-serif")
     setFontSize("14px")
     setFontColor("#1a0a0e")
@@ -760,6 +784,13 @@ export default function AdminDashboardPage() {
     setIsItalic(false)
     setIsUnderline(false)
     setTextAlign("left")
+  }
+
+  const openEmailForOne = (email: string, firstName: string, lastName: string) => {
+    setEmailRecipients([{ email, firstName, lastName }])
+    setEmailSubject("")
+    setEmailResult(null)
+    resetEmailEditor()
     setEmailDialogOpen(true)
   }
 
@@ -767,16 +798,8 @@ export default function AdminDashboardPage() {
     if (recipients.length === 0) return
     setEmailRecipients(recipients)
     setEmailSubject("")
-    setEmailBody("")
     setEmailResult(null)
-    // Reset font settings
-    setFontFamily("Arial, sans-serif")
-    setFontSize("14px")
-    setFontColor("#1a0a0e")
-    setIsBold(false)
-    setIsItalic(false)
-    setIsUnderline(false)
-    setTextAlign("left")
+    resetEmailEditor()
     setEmailDialogOpen(true)
   }
 
@@ -2227,14 +2250,14 @@ export default function AdminDashboardPage() {
                   ))}
                 </div>
 
-                {/* Textarea - Expanded for easier email writing */}
-                <Textarea
-                  ref={emailTextareaRef}
-                  value={emailBody}
-                  onChange={(e) => setEmailBody(e.target.value)}
-                  placeholder="Write your message here... Click the personalization buttons above to insert tags like {{first_name}}."
-                  rows={16}
-                  className="border-0 rounded-none focus-visible:ring-0 resize-y bg-background min-h-[300px]"
+                {/* Rich text editor — contenteditable so links render visually */}
+                <div
+                  ref={emailEditorRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  onInput={e => setEmailBody((e.currentTarget as HTMLDivElement).innerHTML)}
+                  data-placeholder="Write your message here... Click personalization buttons above to insert tags like {{first_name}}."
+                  className="min-h-[300px] p-3 bg-background outline-none overflow-y-auto"
                   style={{
                     fontFamily,
                     fontSize,
@@ -2243,6 +2266,8 @@ export default function AdminDashboardPage() {
                     fontStyle: isItalic ? "italic" : "normal",
                     textDecoration: isUnderline ? "underline" : "none",
                     textAlign,
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
                   }}
                 />
               </div>

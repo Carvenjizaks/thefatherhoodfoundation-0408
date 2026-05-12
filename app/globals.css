@@ -115,6 +115,17 @@
   }
 }
 
+/* Contenteditable placeholder for rich email editor */
+[contenteditable][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  pointer-events: none;
+  position: absolute;
+}
+[contenteditable][data-placeholder]:empty {
+  position: relative;
+}
+
 .animate-faces-scroll {
   animation: faces-scroll 30s linear infinite;
 }
