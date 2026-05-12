@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export const dynamic = "force-dynamic"
 
@@ -43,7 +43,17 @@ import {
   Settings,
   UserCog,
   Key,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Link as LinkIcon,
+  FileText,
+  User,
 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface TableTalkRegistration extends Record<string, unknown> {
   id: string
@@ -156,13 +166,29 @@ export default function AdminDashboardPage() {
   const [isResettingPassword, setIsResettingPassword] = useState(false)
   const [passwordResetResult, setPasswordResetResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
 
-  // Email compose state
+  // Email compose state with full font toolbar
   const [emailDialogOpen, setEmailDialogOpen] = useState(false)
   const [emailRecipients, setEmailRecipients] = useState<{ email: string; firstName: string; lastName: string }[]>([])
   const [emailSubject, setEmailSubject] = useState("")
   const [emailBody, setEmailBody] = useState("")
   const [isSendingEmail, setIsSendingEmail] = useState(false)
   const [emailResult, setEmailResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
+  
+  // Font toolbar state
+  const [fontFamily, setFontFamily] = useState("Arial, sans-serif")
+  const [fontSize, setFontSize] = useState("14px")
+  const [fontColor, setFontColor] = useState("#1a0a0e")
+  const [isBold, setIsBold] = useState(false)
+  const [isItalic, setIsItalic] = useState(false)
+  const [isUnderline, setIsUnderline] = useState(false)
+  const [textAlign, setTextAlign] = useState<"left" | "center" | "right">("left")
+  const [showLinkDialog, setShowLinkDialog] = useState(false)
+  const [linkText, setLinkText] = useState("")
+  const [linkUrl, setLinkUrl] = useState("")
+  const [showDocDialog, setShowDocDialog] = useState(false)
+  const [docName, setDocName] = useState("")
+  const [docUrl, setDocUrl] = useState("")
+  const emailTextareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Bulk selection state
   const [selectedEventRegs, setSelectedEventRegs] = useState<Set<string>>(new Set())
@@ -645,11 +671,89 @@ export default function AdminDashboardPage() {
     }
   }
 
+  // Font options
+  const FONT_FAMILIES = [
+    { value: "Arial, sans-serif", label: "Arial" },
+    { value: "Georgia, serif", label: "Georgia" },
+    { value: "Times New Roman, serif", label: "Times New Roman" },
+    { value: "Verdana, sans-serif", label: "Verdana" },
+    { value: "Tahoma, sans-serif", label: "Tahoma" },
+    { value: "Trebuchet MS, sans-serif", label: "Trebuchet MS" },
+    { value: "Helvetica, sans-serif", label: "Helvetica" },
+    { value: "Courier New, monospace", label: "Courier New" },
+  ]
+  const FONT_SIZES = [
+    { value: "12px", label: "Small" },
+    { value: "14px", label: "Normal" },
+    { value: "16px", label: "Medium" },
+    { value: "18px", label: "Large" },
+    { value: "20px", label: "X-Large" },
+    { value: "24px", label: "XX-Large" },
+  ]
+  const FONT_COLORS = [
+    { value: "#1a0a0e", label: "Black" },
+    { value: "#8B2B3E", label: "Maroon" },
+    { value: "#2563eb", label: "Blue" },
+    { value: "#16a34a", label: "Green" },
+    { value: "#dc2626", label: "Red" },
+    { value: "#9333ea", label: "Purple" },
+    { value: "#ea580c", label: "Orange" },
+    { value: "#6b7280", label: "Gray" },
+  ]
+  const PERSONALIZATION_TAGS = [
+    { value: "{{first_name}}", label: "First Name" },
+    { value: "{{last_name}}", label: "Last Name" },
+    { value: "{{email}}", label: "Email" },
+  ]
+
+  // Insert content at cursor position in email body
+  const insertAtCursor = (content: string) => {
+    const textarea = emailTextareaRef.current
+    if (!textarea) {
+      setEmailBody(prev => prev + content)
+      return
+    }
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const newBody = emailBody.substring(0, start) + content + emailBody.substring(end)
+    setEmailBody(newBody)
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(start + content.length, start + content.length)
+    }, 0)
+  }
+
+  const insertLink = () => {
+    if (!linkText.trim() || !linkUrl.trim()) return
+    const linkHtml = `<a href="${linkUrl}" style="color: #2563eb; text-decoration: underline;">${linkText}</a>`
+    insertAtCursor(linkHtml)
+    setLinkText("")
+    setLinkUrl("")
+    setShowLinkDialog(false)
+  }
+
+  const insertDocLink = () => {
+    if (!docName.trim() || !docUrl.trim()) return
+    const docHtml = `<a href="${docUrl}" style="color: #8B2B3E; text-decoration: underline;">📄 ${docName}</a>`
+    insertAtCursor(docHtml)
+    setDocName("")
+    setDocUrl("")
+    setShowDocDialog(false)
+  }
+
   const openEmailForOne = (email: string, firstName: string, lastName: string) => {
     setEmailRecipients([{ email, firstName, lastName }])
     setEmailSubject("")
     setEmailBody("")
     setEmailResult(null)
+    // Reset font settings
+    setFontFamily("Arial, sans-serif")
+    setFontSize("14px")
+    setFontColor("#1a0a0e")
+    setIsBold(false)
+    setIsItalic(false)
+    setIsUnderline(false)
+    setTextAlign("left")
     setEmailDialogOpen(true)
   }
 
@@ -659,6 +763,14 @@ export default function AdminDashboardPage() {
     setEmailSubject("")
     setEmailBody("")
     setEmailResult(null)
+    // Reset font settings
+    setFontFamily("Arial, sans-serif")
+    setFontSize("14px")
+    setFontColor("#1a0a0e")
+    setIsBold(false)
+    setIsItalic(false)
+    setIsUnderline(false)
+    setTextAlign("left")
     setEmailDialogOpen(true)
   }
 
@@ -666,6 +778,26 @@ export default function AdminDashboardPage() {
     if (!emailSubject.trim() || !emailBody.trim()) return
     setIsSendingEmail(true)
     setEmailResult(null)
+
+    // Build styled HTML from the body
+    const styledContent = `<div style="font-family: ${fontFamily}; font-size: ${fontSize}; color: ${fontColor}; ${isBold ? "font-weight: bold;" : ""} ${isItalic ? "font-style: italic;" : ""} ${isUnderline ? "text-decoration: underline;" : ""} text-align: ${textAlign};">${emailBody.replace(/\n/g, "<br>")}</div>`
+
+    const fullHtml = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <tr><td style="background-color: #8B2B3E; padding: 30px; text-align: center;"><h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold;">The Fatherhood Foundation</h1></td></tr>
+        <tr><td style="padding: 30px;">${styledContent}</td></tr>
+        <tr><td style="background-color: #f8f8f8; padding: 20px 30px; text-align: center;"><p style="color: #999999; font-size: 12px; margin: 0;">The Fatherhood Foundation - Strengthening families, building communities.</p></td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+
     try {
       const response = await adminFetch("/api/admin/send-email", {
         method: "POST",
@@ -674,6 +806,7 @@ export default function AdminDashboardPage() {
           recipients: emailRecipients,
           subject: emailSubject,
           body: emailBody,
+          html: fullHtml,
         }),
       })
       const data = await response.json()
@@ -1928,9 +2061,9 @@ export default function AdminDashboardPage() {
       </main>
       <Footer />
 
-      {/* ==================== EMAIL COMPOSE DIALOG ==================== */}
+      {/* ==================== EMAIL COMPOSE DIALOG WITH FONT TOOLBAR ==================== */}
       <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2 text-lg">
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -1946,62 +2079,155 @@ export default function AdminDashboardPage() {
           </DialogHeader>
 
           {emailRecipients.length > 1 && (
-            <div className="max-h-24 overflow-y-auto bg-secondary/30 rounded-lg p-3 border border-border/40">
-              <div className="flex flex-wrap gap-1.5">
-                {emailRecipients.map((r, i) => (
+            <div className="max-h-20 overflow-y-auto bg-secondary/30 rounded-lg p-2 border border-border/40">
+              <div className="flex flex-wrap gap-1">
+                {emailRecipients.slice(0, 20).map((r, i) => (
                   <Badge key={i} variant="outline" className="text-xs bg-background border-border">
                     {r.firstName} {r.lastName}
                   </Badge>
                 ))}
+                {emailRecipients.length > 20 && (
+                  <Badge variant="outline" className="text-xs bg-background border-border">
+                    +{emailRecipients.length - 20} more
+                  </Badge>
+                )}
               </div>
             </div>
           )}
 
-          <div className="space-y-4 mt-2">
-            <div className="space-y-2">
+          <div className="space-y-3 mt-2">
+            {/* Subject */}
+            <div className="space-y-1.5">
               <Label htmlFor="email-subject" className="text-foreground font-medium text-sm">Subject</Label>
               <Input
                 id="email-subject"
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
-                placeholder="e.g. Payment Confirmation Required"
+                placeholder="e.g. Important Update from The Fatherhood Foundation"
                 className="border-border bg-secondary/30 focus:bg-background"
               />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="email-body" className="text-foreground font-medium text-sm">Message</Label>
-                <div className="flex gap-1.5">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-6 text-xs px-2 border-border"
-                    onClick={() => setEmailBody(prev => prev + "{firstName}")}
-                  >
-                    + First Name
+
+            {/* Message Editor with Font Toolbar */}
+            <div className="space-y-1.5">
+              <Label className="text-foreground font-medium text-sm">Message</Label>
+              <div className="border-2 border-primary/50 rounded-lg overflow-hidden focus-within:border-primary">
+                {/* FONT TOOLBAR ROW 1 */}
+                <div className="bg-[#fdf8f3] border-b border-border/40 p-2 flex flex-wrap items-center gap-2">
+                  {/* Font Family */}
+                  <Select value={fontFamily} onValueChange={setFontFamily}>
+                    <SelectTrigger className="w-[130px] h-8 text-xs bg-background border-border">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_FAMILIES.map(f => (
+                        <SelectItem key={f.value} value={f.value} className="text-xs">{f.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Font Size */}
+                  <Select value={fontSize} onValueChange={setFontSize}>
+                    <SelectTrigger className="w-[90px] h-8 text-xs bg-background border-border">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_SIZES.map(s => (
+                        <SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Font Color */}
+                  <Select value={fontColor} onValueChange={setFontColor}>
+                    <SelectTrigger className="w-[100px] h-8 text-xs bg-background border-border">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: fontColor }} />
+                        <span>{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_COLORS.map(c => (
+                        <SelectItem key={c.value} value={c.value} className="text-xs">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full border" style={{ backgroundColor: c.value }} />
+                            {c.label}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <div className="w-px h-6 bg-border/60 mx-1" />
+
+                  {/* Bold/Italic/Underline */}
+                  <Button type="button" variant={isBold ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${isBold ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setIsBold(!isBold)}>
+                    <Bold className="w-4 h-4" />
                   </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-6 text-xs px-2 border-border"
-                    onClick={() => setEmailBody(prev => prev + "{lastName}")}
-                  >
-                    + Last Name
+                  <Button type="button" variant={isItalic ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${isItalic ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setIsItalic(!isItalic)}>
+                    <Italic className="w-4 h-4" />
+                  </Button>
+                  <Button type="button" variant={isUnderline ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${isUnderline ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setIsUnderline(!isUnderline)}>
+                    <Underline className="w-4 h-4" />
+                  </Button>
+
+                  <div className="w-px h-6 bg-border/60 mx-1" />
+
+                  {/* Alignment */}
+                  <Button type="button" variant={textAlign === "left" ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${textAlign === "left" ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setTextAlign("left")}>
+                    <AlignLeft className="w-4 h-4" />
+                  </Button>
+                  <Button type="button" variant={textAlign === "center" ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${textAlign === "center" ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setTextAlign("center")}>
+                    <AlignCenter className="w-4 h-4" />
+                  </Button>
+                  <Button type="button" variant={textAlign === "right" ? "default" : "outline"} size="sm" className={`h-8 w-8 p-0 ${textAlign === "right" ? "bg-primary text-primary-foreground" : "border-border"}`} onClick={() => setTextAlign("right")}>
+                    <AlignRight className="w-4 h-4" />
                   </Button>
                 </div>
+
+                {/* FONT TOOLBAR ROW 2: Links, Docs, Personalization */}
+                <div className="bg-[#fdf8f3] border-b border-border/40 p-2 flex flex-wrap items-center gap-2">
+                  <Button type="button" variant="outline" size="sm" className="h-8 text-xs border-primary text-primary hover:bg-primary/10" onClick={() => setShowLinkDialog(true)}>
+                    <LinkIcon className="w-3.5 h-3.5 mr-1.5" />
+                    Insert Link
+                  </Button>
+                  <Button type="button" variant="outline" size="sm" className="h-8 text-xs border-primary text-primary hover:bg-primary/10" onClick={() => setShowDocDialog(true)}>
+                    <FileText className="w-3.5 h-3.5 mr-1.5" />
+                    Attach Doc
+                  </Button>
+
+                  <div className="w-px h-6 bg-border/60 mx-1" />
+
+                  <span className="text-xs text-muted-foreground font-medium">Personalize:</span>
+                  {PERSONALIZATION_TAGS.map(tag => (
+                    <Button key={tag.value} type="button" variant="outline" size="sm" className="h-7 text-xs px-2 border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100" onClick={() => insertAtCursor(tag.value)}>
+                      <User className="w-3 h-3 mr-1" />
+                      {tag.label}
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Textarea */}
+                <Textarea
+                  ref={emailTextareaRef}
+                  value={emailBody}
+                  onChange={(e) => setEmailBody(e.target.value)}
+                  placeholder="Write your message here... Click the personalization buttons above to insert tags like {{first_name}}."
+                  rows={8}
+                  className="border-0 rounded-none focus-visible:ring-0 resize-none bg-background"
+                  style={{
+                    fontFamily,
+                    fontSize,
+                    color: fontColor,
+                    fontWeight: isBold ? "bold" : "normal",
+                    fontStyle: isItalic ? "italic" : "normal",
+                    textDecoration: isUnderline ? "underline" : "none",
+                    textAlign,
+                  }}
+                />
               </div>
-              <Textarea
-                id="email-body"
-                value={emailBody}
-                onChange={(e) => setEmailBody(e.target.value)}
-                placeholder="Write your message here... Use {firstName} and {lastName} for personalization."
-                rows={6}
-                className="border-border bg-secondary/30 focus:bg-background resize-none"
-              />
               <p className="text-xs text-muted-foreground">
-                Use <code className="bg-muted px-1 rounded">{"{firstName}"}</code> and <code className="bg-muted px-1 rounded">{"{lastName}"}</code> to personalize the message for each recipient.
+                Tip: Place your cursor in the message and click any button above to insert at that position.
               </p>
             </div>
 
@@ -2017,11 +2243,7 @@ export default function AdminDashboardPage() {
             )}
 
             <div className="flex justify-end gap-3 pt-2 sticky bottom-0 bg-background pb-1">
-              <Button
-                variant="outline"
-                onClick={() => setEmailDialogOpen(false)}
-                className="border-border"
-              >
+              <Button variant="outline" onClick={() => setEmailDialogOpen(false)} className="border-border">
                 Cancel
               </Button>
               <Button
@@ -2035,6 +2257,54 @@ export default function AdminDashboardPage() {
                   <><Send className="w-4 h-4 mr-2" /> {emailRecipients.length === 1 ? "Send Email" : `Send to ${emailRecipients.length}`}</>
                 )}
               </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Insert Link Dialog */}
+      <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Insert Link</DialogTitle>
+            <DialogDescription>Add a clickable link to your email.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-sm">Link Text</Label>
+              <Input value={linkText} onChange={e => setLinkText(e.target.value)} placeholder="e.g. Click here" className="border-border" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-sm">URL</Label>
+              <Input value={linkUrl} onChange={e => setLinkUrl(e.target.value)} placeholder="https://example.com" className="border-border" />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowLinkDialog(false)}>Cancel</Button>
+              <Button onClick={insertLink} disabled={!linkText.trim() || !linkUrl.trim()} className="bg-primary text-primary-foreground">Insert</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Attach Document Dialog */}
+      <Dialog open={showDocDialog} onOpenChange={setShowDocDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Attach Document Link</DialogTitle>
+            <DialogDescription>Add a link to a document or PDF.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-sm">Document Name</Label>
+              <Input value={docName} onChange={e => setDocName(e.target.value)} placeholder="e.g. Registration Form" className="border-border" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-sm">Document URL</Label>
+              <Input value={docUrl} onChange={e => setDocUrl(e.target.value)} placeholder="https://example.com/doc.pdf" className="border-border" />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowDocDialog(false)}>Cancel</Button>
+              <Button onClick={insertDocLink} disabled={!docName.trim() || !docUrl.trim()} className="bg-primary text-primary-foreground">Insert</Button>
             </div>
           </div>
         </DialogContent>
