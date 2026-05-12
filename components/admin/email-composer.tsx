@@ -407,7 +407,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   onClick={() => setShowLinkDialog(true)}
                   className="border-[#8B2B3E] text-[#8B2B3E] bg-white hover:bg-[#8B2B3E]/5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
-                  <Link className="w-4 h-4" />
+                  <LinkIcon className="w-4 h-4" />
                   Insert Link
                 </Button>
                 <Button
