@@ -63,6 +63,7 @@ export async function POST(request: Request) {
         cellphone: phone,
         source: "event_registration",
         sourceDetails: `Table Talk for Men - ${sessionDate}`,
+        gender: "male",
       })
 
       console.log("[v0] Contact created:", contact?.id, "isNew:", isNewContact)

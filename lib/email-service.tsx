@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/server"
-import { tagsFromSource, mergeTags } from "@/lib/tags"
+import { tagsFromSource, mergeTags, tagsFromGender, type Gender } from "@/lib/tags"
 
 // Create admin client for server-side operations - called lazily to ensure env vars are loaded
 function getSupabaseAdmin() {
@@ -18,6 +18,7 @@ export interface CreateContactParams {
   spouseFirstName?: string
   spouseEmail?: string
   spouseCellphone?: string
+  gender?: Gender
 }
 
 // Global Control Webhook Configuration
@@ -80,6 +81,7 @@ export async function createContact(params: CreateContactParams) {
     spouseFirstName,
     spouseEmail,
     spouseCellphone,
+    gender,
   } = params
 
   // Check if contact already exists
@@ -92,8 +94,8 @@ export async function createContact(params: CreateContactParams) {
   let contactId: string
   let isNewContact = false
 
-  // Compute tags based on this signup source
-  const incomingTags = tagsFromSource(source, sourceDetails)
+  // Compute tags based on this signup source + gender segment
+  const incomingTags = mergeTags(tagsFromSource(source, sourceDetails), tagsFromGender(gender))
 
   if (existingContact) {
     contactId = existingContact.id
@@ -136,6 +138,7 @@ export async function createContact(params: CreateContactParams) {
         source,
         source_details: sourceDetails,
         tags: incomingTags,
+        gender: gender || null,
       })
       .select()
       .single()
