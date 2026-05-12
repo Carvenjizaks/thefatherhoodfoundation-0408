@@ -54,6 +54,7 @@ import {
   User,
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { CommunicationsHub } from "@/components/admin/communications-hub"
 
 interface TableTalkRegistration extends Record<string, unknown> {
   id: string
@@ -93,6 +94,7 @@ interface Contact extends Record<string, unknown> {
   id: string
   first_name: string
   last_name: string
+  name?: string
   email: string
   cellphone: string
   source: string
@@ -100,7 +102,11 @@ interface Contact extends Record<string, unknown> {
   email_confirmed: boolean
   created_at: string
   tags: string[] | null
-  }
+  gender?: string | null
+  unsubscribed: boolean
+  unsubscribed_at?: string | null
+  unsubscribe_token?: string | null
+}
 
 interface Donation extends Record<string, unknown> {
   id: string
@@ -1129,6 +1135,10 @@ export default function AdminDashboardPage() {
               <TabsTrigger value="donations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Donations ({donations.length})
               </TabsTrigger>
+              <TabsTrigger value="communications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
+                <Mail className="w-4 h-4 mr-1" />
+                Communications
+              </TabsTrigger>
               {currentUser?.role === "owner" && (
                 <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                   <UserCog className="w-4 h-4 mr-1" />
@@ -2056,6 +2066,16 @@ export default function AdminDashboardPage() {
                 </Card>
               </TabsContent>
             )}
+
+            {/* ==================== COMMUNICATIONS TAB ==================== */}
+            <TabsContent value="communications">
+              <CommunicationsHub
+                adminFetch={adminFetch}
+                contacts={contacts}
+                onRefreshContacts={fetchAllData}
+              />
+            </TabsContent>
+
           </Tabs>
         </div>
       </main>
@@ -2207,14 +2227,14 @@ export default function AdminDashboardPage() {
                   ))}
                 </div>
 
-                {/* Textarea */}
+                {/* Textarea - Expanded for easier email writing */}
                 <Textarea
                   ref={emailTextareaRef}
                   value={emailBody}
                   onChange={(e) => setEmailBody(e.target.value)}
                   placeholder="Write your message here... Click the personalization buttons above to insert tags like {{first_name}}."
-                  rows={8}
-                  className="border-0 rounded-none focus-visible:ring-0 resize-none bg-background"
+                  rows={16}
+                  className="border-0 rounded-none focus-visible:ring-0 resize-y bg-background min-h-[300px]"
                   style={{
                     fontFamily,
                     fontSize,
