@@ -72,18 +72,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, scheduled: true })
     }
 
-    // Send immediately - filter by recipient type
-    let recipients: string[] = []
-    if (recipientType === "men") {
-      recipients = subs.map(sub => sub.husband_email)
-    } else if (recipientType === "women") {
-      recipients = subs.map(sub => sub.wife_email)
-    } else {
-      recipients = subs.flatMap(sub => [sub.husband_email, sub.wife_email])
+    // Helper to replace personalization tags
+    function personalizeContent(content: string, sub: any, recipientEmail: string) {
+      const isHusband = recipientEmail === sub.husband_email
+      const firstName = isHusband ? sub.husband_first_name : sub.wife_first_name
+      const coupleName = `${sub.husband_first_name} & ${sub.wife_first_name}`
+
+      return content
+        .replace(/\{\{first_name\}\}/g, firstName || "")
+        .replace(/\{\{husband_name\}\}/g, sub.husband_first_name || "")
+        .replace(/\{\{wife_name\}\}/g, sub.wife_first_name || "")
+        .replace(/\{\{couple_name\}\}/g, coupleName)
+        .replace(/\{\{email\}\}/g, recipientEmail)
     }
-    
-    // Build full HTML email with wrapper
-    const fullHtml = `
+
+    // Build recipient list with subscription context for personalization
+    const recipientList: { email: string; sub: any }[] = []
+    for (const sub of subs) {
+      if (recipientType === "men" || recipientType === "all") {
+        recipientList.push({ email: sub.husband_email, sub })
+      }
+      if (recipientType === "women" || recipientType === "all") {
+        recipientList.push({ email: sub.wife_email, sub })
+      }
+    }
+
+    // Send personalized emails to each recipient individually
+    let successCount = 0
+    let failCount = 0
+
+    for (const recipient of recipientList) {
+      const personalizedBody = personalizeContent(emailBody, recipient.sub, recipient.email)
+      const personalizedSubject = personalizeContent(subject, recipient.sub, recipient.email)
+
+      const fullHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,7 +124,7 @@ export async function POST(request: NextRequest) {
           </tr>
           <tr>
             <td style="padding: 30px;">
-              ${emailBody}
+              ${personalizedBody}
             </td>
           </tr>
           <tr>
@@ -118,42 +140,29 @@ export async function POST(request: NextRequest) {
 </html>
 `
 
-    const textBody = emailBody.replace(/<[^>]*>/g, "")
+      const textBody = personalizedBody.replace(/<[^>]*>/g, "")
 
-    const result = await sendMgmEmail({
-      to: recipients,
-      subject,
-      html: fullHtml,
-      text: textBody,
-    })
+      const result = await sendMgmEmail({
+        to: [recipient.email],
+        subject: personalizedSubject,
+        html: fullHtml,
+        text: textBody,
+      })
 
-    // Log the email based on recipient type
-    for (const sub of subs) {
-      const logs = []
-      if (recipientType !== "women") {
-        logs.push({
-          subscription_id: sub.id,
-          recipient_email: sub.husband_email,
-          stream_type: "ADMIN",
-          subject,
-          status: result.success ? "sent" : "failed",
-        })
-      }
-      if (recipientType !== "men") {
-        logs.push({
-          subscription_id: sub.id,
-          recipient_email: sub.wife_email,
-          stream_type: "ADMIN",
-          subject,
-          status: result.success ? "sent" : "failed",
-        })
-      }
-      if (logs.length > 0) {
-        await supabase.from("mgm_email_log").insert(logs)
-      }
+      if (result.success) successCount++
+      else failCount++
+
+      // Log the email
+      await supabase.from("mgm_email_log").insert({
+        subscription_id: recipient.sub.id,
+        recipient_email: recipient.email,
+        stream_type: "ADMIN",
+        subject: personalizedSubject,
+        status: result.success ? "sent" : "failed",
+      })
     }
 
-    return NextResponse.json({ success: result.success })
+    return NextResponse.json({ success: successCount > 0, sent: successCount, failed: failCount })
   }
 
   return NextResponse.json({ error: "Unknown action" }, { status: 400 })
