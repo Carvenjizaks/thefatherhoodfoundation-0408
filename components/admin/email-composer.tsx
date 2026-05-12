@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Send, Clock, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, FileText, User } from "lucide-react"
-import { Send, Clock, Type, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link, FileText, Palette, User, Users } from "lucide-react"
 
 interface EmailComposerProps {
   open: boolean
