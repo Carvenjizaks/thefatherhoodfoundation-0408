@@ -12,8 +12,9 @@ import {
   Mail, Send, Users, Tag, Layers, History, Search, Plus, Trash2, Edit2,
   Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight,
   Link as LinkIcon, FileText, User, CheckCircle, XCircle, Loader2,
-  ChevronRight, RefreshCw, X,
+  ChevronRight, RefreshCw, X, BarChart2,
 } from "lucide-react"
+import { CommunicationsAnalytics } from "@/components/admin/communications-analytics"
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type Contact = {
@@ -112,6 +113,9 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
   // Campaigns history
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   const [loadingCampaigns, setLoadingCampaigns] = useState(false)
+
+  // Right panel view: compose | analytics
+  const [rightView, setRightView] = useState<"compose" | "analytics">("compose")
 
   // Compose
   const [composeTarget, setComposeTarget] = useState<ComposeTarget | null>(null)
@@ -552,9 +556,39 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
         </div>
       </div>
 
-      {/* ── RIGHT COMPOSE PANEL ───────────────────────────────────────────── */}
+      {/* ── RIGHT PANEL ───────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col bg-background overflow-hidden">
-        {!composeTarget ? (
+
+        {/* Tab strip: Compose | Analytics */}
+        <div className="flex border-b border-border shrink-0">
+          {([
+            { id: "compose", icon: Mail, label: "Compose" },
+            { id: "analytics", icon: BarChart2, label: "Analytics" },
+          ] as { id: "compose" | "analytics"; icon: React.ElementType; label: string }[]).map(({ id, icon: Icon, label }) => (
+            <button
+              key={id}
+              onClick={() => setRightView(id)}
+              className={`flex items-center gap-1.5 px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                rightView === id
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Analytics view */}
+        {rightView === "analytics" && (
+          <div className="flex-1 overflow-y-auto p-5">
+            <CommunicationsAnalytics adminFetch={adminFetch} />
+          </div>
+        )}
+
+        {/* Compose view — empty state */}
+        {rightView === "compose" && !composeTarget && (
           // Empty state
           <div className="flex-1 flex flex-col items-center justify-center gap-5 p-8 text-center">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
@@ -589,7 +623,10 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
               </Button>
             </div>
           </div>
-        ) : (
+        )}
+
+        {/* Compose view — form */}
+        {rightView === "compose" && composeTarget && (
           <div className="flex flex-col h-full overflow-hidden">
             {/* Compose Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-[#fdf8f3] shrink-0">

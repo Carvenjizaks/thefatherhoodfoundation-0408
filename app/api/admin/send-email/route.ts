@@ -43,10 +43,26 @@ async function sendEmailSMTP(to: string, toName: string, subject: string, html: 
   return await response.json()
 }
 
+// Wraps all <a href="..."> links to go through click tracker
+function wrapLinksForTracking(html: string, openToken: string, appUrl: string): string {
+  return html.replace(
+    /<a\s+([^>]*?)href="([^"]+)"([^>]*?)>/gi,
+    (match, before, href, after) => {
+      // Skip tracking for unsubscribe links and anchor links
+      if (href.includes("/unsubscribe") || href.startsWith("#") || href.startsWith("mailto:")) {
+        return match
+      }
+      const tracked = `${appUrl}/api/track/click?t=${openToken}&url=${encodeURIComponent(href)}`
+      return `<a ${before}href="${tracked}"${after}>`
+    }
+  )
+}
+
 function buildEmailHTML(
   body: string,
   recipientName: string,
   unsubscribeUrl: string,
+  openPixelUrl: string,
   fontFamily = "Arial, sans-serif",
   fontSize = "14px",
   fontColor = "#1a0a0e",
@@ -61,10 +77,14 @@ function buildEmailHTML(
     isUnderline ? "text-decoration: underline;" : "",
   ].filter(Boolean).join(" ")
 
-  const formattedBody = body
-    .split("\n")
-    .map(line => `<p style="margin:0 0 12px 0;">${line || "&nbsp;"}</p>`)
-    .join("")
+  // If body contains HTML tags treat it as rich HTML, otherwise format as paragraphs
+  const isHtml = /<[a-z][\s\S]*>/i.test(body)
+  const formattedBody = isHtml
+    ? body
+    : body
+        .split("\n")
+        .map(line => `<p style="margin:0 0 12px 0;">${line || "&nbsp;"}</p>`)
+        .join("")
 
   return `<!DOCTYPE html>
 <html>
@@ -100,6 +120,8 @@ function buildEmailHTML(
       </table>
     </td></tr>
   </table>
+  <!-- Open tracking pixel -->
+  <img src="${openPixelUrl}" width="1" height="1" style="display:none;" alt="" />
 </body>
 </html>`
 }
@@ -144,7 +166,7 @@ export async function POST(request: Request) {
     const supabase = createAdminClient()
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://thefathersfoundations.org"
 
-    // Enrich recipients with unsubscribe tokens from DB, filter unsubscribed
+    // Enrich recipients with unsubscribe tokens, filter out unsubscribed
     const emails = recipients.map((r: Recipient) => r.email.toLowerCase())
     const { data: dbContacts } = await supabase
       .from("contacts")
@@ -162,11 +184,7 @@ export async function POST(request: Request) {
       })
       .map((r: Recipient) => {
         const contact = contactMap.get(r.email.toLowerCase())
-        return {
-          ...r,
-          id: contact?.id,
-          unsubscribeToken: contact?.unsubscribe_token || null,
-        }
+        return { ...r, id: contact?.id, unsubscribeToken: contact?.unsubscribe_token || null }
       })
 
     if (enrichedRecipients.length === 0) {
@@ -203,6 +221,27 @@ export async function POST(request: Request) {
         ? `${appUrl}/unsubscribe?token=${recipient.unsubscribeToken}`
         : `${appUrl}/unsubscribe`
 
+      // Pre-create log entry so we have an open_token before sending
+      let logEntry: { id: string; open_token: string } | null = null
+      if (campaign) {
+        const { data: log } = await supabase
+          .from("email_campaign_logs")
+          .insert({
+            campaign_id: campaign.id,
+            contact_id: recipient.id || null,
+            email: recipient.email,
+            first_name: recipient.firstName,
+            status: "pending",
+          })
+          .select("id, open_token")
+          .single()
+        logEntry = log
+      }
+
+      const openPixelUrl = logEntry?.open_token
+        ? `${appUrl}/api/track/open?t=${logEntry.open_token}`
+        : `${appUrl}/api/track/open`
+
       const personalizedBody = emailBody
         .replace(/\{\{first_name\}\}/g, recipient.firstName || "")
         .replace(/\{\{last_name\}\}/g, recipient.lastName || "")
@@ -210,40 +249,37 @@ export async function POST(request: Request) {
         .replace(/\{firstName\}/g, recipient.firstName || "")
         .replace(/\{lastName\}/g, recipient.lastName || "")
 
-      const html = buildEmailHTML(
-        personalizedBody, recipientName, unsubscribeUrl,
+      let html = buildEmailHTML(
+        personalizedBody, recipientName, unsubscribeUrl, openPixelUrl,
         fontFamily, fontSize, fontColor, isBold, isItalic, isUnderline, textAlign
       )
+
+      // Wrap all links in click tracker
+      if (logEntry?.open_token) {
+        html = wrapLinksForTracking(html, logEntry.open_token, appUrl)
+      }
+
       const text = `Dear ${recipientName},\n\n${personalizedBody}\n\n---\nTo unsubscribe: ${unsubscribeUrl}`
 
       try {
         await sendEmailSMTP(recipient.email, recipientName, subject, html, text)
         results.push({ email: recipient.email, success: true })
 
-        // Log success
-        if (campaign) {
-          await supabase.from("email_campaign_logs").insert({
-            campaign_id: campaign.id,
-            contact_id: recipient.id || null,
-            email: recipient.email,
-            first_name: recipient.firstName,
-            status: "sent",
-            sent_at: new Date().toISOString(),
-          })
+        if (logEntry) {
+          await supabase
+            .from("email_campaign_logs")
+            .update({ status: "sent", sent_at: new Date().toISOString() })
+            .eq("id", logEntry.id)
         }
       } catch (err) {
         const error = err as Error
         results.push({ email: recipient.email, success: false, error: error.message })
 
-        if (campaign) {
-          await supabase.from("email_campaign_logs").insert({
-            campaign_id: campaign.id,
-            contact_id: recipient.id || null,
-            email: recipient.email,
-            first_name: recipient.firstName,
-            status: "failed",
-            error: error.message,
-          })
+        if (logEntry) {
+          await supabase
+            .from("email_campaign_logs")
+            .update({ status: "failed", error: error.message })
+            .eq("id", logEntry.id)
         }
       }
     }

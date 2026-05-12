@@ -9,7 +9,7 @@ export async function GET() {
 
     const supabase = createAdminClient()
     const { data, error } = await supabase
-      .from("email_campaigns")
+      .from("campaign_analytics")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(50)
