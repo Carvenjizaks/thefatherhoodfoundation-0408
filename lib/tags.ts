@@ -20,6 +20,17 @@ export const TAG_COLORS: Record<string, { bg: string; text: string; border: stri
   "FF-NL": { bg: "#16a34a15", text: "#15803d", border: "#16a34a" },
   TT4Men:  { bg: "#2563eb15", text: "#1d4ed8", border: "#2563eb" },
   Event:   { bg: "#ea580c15", text: "#c2410c", border: "#ea580c" },
+  Men:     { bg: "#1d4ed815", text: "#1e40af", border: "#1d4ed8" },
+  Women:   { bg: "#db277715", text: "#be185d", border: "#db2777" },
+}
+
+export type Gender = "male" | "female" | null | undefined
+
+/** Map a gender value into its corresponding segment tag */
+export function tagsFromGender(gender: Gender): string[] {
+  if (gender === "male") return ["Men"]
+  if (gender === "female") return ["Women"]
+  return []
 }
 
 /** Default color for unknown / event-specific tags */

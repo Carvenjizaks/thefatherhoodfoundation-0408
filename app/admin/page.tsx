@@ -1454,33 +1454,51 @@ export default function AdminDashboardPage() {
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                      const filtered = filterData(contacts, searchTerm)
-                      openEmailForBulk(filtered.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
+                      const searchFiltered = filterData(contacts, searchTerm)
+                      const finalFiltered = tagFilter === "all"
+                        ? searchFiltered
+                        : searchFiltered.filter(c => Array.isArray(c.tags) && c.tags.includes(tagFilter))
+                      openEmailForBulk(finalFiltered.map(c => ({ email: c.email, firstName: c.first_name, lastName: c.last_name })))
                     }}
                     className="border-border text-foreground h-8 text-xs"
                   >
                     <Send className="w-3.5 h-3.5 mr-1.5" />
-                    Email All ({filterData(contacts, searchTerm).length})
+                    {(() => {
+                      const searchFiltered = filterData(contacts, searchTerm)
+                      const finalFiltered = tagFilter === "all"
+                        ? searchFiltered
+                        : searchFiltered.filter(c => Array.isArray(c.tags) && c.tags.includes(tagFilter))
+                      return tagFilter === "all" ? `Email All (${finalFiltered.length})` : `Email ${tagFilter} (${finalFiltered.length})`
+                    })()}
                   </Button>
                   {currentUser?.role === "owner" && (
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => exportToCSV(filterData(contacts, searchTerm), "all-contacts-subscriptions")}
+                      onClick={() => {
+                        const searchFiltered = filterData(contacts, searchTerm)
+                        const finalFiltered = tagFilter === "all"
+                          ? searchFiltered
+                          : searchFiltered.filter(c => Array.isArray(c.tags) && c.tags.includes(tagFilter))
+                        const fileName = tagFilter === "all" ? "all-contacts-subscriptions" : `contacts-${tagFilter.toLowerCase()}`
+                        exportToCSV(finalFiltered, fileName)
+                      }}
                       className="border-border text-foreground h-8 text-xs"
                     >
                       <Download className="w-3.5 h-3.5 mr-1.5" />
-                      Export All CSV
+                      Export {tagFilter === "all" ? "All" : tagFilter} CSV
                     </Button>
                   )}
                 </div>
 
-                {/* Tag filter chips */}
+                {/* Tag filter chips - includes Men/Women segment filters */}
                 <div className="flex flex-wrap items-center gap-2 px-1">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mr-1">Filter by tag:</span>
                   {(() => {
                     const availableTags = Array.from(new Set([
                       ...CORE_TAGS,
+                      "Men",
+                      "Women",
                       ...contacts.flatMap(c => (Array.isArray(c.tags) ? c.tags : []))
                     ]))
                     return (
