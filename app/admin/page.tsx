@@ -1122,7 +1122,11 @@ export default function AdminDashboardPage() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-background border border-border/60 p-1 h-auto flex-wrap">
+            <TabsList className="bg-background border border-border/60 p-1 h-auto flex-wrap gap-1">
+              <TabsTrigger value="communications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4 font-semibold border border-primary/30 data-[state=inactive]:text-primary data-[state=inactive]:bg-primary/5">
+                <Mail className="w-4 h-4 mr-1" />
+                Communications
+              </TabsTrigger>
               <TabsTrigger value="table-talk" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Table Talk ({tableTalkRegistrations.length})
               </TabsTrigger>
@@ -1134,10 +1138,6 @@ export default function AdminDashboardPage() {
               </TabsTrigger>
               <TabsTrigger value="donations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
                 Donations ({donations.length})
-              </TabsTrigger>
-              <TabsTrigger value="communications" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
-                <Mail className="w-4 h-4 mr-1" />
-                Communications
               </TabsTrigger>
               {currentUser?.role === "owner" && (
                 <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm px-3 sm:px-4">
