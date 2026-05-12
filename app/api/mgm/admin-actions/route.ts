@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
-import { buildWelcomeEmail, FROM_ADDRESS } from "@/lib/mgm/email-templates"
+import { buildWelcomeEmail } from "@/lib/mgm/email-templates"
 import { sendMgmEmail } from "@/lib/mgm/send"
 
 async function isAdmin() {
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       const { error: insertError } = await supabase.from("scheduled_emails").insert({
         subject,
         html_body: emailBody,
-        text_body: emailBody.replace(/<[^>]*>/g, ""), // Strip HTML for text version
+        text_body: emailBody.replace(/<[^>]*>/g, ""),
         scheduled_at: scheduledAt,
         subscription_ids: subIds,
         status: "pending",
@@ -82,20 +82,10 @@ export async function POST(request: NextRequest) {
         .replace(/\{\{first_name\}\}/g, firstName || "")
         .replace(/\{\{husband_name\}\}/g, sub.husband_first_name || "")
         .replace(/\{\{wife_name\}\}/g, sub.wife_first_name || "")
-    function personalizeContent(content: string, sub: any, recipientType: string, recipientEmail: string) {
-      const isHusband = recipientEmail === sub.husband_email
-      const firstName = isHusband ? sub.husband_first_name : sub.wife_first_name
-      const coupleName = `${sub.husband_first_name} & ${sub.wife_first_name}`
-      
-      return content
-        .replace(/\{\{first_name\}\}/g, firstName)
-        .replace(/\{\{husband_name\}\}/g, sub.husband_first_name)
-        .replace(/\{\{wife_name\}\}/g, sub.wife_first_name)
         .replace(/\{\{couple_name\}\}/g, coupleName)
         .replace(/\{\{email\}\}/g, recipientEmail)
     }
 
-    // Build recipient list with subscription context for personalization
     // Build recipient list based on type
     const recipientList: { email: string; sub: any }[] = []
     for (const sub of subs) {
@@ -108,7 +98,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Send personalized emails to each recipient individually
-    // Send personalized emails to each recipient
     let successCount = 0
     let failCount = 0
 
@@ -116,10 +105,6 @@ export async function POST(request: NextRequest) {
       const personalizedBody = personalizeContent(emailBody, recipient.sub, recipient.email)
       const personalizedSubject = personalizeContent(subject, recipient.sub, recipient.email)
 
-      const personalizedBody = personalizeContent(emailBody, recipient.sub, recipientType, recipient.email)
-      const personalizedSubject = personalizeContent(subject, recipient.sub, recipientType, recipient.email)
-      
-      // Build full HTML email with wrapper
       const fullHtml = `
 <!DOCTYPE html>
 <html>
@@ -164,15 +149,12 @@ export async function POST(request: NextRequest) {
         text: textBody,
       })
 
-      if (result.success) successCount++
-      else failCount++
       if (result.success) {
         successCount++
       } else {
         failCount++
       }
 
-      // Log the email
       await supabase.from("mgm_email_log").insert({
         subscription_id: recipient.sub.id,
         recipient_email: recipient.email,

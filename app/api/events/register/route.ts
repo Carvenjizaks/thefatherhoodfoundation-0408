@@ -94,6 +94,9 @@ export async function POST(request: Request) {
       || (spouseFirstName && spouseLastName ? `${spouseFirstName} ${spouseLastName}` : spouseFirstName)
       || null
 
+    // Build tags for event registration - always includes "Event" + the specific event slug
+    const eventTags = Array.from(new Set(["Event", eventSlug].filter(Boolean))) as string[]
+
     // Insert registration (matching actual database schema)
     const insertData = {
       first_name: firstName,
@@ -110,6 +113,7 @@ export async function POST(request: Request) {
       spouse_email: null,
       spouse_phone: null,
       checked_in: false,
+      tags: eventTags,
     }
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")

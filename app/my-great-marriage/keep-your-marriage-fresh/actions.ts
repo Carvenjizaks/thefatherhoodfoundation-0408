@@ -75,6 +75,7 @@ export async function submitMgmSignup(data: SignupFormData): Promise<SignupResul
         current_week_in_cycle: 1,
         next_send_at: nextSendAt.toISOString(),
         is_active: true,
+        tags: ["MGM"],
       })
       .select()
       .single()
