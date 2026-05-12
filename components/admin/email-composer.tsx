@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Send, Clock, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, FileText, User } from "lucide-react"
 import { Send, Clock, Type, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link, FileText, Palette, User, Users } from "lucide-react"
 
 interface EmailComposerProps {
@@ -36,12 +37,12 @@ const FONT_FAMILIES = [
 ]
 
 const FONT_SIZES = [
-  { value: "12px", label: "Small (12px)" },
-  { value: "14px", label: "Normal (14px)" },
-  { value: "16px", label: "Medium (16px)" },
-  { value: "18px", label: "Large (18px)" },
-  { value: "20px", label: "X-Large (20px)" },
-  { value: "24px", label: "XX-Large (24px)" },
+  { value: "12px", label: "Small" },
+  { value: "14px", label: "Normal" },
+  { value: "16px", label: "Medium" },
+  { value: "18px", label: "Large" },
+  { value: "20px", label: "X-Large" },
+  { value: "24px", label: "XX-Large" },
 ]
 
 const FONT_COLORS = [
@@ -56,6 +57,11 @@ const FONT_COLORS = [
 ]
 
 const PERSONALIZATION_TAGS = [
+  { value: "{{first_name}}", label: "First Name" },
+  { value: "{{husband_name}}", label: "Husband" },
+  { value: "{{wife_name}}", label: "Wife" },
+  { value: "{{couple_name}}", label: "Couple" },
+  { value: "{{email}}", label: "Email" },
   { value: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
   { value: "{{husband_name}}", label: "Husband Name", description: "Husband's first name" },
   { value: "{{wife_name}}", label: "Wife Name", description: "Wife's first name" },
@@ -78,12 +84,14 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const [scheduledTime, setScheduledTime] = useState("")
   const [isSending, setIsSending] = useState(false)
   const [recipientType, setRecipientType] = useState<"all" | "men" | "women">("all")
-  
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   // Link dialog state
   const [showLinkDialog, setShowLinkDialog] = useState(false)
   const [linkText, setLinkText] = useState("")
   const [linkUrl, setLinkUrl] = useState("")
-  
+
   // Document link dialog state
   const [showDocDialog, setShowDocDialog] = useState(false)
   const [docName, setDocName] = useState("")
@@ -100,13 +108,31 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const menCount = recipients.filter(r => r.gender === "male").length
   const womenCount = recipients.filter(r => r.gender === "female").length
 
+  // Insert content at cursor position
+  const insertAtCursor = (content: string) => {
+    const textarea = textareaRef.current
+    if (!textarea) {
+      setBody(prev => prev + content)
+      return
+    }
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const newBody = body.substring(0, start) + content + body.substring(end)
+    setBody(newBody)
+    // Restore cursor position after the inserted content
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(start + content.length, start + content.length)
+    }, 0)
+  }
+
   const insertLink = () => {
     if (!linkText.trim() || !linkUrl.trim()) {
       alert("Please fill in both link text and URL")
       return
     }
     const linkHtml = `<a href="${linkUrl}" style="color: #2563eb; text-decoration: underline;">${linkText}</a>`
-    setBody(prev => prev + linkHtml)
+    insertAtCursor(linkHtml)
     setLinkText("")
     setLinkUrl("")
     setShowLinkDialog(false)
@@ -117,8 +143,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
       alert("Please fill in both document name and URL")
       return
     }
-    const docHtml = `<a href="${docUrl}" style="color: #8B2B3E; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px;">📄 ${docName}</a>`
-    setBody(prev => prev + docHtml)
+    const docHtml = `<a href="${docUrl}" style="color: #8B2B3E; text-decoration: underline;">📄 ${docName}</a>`
+    insertAtCursor(docHtml)
     setDocName("")
     setDocUrl("")
     setShowDocDialog(false)
@@ -146,8 +172,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
 
     setIsSending(true)
     try {
-      const scheduledAt = scheduleType === "scheduled" 
-        ? new Date(`${scheduledDate}T${scheduledTime}`).toISOString() 
+      const scheduledAt = scheduleType === "scheduled"
+        ? new Date(`${scheduledDate}T${scheduledTime}`).toISOString()
         : null
 
       // Build styled HTML body
@@ -189,7 +215,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="w-[95vw] max-w-2xl bg-white max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="w-[95vw] max-w-3xl bg-white max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e] text-xl">Compose Email</DialogTitle>
             <DialogDescription className="text-[#8B6B5A]">
@@ -203,53 +229,24 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-2 block">Send To</label>
               <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "all" ? "border-[#8B2B3E] bg-[#8B2B3E]/5" : "border-[#e8d8c8] hover:border-[#8B2B3E]/50"}`}>
-                  <input
-                    type="radio"
-                    name="recipientType"
-                    value="all"
-                    checked={recipientType === "all"}
-                    onChange={() => setRecipientType("all")}
-                    className="sr-only"
-                  />
+                  <input type="radio" name="recipientType" value="all" checked={recipientType === "all"} onChange={() => setRecipientType("all")} className="sr-only" />
                   <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Both</span>
                   <span className="text-xs text-[#8B6B5A]">({recipients.length})</span>
                 </label>
                 <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "men" ? "border-[#2563eb] bg-[#2563eb]/5" : "border-[#e8d8c8] hover:border-[#2563eb]/50"}`}>
-                  <input
-                    type="radio"
-                    name="recipientType"
-                    value="men"
-                    checked={recipientType === "men"}
-                    onChange={() => setRecipientType("men")}
-                    className="sr-only"
-                  />
+                  <input type="radio" name="recipientType" value="men" checked={recipientType === "men"} onChange={() => setRecipientType("men")} className="sr-only" />
                   <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Men</span>
                   <span className="text-xs text-[#8B6B5A]">({menCount})</span>
                 </label>
                 <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "women" ? "border-[#ec4899] bg-[#ec4899]/5" : "border-[#e8d8c8] hover:border-[#ec4899]/50"}`}>
-                  <input
-                    type="radio"
-                    name="recipientType"
-                    value="women"
-                    checked={recipientType === "women"}
-                    onChange={() => setRecipientType("women")}
-                    className="sr-only"
-                  />
+                  <input type="radio" name="recipientType" value="women" checked={recipientType === "women"} onChange={() => setRecipientType("women")} className="sr-only" />
                   <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Women</span>
                   <span className="text-xs text-[#8B6B5A]">({womenCount})</span>
                 </label>
               </div>
-            </div>
-
-            {/* Recipients preview */}
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">To ({filteredRecipients.length} recipients)</label>
-              <div className="bg-[#fdf8f3] border border-[#e8d8c8] rounded-lg p-3 max-h-20 overflow-y-auto">
-                <p className="text-sm text-[#6b4c52]">
-                  {filteredRecipients.slice(0, 3).map(r => r.name || r.email).join(", ")}
-                  {filteredRecipients.length > 3 && ` and ${filteredRecipients.length - 3} more...`}
-                </p>
-              </div>
+              <p className="text-xs text-[#8B6B5A] mt-2">
+                Sending to <span className="font-bold text-[#8B2B3E]">{filteredRecipients.length}</span> recipient{filteredRecipients.length !== 1 ? "s" : ""}
+              </p>
             </div>
 
             {/* Subject */}
@@ -264,121 +261,144 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
               />
             </div>
 
-            {/* Font Controls */}
-            <div className="border border-[#e8d8c8] rounded-lg p-3 bg-[#fdf8f3]">
-              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-2 flex items-center gap-2">
-                <Type className="w-3 h-3" />
-                Font Settings
-              </label>
-              
-              {/* Row 1: Font Family and Size */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <Select value={fontFamily} onValueChange={setFontFamily}>
-                  <SelectTrigger className="w-full bg-white border-[#e8d8c8] text-xs sm:text-sm">
-                    <SelectValue placeholder="Font" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    {FONT_FAMILIES.map((font) => (
-                      <SelectItem key={font.value} value={font.value} style={{ fontFamily: font.value }}>
-                        {font.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            {/* Message Editor with Toolbar */}
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Message</label>
+              <div className="border-2 border-[#e8d8c8] rounded-lg overflow-hidden focus-within:border-[#8B2B3E] transition-colors">
+                {/* TOOLBAR - Row 1: Font Family, Size, Color */}
+                <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
+                  <Select value={fontFamily} onValueChange={setFontFamily}>
+                    <SelectTrigger className="w-[130px] h-8 bg-white border-[#e8d8c8] text-xs">
+                      <SelectValue placeholder="Font" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {FONT_FAMILIES.map((font) => (
+                        <SelectItem key={font.value} value={font.value} style={{ fontFamily: font.value }}>
+                          {font.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                <Select value={fontSize} onValueChange={setFontSize}>
-                  <SelectTrigger className="w-full bg-white border-[#e8d8c8] text-xs sm:text-sm">
-                    <SelectValue placeholder="Size" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    {FONT_SIZES.map((size) => (
-                      <SelectItem key={size.value} value={size.value}>
-                        {size.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                  <Select value={fontSize} onValueChange={setFontSize}>
+                    <SelectTrigger className="w-[100px] h-8 bg-white border-[#e8d8c8] text-xs">
+                      <SelectValue placeholder="Size" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {FONT_SIZES.map((size) => (
+                        <SelectItem key={size.value} value={size.value}>
+                          {size.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-              {/* Row 2: Color, Styles, Alignment */}
-              <div className="flex flex-wrap gap-2 items-center">
-                {/* Font Color */}
-                <Select value={fontColor} onValueChange={setFontColor}>
-                  <SelectTrigger className="w-[90px] sm:w-[100px] bg-white border-[#e8d8c8]">
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <div className="w-4 h-4 rounded-full border border-gray-300 shrink-0" style={{ backgroundColor: fontColor }} />
-                      <span className="text-xs truncate">{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    {FONT_COLORS.map((color) => (
-                      <SelectItem key={color.value} value={color.value}>
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: color.value }} />
-                          {color.label}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <Select value={fontColor} onValueChange={setFontColor}>
+                    <SelectTrigger className="w-[100px] h-8 bg-white border-[#e8d8c8]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded-full border border-gray-300 shrink-0" style={{ backgroundColor: fontColor }} />
+                        <span className="text-xs truncate">{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {FONT_COLORS.map((color) => (
+                        <SelectItem key={color.value} value={color.value}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: color.value }} />
+                            {color.label}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                {/* Style buttons */}
-                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsBold(!isBold)}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isBold ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Bold"
-                  >
+                  <div className="h-6 w-px bg-[#e8d8c8]" />
+
+                  {/* Bold/Italic/Underline */}
+                  <button type="button" onClick={() => setIsBold(!isBold)} className={`p-1.5 rounded transition-colors ${isBold ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Bold">
                     <Bold className="w-4 h-4" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsItalic(!isItalic)}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isItalic ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Italic"
-                  >
+                  <button type="button" onClick={() => setIsItalic(!isItalic)} className={`p-1.5 rounded transition-colors ${isItalic ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Italic">
                     <Italic className="w-4 h-4" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsUnderline(!isUnderline)}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isUnderline ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Underline"
-                  >
+                  <button type="button" onClick={() => setIsUnderline(!isUnderline)} className={`p-1.5 rounded transition-colors ${isUnderline ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Underline">
                     <Underline className="w-4 h-4" />
                   </button>
-                </div>
 
-                {/* Alignment buttons */}
-                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-2">
-                  <button
-                    type="button"
-                    onClick={() => setTextAlign("left")}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "left" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Align Left"
-                  >
+                  <div className="h-6 w-px bg-[#e8d8c8]" />
+
+                  {/* Alignment */}
+                  <button type="button" onClick={() => setTextAlign("left")} className={`p-1.5 rounded transition-colors ${textAlign === "left" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Align Left">
                     <AlignLeft className="w-4 h-4" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setTextAlign("center")}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "center" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Align Center"
-                  >
+                  <button type="button" onClick={() => setTextAlign("center")} className={`p-1.5 rounded transition-colors ${textAlign === "center" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Align Center">
                     <AlignCenter className="w-4 h-4" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setTextAlign("right")}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "right" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
-                    title="Align Right"
-                  >
+                  <button type="button" onClick={() => setTextAlign("right")} className={`p-1.5 rounded transition-colors ${textAlign === "right" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`} title="Align Right">
                     <AlignRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
 
+                {/* TOOLBAR - Row 2: Insert Link, Attach Doc, Personalization */}
+                <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowLinkDialog(true)}
+                    className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
+                  >
+                    <LinkIcon className="w-3.5 h-3.5" />
+                    Insert Link
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowDocDialog(true)}
+                    className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    Attach Doc
+                  </button>
+
+                  <div className="h-6 w-px bg-[#e8d8c8]" />
+
+                  <div className="flex items-center gap-1">
+                    <User className="w-3.5 h-3.5 text-[#8B6B5A]" />
+                    <span className="text-xs font-medium text-[#8B6B5A]">Insert:</span>
+                  </div>
+                  {PERSONALIZATION_TAGS.map((tag) => (
+                    <button
+                      key={tag.value}
+                      type="button"
+                      onClick={() => insertAtCursor(tag.value)}
+                      className="px-2 py-1 bg-white border border-[#2563eb] text-[#2563eb] rounded text-xs hover:bg-[#2563eb]/5 transition-colors"
+                      title={`Inserts ${tag.value}`}
+                    >
+                      {tag.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Textarea */}
+                <textarea
+                  ref={textareaRef}
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder="Write your message here... Use the toolbar above to format text, insert links, attach documents, or add personalization tags like {{first_name}}."
+                  rows={10}
+                  style={{
+                    fontFamily,
+                    fontSize,
+                    color: fontColor,
+                    fontWeight: isBold ? "bold" : "normal",
+                    fontStyle: isItalic ? "italic" : "normal",
+                    textDecoration: isUnderline ? "underline" : "none",
+                    textAlign,
+                  }}
+                  className="w-full px-4 py-3 focus:outline-none resize-none border-0"
+                />
+              </div>
+              <p className="text-xs text-[#8B6B5A] mt-1">
+                Tip: Place your cursor in the message and click any button above to insert at that position.
+              </p>
               {/* Insert Links Row */}
               <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-[#e8d8c8]">
                 <Button
@@ -453,53 +473,28 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                 <Clock className="w-3 h-3" />
                 Schedule Time
               </label>
-              
+
               <div className="space-y-3">
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="now"
-                      checked={scheduleType === "now"}
-                      onChange={() => setScheduleType("now")}
-                      className="w-4 h-4 text-[#8B2B3E] accent-[#8B2B3E]"
-                    />
+                    <input type="radio" name="scheduleType" value="now" checked={scheduleType === "now"} onChange={() => setScheduleType("now")} className="w-4 h-4 text-[#8B2B3E] accent-[#8B2B3E]" />
                     <span className="text-sm text-[#1a0a0e]">Send immediately</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="scheduleType"
-                      value="scheduled"
-                      checked={scheduleType === "scheduled"}
-                      onChange={() => setScheduleType("scheduled")}
-                      className="w-4 h-4 text-[#8B2B3E] accent-[#8B2B3E]"
-                    />
+                    <input type="radio" name="scheduleType" value="scheduled" checked={scheduleType === "scheduled"} onChange={() => setScheduleType("scheduled")} className="w-4 h-4 text-[#8B2B3E] accent-[#8B2B3E]" />
                     <span className="text-sm text-[#1a0a0e]">Schedule for later</span>
                   </label>
                 </div>
 
                 {scheduleType === "scheduled" && (
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
                     <div className="flex-1">
                       <label className="text-xs text-[#8B6B5A] mb-1 block">Date</label>
-                      <input
-                        type="date"
-                        value={scheduledDate}
-                        onChange={(e) => setScheduledDate(e.target.value)}
-                        min={today}
-                        className="w-full border border-[#e8d8c8] rounded-lg px-3 py-2 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 bg-white"
-                      />
+                      <input type="date" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} min={today} className="w-full border border-[#e8d8c8] rounded-lg px-3 py-2 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 bg-white" />
                     </div>
                     <div className="flex-1">
                       <label className="text-xs text-[#8B6B5A] mb-1 block">Time</label>
-                      <input
-                        type="time"
-                        value={scheduledTime}
-                        onChange={(e) => setScheduledTime(e.target.value)}
-                        className="w-full border border-[#e8d8c8] rounded-lg px-3 py-2 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 bg-white"
-                      />
+                      <input type="time" value={scheduledTime} onChange={(e) => setScheduledTime(e.target.value)} className="w-full border border-[#e8d8c8] rounded-lg px-3 py-2 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 bg-white" />
                     </div>
                   </div>
                 )}
@@ -507,19 +502,11 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
             </div>
           </div>
 
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent"
-            >
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => onOpenChange(false)} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent w-full sm:w-auto">
               Cancel
             </Button>
-            <Button
-              onClick={handleSend}
-              disabled={isSending || !subject.trim() || !body.trim() || filteredRecipients.length === 0}
-              className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg flex items-center gap-2"
-            >
+            <Button onClick={handleSend} disabled={isSending || !subject.trim() || !body.trim() || filteredRecipients.length === 0} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
               {scheduleType === "scheduled" ? (
                 <>
                   <Clock className="w-4 h-4" />
@@ -538,81 +525,47 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
 
       {/* Insert Link Dialog */}
       <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
-        <DialogContent className="max-w-md bg-white">
+        <DialogContent className="w-[95vw] max-w-md bg-white">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e]">Insert Link</DialogTitle>
-            <DialogDescription className="text-[#8B6B5A]">
-              Add a clickable link to your email
-            </DialogDescription>
+            <DialogDescription className="text-[#8B6B5A]">Add a clickable link to your email</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Link Text</label>
-              <input
-                type="text"
-                value={linkText}
-                onChange={(e) => setLinkText(e.target.value)}
-                placeholder="e.g., Click here"
-                className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
-              />
+              <input type="text" value={linkText} onChange={(e) => setLinkText(e.target.value)} placeholder="e.g., Click here" className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
             </div>
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">URL</label>
-              <input
-                type="url"
-                value={linkUrl}
-                onChange={(e) => setLinkUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
-              />
+              <input type="url" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="https://example.com" className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowLinkDialog(false)} className="border-[#e8d8c8] text-[#6b4c52] bg-transparent">
-              Cancel
-            </Button>
-            <Button onClick={insertLink} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white">
-              Insert Link
-            </Button>
+            <Button variant="outline" onClick={() => setShowLinkDialog(false)} className="border-[#e8d8c8] text-[#6b4c52] bg-transparent">Cancel</Button>
+            <Button onClick={insertLink} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white">Insert Link</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Attach Document Link Dialog */}
       <Dialog open={showDocDialog} onOpenChange={setShowDocDialog}>
-        <DialogContent className="max-w-md bg-white">
+        <DialogContent className="w-[95vw] max-w-md bg-white">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e]">Attach Document Link</DialogTitle>
-            <DialogDescription className="text-[#8B6B5A]">
-              Add a link to a document (PDF, Google Doc, etc.)
-            </DialogDescription>
+            <DialogDescription className="text-[#8B6B5A]">Add a link to a document (PDF, Google Doc, etc.)</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Document Name</label>
-              <input
-                type="text"
-                value={docName}
-                onChange={(e) => setDocName(e.target.value)}
-                placeholder="e.g., Weekly Guide PDF"
-                className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
-              />
+              <input type="text" value={docName} onChange={(e) => setDocName(e.target.value)} placeholder="e.g., Weekly Guide PDF" className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
             </div>
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Document URL</label>
-              <input
-                type="url"
-                value={docUrl}
-                onChange={(e) => setDocUrl(e.target.value)}
-                placeholder="https://drive.google.com/..."
-                className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
-              />
+              <input type="url" value={docUrl} onChange={(e) => setDocUrl(e.target.value)} placeholder="https://drive.google.com/..." className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDocDialog(false)} className="border-[#e8d8c8] text-[#6b4c52] bg-transparent">
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setShowDocDialog(false)} className="border-[#e8d8c8] text-[#6b4c52] bg-transparent">Cancel</Button>
             <Button onClick={insertDocLink} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white">
               <FileText className="w-4 h-4 mr-2" />
               Attach Document

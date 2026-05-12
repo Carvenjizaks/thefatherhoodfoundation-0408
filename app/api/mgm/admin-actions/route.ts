@@ -73,6 +73,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Helper to replace personalization tags
+    function personalizeContent(content: string, sub: any, recipientEmail: string) {
+      const isHusband = recipientEmail === sub.husband_email
+      const firstName = isHusband ? sub.husband_first_name : sub.wife_first_name
+      const coupleName = `${sub.husband_first_name} & ${sub.wife_first_name}`
+
+      return content
+        .replace(/\{\{first_name\}\}/g, firstName || "")
+        .replace(/\{\{husband_name\}\}/g, sub.husband_first_name || "")
+        .replace(/\{\{wife_name\}\}/g, sub.wife_first_name || "")
     function personalizeContent(content: string, sub: any, recipientType: string, recipientEmail: string) {
       const isHusband = recipientEmail === sub.husband_email
       const firstName = isHusband ? sub.husband_first_name : sub.wife_first_name
@@ -86,6 +95,7 @@ export async function POST(request: NextRequest) {
         .replace(/\{\{email\}\}/g, recipientEmail)
     }
 
+    // Build recipient list with subscription context for personalization
     // Build recipient list based on type
     const recipientList: { email: string; sub: any }[] = []
     for (const sub of subs) {
@@ -97,11 +107,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Send personalized emails to each recipient individually
     // Send personalized emails to each recipient
     let successCount = 0
     let failCount = 0
 
     for (const recipient of recipientList) {
+      const personalizedBody = personalizeContent(emailBody, recipient.sub, recipient.email)
+      const personalizedSubject = personalizeContent(subject, recipient.sub, recipient.email)
+
       const personalizedBody = personalizeContent(emailBody, recipient.sub, recipientType, recipient.email)
       const personalizedSubject = personalizeContent(subject, recipient.sub, recipientType, recipient.email)
       
@@ -150,6 +164,8 @@ export async function POST(request: NextRequest) {
         text: textBody,
       })
 
+      if (result.success) successCount++
+      else failCount++
       if (result.success) {
         successCount++
       } else {
