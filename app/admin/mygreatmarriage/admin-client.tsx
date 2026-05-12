@@ -142,24 +142,24 @@ export default function AdminDashboardClient({
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <p className="text-xs font-bold tracking-widest uppercase text-[#D4A574]">Admin</p>
-            <h1 className="text-2xl font-bold text-[#1a0a0e]" style={{ fontFamily: "Georgia, serif" }}>My Great Marriage Dashboard</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#1a0a0e]" style={{ fontFamily: "Georgia, serif" }}>My Great Marriage Dashboard</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {selectedSubs.size > 0 && (
               <Button 
                 onClick={() => setEmailComposerOpen(true)} 
-                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full flex items-center gap-2"
+                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full flex items-center gap-2 text-sm"
               >
                 <Send className="w-4 h-4" />
-                Email {selectedSubs.size} Selected
+                <span className="hidden sm:inline">Email</span> {selectedSubs.size} <span className="hidden sm:inline">Selected</span>
               </Button>
             )}
-            <Button onClick={handleExportCsv} variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full bg-transparent flex items-center gap-2">
+            <Button onClick={handleExportCsv} variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full bg-transparent flex items-center gap-2 text-sm">
               <Download className="w-4 h-4" />
-              Export CSV
+              <span className="hidden sm:inline">Export</span> CSV
             </Button>
           </div>
         </div>
@@ -169,22 +169,22 @@ export default function AdminDashboardClient({
         )}
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
           {[
             { label: "Active Subscribers", value: stats.totalActive },
             { label: "Husband Track", value: stats.husbandTrack },
             { label: "Wife Track", value: stats.wifeTrack },
             { label: "Couple Track", value: stats.coupleTrack },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl border border-[#e8d8c8] p-6 text-center shadow-sm">
-              <p className="text-3xl font-bold text-[#8B2B3E]">{stat.value}</p>
+            <div key={stat.label} className="bg-white rounded-xl border border-[#e8d8c8] p-4 sm:p-6 text-center shadow-sm">
+              <p className="text-2xl sm:text-3xl font-bold text-[#8B2B3E]">{stat.value}</p>
               <p className="text-xs text-[#8B6B5A] mt-1 font-medium">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Search */}
-        <form onSubmit={handleSearch} className="flex gap-3">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B6B5A]" />
             <input
@@ -195,14 +195,16 @@ export default function AdminDashboardClient({
               className="w-full border border-[#e8d8c8] rounded-lg pl-10 pr-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
             />
           </div>
-          <Button type="submit" disabled={isPending} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg px-5">
-            Search
-          </Button>
-          {search && (
-            <Button type="button" variant="outline" onClick={() => { setSearchInput(""); startTransition(() => { router.push("/admin/mygreatmarriage") }) }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
-              Clear
+          <div className="flex gap-2 sm:gap-3">
+            <Button type="submit" disabled={isPending} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg px-5 flex-1 sm:flex-none">
+              Search
             </Button>
-          )}
+            {search && (
+              <Button type="button" variant="outline" onClick={() => { setSearchInput(""); startTransition(() => { router.push("/admin/mygreatmarriage") }) }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
+                Clear
+              </Button>
+            )}
+          </div>
         </form>
 
         {/* Subscriptions Table */}

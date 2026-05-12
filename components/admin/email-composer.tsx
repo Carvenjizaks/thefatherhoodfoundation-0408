@@ -177,7 +177,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-2xl bg-white max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e] text-xl">Compose Email</DialogTitle>
             <DialogDescription className="text-[#8B6B5A]">
@@ -189,8 +189,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
             {/* Recipient Type Selection */}
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-2 block">Send To</label>
-              <div className="flex gap-3">
-                <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "all" ? "border-[#8B2B3E] bg-[#8B2B3E]/5" : "border-[#e8d8c8] hover:border-[#8B2B3E]/50"}`}>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "all" ? "border-[#8B2B3E] bg-[#8B2B3E]/5" : "border-[#e8d8c8] hover:border-[#8B2B3E]/50"}`}>
                   <input
                     type="radio"
                     name="recipientType"
@@ -199,10 +199,10 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     onChange={() => setRecipientType("all")}
                     className="sr-only"
                   />
-                  <span className="text-sm font-medium text-[#1a0a0e]">Both</span>
+                  <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Both</span>
                   <span className="text-xs text-[#8B6B5A]">({recipients.length})</span>
                 </label>
-                <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "men" ? "border-[#2563eb] bg-[#2563eb]/5" : "border-[#e8d8c8] hover:border-[#2563eb]/50"}`}>
+                <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "men" ? "border-[#2563eb] bg-[#2563eb]/5" : "border-[#e8d8c8] hover:border-[#2563eb]/50"}`}>
                   <input
                     type="radio"
                     name="recipientType"
@@ -211,10 +211,10 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     onChange={() => setRecipientType("men")}
                     className="sr-only"
                   />
-                  <span className="text-sm font-medium text-[#1a0a0e]">Men Only</span>
+                  <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Men</span>
                   <span className="text-xs text-[#8B6B5A]">({menCount})</span>
                 </label>
-                <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "women" ? "border-[#ec4899] bg-[#ec4899]/5" : "border-[#e8d8c8] hover:border-[#ec4899]/50"}`}>
+                <label className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 p-2 sm:p-3 rounded-lg border-2 cursor-pointer transition-all ${recipientType === "women" ? "border-[#ec4899] bg-[#ec4899]/5" : "border-[#e8d8c8] hover:border-[#ec4899]/50"}`}>
                   <input
                     type="radio"
                     name="recipientType"
@@ -223,7 +223,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     onChange={() => setRecipientType("women")}
                     className="sr-only"
                   />
-                  <span className="text-sm font-medium text-[#1a0a0e]">Women Only</span>
+                  <span className="text-xs sm:text-sm font-medium text-[#1a0a0e]">Women</span>
                   <span className="text-xs text-[#8B6B5A]">({womenCount})</span>
                 </label>
               </div>
@@ -258,10 +258,11 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                 <Type className="w-3 h-3" />
                 Font Settings
               </label>
-              <div className="flex flex-wrap gap-3 items-center">
-                {/* Font Family */}
+              
+              {/* Row 1: Font Family and Size */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 <Select value={fontFamily} onValueChange={setFontFamily}>
-                  <SelectTrigger className="w-[140px] bg-white border-[#e8d8c8]">
+                  <SelectTrigger className="w-full bg-white border-[#e8d8c8] text-xs sm:text-sm">
                     <SelectValue placeholder="Font" />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
@@ -273,9 +274,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   </SelectContent>
                 </Select>
 
-                {/* Font Size */}
                 <Select value={fontSize} onValueChange={setFontSize}>
-                  <SelectTrigger className="w-[120px] bg-white border-[#e8d8c8]">
+                  <SelectTrigger className="w-full bg-white border-[#e8d8c8] text-xs sm:text-sm">
                     <SelectValue placeholder="Size" />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
@@ -286,36 +286,36 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
 
+              {/* Row 2: Color, Styles, Alignment */}
+              <div className="flex flex-wrap gap-2 items-center">
                 {/* Font Color */}
-                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-3">
-                  <Palette className="w-4 h-4 text-[#8B6B5A]" />
-                  <Select value={fontColor} onValueChange={setFontColor}>
-                    <SelectTrigger className="w-[100px] bg-white border-[#e8d8c8]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: fontColor }} />
-                        <span className="text-xs">{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      {FONT_COLORS.map((color) => (
-                        <SelectItem key={color.value} value={color.value}>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: color.value }} />
-                            {color.label}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select value={fontColor} onValueChange={setFontColor}>
+                  <SelectTrigger className="w-[90px] sm:w-[100px] bg-white border-[#e8d8c8]">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="w-4 h-4 rounded-full border border-gray-300 shrink-0" style={{ backgroundColor: fontColor }} />
+                      <span className="text-xs truncate">{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    {FONT_COLORS.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded-full border border-gray-300" style={{ backgroundColor: color.value }} />
+                          {color.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
                 {/* Style buttons */}
-                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-3">
+                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-2">
                   <button
                     type="button"
                     onClick={() => setIsBold(!isBold)}
-                    className={`p-2 rounded-lg transition-colors ${isBold ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isBold ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Bold"
                   >
                     <Bold className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   <button
                     type="button"
                     onClick={() => setIsItalic(!isItalic)}
-                    className={`p-2 rounded-lg transition-colors ${isItalic ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isItalic ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Italic"
                   >
                     <Italic className="w-4 h-4" />
@@ -331,7 +331,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   <button
                     type="button"
                     onClick={() => setIsUnderline(!isUnderline)}
-                    className={`p-2 rounded-lg transition-colors ${isUnderline ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${isUnderline ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Underline"
                   >
                     <Underline className="w-4 h-4" />
@@ -339,11 +339,11 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                 </div>
 
                 {/* Alignment buttons */}
-                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-3">
+                <div className="flex items-center gap-1 border-l border-[#e8d8c8] pl-2">
                   <button
                     type="button"
                     onClick={() => setTextAlign("left")}
-                    className={`p-2 rounded-lg transition-colors ${textAlign === "left" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "left" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Align Left"
                   >
                     <AlignLeft className="w-4 h-4" />
@@ -351,7 +351,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   <button
                     type="button"
                     onClick={() => setTextAlign("center")}
-                    className={`p-2 rounded-lg transition-colors ${textAlign === "center" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "center" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Align Center"
                   >
                     <AlignCenter className="w-4 h-4" />
@@ -359,7 +359,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   <button
                     type="button"
                     onClick={() => setTextAlign("right")}
-                    className={`p-2 rounded-lg transition-colors ${textAlign === "right" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${textAlign === "right" ? 'bg-[#8B2B3E] text-white' : 'hover:bg-white text-[#6b4c52]'}`}
                     title="Align Right"
                   >
                     <AlignRight className="w-4 h-4" />
@@ -368,26 +368,26 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
               </div>
 
               {/* Insert Links Row */}
-              <div className="flex gap-2 mt-3 pt-3 border-t border-[#e8d8c8]">
+              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-[#e8d8c8]">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setShowLinkDialog(true)}
-                  className="border-[#e8d8c8] text-[#6b4c52] bg-white hover:bg-[#fdf8f3] flex items-center gap-2"
+                  className="border-[#e8d8c8] text-[#6b4c52] bg-white hover:bg-[#fdf8f3] flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
                   <Link className="w-4 h-4" />
-                  Insert Link
+                  <span className="hidden sm:inline">Insert</span> Link
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setShowDocDialog(true)}
-                  className="border-[#e8d8c8] text-[#6b4c52] bg-white hover:bg-[#fdf8f3] flex items-center gap-2"
+                  className="border-[#e8d8c8] text-[#6b4c52] bg-white hover:bg-[#fdf8f3] flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
                 >
                   <FileText className="w-4 h-4" />
-                  Attach Document Link
+                  <span className="hidden sm:inline">Attach</span> Doc
                 </Button>
               </div>
             </div>
