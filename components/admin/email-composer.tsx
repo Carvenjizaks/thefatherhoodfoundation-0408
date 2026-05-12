@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Send, Clock, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, FileText, User } from "lucide-react"
+import { Send, Clock, Type, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link, FileText, Palette, User, Users } from "lucide-react"
 
 interface EmailComposerProps {
   open: boolean
@@ -61,6 +62,11 @@ const PERSONALIZATION_TAGS = [
   { value: "{{wife_name}}", label: "Wife" },
   { value: "{{couple_name}}", label: "Couple" },
   { value: "{{email}}", label: "Email" },
+  { value: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
+  { value: "{{husband_name}}", label: "Husband Name", description: "Husband's first name" },
+  { value: "{{wife_name}}", label: "Wife Name", description: "Wife's first name" },
+  { value: "{{couple_name}}", label: "Couple Name", description: "Both names (e.g., John & Jane)" },
+  { value: "{{email}}", label: "Email", description: "Recipient's email address" },
 ]
 
 export default function EmailComposer({ open, onOpenChange, recipients, onSend }: EmailComposerProps) {
@@ -142,6 +148,10 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
     setDocName("")
     setDocUrl("")
     setShowDocDialog(false)
+  }
+
+  const insertPersonalization = (tag: string) => {
+    setBody(prev => prev + tag)
   }
 
   const handleSend = async () => {
@@ -389,6 +399,72 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
               <p className="text-xs text-[#8B6B5A] mt-1">
                 Tip: Place your cursor in the message and click any button above to insert at that position.
               </p>
+              {/* Insert Links Row */}
+              <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-[#e8d8c8]">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowLinkDialog(true)}
+                  className="border-[#8B2B3E] text-[#8B2B3E] bg-white hover:bg-[#8B2B3E]/5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                >
+                  <Link className="w-4 h-4" />
+                  Insert Link
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowDocDialog(true)}
+                  className="border-[#8B2B3E] text-[#8B2B3E] bg-white hover:bg-[#8B2B3E]/5 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                >
+                  <FileText className="w-4 h-4" />
+                  Attach Doc
+                </Button>
+              </div>
+            </div>
+
+            {/* Personalization Tags */}
+            <div className="border border-[#e8d8c8] rounded-lg p-3 bg-[#fdf8f3]">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-2 flex items-center gap-2">
+                <User className="w-3 h-3" />
+                Personalization (Click to insert)
+              </label>
+              <p className="text-xs text-[#8B6B5A] mb-2">Add dynamic fields that will be replaced with each recipient&apos;s info</p>
+              <div className="flex flex-wrap gap-2">
+                {PERSONALIZATION_TAGS.map((tag) => (
+                  <button
+                    key={tag.value}
+                    type="button"
+                    onClick={() => insertPersonalization(tag.value)}
+                    className="px-3 py-1.5 bg-white border border-[#2563eb] text-[#2563eb] rounded-full text-xs hover:bg-[#2563eb]/5 transition-colors"
+                    title={tag.description}
+                  >
+                    {tag.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Email Body */}
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Message</label>
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder="Write your message here..."
+                rows={8}
+                style={{
+                  fontFamily,
+                  fontSize,
+                  color: fontColor,
+                  fontWeight: isBold ? "bold" : "normal",
+                  fontStyle: isItalic ? "italic" : "normal",
+                  textDecoration: isUnderline ? "underline" : "none",
+                  textAlign,
+                }}
+                className="w-full border border-[#e8d8c8] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 resize-none"
+              />
             </div>
 
             {/* Schedule Time */}
