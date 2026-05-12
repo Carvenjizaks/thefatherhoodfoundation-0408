@@ -52,6 +52,7 @@ import {
   Link as LinkIcon,
   FileText,
   User,
+  X,
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CommunicationsHub } from "@/components/admin/communications-hub"
@@ -232,6 +233,13 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     checkAuth()
   }, [])
+
+  // Auto-dismiss email result toast after 4 seconds
+  useEffect(() => {
+    if (!emailResult) return
+    const t = setTimeout(() => setEmailResult(null), 4000)
+    return () => clearTimeout(t)
+  }, [emailResult])
 
   const checkAuth = async () => {
     const token = sessionStorage.getItem("ff_admin_token")
@@ -2278,13 +2286,18 @@ export default function AdminDashboardPage() {
             </div>
 
             {emailResult && (
-              <div className={`flex items-center gap-2 p-3 rounded-lg text-sm border ${
+              <div className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium shadow-md border ${
                 emailResult.type === "success"
-                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                  : "bg-red-50 text-red-800 border-red-200"
+                  ? "bg-emerald-600 text-white border-emerald-700"
+                  : "bg-red-600 text-white border-red-700"
               }`}>
-                {emailResult.type === "success" ? <CheckCircle className="w-4 h-4 shrink-0" /> : <XCircle className="w-4 h-4 shrink-0" />}
-                <span>{emailResult.message}</span>
+                {emailResult.type === "success"
+                  ? <CheckCircle className="w-5 h-5 shrink-0" />
+                  : <XCircle className="w-5 h-5 shrink-0" />}
+                <span className="flex-1">{emailResult.message}</span>
+                <button onClick={() => setEmailResult(null)} className="opacity-70 hover:opacity-100 ml-1">
+                  <X className="w-4 h-4" />
+                </button>
               </div>
             )}
 

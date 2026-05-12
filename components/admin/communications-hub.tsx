@@ -229,6 +229,13 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
     fetchGroups()
   }
 
+  // Auto-dismiss send result toast after 4 seconds
+  useEffect(() => {
+    if (!sendResult) return
+    const t = setTimeout(() => setSendResult(null), 4000)
+    return () => clearTimeout(t)
+  }, [sendResult])
+
   // ── Compose helpers ────────────────────────────────────────────────────────
   // Insert plain text at cursor position in the contenteditable editor
   const insertAtCursor = (text: string) => {
@@ -348,7 +355,24 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-[calc(100vh-180px)] gap-0 bg-background border border-border rounded-xl overflow-hidden">
+    <div className="relative flex h-[calc(100vh-180px)] gap-0 bg-background border border-border rounded-xl overflow-hidden">
+
+      {/* ── SEND TOAST ───────────────────────────────────────────────────── */}
+      {sendResult && (
+        <div className={`absolute top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-xl shadow-lg text-sm font-medium border transition-all animate-in fade-in slide-in-from-top-2 ${
+          sendResult.type === "success"
+            ? "bg-emerald-600 text-white border-emerald-700"
+            : "bg-red-600 text-white border-red-700"
+        }`}>
+          {sendResult.type === "success"
+            ? <CheckCircle className="w-4 h-4 shrink-0" />
+            : <XCircle className="w-4 h-4 shrink-0" />}
+          <span>{sendResult.message}</span>
+          <button onClick={() => setSendResult(null)} className="ml-1 opacity-70 hover:opacity-100">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* ── LEFT SIDEBAR ──────────────────────────────────────────────────── */}
       <div className="w-64 flex-shrink-0 flex flex-col border-r border-border bg-[#fdf8f3]">
@@ -781,15 +805,7 @@ export function CommunicationsHub({ adminFetch, contacts, onRefreshContacts }: C
                 </p>
               </div>
 
-              {/* Result */}
-              {sendResult && (
-                <div className={`flex items-center gap-2 p-3 rounded-lg text-sm border ${
-                  sendResult.type === "success" ? "bg-emerald-50 text-emerald-800 border-emerald-200" : "bg-red-50 text-red-800 border-red-200"
-                }`}>
-                  {sendResult.type === "success" ? <CheckCircle className="w-4 h-4 shrink-0" /> : <XCircle className="w-4 h-4 shrink-0" />}
-                  <span>{sendResult.message}</span>
-                </div>
-              )}
+              {/* Result toast shown via fixed overlay above — no inline duplicate needed */}
             </div>
 
             {/* Footer actions */}
