@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/server"
+import { tagsFromSource, mergeTags } from "@/lib/tags"
 
 // Create admin client for server-side operations - called lazily to ensure env vars are loaded
 function getSupabaseAdmin() {
@@ -91,9 +92,21 @@ export async function createContact(params: CreateContactParams) {
   let contactId: string
   let isNewContact = false
 
+  // Compute tags based on this signup source
+  const incomingTags = tagsFromSource(source, sourceDetails)
+
   if (existingContact) {
     contactId = existingContact.id
-    // Update source details if registering for new event
+
+    // Fetch existing tags and merge with the incoming ones
+    const { data: existingTagRow } = await getSupabaseAdmin()
+      .from("contacts")
+      .select("tags")
+      .eq("id", contactId)
+      .single()
+    const mergedTags = mergeTags(existingTagRow?.tags as string[] | null, incomingTags)
+
+    // Update source details + tags
     const { error: updateError } = await getSupabaseAdmin()
       .from("contacts")
       .update({
@@ -101,16 +114,17 @@ export async function createContact(params: CreateContactParams) {
         last_name: lastName,
         name: `${firstName} ${lastName}`,
         source_details: sourceDetails,
+        tags: mergedTags,
         updated_at: new Date().toISOString(),
       })
       .eq("id", contactId)
-    
+
     if (updateError) {
       console.error("[v0] Error updating existing contact:", JSON.stringify(updateError))
     }
   } else {
     // Create new contact
-    console.log("[v0] Inserting new contact:", { firstName, lastName, email: email.toLowerCase(), source })
+    console.log("[v0] Inserting new contact:", { firstName, lastName, email: email.toLowerCase(), source, tags: incomingTags })
     const { data: newContact, error } = await getSupabaseAdmin()
       .from("contacts")
       .insert({
@@ -121,6 +135,7 @@ export async function createContact(params: CreateContactParams) {
         cellphone: cellphone || null,
         source,
         source_details: sourceDetails,
+        tags: incomingTags,
       })
       .select()
       .single()

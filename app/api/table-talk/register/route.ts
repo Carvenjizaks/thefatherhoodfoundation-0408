@@ -33,6 +33,7 @@ export async function POST(request: Request) {
         session_date: sessionDate,
         dynamic_code: dynamicCode,
         payment_status: "unpaid",
+        tags: ["TT4Men"],
       })
       .select()
       .single()

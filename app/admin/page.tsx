@@ -16,6 +16,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import { TagBadges } from "@/components/admin/tag-badges"
+import { CORE_TAGS } from "@/lib/tags"
 
 import { 
   Search, 
@@ -87,7 +89,8 @@ interface Contact extends Record<string, unknown> {
   source_details: string
   email_confirmed: boolean
   created_at: string
-}
+  tags: string[] | null
+  }
 
 interface Donation extends Record<string, unknown> {
   id: string
@@ -135,6 +138,7 @@ export default function AdminDashboardPage() {
   const [loginError, setLoginError] = useState("")
   const [activeTab, setActiveTab] = useState("table-talk")
   const [eventFilter, setEventFilter] = useState("all") // Filter by specific event for check-in
+  const [tagFilter, setTagFilter] = useState<string>("all") // Filter contacts by tag
 
   // Admin users management (owner only)
   const [adminUsers, setAdminUsers] = useState<AdminStaffUser[]>([])
@@ -1471,6 +1475,42 @@ export default function AdminDashboardPage() {
                   )}
                 </div>
 
+                {/* Tag filter chips */}
+                <div className="flex flex-wrap items-center gap-2 px-1">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mr-1">Filter by tag:</span>
+                  {(() => {
+                    const availableTags = Array.from(new Set([
+                      ...CORE_TAGS,
+                      ...contacts.flatMap(c => (Array.isArray(c.tags) ? c.tags : []))
+                    ]))
+                    return (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setTagFilter("all")}
+                          className={`inline-flex items-center font-semibold rounded-full border px-2.5 py-1 text-xs transition-colors ${tagFilter === "all" ? "bg-primary text-primary-foreground border-primary" : "bg-background text-foreground border-border hover:bg-secondary"}`}
+                        >
+                          All ({contacts.length})
+                        </button>
+                        {availableTags.map(tag => {
+                          const count = contacts.filter(c => Array.isArray(c.tags) && c.tags.includes(tag)).length
+                          const active = tagFilter === tag
+                          return (
+                            <button
+                              key={tag}
+                              type="button"
+                              onClick={() => setTagFilter(tag)}
+                              className={`inline-flex items-center font-semibold rounded-full border px-2.5 py-1 text-xs transition-colors ${active ? "bg-primary text-primary-foreground border-primary" : "bg-background text-foreground border-border hover:bg-secondary"}`}
+                            >
+                              {tag} ({count})
+                            </button>
+                          )
+                        })}
+                      </>
+                    )
+                  })()}
+                </div>
+
                 {/* Categorized by Source */}
                 {isLoading ? (
                   <div className="flex flex-col items-center justify-center py-16">
@@ -1479,7 +1519,10 @@ export default function AdminDashboardPage() {
                   </div>
                 ) : (
                   (() => {
-                    const filteredContacts = filterData(contacts, searchTerm)
+                    const searchFiltered = filterData(contacts, searchTerm)
+                    const filteredContacts = tagFilter === "all"
+                      ? searchFiltered
+                      : searchFiltered.filter(c => Array.isArray(c.tags) && c.tags.includes(tagFilter))
                     const groupedContacts = filteredContacts.reduce((acc, contact) => {
                       const source = contact.source || "Unknown"
                       if (!acc[source]) acc[source] = []
@@ -1570,6 +1613,7 @@ export default function AdminDashboardPage() {
                                     </TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</TableHead>
+                                    <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Tags</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Details</TableHead>
                                     <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Confirmed</TableHead>
@@ -1600,6 +1644,7 @@ export default function AdminDashboardPage() {
                                         </div>
                                       </TableCell>
                                       <TableCell className="text-sm text-muted-foreground">{contact.email}</TableCell>
+                                      <TableCell><TagBadges tags={contact.tags} /></TableCell>
                                       <TableCell className="text-sm text-muted-foreground">{contact.cellphone || "-"}</TableCell>
                                       <TableCell className="text-xs text-muted-foreground max-w-[150px] truncate">{contact.source_details || "-"}</TableCell>
                                       <TableCell>
