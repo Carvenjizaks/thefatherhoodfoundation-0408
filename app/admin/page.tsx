@@ -56,6 +56,7 @@ import {
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CommunicationsHub } from "@/components/admin/communications-hub"
+import { EmailSetupRedesigned } from "@/components/admin/email-setup-redesigned"
 
 interface TableTalkRegistration extends Record<string, unknown> {
   id: string
@@ -103,7 +104,6 @@ interface Contact extends Record<string, unknown> {
   email_confirmed: boolean
   created_at: string
   tags: string[] | null
-  }
   gender?: string | null
   unsubscribed: boolean
   unsubscribed_at?: string | null
@@ -2101,7 +2101,7 @@ export default function AdminDashboardPage() {
 
             {/* ==================== COMMUNICATIONS TAB ==================== */}
             <TabsContent value="communications">
-              <CommunicationsHub
+              <EmailSetupRedesigned
                 adminFetch={adminFetch}
                 contacts={contacts}
                 onRefreshContacts={fetchAllData}
