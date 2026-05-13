@@ -79,7 +79,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const [isSending, setIsSending] = useState(false)
   const [recipientType, setRecipientType] = useState<"all" | "men" | "women">("all")
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const editorRef = useRef<HTMLDivElement>(null)
 
   // Link dialog state
   const [showLinkDialog, setShowLinkDialog] = useState(false)
@@ -103,22 +103,50 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const menCount = recipients.filter(r => r.gender === "male").length
   const womenCount = recipients.filter(r => r.gender === "female").length
 
-  // Insert content at cursor position
+  // Insert content at cursor position in contentEditable div
   const insertAtCursor = (content: string) => {
-    const textarea = textareaRef.current
-    if (!textarea) {
+    const editorDiv = editorRef.current
+    if (!editorDiv) {
       setBody(prev => prev + content)
       return
     }
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const newBody = body.substring(0, start) + content + body.substring(end)
-    setBody(newBody)
-    // Restore cursor position after the inserted content
-    setTimeout(() => {
-      textarea.focus()
-      textarea.setSelectionRange(start + content.length, start + content.length)
-    }, 0)
+    
+    const selection = window.getSelection()
+    if (!selection?.rangeCount) {
+      setBody(prev => prev + content)
+      return
+    }
+
+    try {
+      const range = selection.getRangeAt(0)
+      range.deleteContents()
+
+      // Create a temporary container to parse HTML
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      
+      // Insert each node from the parsed HTML
+      let lastNode: Node | null = null
+      while (tempDiv.firstChild) {
+        lastNode = range.insertNode(tempDiv.removeChild(tempDiv.firstChild))
+      }
+
+      // Move cursor to end of inserted content
+      if (lastNode) {
+        range.setStartAfter(lastNode)
+        range.collapse(true)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+      
+      // Update state to reflect changes
+      if (editorDiv.innerHTML) {
+        setBody(editorDiv.innerHTML)
+      }
+    } catch (error) {
+      console.error("Error inserting content:", error)
+      setBody(prev => prev + content)
+    }
   }
 
   const insertLink = () => {
@@ -410,13 +438,20 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   ))}
                 </div>
 
-                {/* Textarea */}
-                <textarea
-                  ref={textareaRef}
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  placeholder="Write your message here... Use the toolbar above to format text, insert links, attach documents, or add personalization tags like {{first_name}}."
-                  rows={10}
+                {/* Editor */}
+                <div
+                  ref={editorRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  onInput={(e) => {
+                    const div = e.currentTarget as HTMLDivElement
+                    setBody(div.innerHTML)
+                  }}
+                  onBlur={(e) => {
+                    const div = e.currentTarget as HTMLDivElement
+                    setBody(div.innerHTML)
+                  }}
+                  dangerouslySetInnerHTML={{ __html: body }}
                   style={{
                     fontFamily,
                     fontSize,
@@ -426,7 +461,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     textDecoration: isUnderline ? "underline" : "none",
                     textAlign,
                   }}
-                  className="w-full px-4 py-3 focus:outline-none resize-none border-0"
+                  className="w-full px-4 py-3 focus:outline-none min-h-60 border border-[#e8d8c8] rounded-lg bg-white overflow-auto"
                 />
               </div>
               <p className="text-xs text-[#8B6B5A] mt-1">
