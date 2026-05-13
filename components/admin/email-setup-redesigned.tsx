@@ -865,19 +865,28 @@ export function EmailSetupRedesigned({ adminFetch, contacts, onRefreshContacts }
                 </div>
 
                 {/* Content editable area */}
-                <div
-                  ref={editorRef}
-                  contentEditable
-                  onInput={(e) => setEmailBody((e.target as HTMLDivElement).innerHTML)}
-                  className="min-h-[200px] max-h-[350px] overflow-y-auto p-4 focus:outline-none"
-                  style={{
-                    fontFamily,
-                    fontSize,
-                    color: fontColor,
-                    textAlign,
-                  }}
-                  data-placeholder="Write your email message here..."
-                />
+                <div className="relative">
+                  {!emailBody && (
+                    <div 
+                      className="absolute top-4 left-4 text-[#8B6B5A]/60 pointer-events-none"
+                      style={{ fontFamily, fontSize }}
+                    >
+                      Write your email message here...
+                    </div>
+                  )}
+                  <div
+                    ref={editorRef}
+                    contentEditable
+                    onInput={(e) => setEmailBody((e.target as HTMLDivElement).innerHTML)}
+                    className="min-h-[200px] max-h-[350px] overflow-y-auto p-4 focus:outline-none"
+                    style={{
+                      fontFamily,
+                      fontSize,
+                      color: fontColor,
+                      textAlign,
+                    }}
+                  />
+                </div>
               </div>
               <p className="text-xs text-[#8B6B5A] mt-1">
                 Tip: Click toolbar buttons to format, or use personalization tags to customize for each recipient.
@@ -1057,15 +1066,6 @@ export function EmailSetupRedesigned({ adminFetch, contacts, onRefreshContacts }
         </DialogContent>
       </Dialog>
 
-      {/* CSS for placeholder */}
-      <style jsx global>{`
-        [contenteditable]:empty:before {
-          content: attr(data-placeholder);
-          color: #8B6B5A;
-          opacity: 0.6;
-          pointer-events: none;
-        }
-      `}</style>
     </div>
   )
 }
