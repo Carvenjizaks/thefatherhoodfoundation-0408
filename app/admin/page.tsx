@@ -103,7 +103,6 @@ interface Contact extends Record<string, unknown> {
   email_confirmed: boolean
   created_at: string
   tags: string[] | null
-  }
   gender?: string | null
   unsubscribed: boolean
   unsubscribed_at?: string | null
