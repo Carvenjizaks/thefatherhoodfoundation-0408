@@ -3,7 +3,22 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { Download, RefreshCw, UserX, Search, Mail, Send } from "lucide-react"
+import { 
+  Download, 
+  UserX, 
+  Search, 
+  Mail, 
+  Send, 
+  Users, 
+  TrendingUp, 
+  Calendar, 
+  BarChart3,
+  Menu,
+  X,
+  LogOut,
+  Settings,
+  ChevronRight
+} from "lucide-react"
 import EmailComposer from "@/components/admin/email-composer"
 
 type Subscription = Record<string, any>
@@ -17,12 +32,12 @@ interface Stats {
 }
 
 const STREAM_COLORS: Record<string, string> = {
-  WELCOME: "bg-green-100 text-green-700",
-  COUPLES_1: "bg-blue-100 text-blue-700",
-  HUSBANDS: "bg-sky-100 text-sky-700",
-  WIVES: "bg-pink-100 text-pink-700",
-  COUPLES_2: "bg-purple-100 text-purple-700",
-  ADMIN: "bg-gray-100 text-gray-700",
+  WELCOME: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+  COUPLES_1: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+  HUSBANDS: "bg-sky-500/10 text-sky-400 border border-sky-500/20",
+  WIVES: "bg-pink-500/10 text-pink-400 border border-pink-500/20",
+  COUPLES_2: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
+  ADMIN: "bg-zinc-500/10 text-zinc-400 border border-zinc-500/20",
 }
 
 export default function AdminDashboardClient({
@@ -41,6 +56,8 @@ export default function AdminDashboardClient({
   const [actionMsg, setActionMsg] = useState("")
   const [selectedSubs, setSelectedSubs] = useState<Set<string>>(new Set())
   const [emailComposerOpen, setEmailComposerOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<"subscribers" | "emails">("subscribers")
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -134,195 +151,347 @@ export default function AdminDashboardClient({
     }
   }
 
+  function handleLogout() {
+    document.cookie = "mgm_admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    router.push("/admin/mygreatmarriage/login")
+  }
+
+  const statCards = [
+    { label: "Active Subscribers", value: stats.totalActive, icon: Users, color: "from-rose-500 to-pink-600" },
+    { label: "Husband Track", value: stats.husbandTrack, icon: TrendingUp, color: "from-blue-500 to-cyan-600" },
+    { label: "Wife Track", value: stats.wifeTrack, icon: Calendar, color: "from-purple-500 to-violet-600" },
+    { label: "Couple Track", value: stats.coupleTrack, icon: BarChart3, color: "from-amber-500 to-orange-600" },
+  ]
+
   return (
-    <main className="min-h-screen bg-[#FDF8F3] py-12 px-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-zinc-950 flex">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold tracking-widest uppercase text-[#D4A574]">Admin</p>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1a0a0e]" style={{ fontFamily: "Georgia, serif" }}>My Great Marriage Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {selectedSubs.size > 0 && (
-              <Button 
-                onClick={() => setEmailComposerOpen(true)} 
-                className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-full flex items-center gap-2 text-sm"
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-zinc-900 border-r border-zinc-800 
+        transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="p-6 border-b border-zinc-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-bold text-white">My Great Marriage</h1>
+                <p className="text-xs text-zinc-500 mt-0.5">Admin Dashboard</p>
+              </div>
+              <button 
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden p-2 rounded-lg hover:bg-zinc-800 text-zinc-400"
               >
-                <Send className="w-4 h-4" />
-                <span className="hidden sm:inline">Email</span> {selectedSubs.size} <span className="hidden sm:inline">Selected</span>
-              </Button>
-            )}
-            <Button onClick={handleExportCsv} variant="outline" className="border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5 rounded-full bg-transparent flex items-center gap-2 text-sm">
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Export</span> CSV
-            </Button>
-          </div>
-        </div>
-
-        {actionMsg && (
-          <div className="bg-white border border-[#e8d8c8] rounded-xl px-5 py-3 text-sm text-[#3D2314]">{actionMsg}</div>
-        )}
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-          {[
-            { label: "Active Subscribers", value: stats.totalActive },
-            { label: "Husband Track", value: stats.husbandTrack },
-            { label: "Wife Track", value: stats.wifeTrack },
-            { label: "Couple Track", value: stats.coupleTrack },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl border border-[#e8d8c8] p-4 sm:p-6 text-center shadow-sm">
-              <p className="text-2xl sm:text-3xl font-bold text-[#8B2B3E]">{stat.value}</p>
-              <p className="text-xs text-[#8B6B5A] mt-1 font-medium">{stat.label}</p>
+                <X className="w-5 h-5" />
+              </button>
             </div>
-          ))}
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-1">
+            <button
+              onClick={() => setActiveTab("subscribers")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === "subscribers" 
+                  ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" 
+                  : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Users className="w-5 h-5" />
+              Subscribers
+              <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${activeTab === "subscribers" ? "rotate-90" : ""}`} />
+            </button>
+            <button
+              onClick={() => setActiveTab("emails")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeTab === "emails" 
+                  ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" 
+                  : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Mail className="w-5 h-5" />
+              Email Logs
+              <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${activeTab === "emails" ? "rotate-90" : ""}`} />
+            </button>
+          </nav>
+
+          {/* Bottom Actions */}
+          <div className="p-4 border-t border-zinc-800 space-y-2">
+            <button
+              onClick={handleExportCsv}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all"
+            >
+              <Download className="w-5 h-5" />
+              Export CSV
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-red-400 transition-all"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
+          </div>
         </div>
+      </aside>
 
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B6B5A]" />
-            <input
-              type="search"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search by email address..."
-              className="w-full border border-[#e8d8c8] rounded-lg pl-10 pr-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40"
-            />
-          </div>
-          <div className="flex gap-2 sm:gap-3">
-          <Button type="submit" disabled={false} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg px-5 flex-1 sm:flex-none">
-            Search
-          </Button>
-            {search && (
-              <Button type="button" variant="outline" onClick={() => { setSearchInput(""); router.push("/admin/mygreatmarriage") }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
-                Clear
-              </Button>
-            )}
-          </div>
-        </form>
+      {/* Main Content */}
+      <main className="flex-1 min-h-screen">
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800">
+          <div className="flex items-center justify-between px-4 lg:px-8 py-4">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden p-2 rounded-lg hover:bg-zinc-800 text-zinc-400"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <div>
+                <h2 className="text-lg font-semibold text-white">
+                  {activeTab === "subscribers" ? "Subscribers" : "Email Logs"}
+                </h2>
+                <p className="text-xs text-zinc-500">
+                  {activeTab === "subscribers" 
+                    ? `${stats.totalActive} active subscribers` 
+                    : `${emailLogs.length} recent emails`}
+                </p>
+              </div>
+            </div>
 
-        {/* Subscriptions Table */}
-        <div>
-          <h2 className="text-lg font-bold text-[#1a0a0e] mb-4">Recent Subscriptions</h2>
-          <div className="bg-white rounded-2xl border border-[#e8d8c8] overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-<thead>
-                <tr className="border-b border-[#e8d8c8] bg-[#fdf8f3]">
-                    <th className="px-3 py-3">
-                      <input
-                        type="checkbox"
-                        checked={selectedSubs.size === subscriptions.length && subscriptions.length > 0}
-                        onChange={toggleSelectAll}
-                        className="w-4 h-4 rounded border-[#e8d8c8] text-[#8B2B3E] accent-[#8B2B3E]"
-                      />
-                    </th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Couple</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Location</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Progress</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Next Send</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {subscriptions.length === 0 ? (
-                    <tr><td colSpan={6} className="text-center py-10 text-[#8B6B5A]">No subscriptions found</td></tr>
-                  ) : subscriptions.map((sub) => (
-                    <tr key={sub.id} className={`border-b border-[#f0e8e0] last:border-none hover:bg-[#fdf8f3] ${selectedSubs.has(sub.id) ? 'bg-[#8B2B3E]/5' : ''}`}>
-                      <td className="px-3 py-4">
+            <div className="flex items-center gap-3">
+              {selectedSubs.size > 0 && (
+                <Button 
+                  onClick={() => setEmailComposerOpen(true)} 
+                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl flex items-center gap-2 text-sm shadow-lg shadow-rose-500/25"
+                >
+                  <Send className="w-4 h-4" />
+                  <span className="hidden sm:inline">Email</span> {selectedSubs.size}
+                </Button>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <div className="p-4 lg:p-8 space-y-8">
+          {/* Action Message */}
+          {actionMsg && (
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-5 py-3 text-sm text-emerald-400">
+              {actionMsg}
+            </div>
+          )}
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {statCards.map((stat) => (
+              <div 
+                key={stat.label} 
+                className="relative overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800 p-5 group hover:border-zinc-700 transition-all"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                <div className="relative">
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
+                    <stat.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <p className="text-3xl font-bold text-white">{stat.value}</p>
+                  <p className="text-xs text-zinc-500 mt-1 font-medium">{stat.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Search */}
+          {activeTab === "subscribers" && (
+            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <input
+                  type="search"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search by email address..."
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-500/40 transition-all"
+                />
+              </div>
+              <div className="flex gap-3">
+                <Button 
+                  type="submit" 
+                  className="bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl px-6 flex-1 sm:flex-none border border-zinc-700"
+                >
+                  Search
+                </Button>
+                {search && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => { setSearchInput(""); router.push("/admin/mygreatmarriage") }} 
+                    className="border-zinc-700 text-zinc-400 rounded-xl bg-transparent hover:bg-zinc-800 hover:text-white"
+                  >
+                    Clear
+                  </Button>
+                )}
+              </div>
+            </form>
+          )}
+
+          {/* Content */}
+          {activeTab === "subscribers" ? (
+            <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-zinc-800">
+                      <th className="px-4 py-4">
                         <input
                           type="checkbox"
-                          checked={selectedSubs.has(sub.id)}
-                          onChange={() => toggleSelectSub(sub.id)}
-                          className="w-4 h-4 rounded border-[#e8d8c8] text-[#8B2B3E] accent-[#8B2B3E]"
+                          checked={selectedSubs.size === subscriptions.length && subscriptions.length > 0}
+                          onChange={toggleSelectAll}
+                          className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-rose-500 focus:ring-rose-500/40"
                         />
-                      </td>
-                      <td className="px-5 py-4">
-                        <p className="font-semibold text-[#1a0a0e]">{sub.husband_first_name} &amp; {sub.wife_first_name} {sub.husband_last_name}</p>
-                        <p className="text-xs text-[#8B6B5A]">{sub.husband_email}</p>
-                        <p className="text-xs text-[#8B6B5A]">{sub.wife_email}</p>
-                        {!sub.is_active && <span className="text-xs text-red-500 font-medium">Inactive</span>}
-                      </td>
-                      <td className="px-5 py-4 text-[#6b4c52]">
-                        <p>{sub.country}</p>
-                        {sub.city && <p className="text-xs text-[#8B6B5A]">{sub.city}</p>}
-                      </td>
-                      <td className="px-5 py-4">
-                        <p className="text-[#1a0a0e]">Month {sub.current_month}, Week {sub.current_week_in_cycle}</p>
-                        {sub.last_sent_at && <p className="text-xs text-[#8B6B5A]">Last: {new Date(sub.last_sent_at).toLocaleDateString()}</p>}
-                      </td>
-                      <td className="px-5 py-4 text-[#6b4c52]">
-                        {sub.next_send_at ? new Date(sub.next_send_at).toLocaleDateString() : "—"}
-                      </td>
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleResendWelcome(sub.id, sub.husband_email, sub.wife_email)}
-                            title="Resend welcome email"
-                            className="p-1.5 rounded-lg hover:bg-[#8B2B3E]/10 text-[#8B2B3E] transition-colors"
-                          >
-                            <Mail className="w-4 h-4" />
-                          </button>
-                          {sub.is_active && (
-                            <button
-                              onClick={() => handleMarkInactive(sub.id)}
-                              title="Mark inactive"
-                              className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
-                            >
-                              <UserX className="w-4 h-4" />
-                            </button>
+                      </th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Couple</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 hidden md:table-cell">Location</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 hidden lg:table-cell">Progress</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 hidden sm:table-cell">Next Send</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-800/50">
+                    {subscriptions.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="text-center py-16 text-zinc-500">
+                          <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>No subscriptions found</p>
+                        </td>
+                      </tr>
+                    ) : subscriptions.map((sub) => (
+                      <tr 
+                        key={sub.id} 
+                        className={`hover:bg-zinc-800/50 transition-colors ${selectedSubs.has(sub.id) ? 'bg-rose-500/5' : ''}`}
+                      >
+                        <td className="px-4 py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedSubs.has(sub.id)}
+                            onChange={() => toggleSelectSub(sub.id)}
+                            className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-rose-500 focus:ring-rose-500/40"
+                          />
+                        </td>
+                        <td className="px-5 py-4">
+                          <p className="font-medium text-white">{sub.husband_first_name} &amp; {sub.wife_first_name}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5">{sub.husband_email}</p>
+                          <p className="text-xs text-zinc-500">{sub.wife_email}</p>
+                          {!sub.is_active && (
+                            <span className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+                              Inactive
+                            </span>
                           )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </td>
+                        <td className="px-5 py-4 hidden md:table-cell">
+                          <p className="text-zinc-300">{sub.country}</p>
+                          {sub.city && <p className="text-xs text-zinc-500">{sub.city}</p>}
+                        </td>
+                        <td className="px-5 py-4 hidden lg:table-cell">
+                          <p className="text-zinc-300">Month {sub.current_month}, Week {sub.current_week_in_cycle}</p>
+                          {sub.last_sent_at && (
+                            <p className="text-xs text-zinc-500 mt-0.5">
+                              Last: {new Date(sub.last_sent_at).toLocaleDateString()}
+                            </p>
+                          )}
+                        </td>
+                        <td className="px-5 py-4 text-zinc-400 hidden sm:table-cell">
+                          {sub.next_send_at ? new Date(sub.next_send_at).toLocaleDateString() : "—"}
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => handleResendWelcome(sub.id, sub.husband_email, sub.wife_email)}
+                              title="Resend welcome email"
+                              className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 transition-colors"
+                            >
+                              <Mail className="w-4 h-4" />
+                            </button>
+                            {sub.is_active && (
+                              <button
+                                onClick={() => handleMarkInactive(sub.id)}
+                                title="Mark inactive"
+                                className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-red-400 transition-colors"
+                              >
+                                <UserX className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-zinc-800">
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Type</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Recipient</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 hidden md:table-cell">Subject</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500 hidden sm:table-cell">Sent</th>
+                      <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-800/50">
+                    {emailLogs.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="text-center py-16 text-zinc-500">
+                          <Mail className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>No email logs yet</p>
+                        </td>
+                      </tr>
+                    ) : emailLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-zinc-800/50 transition-colors">
+                        <td className="px-5 py-4">
+                          <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-medium ${STREAM_COLORS[log.stream_type] || "bg-zinc-500/10 text-zinc-400 border border-zinc-500/20"}`}>
+                            {log.stream_type}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-zinc-300 text-xs max-w-[180px] truncate">
+                          {log.recipient_email}
+                        </td>
+                        <td className="px-5 py-4 text-zinc-400 text-xs max-w-[220px] truncate hidden md:table-cell">
+                          {log.subject}
+                        </td>
+                        <td className="px-5 py-4 text-zinc-500 text-xs hidden sm:table-cell">
+                          {new Date(log.sent_at).toLocaleDateString()}
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-medium ${
+                            log.status === "sent" 
+                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
+                              : "bg-red-500/10 text-red-400 border border-red-500/20"
+                          }`}>
+                            {log.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Email Logs */}
-        <div>
-          <h2 className="text-lg font-bold text-[#1a0a0e] mb-4">Recent Email Logs</h2>
-          <div className="bg-white rounded-2xl border border-[#e8d8c8] overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-[#e8d8c8] bg-[#fdf8f3]">
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Type</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Recipient</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Subject</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Sent</th>
-                    <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {emailLogs.length === 0 ? (
-                    <tr><td colSpan={5} className="text-center py-10 text-[#8B6B5A]">No email logs yet</td></tr>
-                  ) : emailLogs.map((log) => (
-                    <tr key={log.id} className="border-b border-[#f0e8e0] last:border-none hover:bg-[#fdf8f3]">
-                      <td className="px-5 py-3">
-                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${STREAM_COLORS[log.stream_type] || "bg-gray-100 text-gray-700"}`}>{log.stream_type}</span>
-                      </td>
-                      <td className="px-5 py-3 text-[#6b4c52] text-xs max-w-[160px] truncate">{log.recipient_email}</td>
-                      <td className="px-5 py-3 text-[#1a0a0e] text-xs max-w-[200px] truncate">{log.subject}</td>
-                      <td className="px-5 py-3 text-[#8B6B5A] text-xs">{new Date(log.sent_at).toLocaleDateString()}</td>
-                      <td className="px-5 py-3">
-                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${log.status === "sent" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>{log.status}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-</div>
-  
-  </div>
+      </main>
 
       <EmailComposer
         open={emailComposerOpen}
@@ -330,6 +499,6 @@ export default function AdminDashboardClient({
         recipients={selectedRecipients}
         onSend={handleSendEmail}
       />
-    </main>
+    </div>
   )
 }
