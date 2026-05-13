@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useTransition } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -25,7 +25,6 @@ export function NewsletterPopup() {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [, startTransition] = useTransition()
 
   useEffect(() => {
     // Check if user has already subscribed or dismissed
@@ -35,9 +34,7 @@ export function NewsletterPopup() {
     if (!hasSubscribed && !hasDismissed) {
       // Show popup after 5 seconds
       const timer = setTimeout(() => {
-        startTransition(() => {
-          setIsOpen(true)
-        })
+        setIsOpen(true)
       }, 5000)
       return () => clearTimeout(timer)
     }
@@ -89,16 +86,12 @@ export function NewsletterPopup() {
       if (!response.ok) throw new Error("Failed to subscribe")
 
       localStorage.setItem("newsletter_subscribed", "true")
-      startTransition(() => {
-        setShowWelcome(true)
-      })
+      setShowWelcome(true)
     } catch (err) {
       console.error("[v0] Subscription error:", err)
       // Still show welcome even if API fails
       localStorage.setItem("newsletter_subscribed", "true")
-      startTransition(() => {
-        setShowWelcome(true)
-      })
+      setShowWelcome(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -108,10 +101,8 @@ export function NewsletterPopup() {
     if (!showWelcome) {
       localStorage.setItem("newsletter_dismissed", "true")
     }
-    startTransition(() => {
-      setIsOpen(false)
-      setShowWelcome(false)
-    })
+    setIsOpen(false)
+    setShowWelcome(false)
   }
 
   if (!isOpen) return null
