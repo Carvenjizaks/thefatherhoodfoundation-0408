@@ -4,7 +4,7 @@ import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Send, Clock, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, FileText, User } from "lucide-react"
+import { Send, Clock, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, FileText, User, Upload, Loader2, X } from "lucide-react"
 
 interface EmailComposerProps {
   open: boolean
@@ -56,15 +56,10 @@ const FONT_COLORS = [
 ]
 
 const PERSONALIZATION_TAGS = [
-  { value: "{{first_name}}", label: "First Name" },
-  { value: "{{husband_name}}", label: "Husband" },
-  { value: "{{wife_name}}", label: "Wife" },
-  { value: "{{couple_name}}", label: "Couple" },
-  { value: "{{email}}", label: "Email" },
   { value: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
-  { value: "{{husband_name}}", label: "Husband Name", description: "Husband's first name" },
-  { value: "{{wife_name}}", label: "Wife Name", description: "Wife's first name" },
-  { value: "{{couple_name}}", label: "Couple Name", description: "Both names (e.g., John & Jane)" },
+  { value: "{{husband_name}}", label: "Husband", description: "Husband's first name" },
+  { value: "{{wife_name}}", label: "Wife", description: "Wife's first name" },
+  { value: "{{couple_name}}", label: "Couple", description: "Both names (e.g., John & Jane)" },
   { value: "{{email}}", label: "Email", description: "Recipient's email address" },
 ]
 
@@ -91,10 +86,11 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const [linkText, setLinkText] = useState("")
   const [linkUrl, setLinkUrl] = useState("")
 
-  // Document link dialog state
+  // File upload dialog state
   const [showDocDialog, setShowDocDialog] = useState(false)
-  const [docName, setDocName] = useState("")
-  const [docUrl, setDocUrl] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState<{ name: string; url: string; size: number }[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Filter recipients based on selection
   const filteredRecipients = recipients.filter(r => {
@@ -137,16 +133,54 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
     setShowLinkDialog(false)
   }
 
-  const insertDocLink = () => {
-    if (!docName.trim() || !docUrl.trim()) {
-      alert("Please fill in both document name and URL")
-      return
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    setIsUploading(true)
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          alert(error.error || 'Upload failed')
+          continue
+        }
+
+        const data = await response.json()
+        setUploadedFiles(prev => [...prev, { name: data.filename, url: data.url, size: data.size }])
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert('Failed to upload file')
+    } finally {
+      setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     }
-    const docHtml = `<a href="${docUrl}" style="color: #8B2B3E; text-decoration: underline;">📄 ${docName}</a>`
+  }
+
+  const insertUploadedFile = (file: { name: string; url: string }) => {
+    const docHtml = `<a href="${file.url}" style="color: #8B2B3E; text-decoration: underline;" target="_blank">[Attachment] ${file.name}</a>`
     insertAtCursor(docHtml)
-    setDocName("")
-    setDocUrl("")
-    setShowDocDialog(false)
+  }
+
+  const removeUploadedFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
   }
 
   const insertPersonalization = (tag: string) => {
@@ -546,28 +580,91 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
         </DialogContent>
       </Dialog>
 
-      {/* Attach Document Link Dialog */}
+{/* Attach File Dialog */}
       <Dialog open={showDocDialog} onOpenChange={setShowDocDialog}>
         <DialogContent className="w-[95vw] max-w-md bg-white">
           <DialogHeader>
-            <DialogTitle className="text-[#1a0a0e]">Attach Document Link</DialogTitle>
-            <DialogDescription className="text-[#8B6B5A]">Add a link to a document (PDF, Google Doc, etc.)</DialogDescription>
+            <DialogTitle className="text-[#1a0a0e]">Attach Files</DialogTitle>
+            <DialogDescription className="text-[#8B6B5A]">
+              Upload files from your computer (PDF, Word, Excel, images - max 10MB each)
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Document Name</label>
-              <input type="text" value={docName} onChange={(e) => setDocName(e.target.value)} placeholder="e.g., Weekly Guide PDF" className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
-            </div>
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">Document URL</label>
-              <input type="url" value={docUrl} onChange={(e) => setDocUrl(e.target.value)} placeholder="https://drive.google.com/..." className="w-full border border-[#e8d8c8] rounded-lg px-4 py-2.5 text-sm text-[#1a0a0e] focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40" />
-            </div>
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.webp,.txt,.csv"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            
+            {/* Upload button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="w-full border-2 border-dashed border-[#8B2B3E]/40 rounded-lg p-6 flex flex-col items-center gap-2 hover:border-[#8B2B3E] hover:bg-[#8B2B3E]/5 transition-colors disabled:opacity-50"
+            >
+              {isUploading ? (
+                <>
+                  <Loader2 className="w-8 h-8 text-[#8B2B3E] animate-spin" />
+                  <span className="text-sm text-[#8B6B5A]">Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-8 h-8 text-[#8B2B3E]" />
+                  <span className="text-sm font-medium text-[#1a0a0e]">Click to select files</span>
+                  <span className="text-xs text-[#8B6B5A]">or drag and drop</span>
+                </>
+              )}
+            </button>
+
+            {/* Uploaded files list */}
+            {uploadedFiles.length > 0 && (
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A]">
+                  Uploaded Files ({uploadedFiles.length})
+                </label>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {uploadedFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 p-2 bg-[#fdf8f3] rounded-lg border border-[#e8d8c8]"
+                    >
+                      <FileText className="w-4 h-4 text-[#8B2B3E] shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-[#1a0a0e] truncate">{file.name}</p>
+                        <p className="text-xs text-[#8B6B5A]">{formatFileSize(file.size)}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => insertUploadedFile(file)}
+                        className="text-xs px-2 py-1 bg-[#8B2B3E] text-white rounded hover:bg-[#6d2230] transition-colors"
+                      >
+                        Insert
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeUploadedFile(index)}
+                        className="p-1 text-[#8B6B5A] hover:text-red-500 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDocDialog(false)} className="border-[#e8d8c8] text-[#6b4c52] bg-transparent">Cancel</Button>
-            <Button onClick={insertDocLink} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white">
-              <FileText className="w-4 h-4 mr-2" />
-              Attach Document
+            <Button
+              variant="outline"
+              onClick={() => setShowDocDialog(false)}
+              className="border-[#e8d8c8] text-[#6b4c52] bg-transparent"
+            >
+              Done
             </Button>
           </DialogFooter>
         </DialogContent>
