@@ -122,11 +122,13 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   }
 
   const insertLink = () => {
+    console.log("[v0] insertLink called with:", { linkText, linkUrl })
     if (!linkText.trim() || !linkUrl.trim()) {
       alert("Please fill in both link text and URL")
       return
     }
     const linkHtml = `<a href="${linkUrl}" style="color: #2563eb; text-decoration: underline;">${linkText}</a>`
+    console.log("[v0] Inserting link HTML:", linkHtml)
     insertAtCursor(linkHtml)
     setLinkText("")
     setLinkUrl("")
@@ -134,12 +136,15 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   }
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("[v0] handleFileSelect triggered")
     const files = e.target.files
+    console.log("[v0] Files selected:", files?.length)
     if (!files || files.length === 0) return
 
     setIsUploading(true)
     try {
       for (const file of Array.from(files)) {
+        console.log("[v0] Uploading file:", file.name, file.size)
         const formData = new FormData()
         formData.append('file', file)
 
@@ -148,17 +153,20 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
           body: formData,
         })
 
+        console.log("[v0] Upload response status:", response.status)
         if (!response.ok) {
           const error = await response.json()
+          console.error("[v0] Upload error:", error)
           alert(error.error || 'Upload failed')
           continue
         }
 
         const data = await response.json()
+        console.log("[v0] Upload success:", data)
         setUploadedFiles(prev => [...prev, { name: data.filename, url: data.url, size: data.size }])
       }
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('[v0] Upload error:', error)
       alert('Failed to upload file')
     } finally {
       setIsUploading(false)
@@ -376,7 +384,10 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                 <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => setShowLinkDialog(true)}
+                    onClick={() => {
+                      console.log("[v0] Insert Link button clicked")
+                      setShowLinkDialog(true)
+                    }}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
                   >
                     <LinkIcon className="w-3.5 h-3.5" />
@@ -384,7 +395,10 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowDocDialog(true)}
+                    onClick={() => {
+                      console.log("[v0] Attach Doc button clicked")
+                      setShowDocDialog(true)
+                    }}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
                   >
                     <FileText className="w-3.5 h-3.5" />
