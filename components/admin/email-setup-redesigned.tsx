@@ -1,1138 +1,837 @@
 "use client"
 
-import { useState, useRef, useCallback, useEffect } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import {
-  Mail, Send, Users, Tag, Layers, Search, Plus, Trash2,
-  Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight,
-  Link as LinkIcon, FileText, User, CheckCircle, XCircle, Loader2,
-  X, Eye, Upload, ChevronDown, Sparkles, Type, Palette, 
-  IndentIncrease, IndentDecrease, List, ListOrdered, Minus, Image,
-  ExternalLink, Paperclip, CloudUpload, FolderOpen
+  Send,
+  Clock,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Link as LinkIcon,
+  FileText,
+  List,
+  ListOrdered,
+  Eye,
+  Download,
+  Share2,
+  Settings,
+  Plus,
+  X,
+  Check,
+  AlertCircle,
+  Users,
+  Tag,
+  FolderOpen,
 } from "lucide-react"
 
-// ── Types ──────────────────────────────────────────────────────────────────────
-type Contact = {
-  id: string
-  first_name: string
-  last_name: string
-  email: string
-  tags: string[] | null
-  unsubscribed: boolean
-  gender?: string | null
+interface EmailSetupRedesignedProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSend: (data: EmailData) => Promise<void>
 }
 
-type Group = {
-  id: string
-  name: string
-  description?: string
-  color: string
-  contact_group_members?: { count: number }[]
+interface EmailData {
+  subject: string
+  body: string
+  fontFamily: string
+  fontSize: string
+  fontColor: string
+  isBold: boolean
+  isItalic: boolean
+  isUnderline: boolean
+  textAlign: "left" | "center" | "right"
+  recipientType: "all" | "individuals" | "group" | "tag"
+  recipients?: string[]
+  groupId?: string
+  tagId?: string
+  scheduledAt?: string
 }
 
-type RecipientSelection = {
-  type: "all" | "tag" | "group" | "individuals"
-  value?: string
+interface PersonalizationTag {
+  value: string
   label: string
-  count: number
-  ids?: string[]
+  description: string
 }
 
-// ── Constants ──────────────────────────────────────────────────────────────────
 const FONT_FAMILIES = [
   { value: "Arial, sans-serif", label: "Arial" },
   { value: "Georgia, serif", label: "Georgia" },
   { value: "Times New Roman, serif", label: "Times New Roman" },
   { value: "Verdana, sans-serif", label: "Verdana" },
+  { value: "Tahoma, sans-serif", label: "Tahoma" },
   { value: "Trebuchet MS, sans-serif", label: "Trebuchet MS" },
   { value: "Helvetica, sans-serif", label: "Helvetica" },
   { value: "Courier New, monospace", label: "Courier New" },
-  { value: "system-ui, sans-serif", label: "System Default" },
 ]
 
 const FONT_SIZES = [
-  { value: "11px", label: "11" },
-  { value: "12px", label: "12" },
-  { value: "14px", label: "14" },
-  { value: "16px", label: "16" },
-  { value: "18px", label: "18" },
-  { value: "20px", label: "20" },
-  { value: "24px", label: "24" },
-  { value: "28px", label: "28" },
+  { value: "12px", label: "Small (12px)" },
+  { value: "14px", label: "Normal (14px)" },
+  { value: "16px", label: "Medium (16px)" },
+  { value: "18px", label: "Large (18px)" },
+  { value: "20px", label: "X-Large (20px)" },
+  { value: "24px", label: "XX-Large (24px)" },
 ]
 
 const FONT_COLORS = [
-  { value: "#1a1a1a", label: "Black", bg: "#1a1a1a" },
-  { value: "#374151", label: "Gray", bg: "#374151" },
-  { value: "#8B2B3E", label: "Maroon", bg: "#8B2B3E" },
-  { value: "#1d4ed8", label: "Blue", bg: "#1d4ed8" },
-  { value: "#059669", label: "Green", bg: "#059669" },
-  { value: "#dc2626", label: "Red", bg: "#dc2626" },
-  { value: "#7c3aed", label: "Purple", bg: "#7c3aed" },
-  { value: "#ea580c", label: "Orange", bg: "#ea580c" },
+  { value: "#1a0a0e", label: "Black", hex: "#1a0a0e" },
+  { value: "#8B2B3E", label: "Maroon", hex: "#8B2B3E" },
+  { value: "#2563eb", label: "Blue", hex: "#2563eb" },
+  { value: "#16a34a", label: "Green", hex: "#16a34a" },
+  { value: "#dc2626", label: "Red", hex: "#dc2626" },
+  { value: "#9333ea", label: "Purple", hex: "#9333ea" },
+  { value: "#ea580c", label: "Orange", hex: "#ea580c" },
+  { value: "#6b7280", label: "Gray", hex: "#6b7280" },
 ]
 
-const PERSONALIZATION_TAGS = [
-  { token: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
-  { token: "{{last_name}}", label: "Last Name", description: "Recipient's last name" },
-  { token: "{{email}}", label: "Email", description: "Recipient's email address" },
-  { token: "{{husband_name}}", label: "Husband", description: "Husband's first name" },
-  { token: "{{wife_name}}", label: "Wife", description: "Wife's first name" },
-  { token: "{{couple_name}}", label: "Couple", description: "Both names combined" },
+const PERSONALIZATION_TAGS: PersonalizationTag[] = [
+  { value: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
+  { value: "{{last_name}}", label: "Last Name", description: "Recipient's last name" },
+  { value: "{{email}}", label: "Email", description: "Recipient's email address" },
+  { value: "{{husband_name}}", label: "Husband Name", description: "Husband's first name" },
+  { value: "{{wife_name}}", label: "Wife Name", description: "Wife's first name" },
+  { value: "{{couple_name}}", label: "Couple Name", description: "Both names (e.g., John & Jane)" },
 ]
 
-const CORE_TAGS = ["MGM", "FF-NL", "TT4Men", "Event", "Men", "Women"]
-const TAG_COLORS: Record<string, string> = {
-  MGM: "#8B2B3E", "FF-NL": "#059669", TT4Men: "#1d4ed8",
-  Event: "#ea580c", Men: "#1d4ed8", Women: "#ec4899",
-}
-
-// ── Main Component ─────────────────────────────────────────────────────────────
-interface EmailSetupRedesignedProps {
-  adminFetch: (url: string, options?: RequestInit) => Promise<Response>
-  contacts: Contact[]
-  onRefreshContacts: () => void
-}
-
-export function EmailSetupRedesigned({ adminFetch, contacts, onRefreshContacts }: EmailSetupRedesignedProps) {
-  // ── Step State ──
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
+export function EmailSetupRedesigned({ open, onOpenChange, onSend }: EmailSetupRedesignedProps) {
+  const [activeTab, setActiveTab] = useState("recipients")
   
-  // ── Recipients State ──
-  const [recipientSelection, setRecipientSelection] = useState<RecipientSelection | null>(null)
-  const [selectedIndividuals, setSelectedIndividuals] = useState<Set<string>>(new Set())
-  const [searchTerm, setSearchTerm] = useState("")
-  const [groups, setGroups] = useState<Group[]>([])
-  const [loadingGroups, setLoadingGroups] = useState(false)
+  // Recipient selection state
+  const [recipientType, setRecipientType] = useState<"all" | "individuals" | "group" | "tag">("all")
+  const [selectedRecipients, setSelectedRecipients] = useState<string[]>([])
+  const [selectedGroup, setSelectedGroup] = useState<string>("")
+  const [selectedTag, setSelectedTag] = useState<string>("")
 
-  // ── Email Content State ──
+  // Email composition state
   const [subject, setSubject] = useState("")
-  const [emailBody, setEmailBody] = useState("")
-  
-  // ── Formatting State ──
+  const [body, setBody] = useState("")
   const [fontFamily, setFontFamily] = useState("Arial, sans-serif")
   const [fontSize, setFontSize] = useState("14px")
-  const [fontColor, setFontColor] = useState("#1a1a1a")
+  const [fontColor, setFontColor] = useState("#1a0a0e")
   const [isBold, setIsBold] = useState(false)
   const [isItalic, setIsItalic] = useState(false)
   const [isUnderline, setIsUnderline] = useState(false)
   const [textAlign, setTextAlign] = useState<"left" | "center" | "right">("left")
 
-  // ── Dialogs ──
+  // Scheduling state
+  const [scheduleType, setScheduleType] = useState<"now" | "scheduled">("now")
+  const [scheduledDate, setScheduledDate] = useState("")
+  const [scheduledTime, setScheduledTime] = useState("")
+
+  // Dialog states
   const [showLinkDialog, setShowLinkDialog] = useState(false)
   const [linkText, setLinkText] = useState("")
   const [linkUrl, setLinkUrl] = useState("")
-  const [showAttachDialog, setShowAttachDialog] = useState(false)
-  const [attachName, setAttachName] = useState("")
-  const [attachUrl, setAttachUrl] = useState("")
   const [showPreview, setShowPreview] = useState(false)
-
-  // ── Send State ──
+  const [showPersonalizationMenu, setShowPersonalizationMenu] = useState(false)
   const [isSending, setIsSending] = useState(false)
-  const [sendResult, setSendResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
 
-  const editorRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // ── Data Fetching ──
-  const fetchGroups = useCallback(async () => {
-    setLoadingGroups(true)
-    try {
-      const res = await adminFetch("/api/admin/groups")
-      const data = await res.json()
-      setGroups(data.groups || [])
-    } catch { /* silent */ } finally { setLoadingGroups(false) }
-  }, [adminFetch])
-
-  useEffect(() => { fetchGroups() }, [fetchGroups])
-
-  // ── Computed Values ──
-  const activeContacts = contacts.filter(c => !c.unsubscribed)
-  const allTags = Array.from(new Set([...CORE_TAGS, ...contacts.flatMap(c => c.tags || [])]))
-  const tagCount = (tag: string) => activeContacts.filter(c => Array.isArray(c.tags) && c.tags.includes(tag)).length
-
-  const filteredContacts = activeContacts.filter(c => {
-    const q = searchTerm.toLowerCase()
-    return (
-      c.first_name?.toLowerCase().includes(q) ||
-      c.last_name?.toLowerCase().includes(q) ||
-      c.email?.toLowerCase().includes(q)
-    )
-  })
-
-  const getRecipientCount = () => {
-    if (!recipientSelection) return 0
-    if (recipientSelection.type === "individuals") return selectedIndividuals.size
-    return recipientSelection.count
-  }
-
-  // ── Selection Handlers ──
-  const selectAll = () => {
-    setRecipientSelection({
-      type: "all",
-      label: "All Contacts",
-      count: activeContacts.length
-    })
-    setSelectedIndividuals(new Set())
-    setCurrentStep(2)
-  }
-
-  const selectTag = (tag: string) => {
-    const count = tagCount(tag)
-    setRecipientSelection({
-      type: "tag",
-      value: tag,
-      label: `Tag: ${tag}`,
-      count
-    })
-    setSelectedIndividuals(new Set())
-    setCurrentStep(2)
-  }
-
-  const selectGroup = (group: Group) => {
-    const count = group.contact_group_members?.[0]?.count || 0
-    setRecipientSelection({
-      type: "group",
-      value: group.id,
-      label: `Group: ${group.name}`,
-      count
-    })
-    setSelectedIndividuals(new Set())
-    setCurrentStep(2)
-  }
-
-  const toggleIndividual = (id: string) => {
-    const newSet = new Set(selectedIndividuals)
-    if (newSet.has(id)) {
-      newSet.delete(id)
-    } else {
-      newSet.add(id)
-    }
-    setSelectedIndividuals(newSet)
-    if (newSet.size > 0) {
-      setRecipientSelection({
-        type: "individuals",
-        label: `${newSet.size} Selected`,
-        count: newSet.size,
-        ids: Array.from(newSet)
-      })
-    } else {
-      setRecipientSelection(null)
-    }
-  }
-
-  const confirmIndividuals = () => {
-    if (selectedIndividuals.size > 0) {
-      setCurrentStep(2)
-    }
-  }
-
-  // ── Editor Helpers ──
+  // Insert text at cursor position
   const insertAtCursor = (text: string) => {
-    const el = editorRef.current
-    if (!el) return
-    el.focus()
-    const sel = window.getSelection()
-    if (sel && sel.rangeCount > 0) {
-      const range = sel.getRangeAt(0)
-      range.deleteContents()
-      const textNode = document.createTextNode(text)
-      range.insertNode(textNode)
-      range.setStartAfter(textNode)
-      range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
-    } else {
-      el.innerHTML += text
-    }
-    setEmailBody(el.innerHTML)
-  }
-
-  const insertHtmlAtCursor = (html: string) => {
-    const el = editorRef.current
-    if (!el) return
-    el.focus()
-    const sel = window.getSelection()
-    if (sel && sel.rangeCount > 0) {
-      const range = sel.getRangeAt(0)
-      range.deleteContents()
-      const frag = document.createRange().createContextualFragment(html)
-      const lastNode = frag.lastChild
-      range.insertNode(frag)
-      if (lastNode) {
-        const afterRange = document.createRange()
-        afterRange.setStartAfter(lastNode)
-        afterRange.collapse(true)
-        sel.removeAllRanges()
-        sel.addRange(afterRange)
-      }
-    } else {
-      el.innerHTML += html
-    }
-    setEmailBody(el.innerHTML)
+    if (!textareaRef.current) return
+    const textarea = textareaRef.current
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const newBody = body.substring(0, start) + text + body.substring(end)
+    setBody(newBody)
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd = start + text.length
+      textarea.focus()
+    }, 0)
   }
 
   const insertLink = () => {
-    if (!linkText.trim() || !linkUrl.trim()) return
-    const url = linkUrl.startsWith("http") ? linkUrl : `https://${linkUrl}`
-    insertHtmlAtCursor(`<a href="${url}" style="color:#1d4ed8;text-decoration:underline;" target="_blank">${linkText}</a>`)
-    setLinkText(""); setLinkUrl(""); setShowLinkDialog(false)
-  }
-
-  const insertAttachment = () => {
-    if (!attachName.trim() || !attachUrl.trim()) return
-    const url = attachUrl.startsWith("http") ? attachUrl : `https://${attachUrl}`
-    insertHtmlAtCursor(`<a href="${url}" style="color:#8B2B3E;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;" target="_blank"><span style="font-size:14px;">📎</span> ${attachName}</a>`)
-    setAttachName(""); setAttachUrl(""); setShowAttachDialog(false)
-  }
-
-  const applyFormatting = (command: string, value?: string) => {
-    document.execCommand(command, false, value)
-    if (editorRef.current) {
-      setEmailBody(editorRef.current.innerHTML)
+    if (linkText && linkUrl) {
+      insertAtCursor(`\n[Link: ${linkText}](${linkUrl})\n`)
+      setLinkText("")
+      setLinkUrl("")
+      setShowLinkDialog(false)
     }
   }
 
-  // ── Send Email ──
+  const insertPersonalizationTag = (tag: PersonalizationTag) => {
+    insertAtCursor(tag.value)
+    setShowPersonalizationMenu(false)
+  }
+
+  const handleFileAttachment = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const fileName = file.name
+      insertAtCursor(`\n[Attachment: ${fileName}]\n`)
+    }
+  }
+
   const handleSend = async () => {
-    if (!subject.trim() || !emailBody.trim() || !recipientSelection) return
+    if (!subject || !body) {
+      alert("Please fill in subject and email body")
+      return
+    }
 
     setIsSending(true)
-    setSendResult(null)
-
     try {
-      let recipients: { id: string; email: string; firstName: string; lastName: string }[] = []
+      const scheduledAt =
+        scheduleType === "scheduled" && scheduledDate && scheduledTime
+          ? `${scheduledDate}T${scheduledTime}`
+          : undefined
 
-      if (recipientSelection.type === "all") {
-        recipients = activeContacts.map(c => ({
-          id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name
-        }))
-      } else if (recipientSelection.type === "tag") {
-        recipients = activeContacts
-          .filter(c => Array.isArray(c.tags) && c.tags.includes(recipientSelection.value!))
-          .map(c => ({ id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name }))
-      } else if (recipientSelection.type === "individuals") {
-        recipients = activeContacts
-          .filter(c => selectedIndividuals.has(c.id))
-          .map(c => ({ id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name }))
-      }
-
-      if (recipients.length === 0) {
-        setSendResult({ message: "No recipients found.", type: "error" })
-        return
-      }
-
-      const res = await adminFetch("/api/admin/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipients,
-          subject,
-          body: emailBody,
-          fontFamily, fontSize, fontColor, isBold, isItalic, isUnderline, textAlign,
-          campaignName: subject,
-          sendToType: recipientSelection.type,
-          sendToValue: recipientSelection.value,
-        }),
+      await onSend({
+        subject,
+        body,
+        fontFamily,
+        fontSize,
+        fontColor,
+        isBold,
+        isItalic,
+        isUnderline,
+        textAlign,
+        recipientType,
+        recipients: selectedRecipients.length > 0 ? selectedRecipients : undefined,
+        groupId: selectedGroup || undefined,
+        tagId: selectedTag || undefined,
+        scheduledAt,
       })
 
-      const data = await res.json()
-      setSendResult({ message: data.message || data.error, type: res.ok ? "success" : "error" })
-
-      if (res.ok) {
-        setTimeout(() => {
-          resetAll()
-        }, 3000)
-      }
-    } catch {
-      setSendResult({ message: "Network error. Please try again.", type: "error" })
+      setShowSuccess(true)
+      setTimeout(() => {
+        setShowSuccess(false)
+        onOpenChange(false)
+        resetForm()
+      }, 2000)
+    } catch (error) {
+      alert("Error sending email")
+      console.error(error)
     } finally {
       setIsSending(false)
     }
   }
 
-  const resetAll = () => {
-    setCurrentStep(1)
-    setRecipientSelection(null)
-    setSelectedIndividuals(new Set())
-    setSearchTerm("")
+  const resetForm = () => {
     setSubject("")
-    setEmailBody("")
-    if (editorRef.current) editorRef.current.innerHTML = ""
+    setBody("")
     setFontFamily("Arial, sans-serif")
     setFontSize("14px")
-    setFontColor("#1a1a1a")
+    setFontColor("#1a0a0e")
     setIsBold(false)
     setIsItalic(false)
     setIsUnderline(false)
     setTextAlign("left")
-    setSendResult(null)
+    setRecipientType("all")
+    setSelectedRecipients([])
+    setSelectedGroup("")
+    setSelectedTag("")
+    setScheduleType("now")
+    setScheduledDate("")
+    setScheduledTime("")
+    setActiveTab("recipients")
   }
 
-  // Auto-dismiss result
-  useEffect(() => {
-    if (sendResult) {
-      const t = setTimeout(() => setSendResult(null), 5000)
-      return () => clearTimeout(t)
-    }
-  }, [sendResult])
+  const previewStyle = {
+    fontFamily,
+    fontSize,
+    color: fontColor,
+    fontWeight: isBold ? "bold" : "normal",
+    fontStyle: isItalic ? "italic" : "normal",
+    textDecoration: isUnderline ? "underline" : "none",
+    textAlign: textAlign as any,
+  }
 
-  // ── Render ──
   return (
-    <TooltipProvider>
-      <div className="min-h-[calc(100vh-200px)] bg-gradient-to-br from-background via-background to-muted/20">
-        {/* Toast Notification */}
-        {sendResult && (
-          <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl text-sm font-medium border-2 transition-all animate-in fade-in slide-in-from-top-4 ${
-            sendResult.type === "success"
-              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-              : "bg-red-50 text-red-800 border-red-200"
-          }`}>
-            {sendResult.type === "success" ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
-            <span>{sendResult.message}</span>
-            <button onClick={() => setSendResult(null)} className="ml-2 opacity-60 hover:opacity-100">
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">Email Campaign Creator</DialogTitle>
+          <DialogDescription>
+            Select recipients, compose your message, customize formatting, and preview before sending
+          </DialogDescription>
+        </DialogHeader>
 
-        {/* Header */}
-        <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
-          <div className="max-w-6xl mx-auto px-6 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
-                  <Mail className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-foreground">Email Campaign</h1>
-                  <p className="text-sm text-muted-foreground">Create and send emails to your contacts</p>
-                </div>
-              </div>
-              
-              {/* Step Progress */}
-              <div className="flex items-center gap-2">
-                {[1, 2, 3].map((step) => (
-                  <div key={step} className="flex items-center">
-                    <button
-                      onClick={() => {
-                        if (step === 1) setCurrentStep(1)
-                        else if (step === 2 && recipientSelection) setCurrentStep(2)
-                        else if (step === 3 && recipientSelection && subject.trim()) setCurrentStep(3)
-                      }}
-                      disabled={
-                        (step === 2 && !recipientSelection) ||
-                        (step === 3 && (!recipientSelection || !subject.trim()))
-                      }
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                        currentStep === step
-                          ? "bg-primary text-primary-foreground shadow-md"
-                          : currentStep > step
-                          ? "bg-primary/20 text-primary hover:bg-primary/30"
-                          : "bg-muted text-muted-foreground"
-                      } ${(step === 2 && !recipientSelection) || (step === 3 && (!recipientSelection || !subject.trim())) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
+          <TabsList className="grid w-full grid-cols-4 gap-1">
+            <TabsTrigger value="recipients" className="flex items-center gap-1 text-xs sm:text-sm">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Recipients</span>
+            </TabsTrigger>
+            <TabsTrigger value="compose" className="flex items-center gap-1 text-xs sm:text-sm">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Compose</span>
+            </TabsTrigger>
+            <TabsTrigger value="formatting" className="flex items-center gap-1 text-xs sm:text-sm">
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">Format</span>
+            </TabsTrigger>
+            <TabsTrigger value="preview" className="flex items-center gap-1 text-xs sm:text-sm">
+              <Eye className="w-4 h-4" />
+              <span className="hidden sm:inline">Preview</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* RECIPIENTS TAB */}
+          <TabsContent value="recipients" className="flex-1 overflow-y-auto space-y-4 p-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Select Recipients</CardTitle>
+                <CardDescription>Choose who receives this email campaign</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { type: "all", icon: Users, label: "Send to All", description: "All active contacts" },
+                    { type: "individuals", icon: Users, label: "Select Individuals", description: "Pick specific people" },
+                    { type: "group", icon: FolderOpen, label: "Send to Group", description: "Select a saved group" },
+                    { type: "tag", icon: Tag, label: "Send by Tag", description: "All contacts with a tag" },
+                  ].map(({ type, icon: Icon, label, description }) => (
+                    <label
+                      key={type}
+                      className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                      onClick={() => setRecipientType(type as any)}
                     >
-                      <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        currentStep >= step ? "bg-primary-foreground/20" : "bg-muted-foreground/20"
-                      }`}>{step}</span>
-                      <span className="hidden sm:inline">
-                        {step === 1 ? "Recipients" : step === 2 ? "Compose" : "Preview"}
-                      </span>
-                    </button>
-                    {step < 3 && <div className={`w-8 h-0.5 mx-1 rounded ${currentStep > step ? "bg-primary" : "bg-border"}`} />}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {/* STEP 1: SELECT RECIPIENTS */}
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {currentStep === 1 && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <div className="text-center max-w-2xl mx-auto">
-                <h2 className="text-xl font-semibold text-foreground mb-2">Who would you like to email?</h2>
-                <p className="text-muted-foreground">Choose recipients from your contacts, tags, groups, or select individuals</p>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                <button
-                  onClick={selectAll}
-                  className="group relative p-6 rounded-2xl border-2 border-dashed border-primary/30 hover:border-primary hover:bg-primary/5 transition-all text-left"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Users className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1">All Contacts</h3>
-                  <p className="text-sm text-muted-foreground">Send to everyone</p>
-                  <Badge variant="secondary" className="absolute top-4 right-4">{activeContacts.length}</Badge>
-                </button>
-
-                <div className="p-6 rounded-2xl border-2 border-border bg-card">
-                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-                    <Tag className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-3">By Tag</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {allTags.slice(0, 6).map(tag => {
-                      const count = tagCount(tag)
-                      const color = TAG_COLORS[tag] || "#6b7280"
-                      return (
-                        <button
-                          key={tag}
-                          onClick={() => selectTag(tag)}
-                          disabled={count === 0}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
-                          style={{ borderColor: color, color: color }}
-                        >
-                          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                          {tag} <span className="opacity-60">({count})</span>
-                        </button>
-                      )
-                    })}
-                  </div>
+                      <input
+                        type="radio"
+                        name="recipients"
+                        value={type}
+                        checked={recipientType === type}
+                        readOnly
+                        className="w-4 h-4"
+                      />
+                      <div>
+                        <p className="font-medium text-sm">{label}</p>
+                        <p className="text-xs text-muted-foreground">{description}</p>
+                      </div>
+                    </label>
+                  ))}
                 </div>
 
-                <div className="p-6 rounded-2xl border-2 border-border bg-card">
-                  <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4">
-                    <Layers className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-3">By Group</h3>
-                  {loadingGroups ? (
-                    <div className="flex items-center justify-center py-4">
-                      <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                    </div>
-                  ) : groups.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No groups created yet</p>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {groups.slice(0, 4).map(group => {
-                        const count = group.contact_group_members?.[0]?.count || 0
-                        return (
-                          <button
-                            key={group.id}
-                            onClick={() => selectGroup(group)}
-                            disabled={count === 0}
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
-                            style={{ borderColor: group.color, color: group.color }}
-                          >
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: group.color }} />
-                            {group.name} <span className="opacity-60">({count})</span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Individual Selection */}
-              <div className="bg-card rounded-2xl border border-border p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-                      <User className="w-5 h-5 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground">Select Individuals</h3>
-                      <p className="text-sm text-muted-foreground">Pick specific contacts to email</p>
+                {recipientType === "individuals" && (
+                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
+                    <label className="text-sm font-medium">Selected Recipients ({selectedRecipients.length})</label>
+                    <Input placeholder="Search and add recipients..." className="mb-2 text-sm" />
+                    <div className="flex flex-wrap gap-2 p-2 border rounded-lg min-h-10 bg-background">
+                      {selectedRecipients.length === 0 ? (
+                        <span className="text-xs text-muted-foreground">No recipients selected</span>
+                      ) : (
+                        selectedRecipients.map((id) => (
+                          <div key={id} className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs flex items-center gap-1">
+                            {id}
+                            <button onClick={() => setSelectedRecipients(selectedRecipients.filter(r => r !== id))}>
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
-                  {selectedIndividuals.size > 0 && (
-                    <div className="flex items-center gap-3">
-                      <Badge variant="default" className="bg-primary">{selectedIndividuals.size} selected</Badge>
-                      <Button onClick={confirmIndividuals} size="sm" className="bg-primary hover:bg-primary/90">
-                        Continue with Selected
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                )}
 
-                <div className="relative mb-4">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                {recipientType === "group" && (
+                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
+                    <label className="text-sm font-medium">Select Group</label>
+                    <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+                      <SelectTrigger className="text-sm">
+                        <SelectValue placeholder="Choose a group..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="group1">Team Leaders</SelectItem>
+                        <SelectItem value="group2">Newsletter Subscribers</SelectItem>
+                        <SelectItem value="group3">Active Members</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {recipientType === "tag" && (
+                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
+                    <label className="text-sm font-medium">Select Tag</label>
+                    <Select value={selectedTag} onValueChange={setSelectedTag}>
+                      <SelectTrigger className="text-sm">
+                        <SelectValue placeholder="Choose a tag..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MGM">My Great Marriage</SelectItem>
+                        <SelectItem value="TT4Men">Table Talk for Men</SelectItem>
+                        <SelectItem value="FF-NL">Newsletter</SelectItem>
+                        <SelectItem value="Men">Men</SelectItem>
+                        <SelectItem value="Women">Women</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* COMPOSE TAB */}
+          <TabsContent value="compose" className="flex-1 overflow-y-auto space-y-4 p-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Email Content</CardTitle>
+                <CardDescription>Write your message with personalization options</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Subject Line *</label>
                   <Input
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    placeholder="Search by name or email..."
-                    className="pl-10 h-11 bg-background"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Enter email subject (keep it clear and compelling)..."
+                    className="text-sm"
                   />
+                  <p className="text-xs text-muted-foreground">{subject.length}/60 characters</p>
                 </div>
 
-                <ScrollArea className="h-[280px] pr-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {filteredContacts.slice(0, 60).map(contact => {
-                      const isSelected = selectedIndividuals.has(contact.id)
-                      return (
-                        <button
-                          key={contact.id}
-                          onClick={() => toggleIndividual(contact.id)}
-                          className={`flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
-                            isSelected
-                              ? "bg-primary/10 border-2 border-primary"
-                              : "bg-muted/30 border-2 border-transparent hover:bg-muted/50"
-                          }`}
-                        >
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                            isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                          }`}>
-                            {contact.first_name?.[0]}{contact.last_name?.[0]}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {contact.first_name} {contact.last_name}
-                            </p>
-                            <p className="text-xs text-muted-foreground truncate">{contact.email}</p>
-                          </div>
-                          {isSelected && <CheckCircle className="w-4 h-4 text-primary shrink-0" />}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  {filteredContacts.length > 60 && (
-                    <p className="text-center text-sm text-muted-foreground mt-4">
-                      Showing 60 of {filteredContacts.length} contacts. Use search to find more.
-                    </p>
-                  )}
-                </ScrollArea>
-              </div>
-            </div>
-          )}
+                <Separator className="my-3" />
 
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {/* STEP 2: COMPOSE EMAIL */}
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {currentStep === 2 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-              {/* Recipient Summary */}
-              <div className="flex items-center justify-between p-4 bg-primary/5 rounded-2xl border border-primary/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Send className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Sending to: <span className="text-primary">{recipientSelection?.label}</span></p>
-                    <p className="text-xs text-muted-foreground">{getRecipientCount()} recipient{getRecipientCount() !== 1 ? "s" : ""}</p>
-                  </div>
-                </div>
-                <Button variant="ghost" size="sm" onClick={() => setCurrentStep(1)} className="text-muted-foreground">
-                  Change Recipients
-                </Button>
-              </div>
-
-              {/* Subject Line */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium flex items-center gap-2">
-                  <Type className="w-4 h-4 text-muted-foreground" />
-                  Subject Line <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  value={subject}
-                  onChange={e => setSubject(e.target.value)}
-                  placeholder="Enter a compelling subject line..."
-                  className="h-12 text-base bg-background border-2 focus:border-primary"
-                />
-              </div>
-
-              {/* Email Editor */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-muted-foreground" />
-                  Email Content <span className="text-destructive">*</span>
-                </Label>
-                
-                <div className="border-2 border-border rounded-2xl overflow-hidden bg-card focus-within:border-primary transition-colors">
-                  {/* Toolbar Row 1: Font Controls */}
-                  <div className="flex flex-wrap items-center gap-1 p-3 bg-muted/30 border-b border-border">
-                    <Select value={fontFamily} onValueChange={setFontFamily}>
-                      <SelectTrigger className="w-[140px] h-9 text-sm bg-background">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FONT_FAMILIES.map(f => (
-                          <SelectItem key={f.value} value={f.value} style={{ fontFamily: f.value }}>{f.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <Select value={fontSize} onValueChange={setFontSize}>
-                      <SelectTrigger className="w-[70px] h-9 text-sm bg-background">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FONT_SIZES.map(s => (
-                          <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <div className="w-px h-6 bg-border mx-1" />
-
-                    <Select value={fontColor} onValueChange={setFontColor}>
-                      <SelectTrigger className="w-[110px] h-9 text-sm bg-background">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded border" style={{ backgroundColor: fontColor }} />
-                          <span>{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FONT_COLORS.map(c => (
-                          <SelectItem key={c.value} value={c.value}>
-                            <div className="flex items-center gap-2">
-                              <div className="w-4 h-4 rounded border" style={{ backgroundColor: c.bg }} />
-                              {c.label}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <div className="w-px h-6 bg-border mx-1" />
-
-                    {/* Text Style Buttons */}
+                {/* Formatting Toolbar */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Text Formatting Tools</label>
+                  <div className="flex flex-wrap gap-1 p-2 border rounded-lg bg-muted/50">
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={isBold ? "default" : "outline"}
+                          variant={isBold ? "default" : "ghost"}
                           size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setIsBold(!isBold); applyFormatting("bold") }}
+                          onClick={() => setIsBold(!isBold)}
+                          className="h-8 px-2"
                         >
                           <Bold className="w-4 h-4" />
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent>Bold (Ctrl+B)</TooltipContent>
+                      <TooltipContent>Bold text</TooltipContent>
                     </Tooltip>
 
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={isItalic ? "default" : "outline"}
+                          variant={isItalic ? "default" : "ghost"}
                           size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setIsItalic(!isItalic); applyFormatting("italic") }}
+                          onClick={() => setIsItalic(!isItalic)}
+                          className="h-8 px-2"
                         >
                           <Italic className="w-4 h-4" />
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent>Italic (Ctrl+I)</TooltipContent>
+                      <TooltipContent>Italic text</TooltipContent>
                     </Tooltip>
 
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={isUnderline ? "default" : "outline"}
+                          variant={isUnderline ? "default" : "ghost"}
                           size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setIsUnderline(!isUnderline); applyFormatting("underline") }}
+                          onClick={() => setIsUnderline(!isUnderline)}
+                          className="h-8 px-2"
                         >
                           <Underline className="w-4 h-4" />
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent>Underline (Ctrl+U)</TooltipContent>
+                      <TooltipContent>Underline text</TooltipContent>
                     </Tooltip>
 
-                    <div className="w-px h-6 bg-border mx-1" />
+                    <Separator orientation="vertical" className="mx-1 h-6" />
 
-                    {/* Alignment */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={textAlign === "left" ? "default" : "outline"}
-                          size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setTextAlign("left"); applyFormatting("justifyLeft") }}
-                        >
-                          <AlignLeft className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Align Left</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={textAlign === "center" ? "default" : "outline"}
-                          size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setTextAlign("center"); applyFormatting("justifyCenter") }}
-                        >
-                          <AlignCenter className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Center</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={textAlign === "right" ? "default" : "outline"}
-                          size="sm"
-                          className="h-9 w-9 p-0"
-                          onClick={() => { setTextAlign("right"); applyFormatting("justifyRight") }}
-                        >
-                          <AlignRight className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Align Right</TooltipContent>
-                    </Tooltip>
-
-                    <div className="w-px h-6 bg-border mx-1" />
-
-                    {/* Lists and Indent */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={() => applyFormatting("insertUnorderedList")}>
-                          <List className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Bullet List</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={() => applyFormatting("insertOrderedList")}>
-                          <ListOrdered className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Numbered List</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={() => applyFormatting("indent")}>
-                          <IndentIncrease className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Increase Indent</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" onClick={() => applyFormatting("outdent")}>
-                          <IndentDecrease className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Decrease Indent</TooltipContent>
-                    </Tooltip>
-                  </div>
-
-                  {/* Toolbar Row 2: Insert & Personalization */}
-                  <div className="flex flex-wrap items-center gap-2 p-3 bg-muted/20 border-b border-border">
-                    <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={() => setShowLinkDialog(true)}>
-                      <LinkIcon className="w-3.5 h-3.5" /> Insert Link
-                    </Button>
-
-                    <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5" onClick={() => setShowAttachDialog(true)}>
-                      <Paperclip className="w-3.5 h-3.5" /> Attach File
-                    </Button>
-
-                    <Separator orientation="vertical" className="h-6" />
-
-                    <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5" /> Personalize:
-                    </span>
-
-                    {PERSONALIZATION_TAGS.map(tag => (
-                      <Tooltip key={tag.token}>
+                    {[
+                      { align: "left", icon: AlignLeft },
+                      { align: "center", icon: AlignCenter },
+                      { align: "right", icon: AlignRight },
+                    ].map(({ align, icon: Icon }) => (
+                      <Tooltip key={align}>
                         <TooltipTrigger asChild>
                           <Button
-                            variant="outline"
+                            variant={textAlign === align ? "default" : "ghost"}
                             size="sm"
-                            className="h-7 text-xs px-2 border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100"
-                            onClick={() => insertAtCursor(tag.token)}
+                            onClick={() => setTextAlign(align as any)}
+                            className="h-8 px-2"
                           >
-                            {tag.label}
+                            <Icon className="w-4 h-4" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>{tag.description}</TooltipContent>
+                        <TooltipContent>Align {align}</TooltipContent>
                       </Tooltip>
                     ))}
+
+                    <Separator orientation="vertical" className="mx-1 h-6" />
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowLinkDialog(true)}
+                          className="h-8 px-2"
+                        >
+                          <LinkIcon className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Insert link</TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleFileAttachment}
+                          className="h-8 px-2"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Attach file</TooltipContent>
+                    </Tooltip>
+
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={showPersonalizationMenu ? "default" : "ghost"}
+                          size="sm"
+                          onClick={() => setShowPersonalizationMenu(!showPersonalizationMenu)}
+                          className="h-8 px-2 text-xs font-bold"
+                        >
+                          {'{}'}</Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Personalization tags</TooltipContent>
+                    </Tooltip>
                   </div>
+                </div>
 
-                  {/* Editor Area */}
-                  <div
-                    ref={editorRef}
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={e => setEmailBody((e.currentTarget as HTMLDivElement).innerHTML)}
-                    data-placeholder="Start writing your email here...
+                {/* Personalization Menu */}
+                {showPersonalizationMenu && (
+                  <div className="p-3 border rounded-lg bg-muted/50 space-y-2">
+                    <p className="text-sm font-medium">Personalization Tags - Click to insert:</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {PERSONALIZATION_TAGS.map((tag) => (
+                        <Tooltip key={tag.value}>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={() => insertPersonalizationTag(tag)}
+                              className="text-left p-2 rounded border hover:bg-muted transition-colors text-xs bg-background hover:border-primary"
+                            >
+                              <p className="font-medium">{tag.label}</p>
+                              <p className="text-xs text-muted-foreground">{tag.value}</p>
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>{tag.description}</TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-Use the toolbar above to format your text, insert links, attach files, or add personalization tags like {{first_name}} to make your emails more personal.
-
-Tip: You can use bullet points and indentation to organize key points clearly."
-                    className="min-h-[350px] p-5 bg-background outline-none overflow-y-auto prose prose-sm max-w-none"
-                    style={{
-                      fontFamily, fontSize, color: fontColor,
-                      textAlign,
-                    }}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email Body *</label>
+                  <Textarea
+                    ref={textareaRef}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder="Write your email message here... Use {{first_name}}, {{wife_name}}, etc. for personalization."
+                    className="min-h-48 resize-none font-mono text-sm"
                   />
+                  <p className="text-xs text-muted-foreground">{body.length} characters</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* FORMATTING TAB */}
+          <TabsContent value="formatting" className="flex-1 overflow-y-auto space-y-4 p-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Text Formatting</CardTitle>
+                <CardDescription>Customize the appearance of your email</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Font Family */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Font Family</label>
+                  <Select value={fontFamily} onValueChange={setFontFamily}>
+                    <SelectTrigger className="text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_FAMILIES.map((font) => (
+                        <SelectItem key={font.value} value={font.value}>
+                          {font.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <CheckCircle className="w-3.5 h-3.5 text-green-600" />
-                  An unsubscribe link will be automatically added to the footer
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-4">
-                <Button variant="ghost" onClick={() => setCurrentStep(1)} className="gap-2">
-                  Back to Recipients
-                </Button>
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" onClick={() => setShowPreview(true)} disabled={!subject.trim() || !emailBody.trim()} className="gap-2">
-                    <Eye className="w-4 h-4" /> Preview
-                  </Button>
-                  <Button
-                    onClick={() => setCurrentStep(3)}
-                    disabled={!subject.trim() || !emailBody.trim()}
-                    className="bg-primary hover:bg-primary/90 gap-2"
-                  >
-                    Continue to Preview
-                  </Button>
+                {/* Font Size */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Font Size</label>
+                  <Select value={fontSize} onValueChange={setFontSize}>
+                    <SelectTrigger className="text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_SIZES.map((size) => (
+                        <SelectItem key={size.value} value={size.value}>
+                          {size.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {/* STEP 3: PREVIEW & SEND */}
-          {/* ═══════════════════════════════════════════════════════════════════ */}
-          {currentStep === 3 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <div className="text-center max-w-2xl mx-auto">
-                <h2 className="text-xl font-semibold text-foreground mb-2">Review Your Email</h2>
-                <p className="text-muted-foreground">Double-check everything before sending to {getRecipientCount()} recipient{getRecipientCount() !== 1 ? "s" : ""}</p>
-              </div>
+                {/* Font Color */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Font Color</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {FONT_COLORS.map((color) => (
+                      <button
+                        key={color.value}
+                        onClick={() => setFontColor(color.value)}
+                        className={`p-2 rounded-lg border-2 transition-all ${
+                          fontColor === color.value
+                            ? "border-primary ring-2 ring-primary"
+                            : "border-muted hover:border-primary"
+                        }`}
+                        title={color.label}
+                      >
+                        <div className="w-full h-8 rounded" style={{ backgroundColor: color.hex }} />
+                        <p className="text-xs mt-1 text-center">{color.label}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Preview Card */}
-              <div className="max-w-3xl mx-auto">
-                <div className="bg-card border-2 border-border rounded-2xl overflow-hidden shadow-xl">
-                  {/* Email Header Preview */}
-                  <div className="bg-muted/30 px-6 py-4 border-b border-border">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Mail className="w-5 h-5 text-primary" />
+                <Separator className="my-4" />
+
+                {/* Scheduling */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    Schedule Delivery
+                  </h3>
+
+                  <div className="space-y-3">
+                    {[
+                      { type: "now", label: "Send Now", description: "Deliver immediately" },
+                      { type: "scheduled", label: "Schedule for Later", description: "Choose date and time" },
+                    ].map(({ type, label, description }) => (
+                      <label
+                        key={type}
+                        className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                        onClick={() => setScheduleType(type as any)}
+                      >
+                        <input
+                          type="radio"
+                          name="schedule"
+                          checked={scheduleType === type}
+                          readOnly
+                          className="w-4 h-4"
+                        />
+                        <div>
+                          <p className="font-medium text-sm">{label}</p>
+                          <p className="text-xs text-muted-foreground">{description}</p>
+                        </div>
+                      </label>
+                    ))}
+
+                    {scheduleType === "scheduled" && (
+                      <div className="grid grid-cols-2 gap-3 ml-7 mt-3 p-3 border rounded-lg bg-muted/30">
+                        <div className="space-y-2">
+                          <label className="text-xs font-medium">Date</label>
+                          <Input
+                            type="date"
+                            value={scheduledDate}
+                            onChange={(e) => setScheduledDate(e.target.value)}
+                            className="text-sm"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-medium">Time</label>
+                          <Input
+                            type="time"
+                            value={scheduledTime}
+                            onChange={(e) => setScheduledTime(e.target.value)}
+                            className="text-sm"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* PREVIEW TAB */}
+          <TabsContent value="preview" className="flex-1 overflow-y-auto p-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Email Preview</CardTitle>
+                <CardDescription>This is how your email will appear to recipients</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {!subject || !body ? (
+                  <div className="p-8 text-center border rounded-lg bg-muted/30">
+                    <AlertCircle className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-sm text-muted-foreground">Add subject and body content to see preview</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {/* Preview Header */}
+                    <div className="p-4 border rounded-lg bg-muted/50">
+                      <p className="text-xs text-muted-foreground mb-1">Subject:</p>
+                      <p className="font-semibold text-base" style={previewStyle}>
+                        {subject}
+                      </p>
+                    </div>
+
+                    {/* Preview Body */}
+                    <div className="p-4 border rounded-lg min-h-64 bg-white">
+                      <div style={previewStyle} className="whitespace-pre-wrap break-words text-sm">
+                        {body}
+                      </div>
+                    </div>
+
+                    {/* Preview Info */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs p-3 border rounded-lg bg-muted/30">
+                      <div>
+                        <p className="text-muted-foreground">Font</p>
+                        <p className="font-medium">{FONT_FAMILIES.find(f => f.value === fontFamily)?.label}</p>
                       </div>
                       <div>
-                        <p className="font-medium text-foreground text-sm">From: Fatherhood Foundation</p>
-                        <p className="text-xs text-muted-foreground">To: {recipientSelection?.label} ({getRecipientCount()})</p>
+                        <p className="text-muted-foreground">Size</p>
+                        <p className="font-medium">{fontSize}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Style</p>
+                        <p className="font-medium">
+                          {[isBold && "Bold", isItalic && "Italic", isUnderline && "Underline"]
+                            .filter(Boolean)
+                            .join(", ") || "Normal"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Alignment</p>
+                        <p className="font-medium capitalize">{textAlign}</p>
                       </div>
                     </div>
-                    <div className="bg-background rounded-lg px-4 py-3">
-                      <p className="text-sm text-muted-foreground">Subject:</p>
-                      <p className="font-semibold text-foreground">{subject}</p>
-                    </div>
                   </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
-                  {/* Email Body Preview */}
-                  <div className="p-6 bg-background min-h-[300px]">
-                    <div
-                      className="prose prose-sm max-w-none"
-                      style={{ fontFamily, fontSize, color: fontColor, textAlign }}
-                      dangerouslySetInnerHTML={{ __html: emailBody }}
-                    />
-                  </div>
+        {/* Success Message */}
+        {showSuccess && (
+          <div className="fixed top-4 right-4 p-4 bg-green-100 text-green-800 rounded-lg flex items-center gap-2 animate-in">
+            <Check className="w-5 h-5" />
+            <span className="text-sm">Email campaign created successfully!</span>
+          </div>
+        )}
 
-                  {/* Footer Preview */}
-                  <div className="bg-muted/20 px-6 py-4 border-t border-border text-center text-xs text-muted-foreground">
-                    <p>Fatherhood Foundation | Cape Town, South Africa</p>
-                    <p className="mt-1">
-                      <a href="#" className="text-primary hover:underline">Unsubscribe</a> from these emails
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Send Summary */}
-              <div className="max-w-3xl mx-auto bg-primary/5 rounded-2xl p-6 border border-primary/20">
-                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-primary" />
-                  Ready to Send
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">Recipients</p>
-                    <p className="font-semibold text-foreground">{getRecipientCount()}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Sending To</p>
-                    <p className="font-semibold text-foreground truncate">{recipientSelection?.label}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Subject</p>
-                    <p className="font-semibold text-foreground truncate">{subject}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">Content</p>
-                    <p className="font-semibold text-foreground">{emailBody.replace(/<[^>]*>/g, '').slice(0, 30)}...</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between max-w-3xl mx-auto pt-4">
-                <Button variant="ghost" onClick={() => setCurrentStep(2)} className="gap-2">
-                  Back to Edit
-                </Button>
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" onClick={resetAll}>
-                    Discard
-                  </Button>
-                  <Button
-                    onClick={handleSend}
-                    disabled={isSending}
-                    className="bg-primary hover:bg-primary/90 gap-2 min-w-[140px]"
-                  >
-                    {isSending ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        Send Email
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* DIALOGS */}
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-
-        {/* Insert Link Dialog */}
+        {/* Dialog: Insert Link */}
         <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <LinkIcon className="w-5 h-5 text-primary" />
-                Insert Link
-              </DialogTitle>
+              <DialogTitle className="text-lg">Insert Link</DialogTitle>
               <DialogDescription>Add a clickable link to your email</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Link Text</Label>
+                <label className="text-sm font-medium">Link Text</label>
                 <Input
                   value={linkText}
-                  onChange={e => setLinkText(e.target.value)}
-                  placeholder="e.g., Click here to learn more"
+                  onChange={(e) => setLinkText(e.target.value)}
+                  placeholder="e.g., Learn More"
+                  className="text-sm"
                 />
               </div>
               <div className="space-y-2">
-                <Label>URL</Label>
+                <label className="text-sm font-medium">URL</label>
                 <Input
                   value={linkUrl}
-                  onChange={e => setLinkUrl(e.target.value)}
+                  onChange={(e) => setLinkUrl(e.target.value)}
                   placeholder="e.g., https://example.com"
+                  className="text-sm"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowLinkDialog(false)}>Cancel</Button>
-              <Button onClick={insertLink} disabled={!linkText.trim() || !linkUrl.trim()}>Insert Link</Button>
+              <Button variant="outline" onClick={() => setShowLinkDialog(false)} className="text-sm">
+                Cancel
+              </Button>
+              <Button onClick={insertLink} className="text-sm">
+                Insert Link
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* Attach File Dialog */}
-        <Dialog open={showAttachDialog} onOpenChange={setShowAttachDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Paperclip className="w-5 h-5 text-primary" />
-                Attach File
-              </DialogTitle>
-              <DialogDescription>Add a file link to your email (Google Drive, Dropbox, or any URL)</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={() => window.open("https://drive.google.com", "_blank")}
-                  className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-border hover:border-primary hover:bg-primary/5 transition-all"
-                >
-                  <CloudUpload className="w-8 h-8 text-blue-500" />
-                  <span className="text-sm font-medium">Google Drive</span>
-                </button>
-                <button
-                  onClick={() => window.open("https://www.dropbox.com", "_blank")}
-                  className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-border hover:border-primary hover:bg-primary/5 transition-all"
-                >
-                  <FolderOpen className="w-8 h-8 text-blue-600" />
-                  <span className="text-sm font-medium">Dropbox</span>
-                </button>
-              </div>
-              <Separator />
-              <div className="space-y-2">
-                <Label>File Name</Label>
-                <Input
-                  value={attachName}
-                  onChange={e => setAttachName(e.target.value)}
-                  placeholder="e.g., Event Schedule.pdf"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>File URL (from cloud storage)</Label>
-                <Input
-                  value={attachUrl}
-                  onChange={e => setAttachUrl(e.target.value)}
-                  placeholder="Paste the sharing link here"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowAttachDialog(false)}>Cancel</Button>
-              <Button onClick={insertAttachment} disabled={!attachName.trim() || !attachUrl.trim()}>Attach File</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        {/* Preview Dialog */}
-        <Dialog open={showPreview} onOpenChange={setShowPreview}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Eye className="w-5 h-5 text-primary" />
-                Email Preview
-              </DialogTitle>
-            </DialogHeader>
-            <div className="border rounded-xl overflow-hidden">
-              <div className="bg-muted/30 px-4 py-3 border-b">
-                <p className="text-sm"><span className="text-muted-foreground">Subject:</span> <strong>{subject}</strong></p>
-              </div>
-              <div
-                className="p-4 bg-background min-h-[200px] prose prose-sm max-w-none"
-                style={{ fontFamily, fontSize, color: fontColor, textAlign }}
-                dangerouslySetInnerHTML={{ __html: emailBody }}
-              />
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowPreview(false)}>Close</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </TooltipProvider>
+        {/* Footer Actions */}
+        <CardFooter className="flex gap-2 justify-between border-t pt-4">
+          <Button
+            variant="outline"
+            onClick={() => {
+              onOpenChange(false)
+              resetForm()
+            }}
+            className="text-sm"
+          >
+            Cancel
+          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab("preview")}
+              className="flex items-center gap-2 text-sm"
+            >
+              <Eye className="w-4 h-4" />
+              Preview
+            </Button>
+            <Button
+              onClick={handleSend}
+              disabled={isSending || !subject || !body}
+              className="flex items-center gap-2 text-sm bg-primary hover:bg-primary/90"
+            >
+              {isSending ? (
+                <>
+                  <span className="inline-block animate-spin">⌛</span>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  Send Campaign
+                </>
+              )}
+            </Button>
+          </div>
+        </CardFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
