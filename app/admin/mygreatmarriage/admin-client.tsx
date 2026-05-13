@@ -35,7 +35,7 @@ const STREAM_COLORS: Record<string, string> = {
   WELCOME: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
   COUPLES_1: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
   HUSBANDS: "bg-sky-500/10 text-sky-400 border border-sky-500/20",
-  WIVES: "bg-pink-500/10 text-pink-400 border border-pink-500/20",
+  WIVES: "bg-[#8B2B3E]/10 text-[#d4626f] border border-[#8B2B3E]/20",
   COUPLES_2: "bg-purple-500/10 text-purple-400 border border-purple-500/20",
   ADMIN: "bg-zinc-500/10 text-zinc-400 border border-zinc-500/20",
 }
@@ -157,10 +157,10 @@ export default function AdminDashboardClient({
   }
 
   const statCards = [
-    { label: "Active Subscribers", value: stats.totalActive, icon: Users, color: "from-rose-500 to-pink-600" },
-    { label: "Husband Track", value: stats.husbandTrack, icon: TrendingUp, color: "from-blue-500 to-cyan-600" },
-    { label: "Wife Track", value: stats.wifeTrack, icon: Calendar, color: "from-purple-500 to-violet-600" },
-    { label: "Couple Track", value: stats.coupleTrack, icon: BarChart3, color: "from-amber-500 to-orange-600" },
+    { label: "Active Subscribers", value: stats.totalActive, icon: Users, color: "from-[#8B2B3E] to-[#6d2230]" },
+    { label: "Husband Track", value: stats.husbandTrack, icon: TrendingUp, color: "from-blue-500 to-blue-700" },
+    { label: "Wife Track", value: stats.wifeTrack, icon: Calendar, color: "from-[#8B6B5A] to-[#6b4c42]" },
+    { label: "Couple Track", value: stats.coupleTrack, icon: BarChart3, color: "from-amber-500 to-amber-700" },
   ]
 
   return (
@@ -202,7 +202,7 @@ export default function AdminDashboardClient({
               onClick={() => setActiveTab("subscribers")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 activeTab === "subscribers" 
-                  ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" 
+                  ? "bg-[#8B2B3E]/10 text-[#d4626f] border border-[#8B2B3E]/30" 
                   : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
@@ -214,7 +214,7 @@ export default function AdminDashboardClient({
               onClick={() => setActiveTab("emails")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 activeTab === "emails" 
-                  ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" 
+                  ? "bg-[#8B2B3E]/10 text-[#d4626f] border border-[#8B2B3E]/30" 
                   : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
               }`}
             >
@@ -272,7 +272,7 @@ export default function AdminDashboardClient({
               {selectedSubs.size > 0 && (
                 <Button 
                   onClick={() => setEmailComposerOpen(true)} 
-                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl flex items-center gap-2 text-sm shadow-lg shadow-rose-500/25"
+                  className="bg-gradient-to-r from-[#8B2B3E] to-[#6d2230] hover:from-[#7a2536] hover:to-[#5c1c28] text-white rounded-xl flex items-center gap-2 text-sm shadow-lg shadow-[#8B2B3E]/25"
                 >
                   <Send className="w-4 h-4" />
                   <span className="hidden sm:inline">Email</span> {selectedSubs.size}
@@ -319,7 +319,7 @@ export default function AdminDashboardClient({
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search by email address..."
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-500/40 transition-all"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 focus:border-[#8B2B3E]/40 transition-all"
                 />
               </div>
               <div className="flex gap-3">
@@ -355,7 +355,7 @@ export default function AdminDashboardClient({
                           type="checkbox"
                           checked={selectedSubs.size === subscriptions.length && subscriptions.length > 0}
                           onChange={toggleSelectAll}
-                          className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-rose-500 focus:ring-rose-500/40"
+                          className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-[#8B2B3E] focus:ring-[#8B2B3E]/40 accent-[#8B2B3E]"
                         />
                       </th>
                       <th className="text-left px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Couple</th>
@@ -376,14 +376,14 @@ export default function AdminDashboardClient({
                     ) : subscriptions.map((sub) => (
                       <tr 
                         key={sub.id} 
-                        className={`hover:bg-zinc-800/50 transition-colors ${selectedSubs.has(sub.id) ? 'bg-rose-500/5' : ''}`}
+                        className={`hover:bg-zinc-800/50 transition-colors ${selectedSubs.has(sub.id) ? 'bg-[#8B2B3E]/10' : ''}`}
                       >
                         <td className="px-4 py-4">
                           <input
                             type="checkbox"
                             checked={selectedSubs.has(sub.id)}
                             onChange={() => toggleSelectSub(sub.id)}
-                            className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-rose-500 focus:ring-rose-500/40"
+                            className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-[#8B2B3E] focus:ring-[#8B2B3E]/40 accent-[#8B2B3E]"
                           />
                         </td>
                         <td className="px-5 py-4">
@@ -416,7 +416,7 @@ export default function AdminDashboardClient({
                             <button
                               onClick={() => handleResendWelcome(sub.id, sub.husband_email, sub.wife_email)}
                               title="Resend welcome email"
-                              className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 transition-colors"
+                              className="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-[#d4626f] transition-colors"
                             >
                               <Mail className="w-4 h-4" />
                             </button>
