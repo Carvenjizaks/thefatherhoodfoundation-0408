@@ -109,6 +109,7 @@ export const metadata: Metadata = {
 }
 
 import { WebsiteSchema } from "@/components/structured-data"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 // Organization structured data for SEO - single source of truth
 const organizationJsonLd = {
@@ -167,9 +168,11 @@ export default function RootLayout({
         <WebsiteSchema />
       </head>
       <body className={`${inter.className} ${playfair.variable} font-sans antialiased`}>
-        {children}
-        <NewsletterPopup />
-        <Analytics />
+        <TooltipProvider>
+          {children}
+          <NewsletterPopup />
+          <Analytics />
+        </TooltipProvider>
       </body>
     </html>
   )
