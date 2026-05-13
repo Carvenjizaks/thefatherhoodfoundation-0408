@@ -1,19 +1,18 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import {
   Send,
-  Clock,
   Bold,
   Italic,
   Underline,
@@ -21,57 +20,49 @@ import {
   AlignCenter,
   AlignRight,
   Link as LinkIcon,
-  FileText,
-  List,
-  ListOrdered,
+  Paperclip,
   Eye,
-  Download,
-  Share2,
-  Settings,
-  Plus,
   X,
   Check,
   AlertCircle,
   Users,
   Tag,
   FolderOpen,
+  Search,
+  Loader2,
+  CheckCircle,
+  XCircle,
+  User,
+  Mail,
+  RefreshCw,
+  Upload,
 } from "lucide-react"
 
-interface EmailSetupRedesignedProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSend: (data: EmailData) => Promise<void>
+// Types
+type Contact = {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  tags: string[] | null
+  unsubscribed: boolean
+  gender?: string | null
 }
 
-interface EmailData {
-  subject: string
-  body: string
-  fontFamily: string
-  fontSize: string
-  fontColor: string
-  isBold: boolean
-  isItalic: boolean
-  isUnderline: boolean
-  textAlign: "left" | "center" | "right"
-  recipientType: "all" | "individuals" | "group" | "tag"
-  recipients?: string[]
-  groupId?: string
-  tagId?: string
-  scheduledAt?: string
+type Group = {
+  id: string
+  name: string
+  description?: string
+  color: string
+  memberCount?: number
 }
 
-interface PersonalizationTag {
-  value: string
-  label: string
-  description: string
-}
-
+// Constants
 const FONT_FAMILIES = [
   { value: "Arial, sans-serif", label: "Arial" },
   { value: "Georgia, serif", label: "Georgia" },
   { value: "Times New Roman, serif", label: "Times New Roman" },
   { value: "Verdana, sans-serif", label: "Verdana" },
-  { value: "Tahoma, sans-serif", label: "Tahoma" },
   { value: "Trebuchet MS, sans-serif", label: "Trebuchet MS" },
   { value: "Helvetica, sans-serif", label: "Helvetica" },
   { value: "Courier New, monospace", label: "Courier New" },
@@ -87,37 +78,55 @@ const FONT_SIZES = [
 ]
 
 const FONT_COLORS = [
-  { value: "#1a0a0e", label: "Black", hex: "#1a0a0e" },
-  { value: "#8B2B3E", label: "Maroon", hex: "#8B2B3E" },
-  { value: "#2563eb", label: "Blue", hex: "#2563eb" },
-  { value: "#16a34a", label: "Green", hex: "#16a34a" },
-  { value: "#dc2626", label: "Red", hex: "#dc2626" },
-  { value: "#9333ea", label: "Purple", hex: "#9333ea" },
-  { value: "#ea580c", label: "Orange", hex: "#ea580c" },
-  { value: "#6b7280", label: "Gray", hex: "#6b7280" },
+  { value: "#1a0a0e", label: "Black", bg: "#1a0a0e" },
+  { value: "#8B2B3E", label: "Maroon", bg: "#8B2B3E" },
+  { value: "#2563eb", label: "Blue", bg: "#2563eb" },
+  { value: "#16a34a", label: "Green", bg: "#16a34a" },
+  { value: "#dc2626", label: "Red", bg: "#dc2626" },
+  { value: "#9333ea", label: "Purple", bg: "#9333ea" },
+  { value: "#ea580c", label: "Orange", bg: "#ea580c" },
+  { value: "#6b7280", label: "Gray", bg: "#6b7280" },
 ]
 
-const PERSONALIZATION_TAGS: PersonalizationTag[] = [
-  { value: "{{first_name}}", label: "First Name", description: "Recipient's first name" },
-  { value: "{{last_name}}", label: "Last Name", description: "Recipient's last name" },
-  { value: "{{email}}", label: "Email", description: "Recipient's email address" },
-  { value: "{{husband_name}}", label: "Husband Name", description: "Husband's first name" },
-  { value: "{{wife_name}}", label: "Wife Name", description: "Wife's first name" },
-  { value: "{{couple_name}}", label: "Couple Name", description: "Both names (e.g., John & Jane)" },
+const PERSONALIZATION_TAGS = [
+  { value: "{{first_name}}", label: "First Name", desc: "Recipient's first name" },
+  { value: "{{last_name}}", label: "Last Name", desc: "Recipient's last name" },
+  { value: "{{email}}", label: "Email", desc: "Recipient's email" },
+  { value: "{{husband_name}}", label: "Husband", desc: "Husband's name" },
+  { value: "{{wife_name}}", label: "Wife", desc: "Wife's name" },
+  { value: "{{couple_name}}", label: "Couple", desc: "Both names" },
 ]
 
-export function EmailSetupRedesigned({ open, onOpenChange, onSend }: EmailSetupRedesignedProps) {
-  const [activeTab, setActiveTab] = useState("recipients")
-  
-  // Recipient selection state
-  const [recipientType, setRecipientType] = useState<"all" | "individuals" | "group" | "tag">("all")
-  const [selectedRecipients, setSelectedRecipients] = useState<string[]>([])
-  const [selectedGroup, setSelectedGroup] = useState<string>("")
+const CORE_TAGS = ["MGM", "FF-NL", "TT4Men", "Event", "Men", "Women"]
+const TAG_COLORS: Record<string, string> = {
+  MGM: "#8B2B3E", "FF-NL": "#16a34a", TT4Men: "#2563eb",
+  Event: "#ea580c", Men: "#1d4ed8", Women: "#db2777",
+}
+
+// Props
+interface EmailSetupRedesignedProps {
+  adminFetch: (url: string, options?: RequestInit) => Promise<Response>
+  contacts: Contact[]
+  onRefreshContacts: () => void
+}
+
+export function EmailSetupRedesigned({ adminFetch, contacts, onRefreshContacts }: EmailSetupRedesignedProps) {
+  // Selection mode: "all" | "individuals" | "tag" | "group"
+  const [selectionMode, setSelectionMode] = useState<"all" | "individuals" | "tag" | "group">("all")
   const [selectedTag, setSelectedTag] = useState<string>("")
+  const [selectedGroup, setSelectedGroup] = useState<string>("")
+  const [selectedIndividuals, setSelectedIndividuals] = useState<Set<string>>(new Set())
+  const [searchTerm, setSearchTerm] = useState("")
 
-  // Email composition state
+  // Groups
+  const [groups, setGroups] = useState<Group[]>([])
+  const [loadingGroups, setLoadingGroups] = useState(false)
+
+  // Email content
   const [subject, setSubject] = useState("")
-  const [body, setBody] = useState("")
+  const [emailBody, setEmailBody] = useState("")
+
+  // Formatting
   const [fontFamily, setFontFamily] = useState("Arial, sans-serif")
   const [fontSize, setFontSize] = useState("14px")
   const [fontColor, setFontColor] = useState("#1a0a0e")
@@ -126,712 +135,937 @@ export function EmailSetupRedesigned({ open, onOpenChange, onSend }: EmailSetupR
   const [isUnderline, setIsUnderline] = useState(false)
   const [textAlign, setTextAlign] = useState<"left" | "center" | "right">("left")
 
-  // Scheduling state
-  const [scheduleType, setScheduleType] = useState<"now" | "scheduled">("now")
-  const [scheduledDate, setScheduledDate] = useState("")
-  const [scheduledTime, setScheduledTime] = useState("")
-
-  // Dialog states
+  // Dialogs
   const [showLinkDialog, setShowLinkDialog] = useState(false)
   const [linkText, setLinkText] = useState("")
   const [linkUrl, setLinkUrl] = useState("")
+  const [showDocDialog, setShowDocDialog] = useState(false)
+  const [docName, setDocName] = useState("")
+  const [docUrl, setDocUrl] = useState("")
   const [showPreview, setShowPreview] = useState(false)
-  const [showPersonalizationMenu, setShowPersonalizationMenu] = useState(false)
-  const [isSending, setIsSending] = useState(false)
-  const [showSuccess, setShowSuccess] = useState(false)
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  // Send state
+  const [isSending, setIsSending] = useState(false)
+  const [sendResult, setSendResult] = useState<{ message: string; type: "success" | "error" } | null>(null)
+
+  const editorRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Insert text at cursor position
+  // Fetch groups on mount
+  const fetchGroups = useCallback(async () => {
+    setLoadingGroups(true)
+    try {
+      const res = await adminFetch("/api/admin/groups")
+      if (res.ok) {
+        const data = await res.json()
+        setGroups(data.groups?.map((g: any) => ({
+          ...g,
+          memberCount: g.contact_group_members?.[0]?.count || 0
+        })) || [])
+      }
+    } catch (e) {
+      console.error("Failed to fetch groups:", e)
+    } finally {
+      setLoadingGroups(false)
+    }
+  }, [adminFetch])
+
+  useEffect(() => {
+    fetchGroups()
+  }, [fetchGroups])
+
+  // Auto-dismiss result
+  useEffect(() => {
+    if (sendResult) {
+      const t = setTimeout(() => setSendResult(null), 5000)
+      return () => clearTimeout(t)
+    }
+  }, [sendResult])
+
+  // Active (non-unsubscribed) contacts
+  const activeContacts = contacts.filter(c => !c.unsubscribed)
+
+  // Get all unique tags
+  const allTags = Array.from(new Set([
+    ...CORE_TAGS,
+    ...contacts.flatMap(c => c.tags || []).filter(Boolean)
+  ]))
+
+  // Count contacts per tag
+  const tagCount = (tag: string) => activeContacts.filter(c => c.tags?.includes(tag)).length
+
+  // Filter contacts by search
+  const filteredContacts = activeContacts.filter(c => {
+    const q = searchTerm.toLowerCase()
+    return (
+      c.first_name?.toLowerCase().includes(q) ||
+      c.last_name?.toLowerCase().includes(q) ||
+      c.email?.toLowerCase().includes(q)
+    )
+  })
+
+  // Calculate recipient count based on selection
+  const getRecipientCount = (): number => {
+    switch (selectionMode) {
+      case "all":
+        return activeContacts.length
+      case "individuals":
+        return selectedIndividuals.size
+      case "tag":
+        return selectedTag ? tagCount(selectedTag) : 0
+      case "group":
+        return groups.find(g => g.id === selectedGroup)?.memberCount || 0
+      default:
+        return 0
+    }
+  }
+
+  // Get recipients for sending
+  const getRecipients = () => {
+    let recipients: { id: string; email: string; firstName: string; lastName: string }[] = []
+
+    switch (selectionMode) {
+      case "all":
+        recipients = activeContacts.map(c => ({
+          id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name
+        }))
+        break
+      case "individuals":
+        recipients = activeContacts
+          .filter(c => selectedIndividuals.has(c.id))
+          .map(c => ({
+            id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name
+          }))
+        break
+      case "tag":
+        if (selectedTag) {
+          recipients = activeContacts
+            .filter(c => c.tags?.includes(selectedTag))
+            .map(c => ({
+              id: c.id, email: c.email, firstName: c.first_name, lastName: c.last_name
+            }))
+        }
+        break
+      case "group":
+        // For groups, we'll need to fetch group members or handle this server-side
+        break
+    }
+    return recipients
+  }
+
+  // Toggle individual selection
+  const toggleIndividual = (id: string) => {
+    const newSet = new Set(selectedIndividuals)
+    if (newSet.has(id)) {
+      newSet.delete(id)
+    } else {
+      newSet.add(id)
+    }
+    setSelectedIndividuals(newSet)
+  }
+
+  // Select/deselect all filtered contacts
+  const selectAllFiltered = () => {
+    const newSet = new Set(selectedIndividuals)
+    filteredContacts.forEach(c => newSet.add(c.id))
+    setSelectedIndividuals(newSet)
+  }
+
+  const deselectAll = () => {
+    setSelectedIndividuals(new Set())
+  }
+
+  // Editor helpers
   const insertAtCursor = (text: string) => {
-    if (!textareaRef.current) return
-    const textarea = textareaRef.current
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const newBody = body.substring(0, start) + text + body.substring(end)
-    setBody(newBody)
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = start + text.length
-      textarea.focus()
-    }, 0)
+    const el = editorRef.current
+    if (!el) return
+    el.focus()
+    const sel = window.getSelection()
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0)
+      range.deleteContents()
+      const textNode = document.createTextNode(text)
+      range.insertNode(textNode)
+      range.setStartAfter(textNode)
+      range.collapse(true)
+      sel.removeAllRanges()
+      sel.addRange(range)
+    } else {
+      el.innerHTML += text
+    }
+    setEmailBody(el.innerHTML)
+  }
+
+  const insertHtmlAtCursor = (html: string) => {
+    const el = editorRef.current
+    if (!el) return
+    el.focus()
+    const sel = window.getSelection()
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0)
+      range.deleteContents()
+      const frag = document.createRange().createContextualFragment(html)
+      const lastNode = frag.lastChild
+      range.insertNode(frag)
+      if (lastNode) {
+        const afterRange = document.createRange()
+        afterRange.setStartAfter(lastNode)
+        afterRange.collapse(true)
+        sel.removeAllRanges()
+        sel.addRange(afterRange)
+      }
+    } else {
+      el.innerHTML += html
+    }
+    setEmailBody(el.innerHTML)
   }
 
   const insertLink = () => {
-    if (linkText && linkUrl) {
-      insertAtCursor(`\n[Link: ${linkText}](${linkUrl})\n`)
-      setLinkText("")
-      setLinkUrl("")
-      setShowLinkDialog(false)
-    }
+    if (!linkText.trim() || !linkUrl.trim()) return
+    const url = linkUrl.startsWith("http") ? linkUrl : `https://${linkUrl}`
+    insertHtmlAtCursor(`<a href="${url}" style="color:#2563eb;text-decoration:underline;" target="_blank">${linkText}</a>`)
+    setLinkText("")
+    setLinkUrl("")
+    setShowLinkDialog(false)
   }
 
-  const insertPersonalizationTag = (tag: PersonalizationTag) => {
-    insertAtCursor(tag.value)
-    setShowPersonalizationMenu(false)
+  const insertDocument = () => {
+    if (!docName.trim() || !docUrl.trim()) return
+    const url = docUrl.startsWith("http") ? docUrl : `https://${docUrl}`
+    insertHtmlAtCursor(`<a href="${url}" style="color:#8B2B3E;text-decoration:underline;" target="_blank">📎 ${docName}</a>`)
+    setDocName("")
+    setDocUrl("")
+    setShowDocDialog(false)
   }
 
-  const handleFileAttachment = () => {
+  const handleFileSelect = () => {
     fileInputRef.current?.click()
   }
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const fileName = file.name
-      insertAtCursor(`\n[Attachment: ${fileName}]\n`)
+      // For now, just show the filename - real implementation would upload to storage
+      insertHtmlAtCursor(`<span style="color:#8B2B3E;"><strong>📎 Attached: ${file.name}</strong></span>`)
+    }
+    e.target.value = ""
+  }
+
+  const applyFormatting = (command: string, value?: string) => {
+    document.execCommand(command, false, value)
+    if (editorRef.current) {
+      setEmailBody(editorRef.current.innerHTML)
     }
   }
 
+  // Send email
   const handleSend = async () => {
-    if (!subject || !body) {
-      alert("Please fill in subject and email body")
+    // Validation
+    if (!subject.trim()) {
+      setSendResult({ message: "Please enter an email subject.", type: "error" })
+      return
+    }
+    if (!emailBody.trim()) {
+      setSendResult({ message: "Please write your email message.", type: "error" })
+      return
+    }
+
+    const recipientCount = getRecipientCount()
+    if (recipientCount === 0) {
+      setSendResult({ message: "No recipients selected. Please select recipients first.", type: "error" })
       return
     }
 
     setIsSending(true)
-    try {
-      const scheduledAt =
-        scheduleType === "scheduled" && scheduledDate && scheduledTime
-          ? `${scheduledDate}T${scheduledTime}`
-          : undefined
+    setSendResult(null)
 
-      await onSend({
-        subject,
-        body,
-        fontFamily,
-        fontSize,
-        fontColor,
-        isBold,
-        isItalic,
-        isUnderline,
-        textAlign,
-        recipientType,
-        recipients: selectedRecipients.length > 0 ? selectedRecipients : undefined,
-        groupId: selectedGroup || undefined,
-        tagId: selectedTag || undefined,
-        scheduledAt,
+    try {
+      const recipients = getRecipients()
+
+      const res = await adminFetch("/api/admin/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipients,
+          subject,
+          body: emailBody,
+          fontFamily,
+          fontSize,
+          fontColor,
+          isBold,
+          isItalic,
+          isUnderline,
+          textAlign,
+          campaignName: subject,
+          sendToType: selectionMode,
+          sendToValue: selectionMode === "tag" ? selectedTag : selectionMode === "group" ? selectedGroup : undefined,
+        }),
       })
 
-      setShowSuccess(true)
-      setTimeout(() => {
-        setShowSuccess(false)
-        onOpenChange(false)
-        resetForm()
-      }, 2000)
-    } catch (error) {
-      alert("Error sending email")
-      console.error(error)
+      const data = await res.json()
+
+      if (res.ok) {
+        setSendResult({ message: data.message || `Email sent to ${recipientCount} recipients!`, type: "success" })
+        // Reset form after success
+        setTimeout(() => {
+          setSubject("")
+          setEmailBody("")
+          if (editorRef.current) editorRef.current.innerHTML = ""
+          setSelectedIndividuals(new Set())
+          setSelectionMode("all")
+        }, 2000)
+      } else {
+        setSendResult({ message: data.error || "Failed to send email.", type: "error" })
+      }
+    } catch (e) {
+      setSendResult({ message: "Network error. Please try again.", type: "error" })
     } finally {
       setIsSending(false)
     }
   }
 
-  const resetForm = () => {
-    setSubject("")
-    setBody("")
-    setFontFamily("Arial, sans-serif")
-    setFontSize("14px")
-    setFontColor("#1a0a0e")
-    setIsBold(false)
-    setIsItalic(false)
-    setIsUnderline(false)
-    setTextAlign("left")
-    setRecipientType("all")
-    setSelectedRecipients([])
-    setSelectedGroup("")
-    setSelectedTag("")
-    setScheduleType("now")
-    setScheduledDate("")
-    setScheduledTime("")
-    setActiveTab("recipients")
-  }
-
-  const previewStyle = {
-    fontFamily,
-    fontSize,
-    color: fontColor,
-    fontWeight: isBold ? "bold" : "normal",
-    fontStyle: isItalic ? "italic" : "normal",
-    textDecoration: isUnderline ? "underline" : "none",
-    textAlign: textAlign as any,
-  }
+  const recipientCount = getRecipientCount()
+  const hasValidSelection = recipientCount > 0
+  const canSend = hasValidSelection && subject.trim() && emailBody.trim()
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Email Campaign Creator</DialogTitle>
-          <DialogDescription>
-            Select recipients, compose your message, customize formatting, and preview before sending
-          </DialogDescription>
-        </DialogHeader>
+    <div className="flex flex-col gap-6">
+      {/* Toast notification */}
+      {sendResult && (
+        <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 rounded-lg shadow-lg text-sm font-medium ${
+          sendResult.type === "success"
+            ? "bg-green-100 text-green-800 border border-green-300"
+            : "bg-red-100 text-red-800 border border-red-300"
+        }`}>
+          {sendResult.type === "success" ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
+          <span>{sendResult.message}</span>
+          <button onClick={() => setSendResult(null)} className="ml-2 hover:opacity-70">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
-          <TabsList className="grid w-full grid-cols-4 gap-1">
-            <TabsTrigger value="recipients" className="flex items-center gap-1 text-xs sm:text-sm">
-              <Users className="w-4 h-4" />
-              <span className="hidden sm:inline">Recipients</span>
-            </TabsTrigger>
-            <TabsTrigger value="compose" className="flex items-center gap-1 text-xs sm:text-sm">
-              <FileText className="w-4 h-4" />
-              <span className="hidden sm:inline">Compose</span>
-            </TabsTrigger>
-            <TabsTrigger value="formatting" className="flex items-center gap-1 text-xs sm:text-sm">
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Format</span>
-            </TabsTrigger>
-            <TabsTrigger value="preview" className="flex items-center gap-1 text-xs sm:text-sm">
-              <Eye className="w-4 h-4" />
-              <span className="hidden sm:inline">Preview</span>
-            </TabsTrigger>
-          </TabsList>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-[#1a0a0e] flex items-center gap-2">
+            <Mail className="w-6 h-6 text-[#8B2B3E]" />
+            Email Campaign
+          </h2>
+          <p className="text-sm text-[#8B6B5A] mt-1">Select recipients, compose your message, and send</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={onRefreshContacts} className="gap-2">
+          <RefreshCw className="w-4 h-4" />
+          Refresh Contacts
+        </Button>
+      </div>
 
-          {/* RECIPIENTS TAB */}
-          <TabsContent value="recipients" className="flex-1 overflow-y-auto space-y-4 p-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Select Recipients</CardTitle>
-                <CardDescription>Choose who receives this email campaign</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {[
-                    { type: "all", icon: Users, label: "Send to All", description: "All active contacts" },
-                    { type: "individuals", icon: Users, label: "Select Individuals", description: "Pick specific people" },
-                    { type: "group", icon: FolderOpen, label: "Send to Group", description: "Select a saved group" },
-                    { type: "tag", icon: Tag, label: "Send by Tag", description: "All contacts with a tag" },
-                  ].map(({ type, icon: Icon, label, description }) => (
-                    <label
-                      key={type}
-                      className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
-                      onClick={() => setRecipientType(type as any)}
-                    >
-                      <input
-                        type="radio"
-                        name="recipients"
-                        value={type}
-                        checked={recipientType === type}
-                        readOnly
-                        className="w-4 h-4"
-                      />
-                      <div>
-                        <p className="font-medium text-sm">{label}</p>
-                        <p className="text-xs text-muted-foreground">{description}</p>
-                      </div>
-                    </label>
-                  ))}
+      {/* Main content - two columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left column - Recipients */}
+        <Card className="lg:col-span-1">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#8B2B3E]" />
+              Select Recipients
+            </CardTitle>
+            <CardDescription>
+              Choose who receives this email
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Selection mode buttons */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { mode: "all" as const, icon: Users, label: "All Contacts", count: activeContacts.length },
+                { mode: "individuals" as const, icon: User, label: "Select People", count: selectedIndividuals.size },
+                { mode: "tag" as const, icon: Tag, label: "By Tag", count: selectedTag ? tagCount(selectedTag) : 0 },
+                { mode: "group" as const, icon: FolderOpen, label: "By Group", count: groups.find(g => g.id === selectedGroup)?.memberCount || 0 },
+              ].map(({ mode, icon: Icon, label, count }) => (
+                <button
+                  key={mode}
+                  onClick={() => setSelectionMode(mode)}
+                  className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${
+                    selectionMode === mode
+                      ? "border-[#8B2B3E] bg-[#8B2B3E]/5 text-[#8B2B3E]"
+                      : "border-[#e8d8c8] hover:border-[#8B2B3E]/50 text-[#6b4c52]"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span className="text-xs font-medium">{label}</span>
+                  {(selectionMode === mode || mode === "all") && (
+                    <Badge variant="secondary" className="text-xs">{count}</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <Separator />
+
+            {/* Conditional content based on selection mode */}
+            {selectionMode === "all" && (
+              <div className="p-4 bg-[#fdf8f3] rounded-lg border border-[#e8d8c8]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-[#8B2B3E]" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-[#1a0a0e]">All Active Contacts</p>
+                    <p className="text-sm text-[#8B6B5A]">{activeContacts.length} recipients</p>
+                  </div>
                 </div>
+              </div>
+            )}
 
-                {recipientType === "individuals" && (
-                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                    <label className="text-sm font-medium">Selected Recipients ({selectedRecipients.length})</label>
-                    <Input placeholder="Search and add recipients..." className="mb-2 text-sm" />
-                    <div className="flex flex-wrap gap-2 p-2 border rounded-lg min-h-10 bg-background">
-                      {selectedRecipients.length === 0 ? (
-                        <span className="text-xs text-muted-foreground">No recipients selected</span>
-                      ) : (
-                        selectedRecipients.map((id) => (
-                          <div key={id} className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs flex items-center gap-1">
-                            {id}
-                            <button onClick={() => setSelectedRecipients(selectedRecipients.filter(r => r !== id))}>
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {recipientType === "group" && (
-                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                    <label className="text-sm font-medium">Select Group</label>
-                    <Select value={selectedGroup} onValueChange={setSelectedGroup}>
-                      <SelectTrigger className="text-sm">
-                        <SelectValue placeholder="Choose a group..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="group1">Team Leaders</SelectItem>
-                        <SelectItem value="group2">Newsletter Subscribers</SelectItem>
-                        <SelectItem value="group3">Active Members</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
-                {recipientType === "tag" && (
-                  <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                    <label className="text-sm font-medium">Select Tag</label>
-                    <Select value={selectedTag} onValueChange={setSelectedTag}>
-                      <SelectTrigger className="text-sm">
-                        <SelectValue placeholder="Choose a tag..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MGM">My Great Marriage</SelectItem>
-                        <SelectItem value="TT4Men">Table Talk for Men</SelectItem>
-                        <SelectItem value="FF-NL">Newsletter</SelectItem>
-                        <SelectItem value="Men">Men</SelectItem>
-                        <SelectItem value="Women">Women</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* COMPOSE TAB */}
-          <TabsContent value="compose" className="flex-1 overflow-y-auto space-y-4 p-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Email Content</CardTitle>
-                <CardDescription>Write your message with personalization options</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Subject Line *</label>
+            {selectionMode === "individuals" && (
+              <div className="space-y-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B6B5A]" />
                   <Input
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    placeholder="Enter email subject (keep it clear and compelling)..."
-                    className="text-sm"
+                    placeholder="Search contacts..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9 border-[#e8d8c8]"
                   />
-                  <p className="text-xs text-muted-foreground">{subject.length}/60 characters</p>
                 </div>
-
-                <Separator className="my-3" />
-
-                {/* Formatting Toolbar */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Text Formatting Tools</label>
-                  <div className="flex flex-wrap gap-1 p-2 border rounded-lg bg-muted/50">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={isBold ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => setIsBold(!isBold)}
-                          className="h-8 px-2"
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={selectAllFiltered} className="text-xs">
+                    Select All
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={deselectAll} className="text-xs">
+                    Clear
+                  </Button>
+                </div>
+                <ScrollArea className="h-[250px] border rounded-lg">
+                  <div className="p-2 space-y-1">
+                    {filteredContacts.length === 0 ? (
+                      <p className="text-sm text-center text-[#8B6B5A] py-4">No contacts found</p>
+                    ) : (
+                      filteredContacts.map((contact) => (
+                        <label
+                          key={contact.id}
+                          className={`flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-[#fdf8f3] ${
+                            selectedIndividuals.has(contact.id) ? "bg-[#8B2B3E]/5" : ""
+                          }`}
                         >
-                          <Bold className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Bold text</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={isItalic ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => setIsItalic(!isItalic)}
-                          className="h-8 px-2"
-                        >
-                          <Italic className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Italic text</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={isUnderline ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => setIsUnderline(!isUnderline)}
-                          className="h-8 px-2"
-                        >
-                          <Underline className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Underline text</TooltipContent>
-                    </Tooltip>
-
-                    <Separator orientation="vertical" className="mx-1 h-6" />
-
-                    {[
-                      { align: "left", icon: AlignLeft },
-                      { align: "center", icon: AlignCenter },
-                      { align: "right", icon: AlignRight },
-                    ].map(({ align, icon: Icon }) => (
-                      <Tooltip key={align}>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant={textAlign === align ? "default" : "ghost"}
-                            size="sm"
-                            onClick={() => setTextAlign(align as any)}
-                            className="h-8 px-2"
-                          >
-                            <Icon className="w-4 h-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Align {align}</TooltipContent>
-                      </Tooltip>
-                    ))}
-
-                    <Separator orientation="vertical" className="mx-1 h-6" />
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setShowLinkDialog(true)}
-                          className="h-8 px-2"
-                        >
-                          <LinkIcon className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Insert link</TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleFileAttachment}
-                          className="h-8 px-2"
-                        >
-                          <FileText className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Attach file</TooltipContent>
-                    </Tooltip>
-
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={showPersonalizationMenu ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => setShowPersonalizationMenu(!showPersonalizationMenu)}
-                          className="h-8 px-2 text-xs font-bold"
-                        >
-                          {'{}'}</Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Personalization tags</TooltipContent>
-                    </Tooltip>
+                          <Checkbox
+                            checked={selectedIndividuals.has(contact.id)}
+                            onCheckedChange={() => toggleIndividual(contact.id)}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-[#1a0a0e] truncate">
+                              {contact.first_name} {contact.last_name}
+                            </p>
+                            <p className="text-xs text-[#8B6B5A] truncate">{contact.email}</p>
+                          </div>
+                        </label>
+                      ))
+                    )}
                   </div>
-                </div>
+                </ScrollArea>
+                <p className="text-xs text-[#8B6B5A]">
+                  <strong>{selectedIndividuals.size}</strong> selected
+                </p>
+              </div>
+            )}
 
-                {/* Personalization Menu */}
-                {showPersonalizationMenu && (
-                  <div className="p-3 border rounded-lg bg-muted/50 space-y-2">
-                    <p className="text-sm font-medium">Personalization Tags - Click to insert:</p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {PERSONALIZATION_TAGS.map((tag) => (
-                        <Tooltip key={tag.value}>
-                          <TooltipTrigger asChild>
-                            <button
-                              onClick={() => insertPersonalizationTag(tag)}
-                              className="text-left p-2 rounded border hover:bg-muted transition-colors text-xs bg-background hover:border-primary"
-                            >
-                              <p className="font-medium">{tag.label}</p>
-                              <p className="text-xs text-muted-foreground">{tag.value}</p>
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent>{tag.description}</TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </div>
+            {selectionMode === "tag" && (
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-[#1a0a0e]">Select a tag:</p>
+                <div className="flex flex-wrap gap-2">
+                  {allTags.map((tag) => {
+                    const count = tagCount(tag)
+                    const color = TAG_COLORS[tag] || "#6b7280"
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => setSelectedTag(tag)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                          selectedTag === tag
+                            ? "ring-2 ring-offset-2"
+                            : "hover:opacity-80"
+                        }`}
+                        style={{
+                          backgroundColor: `${color}20`,
+                          color: color,
+                          borderColor: color,
+                          ...(selectedTag === tag ? { ringColor: color } : {})
+                        }}
+                      >
+                        {tag} ({count})
+                      </button>
+                    )
+                  })}
+                </div>
+                {selectedTag && (
+                  <div className="p-3 bg-[#fdf8f3] rounded-lg border border-[#e8d8c8]">
+                    <p className="text-sm">
+                      <strong>{tagCount(selectedTag)}</strong> contacts with tag <Badge>{selectedTag}</Badge>
+                    </p>
                   </div>
                 )}
+              </div>
+            )}
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email Body *</label>
-                  <Textarea
-                    ref={textareaRef}
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    placeholder="Write your email message here... Use {{first_name}}, {{wife_name}}, etc. for personalization."
-                    className="min-h-48 resize-none font-mono text-sm"
-                  />
-                  <p className="text-xs text-muted-foreground">{body.length} characters</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            {selectionMode === "group" && (
+              <div className="space-y-3">
+                {loadingGroups ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-5 h-5 animate-spin text-[#8B2B3E]" />
+                  </div>
+                ) : groups.length === 0 ? (
+                  <p className="text-sm text-center text-[#8B6B5A] py-4">No groups created yet</p>
+                ) : (
+                  <div className="space-y-2">
+                    {groups.map((group) => (
+                      <button
+                        key={group.id}
+                        onClick={() => setSelectedGroup(group.id)}
+                        className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all text-left ${
+                          selectedGroup === group.id
+                            ? "border-[#8B2B3E] bg-[#8B2B3E]/5"
+                            : "border-[#e8d8c8] hover:border-[#8B2B3E]/50"
+                        }`}
+                      >
+                        <div
+                          className="w-4 h-4 rounded-full"
+                          style={{ backgroundColor: group.color }}
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-[#1a0a0e]">{group.name}</p>
+                          {group.description && (
+                            <p className="text-xs text-[#8B6B5A]">{group.description}</p>
+                          )}
+                        </div>
+                        <Badge variant="secondary">{group.memberCount}</Badge>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
-          {/* FORMATTING TAB */}
-          <TabsContent value="formatting" className="flex-1 overflow-y-auto space-y-4 p-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Text Formatting</CardTitle>
-                <CardDescription>Customize the appearance of your email</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Font Family */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Font Family</label>
+            {/* Selected count summary */}
+            <div className={`p-3 rounded-lg border ${hasValidSelection ? "bg-green-50 border-green-200" : "bg-amber-50 border-amber-200"}`}>
+              {hasValidSelection ? (
+                <p className="text-sm text-green-800 flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  <strong>{recipientCount}</strong> recipient{recipientCount !== 1 ? "s" : ""} selected
+                </p>
+              ) : (
+                <p className="text-sm text-amber-800 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  No recipients selected
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Right column - Compose */}
+        <Card className="lg:col-span-2">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Send className="w-5 h-5 text-[#8B2B3E]" />
+              Compose Email
+            </CardTitle>
+            <CardDescription>
+              Write your message with formatting and personalization
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Subject */}
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">
+                Subject *
+              </label>
+              <Input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Enter email subject..."
+                className="border-[#e8d8c8] text-[#1a0a0e]"
+              />
+            </div>
+
+            {/* Editor with toolbar */}
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#8B6B5A] mb-1 block">
+                Message *
+              </label>
+              <div className="border-2 border-[#e8d8c8] rounded-lg overflow-hidden focus-within:border-[#8B2B3E]">
+                {/* Toolbar Row 1 - Font settings */}
+                <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
                   <Select value={fontFamily} onValueChange={setFontFamily}>
-                    <SelectTrigger className="text-sm">
+                    <SelectTrigger className="w-[130px] h-8 bg-white border-[#e8d8c8] text-xs">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {FONT_FAMILIES.map((font) => (
-                        <SelectItem key={font.value} value={font.value}>
+                        <SelectItem key={font.value} value={font.value} style={{ fontFamily: font.value }}>
                           {font.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
-                {/* Font Size */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Font Size</label>
                   <Select value={fontSize} onValueChange={setFontSize}>
-                    <SelectTrigger className="text-sm">
+                    <SelectTrigger className="w-[110px] h-8 bg-white border-[#e8d8c8] text-xs">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {FONT_SIZES.map((size) => (
-                        <SelectItem key={size.value} value={size.value}>
-                          {size.label}
+                        <SelectItem key={size.value} value={size.value}>{size.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={fontColor} onValueChange={setFontColor}>
+                    <SelectTrigger className="w-[100px] h-8 bg-white border-[#e8d8c8]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: fontColor }} />
+                        <span className="text-xs">{FONT_COLORS.find(c => c.value === fontColor)?.label}</span>
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FONT_COLORS.map((color) => (
+                        <SelectItem key={color.value} value={color.value}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: color.value }} />
+                            {color.label}
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
 
-                {/* Font Color */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Font Color</label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {FONT_COLORS.map((color) => (
+                  <Separator orientation="vertical" className="h-6" />
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <button
-                        key={color.value}
-                        onClick={() => setFontColor(color.value)}
-                        className={`p-2 rounded-lg border-2 transition-all ${
-                          fontColor === color.value
-                            ? "border-primary ring-2 ring-primary"
-                            : "border-muted hover:border-primary"
-                        }`}
-                        title={color.label}
+                        type="button"
+                        onClick={() => { setIsBold(!isBold); applyFormatting("bold") }}
+                        className={`p-1.5 rounded transition-colors ${isBold ? "bg-[#8B2B3E] text-white" : "hover:bg-white text-[#6b4c52]"}`}
                       >
-                        <div className="w-full h-8 rounded" style={{ backgroundColor: color.hex }} />
-                        <p className="text-xs mt-1 text-center">{color.label}</p>
+                        <Bold className="w-4 h-4" />
                       </button>
-                    ))}
-                  </div>
-                </div>
+                    </TooltipTrigger>
+                    <TooltipContent>Bold</TooltipContent>
+                  </Tooltip>
 
-                <Separator className="my-4" />
-
-                {/* Scheduling */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    Schedule Delivery
-                  </h3>
-
-                  <div className="space-y-3">
-                    {[
-                      { type: "now", label: "Send Now", description: "Deliver immediately" },
-                      { type: "scheduled", label: "Schedule for Later", description: "Choose date and time" },
-                    ].map(({ type, label, description }) => (
-                      <label
-                        key={type}
-                        className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
-                        onClick={() => setScheduleType(type as any)}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => { setIsItalic(!isItalic); applyFormatting("italic") }}
+                        className={`p-1.5 rounded transition-colors ${isItalic ? "bg-[#8B2B3E] text-white" : "hover:bg-white text-[#6b4c52]"}`}
                       >
-                        <input
-                          type="radio"
-                          name="schedule"
-                          checked={scheduleType === type}
-                          readOnly
-                          className="w-4 h-4"
-                        />
-                        <div>
-                          <p className="font-medium text-sm">{label}</p>
-                          <p className="text-xs text-muted-foreground">{description}</p>
-                        </div>
-                      </label>
-                    ))}
+                        <Italic className="w-4 h-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Italic</TooltipContent>
+                  </Tooltip>
 
-                    {scheduleType === "scheduled" && (
-                      <div className="grid grid-cols-2 gap-3 ml-7 mt-3 p-3 border rounded-lg bg-muted/30">
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium">Date</label>
-                          <Input
-                            type="date"
-                            value={scheduledDate}
-                            onChange={(e) => setScheduledDate(e.target.value)}
-                            className="text-sm"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-medium">Time</label>
-                          <Input
-                            type="time"
-                            value={scheduledTime}
-                            onChange={(e) => setScheduledTime(e.target.value)}
-                            className="text-sm"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => { setIsUnderline(!isUnderline); applyFormatting("underline") }}
+                        className={`p-1.5 rounded transition-colors ${isUnderline ? "bg-[#8B2B3E] text-white" : "hover:bg-white text-[#6b4c52]"}`}
+                      >
+                        <Underline className="w-4 h-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>Underline</TooltipContent>
+                  </Tooltip>
+
+                  <Separator orientation="vertical" className="h-6" />
+
+                  {[
+                    { align: "left" as const, icon: AlignLeft },
+                    { align: "center" as const, icon: AlignCenter },
+                    { align: "right" as const, icon: AlignRight },
+                  ].map(({ align, icon: Icon }) => (
+                    <Tooltip key={align}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => { setTextAlign(align); applyFormatting(`justify${align.charAt(0).toUpperCase() + align.slice(1)}`) }}
+                          className={`p-1.5 rounded transition-colors ${textAlign === align ? "bg-[#8B2B3E] text-white" : "hover:bg-white text-[#6b4c52]"}`}
+                        >
+                          <Icon className="w-4 h-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Align {align}</TooltipContent>
+                    </Tooltip>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
-          {/* PREVIEW TAB */}
-          <TabsContent value="preview" className="flex-1 overflow-y-auto p-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Email Preview</CardTitle>
-                <CardDescription>This is how your email will appear to recipients</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!subject || !body ? (
-                  <div className="p-8 text-center border rounded-lg bg-muted/30">
-                    <AlertCircle className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">Add subject and body content to see preview</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {/* Preview Header */}
-                    <div className="p-4 border rounded-lg bg-muted/50">
-                      <p className="text-xs text-muted-foreground mb-1">Subject:</p>
-                      <p className="font-semibold text-base" style={previewStyle}>
-                        {subject}
-                      </p>
+                {/* Toolbar Row 2 - Insert actions */}
+                <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowLinkDialog(true)}
+                    className="h-8 text-xs border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5"
+                  >
+                    <LinkIcon className="w-3.5 h-3.5 mr-1" />
+                    Insert Link
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowDocDialog(true)}
+                    className="h-8 text-xs border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5"
+                  >
+                    <Paperclip className="w-3.5 h-3.5 mr-1" />
+                    Attach Document
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleFileSelect}
+                    className="h-8 text-xs border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E]/5"
+                  >
+                    <Upload className="w-3.5 h-3.5 mr-1" />
+                    Upload File
+                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+
+                  <Separator orientation="vertical" className="h-6" />
+
+                  <span className="text-xs text-[#8B6B5A] flex items-center gap-1">
+                    <User className="w-3.5 h-3.5" />
+                    Personalize:
+                  </span>
+                  {PERSONALIZATION_TAGS.map((tag) => (
+                    <Tooltip key={tag.value}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => insertAtCursor(tag.value)}
+                          className="px-2 py-1 text-xs bg-white border border-[#2563eb] text-[#2563eb] rounded hover:bg-[#2563eb]/5"
+                        >
+                          {tag.label}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>{tag.desc}</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+
+                {/* Content editable area */}
+                <div className="relative">
+                  {!emailBody && (
+                    <div 
+                      className="absolute top-4 left-4 text-[#8B6B5A]/60 pointer-events-none"
+                      style={{ fontFamily, fontSize }}
+                    >
+                      Write your email message here...
                     </div>
-
-                    {/* Preview Body */}
-                    <div className="p-4 border rounded-lg min-h-64 bg-white">
-                      <div style={previewStyle} className="whitespace-pre-wrap break-words text-sm">
-                        {body}
-                      </div>
-                    </div>
-
-                    {/* Preview Info */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs p-3 border rounded-lg bg-muted/30">
-                      <div>
-                        <p className="text-muted-foreground">Font</p>
-                        <p className="font-medium">{FONT_FAMILIES.find(f => f.value === fontFamily)?.label}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Size</p>
-                        <p className="font-medium">{fontSize}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Style</p>
-                        <p className="font-medium">
-                          {[isBold && "Bold", isItalic && "Italic", isUnderline && "Underline"]
-                            .filter(Boolean)
-                            .join(", ") || "Normal"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground">Alignment</p>
-                        <p className="font-medium capitalize">{textAlign}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        {/* Success Message */}
-        {showSuccess && (
-          <div className="fixed top-4 right-4 p-4 bg-green-100 text-green-800 rounded-lg flex items-center gap-2 animate-in">
-            <Check className="w-5 h-5" />
-            <span className="text-sm">Email campaign created successfully!</span>
-          </div>
-        )}
-
-        {/* Dialog: Insert Link */}
-        <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-lg">Insert Link</DialogTitle>
-              <DialogDescription>Add a clickable link to your email</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Link Text</label>
-                <Input
-                  value={linkText}
-                  onChange={(e) => setLinkText(e.target.value)}
-                  placeholder="e.g., Learn More"
-                  className="text-sm"
-                />
+                  )}
+                  <div
+                    ref={editorRef}
+                    contentEditable
+                    onInput={(e) => setEmailBody((e.target as HTMLDivElement).innerHTML)}
+                    className="min-h-[200px] max-h-[350px] overflow-y-auto p-4 focus:outline-none"
+                    style={{
+                      fontFamily,
+                      fontSize,
+                      color: fontColor,
+                      textAlign,
+                    }}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">URL</label>
-                <Input
-                  value={linkUrl}
-                  onChange={(e) => setLinkUrl(e.target.value)}
-                  placeholder="e.g., https://example.com"
-                  className="text-sm"
-                />
-              </div>
+              <p className="text-xs text-[#8B6B5A] mt-1">
+                Tip: Click toolbar buttons to format, or use personalization tags to customize for each recipient.
+              </p>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowLinkDialog(false)} className="text-sm">
-                Cancel
-              </Button>
-              <Button onClick={insertLink} className="text-sm">
-                Insert Link
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
 
-        {/* Footer Actions */}
-        <CardFooter className="flex gap-2 justify-between border-t pt-4">
-          <Button
-            variant="outline"
-            onClick={() => {
-              onOpenChange(false)
-              resetForm()
-            }}
-            className="text-sm"
-          >
-            Cancel
-          </Button>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setActiveTab("preview")}
-              className="flex items-center gap-2 text-sm"
-            >
-              <Eye className="w-4 h-4" />
-              Preview
-            </Button>
-            <Button
-              onClick={handleSend}
-              disabled={isSending || !subject || !body}
-              className="flex items-center gap-2 text-sm bg-primary hover:bg-primary/90"
-            >
-              {isSending ? (
-                <>
-                  <span className="inline-block animate-spin">⌛</span>
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4" />
-                  Send Campaign
-                </>
-              )}
-            </Button>
+            {/* Action buttons */}
+            <div className="flex items-center justify-between pt-4 border-t border-[#e8d8c8]">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowPreview(true)}
+                disabled={!subject.trim() || !emailBody.trim()}
+                className="gap-2"
+              >
+                <Eye className="w-4 h-4" />
+                Preview
+              </Button>
+
+              <Button
+                onClick={handleSend}
+                disabled={!canSend || isSending}
+                className="gap-2 bg-[#8B2B3E] hover:bg-[#6d2231] text-white"
+              >
+                {isSending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Send to {recipientCount} Recipient{recipientCount !== 1 ? "s" : ""}
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Insert Link Dialog */}
+      <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <LinkIcon className="w-5 h-5 text-[#8B2B3E]" />
+              Insert Link
+            </DialogTitle>
+            <DialogDescription>
+              Add a clickable link to your email
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium text-[#1a0a0e] block mb-1">Link Text *</label>
+              <Input
+                value={linkText}
+                onChange={(e) => setLinkText(e.target.value)}
+                placeholder="e.g., Click here to learn more"
+                className="border-[#e8d8c8]"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-[#1a0a0e] block mb-1">URL *</label>
+              <Input
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="https://example.com"
+                className="border-[#e8d8c8]"
+              />
+            </div>
           </div>
-        </CardFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLinkDialog(false)}>Cancel</Button>
+            <Button
+              onClick={insertLink}
+              disabled={!linkText.trim() || !linkUrl.trim()}
+              className="bg-[#8B2B3E] hover:bg-[#6d2231] text-white"
+            >
+              Insert Link
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Attach Document Dialog */}
+      <Dialog open={showDocDialog} onOpenChange={setShowDocDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Paperclip className="w-5 h-5 text-[#8B2B3E]" />
+              Attach Document
+            </DialogTitle>
+            <DialogDescription>
+              Link to a document (Google Drive, Dropbox, etc.)
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium text-[#1a0a0e] block mb-1">Document Name *</label>
+              <Input
+                value={docName}
+                onChange={(e) => setDocName(e.target.value)}
+                placeholder="e.g., Event Schedule PDF"
+                className="border-[#e8d8c8]"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-[#1a0a0e] block mb-1">Document URL *</label>
+              <Input
+                value={docUrl}
+                onChange={(e) => setDocUrl(e.target.value)}
+                placeholder="https://drive.google.com/..."
+                className="border-[#e8d8c8]"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDocDialog(false)}>Cancel</Button>
+            <Button
+              onClick={insertDocument}
+              disabled={!docName.trim() || !docUrl.trim()}
+              className="bg-[#8B2B3E] hover:bg-[#6d2231] text-white"
+            >
+              Attach Document
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Preview Dialog */}
+      <Dialog open={showPreview} onOpenChange={setShowPreview}>
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="w-5 h-5 text-[#8B2B3E]" />
+              Email Preview
+            </DialogTitle>
+            <DialogDescription>
+              This is how your email will appear to recipients
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 space-y-4">
+            <div className="p-4 bg-[#fdf8f3] rounded-lg border border-[#e8d8c8]">
+              <p className="text-xs text-[#8B6B5A] mb-1">Subject:</p>
+              <p className="font-semibold text-[#1a0a0e]">{subject}</p>
+            </div>
+            <div className="p-4 bg-white rounded-lg border border-[#e8d8c8] min-h-[200px]">
+              <div
+                style={{
+                  fontFamily,
+                  fontSize,
+                  color: fontColor,
+                  textAlign,
+                }}
+                dangerouslySetInnerHTML={{ __html: emailBody }}
+              />
+            </div>
+            <div className="p-3 bg-[#fdf8f3] rounded-lg border border-[#e8d8c8]">
+              <p className="text-sm text-[#8B6B5A]">
+                Sending to <strong>{recipientCount}</strong> recipient{recipientCount !== 1 ? "s" : ""}
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setShowPreview(false)}>Close</Button>
+            <Button
+              onClick={() => { setShowPreview(false); handleSend() }}
+              disabled={!canSend || isSending}
+              className="bg-[#8B2B3E] hover:bg-[#6d2231] text-white gap-2"
+            >
+              <Send className="w-4 h-4" />
+              Send Email
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+    </div>
   )
 }
