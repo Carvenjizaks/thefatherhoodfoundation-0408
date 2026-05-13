@@ -79,7 +79,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const [isSending, setIsSending] = useState(false)
   const [recipientType, setRecipientType] = useState<"all" | "men" | "women">("all")
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const editorRef = useRef<HTMLDivElement>(null)
 
   // Link dialog state
   const [showLinkDialog, setShowLinkDialog] = useState(false)
@@ -103,32 +103,58 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   const menCount = recipients.filter(r => r.gender === "male").length
   const womenCount = recipients.filter(r => r.gender === "female").length
 
-  // Insert content at cursor position
+  // Insert content at cursor position in contentEditable div
   const insertAtCursor = (content: string) => {
-    const textarea = textareaRef.current
-    if (!textarea) {
+    const editorDiv = editorRef.current
+    if (!editorDiv) {
       setBody(prev => prev + content)
       return
     }
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const newBody = body.substring(0, start) + content + body.substring(end)
-    setBody(newBody)
-    // Restore cursor position after the inserted content
-    setTimeout(() => {
-      textarea.focus()
-      textarea.setSelectionRange(start + content.length, start + content.length)
-    }, 0)
+    
+    const selection = window.getSelection()
+    if (!selection?.rangeCount) {
+      setBody(prev => prev + content)
+      return
+    }
+
+    try {
+      const range = selection.getRangeAt(0)
+      range.deleteContents()
+
+      // Create a temporary container to parse HTML
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      
+      // Insert each node from the parsed HTML
+      let lastNode: Node | null = null
+      while (tempDiv.firstChild) {
+        lastNode = range.insertNode(tempDiv.removeChild(tempDiv.firstChild))
+      }
+
+      // Move cursor to end of inserted content
+      if (lastNode) {
+        range.setStartAfter(lastNode)
+        range.collapse(true)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+      
+      // Update state to reflect changes
+      if (editorDiv.innerHTML) {
+        setBody(editorDiv.innerHTML)
+      }
+    } catch (error) {
+      console.error("Error inserting content:", error)
+      setBody(prev => prev + content)
+    }
   }
 
   const insertLink = () => {
-    console.log("[v0] insertLink called with:", { linkText, linkUrl })
     if (!linkText.trim() || !linkUrl.trim()) {
       alert("Please fill in both link text and URL")
       return
     }
     const linkHtml = `<a href="${linkUrl}" style="color: #2563eb; text-decoration: underline;">${linkText}</a>`
-    console.log("[v0] Inserting link HTML:", linkHtml)
     insertAtCursor(linkHtml)
     setLinkText("")
     setLinkUrl("")
@@ -136,15 +162,12 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
   }
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("[v0] handleFileSelect triggered")
     const files = e.target.files
-    console.log("[v0] Files selected:", files?.length)
     if (!files || files.length === 0) return
 
     setIsUploading(true)
     try {
       for (const file of Array.from(files)) {
-        console.log("[v0] Uploading file:", file.name, file.size)
         const formData = new FormData()
         formData.append('file', file)
 
@@ -153,16 +176,13 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
           body: formData,
         })
 
-        console.log("[v0] Upload response status:", response.status)
         if (!response.ok) {
           const error = await response.json()
-          console.error("[v0] Upload error:", error)
           alert(error.error || 'Upload failed')
           continue
         }
 
         const data = await response.json()
-        console.log("[v0] Upload success:", data)
         setUploadedFiles(prev => [...prev, { name: data.filename, url: data.url, size: data.size }])
       }
     } catch (error) {
@@ -384,10 +404,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                 <div className="bg-[#fdf8f3] border-b border-[#e8d8c8] p-2 flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      console.log("[v0] Insert Link button clicked")
-                      setShowLinkDialog(true)
-                    }}
+                    onClick={() => setShowLinkDialog(true)}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
                   >
                     <LinkIcon className="w-3.5 h-3.5" />
@@ -395,10 +412,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      console.log("[v0] Attach Doc button clicked")
-                      setShowDocDialog(true)
-                    }}
+                    onClick={() => setShowDocDialog(true)}
                     className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-white border border-[#8B2B3E] text-[#8B2B3E] rounded hover:bg-[#8B2B3E]/5 transition-colors"
                   >
                     <FileText className="w-3.5 h-3.5" />
@@ -424,13 +438,20 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                   ))}
                 </div>
 
-                {/* Textarea */}
-                <textarea
-                  ref={textareaRef}
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  placeholder="Write your message here... Use the toolbar above to format text, insert links, attach documents, or add personalization tags like {{first_name}}."
-                  rows={10}
+                {/* Editor */}
+                <div
+                  ref={editorRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  onInput={(e) => {
+                    const div = e.currentTarget as HTMLDivElement
+                    setBody(div.innerHTML)
+                  }}
+                  onBlur={(e) => {
+                    const div = e.currentTarget as HTMLDivElement
+                    setBody(div.innerHTML)
+                  }}
+                  dangerouslySetInnerHTML={{ __html: body }}
                   style={{
                     fontFamily,
                     fontSize,
@@ -440,7 +461,7 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
                     textDecoration: isUnderline ? "underline" : "none",
                     textAlign,
                   }}
-                  className="w-full px-4 py-3 focus:outline-none resize-none border-0"
+                  className="w-full px-4 py-3 focus:outline-none min-h-60 border border-[#e8d8c8] rounded-lg bg-white overflow-auto"
                 />
               </div>
               <p className="text-xs text-[#8B6B5A] mt-1">
@@ -571,8 +592,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
       </Dialog>
 
       {/* Insert Link Dialog */}
-      <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
-        <DialogContent className="w-[95vw] max-w-md bg-white">
+      <Dialog open={showLinkDialog} onOpenChange={setShowLinkDialog} modal={true}>
+        <DialogContent className="w-[95vw] max-w-md bg-white z-[100]" overlayClassName="z-[99]">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e]">Insert Link</DialogTitle>
             <DialogDescription className="text-[#8B6B5A]">Add a clickable link to your email</DialogDescription>
@@ -595,8 +616,8 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
       </Dialog>
 
 {/* Attach File Dialog */}
-      <Dialog open={showDocDialog} onOpenChange={setShowDocDialog}>
-        <DialogContent className="w-[95vw] max-w-md bg-white">
+      <Dialog open={showDocDialog} onOpenChange={setShowDocDialog} modal={true}>
+        <DialogContent className="w-[95vw] max-w-md bg-white z-[100]" overlayClassName="z-[99]">
           <DialogHeader>
             <DialogTitle className="text-[#1a0a0e]">Attach Files</DialogTitle>
             <DialogDescription className="text-[#8B6B5A]">

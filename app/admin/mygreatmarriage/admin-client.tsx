@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { Download, RefreshCw, UserX, Search, Mail, Send } from "lucide-react"
@@ -38,16 +38,13 @@ export default function AdminDashboardClient({
 }) {
   const router = useRouter()
   const [searchInput, setSearchInput] = useState(search)
-  const [isPending, startTransition] = useTransition()
   const [actionMsg, setActionMsg] = useState("")
   const [selectedSubs, setSelectedSubs] = useState<Set<string>>(new Set())
   const [emailComposerOpen, setEmailComposerOpen] = useState(false)
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    startTransition(() => {
-      router.push(`/admin/mygreatmarriage?search=${encodeURIComponent(searchInput)}`)
-    })
+    router.push(`/admin/mygreatmarriage?search=${encodeURIComponent(searchInput)}`)
   }
 
   async function handleResendWelcome(subId: string, husbandEmail: string, wifeEmail: string) {
@@ -196,11 +193,11 @@ export default function AdminDashboardClient({
             />
           </div>
           <div className="flex gap-2 sm:gap-3">
-            <Button type="submit" disabled={isPending} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg px-5 flex-1 sm:flex-none">
-              Search
-            </Button>
+          <Button type="submit" disabled={false} className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white rounded-lg px-5 flex-1 sm:flex-none">
+            Search
+          </Button>
             {search && (
-              <Button type="button" variant="outline" onClick={() => { setSearchInput(""); startTransition(() => { router.push("/admin/mygreatmarriage") }) }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
+              <Button type="button" variant="outline" onClick={() => { setSearchInput(""); router.push("/admin/mygreatmarriage") }} className="border-[#e8d8c8] text-[#6b4c52] rounded-lg bg-transparent">
                 Clear
               </Button>
             )}
