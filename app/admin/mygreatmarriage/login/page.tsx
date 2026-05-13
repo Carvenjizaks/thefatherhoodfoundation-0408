@@ -37,12 +37,12 @@ export default function AdminLoginPage() {
   return (
     <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-6">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/10 via-transparent to-[#8B6B5A]/10 pointer-events-none" />
       
       <div className="relative max-w-sm w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center shadow-lg shadow-rose-500/25">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#8B2B3E] to-[#6d2230] flex items-center justify-center shadow-lg shadow-[#8B2B3E]/25">
             <Lock className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">My Great Marriage</h1>
@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-500/40 transition-all"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#8B2B3E]/40 focus:border-[#8B2B3E]/40 transition-all"
               placeholder="Enter admin password"
               autoComplete="current-password"
             />
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
           <Button 
             type="submit" 
             disabled={loading} 
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl font-medium py-3 shadow-lg shadow-rose-500/25 transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-[#8B2B3E] to-[#6d2230] hover:from-[#7a2536] hover:to-[#5c1c28] text-white rounded-xl font-medium py-3 shadow-lg shadow-[#8B2B3E]/25 transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
               <span>Verifying...</span>
