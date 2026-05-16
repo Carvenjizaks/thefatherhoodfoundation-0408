@@ -128,7 +128,9 @@ export default function EmailComposer({ open, onOpenChange, recipients, onSend }
       // Insert each node from the parsed HTML
       let lastNode: Node | null = null
       while (tempDiv.firstChild) {
-        lastNode = range.insertNode(tempDiv.removeChild(tempDiv.firstChild))
+        const node = tempDiv.removeChild(tempDiv.firstChild)
+        range.insertNode(node)
+        lastNode = node
       }
 
       // Move cursor to end of inserted content
