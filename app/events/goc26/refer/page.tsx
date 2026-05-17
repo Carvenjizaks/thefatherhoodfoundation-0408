@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,26 @@ interface Friend {
   email: string
 }
 
-export default function ReferPage() {
+// Loading fallback for Suspense
+function ReferPageLoading() {
+  return (
+    <div className="min-h-screen bg-[#f5ede4]">
+      <Header />
+      <main className="container mx-auto px-4 py-20">
+        <div className="max-w-xl mx-auto text-center">
+          <div className="animate-pulse">
+            <div className="h-8 bg-[#8B6F47]/20 rounded w-3/4 mx-auto mb-4"></div>
+            <div className="h-4 bg-[#8B6F47]/20 rounded w-1/2 mx-auto"></div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+// Main component with search params
+function ReferPageContent() {
   const searchParams = useSearchParams()
   const refCode = searchParams.get("ref") || "GOC-XXX"
   
@@ -50,7 +69,7 @@ export default function ReferPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen bg-[#f5ede4]">
+      <>
         <Header />
         <main className="container mx-auto px-4 py-20">
           <div className="max-w-md mx-auto text-center">
@@ -76,13 +95,13 @@ export default function ReferPage() {
           </div>
         </main>
         <Footer />
-      </div>
+      </>
     )
   }
 
   if (showPreview) {
     return (
-      <div className="min-h-screen bg-[#f5ede4]">
+      <>
         <Header />
         <main className="container mx-auto px-4 py-10">
           <div className="max-w-2xl mx-auto">
@@ -151,12 +170,12 @@ export default function ReferPage() {
           </div>
         </main>
         <Footer />
-      </div>
+      </>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#f5ede4]">
+    <>
       <Header />
       <main className="container mx-auto px-4 py-10">
         <div className="max-w-xl mx-auto">
@@ -230,6 +249,17 @@ export default function ReferPage() {
         </div>
       </main>
       <Footer />
+    </>
+  )
+}
+
+// Wrapper component with Suspense
+export default function ReferPage() {
+  return (
+    <div className="min-h-screen bg-[#f5ede4]">
+      <Suspense fallback={<ReferPageLoading />}>
+        <ReferPageContent />
+      </Suspense>
     </div>
   )
 }
