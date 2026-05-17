@@ -72,9 +72,9 @@ const events = [
     slug: "goc26",
     title: "Gathering of Champions 2026",
     subtitle: "GOC26 - Annual Men's Conference",
-    dates: "17-19 July 2026",
-    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm | Sunday: 8:00am-1:00pm",
-    location: "Venue: To be Announced",
+    dates: "17-18 July 2026",
+    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm",
+    location: "Windhoek, Namibia",
     banner: "/images/hero/men-gathering.jpg",
     bannerSlides: [
       "/images/hero/men-gathering.jpg",
@@ -83,7 +83,7 @@ const events = [
       "/images/goc/goc-men-learning.jpg",
       "/images/goc/goc-speaker.jpg",
     ],
-    registrationOpen: false,
+    registrationOpen: true,
     requiresSpouse: false,
     description: "The flagship annual conference for men ready to step up as champions in their homes, workplaces, and communities. Powerful teaching, brotherhood, and life-changing encounters.",
     price: "NAD 250 per man",
@@ -117,7 +117,6 @@ type FormData = {
   spouseLastName: string
   spouseEmail: string
   spouseCellphone: string
-  specialRequirements: string
 }
 
 type FormErrors = Partial<Record<keyof FormData, string>>
@@ -138,7 +137,6 @@ function EventRegistrationModal({
     spouseLastName: "",
     spouseEmail: "",
     spouseCellphone: "",
-    specialRequirements: "",
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -205,7 +203,6 @@ function EventRegistrationModal({
           paymentAmount: event.priceAmount,
           spouseFirstName: event.requiresSpouse ? formData.spouseFirstName : undefined,
           spouseLastName: event.requiresSpouse ? formData.spouseLastName : undefined,
-          specialRequirements: formData.specialRequirements,
         }),
       })
 
@@ -399,19 +396,6 @@ function EventRegistrationModal({
                 </div>
               </div>
             )}
-
-            {/* Special Requirements */}
-            <div>
-              <Label htmlFor="specialRequirements">Special Requirements (Optional)</Label>
-              <Textarea
-                id="specialRequirements"
-                value={formData.specialRequirements}
-                onChange={(e) => handleInputChange("specialRequirements", e.target.value)}
-                placeholder="Dietary requirements, accessibility needs, etc."
-                className="mt-1"
-                rows={3}
-              />
-            </div>
 
             {/* Registration Fee */}
             <div className="bg-gray-50 rounded-lg p-4">

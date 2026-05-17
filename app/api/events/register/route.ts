@@ -25,7 +25,6 @@ export async function POST(request: Request) {
       spouseLastName,
       spouseName,
       numberOfAttendees,
-      specialRequirements,
     } = body
 
     // Validate required fields (eventDate is optional — defaults to today for walk-ins)
