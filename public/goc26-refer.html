@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite 3 Men - Gathering of Champions 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #f5ede4;
+            color: #3D2314;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #3D2314 0%, #5a3a28 100%);
+            padding: 40px 20px;
+            text-align: center;
+            margin: -20px -20px 30px;
+        }
+        .header h1 {
+            color: #f5ede4;
+            font-size: 24px;
+            margin: 0;
+        }
+        .header p {
+            color: #D4A574;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0 0 10px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #5a3a28;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #3D2314;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #8B6F47;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3D2314;
+        }
+        .friend-section {
+            background: #fdf8f3;
+            border-left: 4px solid #8B6F47;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .friend-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #3D2314;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: #3D2314;
+            color: #f5ede4;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #5a3a28;
+        }
+        .btn:disabled {
+            background: #8B6B5A;
+            cursor: not-allowed;
+        }
+        .email-preview {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .email-preview .to {
+            font-size: 12px;
+            color: #8B6B5A;
+            margin-bottom: 5px;
+        }
+        .email-preview .subject {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .email-preview .body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #5a3a28;
+        }
+        .success {
+            text-align: center;
+            padding: 40px;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 40px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p>The Fatherhood Foundation</p>
+            <h1>Invite 3 Men to GOC2026</h1>
+        </div>
+
+        <div id="form-section" class="card">
+            <h2>Share the Experience</h2>
+            <p class="subtitle">Think of men who need this. Enter their details below.</p>
+            
+            <div class="form-group">
+                <label for="referrer">Your Name</label>
+                <input type="text" id="referrer" placeholder="e.g. John Smith" required>
+            </div>
+
+            <div class="friend-section">
+                <h3>Friend 1</h3>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="friend1-name" placeholder="e.g. Mike Johnson" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="friend1-email" placeholder="mike@example.com" required>
+                </div>
+            </div>
+
+            <div class="friend-section">
+                <h3>Friend 2</h3>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="friend2-name" placeholder="e.g. David Brown" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="friend2-email" placeholder="david@example.com" required>
+                </div>
+            </div>
+
+            <div class="friend-section">
+                <h3>Friend 3</h3>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="friend3-name" placeholder="e.g. James Wilson" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="friend3-email" placeholder="james@example.com" required>
+                </div>
+            </div>
+
+            <button class="btn" onclick="showPreview()">Preview Invitations</button>
+        </div>
+
+        <div id="preview-section" class="card hidden">
+            <h2>Preview Invitations</h2>
+            <p class="subtitle">This is how your invitation will look:</p>
+            
+            <div id="preview-container"></div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" onclick="backToForm()" style="flex: 1; background: #8B6B5A;">Back</button>
+                <button class="btn" onclick="sendInvites()" style="flex: 1;">Send Invitations</button>
+            </div>
+        </div>
+
+        <div id="success-section" class="card hidden">
+            <div class="success">
+                <div class="success-icon">✓</div>
+                <h2>Invitations Sent!</h2>
+                <p>Your friends will receive their personalized invitations shortly.</p>
+                <div id="sent-list" style="text-align: left; margin: 20px 0; padding: 20px; background: #f9f5f0; border-radius: 8px;"></div>
+                <button class="btn" onclick="window.location.href='/'">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const refCode = new URLSearchParams(window.location.search).get('ref') || 'GOC-XXX';
+        
+        function getFormData() {
+            return {
+                referrer: document.getElementById('referrer').value,
+                friends: [
+                    { name: document.getElementById('friend1-name').value, email: document.getElementById('friend1-email').value },
+                    { name: document.getElementById('friend2-name').value, email: document.getElementById('friend2-email').value },
+                    { name: document.getElementById('friend3-name').value, email: document.getElementById('friend3-email').value }
+                ]
+            };
+        }
+
+        function validateForm() {
+            const data = getFormData();
+            if (!data.referrer.trim()) return false;
+            return data.friends.every(f => f.name.trim() && f.email.trim() && f.email.includes('@'));
+        }
+
+        function showPreview() {
+            if (!validateForm()) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const data = getFormData();
+            const container = document.getElementById('preview-container');
+            container.innerHTML = '';
+
+            data.friends.forEach((friend, i) => {
+                const firstName = friend.name.split(' ')[0];
+                const preview = document.createElement('div');
+                preview.className = 'email-preview';
+                preview.innerHTML = `
+                    <div class="to">To: ${friend.name} &lt;${friend.email}&gt;</div>
+                    <div class="subject">Subject: ${data.referrer} thinks you'd benefit from this...</div>
+                    <div class="body">
+                        Hey ${firstName},<br><br>
+                        It's ${data.referrer}. I just registered for <strong>Gathering of Champions 2026</strong> — 
+                        a men's conference happening July 17-18 in Windhoek.<br><br>
+                        I immediately thought of you. This isn't just another event. It's for men who are serious 
+                        about stepping up — in their homes, their work, their lives.<br><br>
+                        I think you'd get a lot out of it. And honestly? I think you'd bring something to the room too.<br><br>
+                        <a href="https://thefatherhoodfoundation.org/events" style="color: #8B6F47;">Check it out here</a><br><br>
+                        Hope to see you there,<br>
+                        ${data.referrer}
+                    </div>
+                `;
+                container.appendChild(preview);
+            });
+
+            document.getElementById('form-section').classList.add('hidden');
+            document.getElementById('preview-section').classList.remove('hidden');
+        }
+
+        function backToForm() {
+            document.getElementById('preview-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+        }
+
+        async function sendInvites() {
+            const btn = document.querySelector('#preview-section .btn:last-child');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            const data = getFormData();
+            
+            try {
+                const response = await fetch('/api/goc26/referral/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        referrerName: data.referrer,
+                        friends: data.friends,
+                        refCode: refCode
+                    })
+                });
+
+                if (response.ok) {
+                    const sentList = document.getElementById('sent-list');
+                    sentList.innerHTML = data.friends.map(f => `<p>• ${f.name} (${f.email})</p>`).join('');
+                    
+                    document.getElementById('preview-section').classList.add('hidden');
+                    document.getElementById('success-section').classList.remove('hidden');
+                } else {
+                    throw new Error('Failed to send');
+                }
+            } catch (error) {
+                alert('Error sending invitations. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Send Invitations';
+            }
+        }
+    </script>
+</body>
+</html>
