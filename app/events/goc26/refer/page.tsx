@@ -61,10 +61,29 @@ function ReferPageContent() {
 
   const handleSend = async () => {
     setIsSending(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsSending(false)
-    setSent(true)
+    try {
+      const response = await fetch("/api/goc26/referral/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          referrerName,
+          friends: friends.filter(f => f.name.trim() && f.email.trim()),
+          refCode,
+        }),
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to send invitations")
+      }
+      
+      setSent(true)
+    } catch (error) {
+      console.error("Error sending referrals:", error)
+      alert(error instanceof Error ? error.message : "Failed to send invitations. Please try again.")
+    } finally {
+      setIsSending(false)
+    }
   }
 
   if (sent) {
