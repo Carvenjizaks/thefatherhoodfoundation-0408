@@ -1,16 +1,13 @@
 "use client"
 
-export const dynamic = "force-dynamic"
-
 import { useState, useEffect, Suspense } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock, MapPin, Users, Star, ArrowRight, CheckCircle, Loader2, Gift, Share2 } from "lucide-react"
+import { Calendar, Clock, MapPin, Users, Star, ArrowRight, CheckCircle, Share2 } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { FadeIn, ScaleIn } from "@/components/ui/motion"
 import { useSearchParams } from "next/navigation"
 
 const eventData = {
@@ -28,7 +25,7 @@ const eventData = {
     { title: "Powerful Teaching", description: "Life-changing messages from seasoned speakers", icon: Star },
     { title: "Authentic Brotherhood", description: "Connect with men on the same journey", icon: Users },
     { title: "Practical Workshops", description: "Hands-on sessions for immediate application", icon: CheckCircle },
-    { title: "Worship & Prayer", description: "Encounter God in powerful worship", icon: Gift },
+    { title: "Worship & Prayer", description: "Encounter God in powerful worship", icon: Star },
   ],
 }
 
@@ -77,7 +74,7 @@ function RegistrationModal({ onClose }: { onClose: () => void }) {
       <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="bg-[#8B2B3E] p-6 flex justify-between items-center">
           <h2 className="text-xl font-bold text-white">Register for GOC26</h2>
-          <button onClick={onClose} className="text-white hover:text-white/80">✕</button>
+          <button onClick={onClose} className="text-white hover:text-white/80 text-2xl">&times;</button>
         </div>
         {submitSuccess ? (
           <div className="p-8 text-center">
@@ -167,7 +164,7 @@ function GOC26PageContent() {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <h2 className="text-3xl font-bold text-[#8B2B3E] mb-8">Step Into Your Destiny</h2>
-            <p className="text-lg text-gray-700">Join hundreds of men from across Namibia for an unforgettable weekend of transformation. The Gathering of Champions is a divine appointment for men serious about becoming the leaders God designed them to be.</p>
+            <p className="text-lg text-gray-700">Join hundreds of men from across Namibia for an unforgettable weekend of transformation.</p>
           </div>
         </section>
 
