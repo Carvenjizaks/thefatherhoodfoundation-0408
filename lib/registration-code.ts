@@ -10,6 +10,8 @@ const EVENT_ABBREVIATIONS: Record<string, string> = {
   'world-youth-conference': 'WYC',
   'family-conference': 'FC',
   'leaders-summit': 'LS',
+  'goc26': 'GOC26',
+  'gathering-of-champions': 'GOC26',
 }
 
 /**
