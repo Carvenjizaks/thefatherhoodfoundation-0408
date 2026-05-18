@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { sendEmail } from "@/lib/email-service"
+import { sendEmail, createContact } from "@/lib/email-service"
 
 interface Friend {
   name: string
@@ -23,6 +23,28 @@ export async function POST(request: NextRequest) {
 
     for (const friend of friends) {
       if (!friend.name || !friend.email) continue
+
+      // Parse friend name into first/last name
+      const nameParts = friend.name.trim().split(" ")
+      const friendFirstName = nameParts[0] || friend.name
+      const friendLastName = nameParts.slice(1).join(" ") || ""
+
+      // Create contact for the referred friend (captures email immediately)
+      try {
+        console.log("[v0] Creating contact for referral:", friend.email)
+        await createContact({
+          firstName: friendFirstName,
+          lastName: friendLastName,
+          email: friend.email,
+          source: "event_registration",
+          sourceDetails: `GOC2026 Referral from ${referrerName}`,
+          gender: "male",
+        })
+        console.log("[v0] Contact created for referral:", friend.email)
+      } catch (contactError) {
+        console.error("[v0] Error creating contact for referral:", contactError)
+        // Don't fail the referral if contact creation fails
+      }
 
       // Store referral in database
       const { error: dbError } = await supabase
