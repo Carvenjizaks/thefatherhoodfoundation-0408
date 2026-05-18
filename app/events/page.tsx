@@ -33,8 +33,9 @@ const events = [
     dates: "17-18 July 2026",
     time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm",
     location: "Windhoek, Namibia",
-    banner: "/images/hero/men-gathering.jpg",
+    banner: "/images/goc/goc26-poster.jpeg",
     bannerSlides: [
+      "/images/goc/goc26-poster.jpeg",
       "/images/hero/men-gathering.jpg",
       "/images/goc/goc-training-1.jpg",
       "/images/goc/goc-group-beach.jpg",
@@ -722,7 +723,8 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
   const slides = (event as typeof events[0] & { bannerSlides?: string[] }).bannerSlides || [event.banner]
   const logo = (event as typeof events[0] & { logo?: string }).logo
   const isTableTalk = (event as typeof events[0] & { isTableTalk?: boolean }).isTableTalk
-  
+  const isGOC26 = event.id === "goc26"
+
   useEffect(() => {
     if (slides.length <= 1 || isTableTalk) return
     const interval = setInterval(() => {
@@ -732,7 +734,9 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
   }, [slides.length, isTableTalk])
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group">
+    <div className={`rounded-2xl shadow-lg overflow-hidden border hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group ${
+      isGOC26 ? 'bg-[#0D1B2A] border-[#C9A84C]/30' : 'bg-white border-gray-100'
+    }`}>
       {/* Banner - Different layout for TableTalk */}
       {isTableTalk && logo ? (
         <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] via-[#7A2536] to-[#6B1B2E] flex items-center justify-center overflow-hidden">
@@ -785,7 +789,9 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
           </div>
         </div>
       ) : (
-        <div className="relative w-full h-[220px] md:h-[300px] lg:h-[350px] bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]">
+        <div className={`relative w-full h-[220px] md:h-[300px] lg:h-[350px] ${
+          isGOC26 ? 'bg-[#0D1B2A]' : 'bg-gradient-to-br from-[#8B2B3E] to-[#6B1B2E]'
+        }`}>
           {slides.map((slide, index) => (
             <div
               key={index}
@@ -841,7 +847,7 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
                 : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming 
                   ? 'bg-[#D4A574]' 
                   : event.registrationOpen 
-                    ? 'bg-blue-600' 
+                    ? isGOC26 ? 'bg-[#C9A84C]' : 'bg-blue-600' 
                     : 'bg-[#8B2B3E]'
             } text-white px-3 py-1 text-sm shadow-lg`}>
               {(event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent 
@@ -858,37 +864,54 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
 
       {/* Event Details */}
       <div className="p-6 lg:p-8">
-        <h2 className="text-2xl lg:text-3xl font-bold text-[#8B2B3E] mb-2 group-hover:text-[#6B1B2E] transition-colors duration-300">{event.title}</h2>
-        <p className="text-lg text-gray-600 mb-4">{event.subtitle}</p>
-        
+
+        {/* GOC26: compass star accent */}
+        {isGOC26 && (
+          <div className="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#C9A84C]" fill="currentColor">
+              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+            </svg>
+            <span className="text-[#C9A84C] text-xs font-bold uppercase tracking-widest">Men&apos;s Conference</span>
+          </div>
+        )}
+
+        <h2 className={`text-2xl lg:text-3xl font-bold mb-2 transition-colors duration-300 ${
+          isGOC26
+            ? 'text-[#C9A84C] group-hover:text-[#e0bd6e]'
+            : 'text-[#8B2B3E] group-hover:text-[#6B1B2E]'
+        }`}>{event.title}</h2>
+        <p className={`text-lg mb-4 ${isGOC26 ? 'text-white/60' : 'text-gray-600'}`}>{event.subtitle}</p>
+
         <div className="space-y-3 mb-6">
-          <div className="flex items-center gap-3 text-gray-700">
-            <Calendar className="w-5 h-5 text-[#8B2B3E]" />
+          <div className={`flex items-center gap-3 ${isGOC26 ? 'text-white/90' : 'text-gray-700'}`}>
+            <Calendar className={`w-5 h-5 ${isGOC26 ? 'text-[#C9A84C]' : 'text-[#8B2B3E]'}`} />
             <span className="font-semibold text-lg">{event.dates}</span>
           </div>
-          <div className="flex items-start gap-3 text-gray-600">
-            <Clock className="w-5 h-5 text-[#8B2B3E] mt-0.5" />
+          <div className={`flex items-start gap-3 ${isGOC26 ? 'text-white/70' : 'text-gray-600'}`}>
+            <Clock className={`w-5 h-5 mt-0.5 ${isGOC26 ? 'text-[#C9A84C]' : 'text-[#8B2B3E]'}`} />
             <span>{event.time}</span>
           </div>
-          <div className="flex items-center gap-3 text-gray-600">
-            <MapPin className="w-5 h-5 text-[#8B2B3E]" />
+          <div className={`flex items-center gap-3 ${isGOC26 ? 'text-white/70' : 'text-gray-600'}`}>
+            <MapPin className={`w-5 h-5 ${isGOC26 ? 'text-[#C9A84C]' : 'text-[#8B2B3E]'}`} />
             <span>{event.location}</span>
           </div>
         </div>
 
-        <p className="text-gray-600 mb-4">{event.description}</p>
+        <p className={`mb-4 ${isGOC26 ? 'text-white/60' : 'text-gray-600'}`}>{event.description}</p>
 
         {event.detailsPage && (
-          <Link 
+          <Link
             href={event.detailsPage}
-            className="inline-flex items-center gap-2 text-[#8B2B3E] font-semibold hover:underline mb-4"
+            className={`inline-flex items-center gap-2 font-semibold hover:underline mb-4 ${
+              isGOC26 ? 'text-[#C9A84C]' : 'text-[#8B2B3E]'
+            }`}
           >
             Read More <ArrowRight className="w-4 h-4" />
           </Link>
         )}
 
-        <div className="border-t pt-4 mb-6">
-          {(event as typeof events[0] & { earlyBirdPrice?: string; earlyBirdEndDate?: string }).earlyBirdPrice && 
+        <div className={`border-t pt-4 mb-6 ${isGOC26 ? 'border-[#C9A84C]/20' : ''}`}>
+          {(event as typeof events[0] & { earlyBirdPrice?: string; earlyBirdEndDate?: string }).earlyBirdPrice &&
            new Date() < new Date((event as typeof events[0] & { earlyBirdEndDate?: string }).earlyBirdEndDate!) ? (
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -902,36 +925,40 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
               </p>
             </div>
           ) : (
-            <span className="text-xl font-bold text-[#8B2B3E]">{event.price}</span>
+            <span className={`text-xl font-bold ${isGOC26 ? 'text-[#C9A84C]' : 'text-[#8B2B3E]'}`}>{event.price}</span>
           )}
         </div>
 
+        {/* GOC26 note about referral */}
+        {isGOC26 && (event as typeof events[0] & { hasReferralProgram?: boolean }).hasReferralProgram && (
+          <div className="bg-[#C9A84C]/10 border border-[#C9A84C]/20 rounded-lg p-3 mb-4">
+            <p className="text-[#C9A84C] text-xs">
+              After registering you&apos;ll receive a personal invitation link via email to invite up to 3 men to join you.
+            </p>
+          </div>
+        )}
+
         {(event as typeof events[0] & { isPastEvent?: boolean }).isPastEvent ? (
-          <Button
-            disabled
-            className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed"
-          >
+          <Button disabled className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed">
             Event Completed
           </Button>
         ) : (event as typeof events[0] & { isUpcoming?: boolean }).isUpcoming ? (
-          <Button
-            disabled
-            className="w-full bg-[#D4A574]/50 text-[#3D2314] py-3 text-lg cursor-not-allowed"
-          >
+          <Button disabled className="w-full bg-[#D4A574]/50 text-[#3D2314] py-3 text-lg cursor-not-allowed">
             Registration Opening Soon
           </Button>
         ) : event.registrationOpen ? (
           <Button
             onClick={onRegister}
-            className="w-full bg-[#8B2B3E] hover:bg-[#6d2230] py-3 text-lg"
+            className={`w-full py-3 text-lg font-bold tracking-wide ${
+              isGOC26
+                ? 'bg-[#C9A84C] hover:bg-[#b8973b] text-[#0D1B2A]'
+                : 'bg-[#8B2B3E] hover:bg-[#6d2230] text-white'
+            }`}
           >
             Register Now
           </Button>
         ) : (
-          <Button
-            disabled
-            className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed"
-          >
+          <Button disabled className="w-full bg-gray-200 text-gray-500 py-3 text-lg cursor-not-allowed">
             Registration Opening Soon
           </Button>
         )}
