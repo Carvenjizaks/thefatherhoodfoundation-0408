@@ -44,10 +44,11 @@ const events = [
     ],
     registrationOpen: true,
     requiresSpouse: false,
-    hasReferralProgram: true, // Referral email sent next day after registration - link is private
+    hasReferralProgram: true,
     description: "The flagship annual conference for men ready to step up as champions in their homes, workplaces, and communities. Powerful teaching, brotherhood, and life-changing encounters.",
     price: "NAD 250 per man",
     priceAmount: 250,
+    detailsPage: "/events/goc26",
   },
   {
     id: "table-talk-for-men",
