@@ -704,27 +704,48 @@ export async function sendRegistrationConfirmationEmail(params: {
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f8f8f8; border-radius: 8px; margin-bottom: 30px;">
                 <tr>
                   <td style="padding: 25px;">
-                    <h3 style="color: #8B2B3E; margin: 0 0 15px 0; font-size: 18px;">Event Details</h3>
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <h3 style="color: #8B2B3E; margin: 0 0 20px 0; font-size: 18px;">Event Details</h3>
+                    
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
                       <tr>
-                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Event:</td>
-                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${eventName}</td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; width: 140px; vertical-align: top;">
+                          <span style="color: #666666; font-size: 14px;">Event:</span>
+                        </td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; vertical-align: top;">
+                          <span style="color: #333333; font-size: 14px; font-weight: bold;">${eventName}</span>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Date:</td>
-                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${sessionDate}</td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; width: 140px; vertical-align: top;">
+                          <span style="color: #666666; font-size: 14px;">Date:</span>
+                        </td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; vertical-align: top;">
+                          <span style="color: #333333; font-size: 14px; font-weight: bold;">${sessionDate}</span>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Time:</td>
-                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${sessionTime}</td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; width: 140px; vertical-align: top;">
+                          <span style="color: #666666; font-size: 14px;">Time:</span>
+                        </td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; vertical-align: top;">
+                          <span style="color: #333333; font-size: 14px; font-weight: bold;">${sessionTime}</span>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="color: #666666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee;">Location:</td>
-                        <td style="color: #333333; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #eeeeee; text-align: right; font-weight: bold;">${location}</td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; width: 140px; vertical-align: top;">
+                          <span style="color: #666666; font-size: 14px;">Location:</span>
+                        </td>
+                        <td style="padding: 12px 15px; border-bottom: 1px solid #e5e5e5; vertical-align: top;">
+                          <span style="color: #333333; font-size: 14px; font-weight: bold;">${location}</span>
+                        </td>
                       </tr>
                       <tr>
-                        <td style="color: #666666; font-size: 14px; padding: 8px 0;">Registration Fee:</td>
-                        <td style="color: #333333; font-size: 14px; padding: 8px 0; text-align: right; font-weight: bold;">${paymentAmount}</td>
+                        <td style="padding: 12px 15px; width: 140px; vertical-align: top;">
+                          <span style="color: #666666; font-size: 14px;">Registration Fee:</span>
+                        </td>
+                        <td style="padding: 12px 15px; vertical-align: top;">
+                          <span style="color: #333333; font-size: 14px; font-weight: bold;">${paymentAmount}</span>
+                        </td>
                       </tr>
                     </table>
                   </td>
