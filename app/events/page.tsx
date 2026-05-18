@@ -143,6 +143,7 @@ function EventRegistrationModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [registrationCode, setRegistrationCode] = useState("")
+  const [referralToken, setReferralToken] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
@@ -214,6 +215,9 @@ function EventRegistrationModal({
       }
 
       setRegistrationCode(data.registrationCode)
+      if (data.referralToken) {
+        setReferralToken(data.referralToken)
+      }
       setSubmitSuccess(true)
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Registration failed. Please try again.")
@@ -280,12 +284,30 @@ function EventRegistrationModal({
               </div>
             </div>
             
-            {/* Note about referral program - sent via email */}
-            {(event as typeof events[0] & { hasReferralProgram?: boolean }).hasReferralProgram && (
-              <div className="bg-[#D4A574]/10 border border-[#D4A574]/30 rounded-lg p-4 text-left mb-6">
-                <p className="text-sm text-[#5a3a28]">
-                  <strong>Want to invite friends?</strong> You&apos;ll receive an email tomorrow with your personal referral link to invite up to 3 men to join you at GOC26.
+            {/* Referral Link for GOC26 */}
+            {(event as typeof events[0] & { hasReferralProgram?: boolean }).hasReferralProgram && referralToken && (
+              <div className="bg-[#0D1B2A] border border-[#C9A84C]/30 rounded-lg p-5 text-left mb-6">
+                <h4 className="text-[#C9A84C] font-semibold mb-2 flex items-center gap-2">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+                  </svg>
+                  Want to invite friends?
+                </h4>
+                <p className="text-white/70 text-sm mb-4">
+                  Share your personal referral link to invite up to 3 men to join you at GOC26:
                 </p>
+                <div className="bg-[#1a2d42] rounded-lg p-3 mb-3">
+                  <code className="text-[#C9A84C] text-xs break-all select-all">
+                    {typeof window !== 'undefined' ? window.location.origin : ''}/events/goc26/refer?token={referralToken}
+                  </code>
+                </div>
+                <Link
+                  href={`/events/goc26/refer?token=${referralToken}`}
+                  className="inline-flex items-center gap-2 bg-[#C9A84C] hover:bg-[#b8973b] text-[#0D1B2A] px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                >
+                  Open Referral Page
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             )}
             

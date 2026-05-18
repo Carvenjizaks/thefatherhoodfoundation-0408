@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { createContact, sendWelcomeEmail, sendRegistrationConfirmationEmail, sendAdminNotification } from "@/lib/email-service"
 import { generateRegistrationCode, extractCodeNumber } from "@/lib/registration-code"
 import { verifyAdminRequest } from "@/lib/admin-auth"
+import crypto from "crypto"
 
 // Events that are closed for public registration (admin walk-in still allowed)
 const CLOSED_EVENT_SLUGS = ["my-great-marriage-2026"]
@@ -96,6 +97,10 @@ export async function POST(request: Request) {
     // Build tags for event registration - always includes "Event" + the specific event slug
     const eventTags = Array.from(new Set(["Event", eventSlug].filter(Boolean))) as string[]
 
+    // Generate referral token for GOC26 registrations
+    const isGOC26 = eventSlug === "goc26"
+    const referralToken = isGOC26 ? crypto.randomBytes(16).toString("hex") : null
+
     // Insert registration (matching actual database schema)
     const insertData = {
       first_name: firstName,
@@ -113,6 +118,7 @@ export async function POST(request: Request) {
       spouse_phone: null,
       checked_in: false,
       tags: eventTags,
+      ...(isGOC26 && { referral_token: referralToken }),
     }
     const { data: registration, error: insertError } = await supabase
       .from("event_registrations")
@@ -190,6 +196,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       registrationCode,
+      referralToken: referralToken,
       message: "Registration successful! Check your email for confirmation.",
     })
   } catch (error) {
