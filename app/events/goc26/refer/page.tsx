@@ -43,6 +43,7 @@ function ReferPageContent() {
     { name: "", email: "" }
   ])
   const [referrerName, setReferrerName] = useState("")
+  const [personalNote, setPersonalNote] = useState("")
   const [showPreview, setShowPreview] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [sent, setSent] = useState(false)
@@ -67,6 +68,7 @@ function ReferPageContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           referrerName,
+          personalNote,
           friends: friends.filter(f => f.name.trim() && f.email.trim()),
           refCode,
         }),
@@ -145,22 +147,28 @@ function ReferPageContent() {
                   <div className="text-[#3D2314] space-y-4">
                     <p>Hey {friend.name.split(" ")[0]},</p>
                     <p>
-                      It's {referrerName}. I just registered for <strong>Gathering of Champions 2026</strong> — 
-                      a men's conference happening July 17-18 in Windhoek.
+                      It&apos;s <strong>{referrerName}</strong>. I just registered for <strong>Gathering of Champions 2026</strong> — 
+                      a men&apos;s conference happening July 17-18 in Windhoek.
                     </p>
+                    {personalNote && (
+                      <div className="bg-[#f5ede4] border-l-4 border-[#D4A574] p-4 rounded-r italic">
+                        <p className="text-[#5a3a28]">&quot;{personalNote}&quot;</p>
+                        <p className="text-sm text-[#8B6B5A] mt-2">— {referrerName}</p>
+                      </div>
+                    )}
                     <p>
-                      I immediately thought of you. This isn't just another event. It's for men who are serious 
+                      I immediately thought of you. This isn&apos;t just another event. It&apos;s for men who are serious 
                       about stepping up — in their homes, their work, their lives.
                     </p>
                     <p>
-                      I think you'd get a lot out of it. And honestly? I think you'd bring something to the room too.
+                      I think you&apos;d get a lot out of it. And honestly? I think you&apos;d bring something to the room too.
                     </p>
                     <p>
                       <a href="https://thefatherhoodfoundation.org/events" style={{ color: "#8B6F47", textDecoration: "underline" }}>
                         Check it out here
                       </a>
                     </p>
-                    <p>Hope to see you there,<br/>{referrerName}</p>
+                    <p>Hope to see you there,<br/><strong>{referrerName}</strong></p>
                   </div>
                 </div>
               </div>
@@ -214,6 +222,24 @@ function ReferPageContent() {
               placeholder="e.g. John Smith"
               className="mt-2 border-[#8B6F47] focus:ring-[#3D2314]"
             />
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <Label htmlFor="personalNote" className="text-[#3D2314] font-medium">
+              Personal Note <span className="text-[#8B6B5A] font-normal">(optional but recommended)</span>
+            </Label>
+            <p className="text-sm text-[#8B6B5A] mt-1 mb-3">
+              Add a personal message to make your invitation more meaningful
+            </p>
+            <textarea
+              id="personalNote"
+              value={personalNote}
+              onChange={(e) => setPersonalNote(e.target.value)}
+              placeholder="e.g. I've been thinking about you lately and this event reminded me of our conversations about being better men. Would mean a lot to have you there with me."
+              className="w-full min-h-[100px] px-3 py-2 border border-[#8B6F47] rounded-md focus:outline-none focus:ring-2 focus:ring-[#3D2314] resize-none"
+              maxLength={500}
+            />
+            <p className="text-xs text-[#8B6B5A] mt-1 text-right">{personalNote.length}/500</p>
           </div>
           
           {friends.map((friend, index) => (
