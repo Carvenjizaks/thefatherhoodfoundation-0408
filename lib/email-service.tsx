@@ -813,3 +813,20 @@ Empowering fathers. Strengthening families. Building communities.
 
   return await sendEmailViaSMTP(email, `${firstName} ${lastName}`, subject, html, text)
 }
+
+// Public sendEmail function for general email sending
+export interface SendEmailParams {
+  to: string
+  toName?: string
+  subject: string
+  html: string
+  text?: string
+}
+
+export async function sendEmail(params: SendEmailParams): Promise<boolean> {
+  const { to, toName, subject, html, text } = params
+  const recipientName = toName || to.split("@")[0]
+  const plainText = text || html.replace(/<[^>]*>/g, "").trim()
+  
+  return await sendEmailViaSMTP(to, recipientName, subject, html, plainText)
+}
