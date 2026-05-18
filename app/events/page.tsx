@@ -26,6 +26,29 @@ const tableTalkSessions = [
 // Event configuration with open/closed status
 const events = [
   {
+    id: "goc26",
+    slug: "goc26",
+    title: "Gathering of Champions 2026",
+    subtitle: "GOC26 - Annual Men's Conference",
+    dates: "17-18 July 2026",
+    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm",
+    location: "Windhoek, Namibia",
+    banner: "/images/hero/men-gathering.jpg",
+    bannerSlides: [
+      "/images/hero/men-gathering.jpg",
+      "/images/goc/goc-training-1.jpg",
+      "/images/goc/goc-group-beach.jpg",
+      "/images/goc/goc-men-learning.jpg",
+      "/images/goc/goc-speaker.jpg",
+    ],
+    registrationOpen: true,
+    requiresSpouse: false,
+    hasReferralProgram: true, // Referral email sent next day after registration - link is private
+    description: "The flagship annual conference for men ready to step up as champions in their homes, workplaces, and communities. Powerful teaching, brotherhood, and life-changing encounters.",
+    price: "NAD 250 per man",
+    priceAmount: 250,
+  },
+  {
     id: "table-talk-for-men",
     slug: "table-talk-for-men",
     title: "TableTalk for Men",
@@ -65,31 +88,6 @@ const events = [
     price: "NAD 550 per couple",
     priceAmount: 550,
     detailsPage: "/events/my-great-marriage-2026",
-  },
-
-  {
-    id: "goc26",
-    slug: "goc26",
-    title: "Gathering of Champions 2026",
-    subtitle: "GOC26 - Annual Men's Conference",
-    dates: "17-18 July 2026",
-    time: "Friday: 6:00pm-9:00pm | Saturday: 8:00am-5:00pm",
-    location: "Windhoek, Namibia",
-    banner: "/images/hero/men-gathering.jpg",
-    bannerSlides: [
-      "/images/hero/men-gathering.jpg",
-      "/images/goc/goc-training-1.jpg",
-      "/images/goc/goc-group-beach.jpg",
-      "/images/goc/goc-men-learning.jpg",
-      "/images/goc/goc-speaker.jpg",
-    ],
-    registrationOpen: true,
-    requiresSpouse: false,
-    hasReferralProgram: true,
-    referralLink: "/events/goc26/refer",
-    description: "The flagship annual conference for men ready to step up as champions in their homes, workplaces, and communities. Powerful teaching, brotherhood, and life-changing encounters.",
-    price: "NAD 250 per man",
-    priceAmount: 250,
   },
   {
     id: "mgm-sept-2026",
@@ -281,25 +279,12 @@ function EventRegistrationModal({
               </div>
             </div>
             
-            {/* Referral Program CTA for GOC26 */}
-            {(event as typeof events[0] & { hasReferralProgram?: boolean; referralLink?: string }).hasReferralProgram && (
-              <div className="bg-[#D4A574]/20 border border-[#D4A574]/40 rounded-lg p-6 text-left mb-6">
-                <h4 className="font-semibold text-[#8B2B3E] mb-2 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  Invite Your Friends!
-                </h4>
-                <p className="text-sm text-gray-700 mb-4">
-                  Know other men who would benefit from GOC26? Invite them and help build the brotherhood!
+            {/* Note about referral program - sent via email */}
+            {(event as typeof events[0] & { hasReferralProgram?: boolean }).hasReferralProgram && (
+              <div className="bg-[#D4A574]/10 border border-[#D4A574]/30 rounded-lg p-4 text-left mb-6">
+                <p className="text-sm text-[#5a3a28]">
+                  <strong>Want to invite friends?</strong> You&apos;ll receive an email tomorrow with your personal referral link to invite up to 3 men to join you at GOC26.
                 </p>
-                <Link
-                  href={(event as typeof events[0] & { referralLink?: string }).referralLink || "/events/goc26/refer"}
-                  className="inline-flex items-center gap-2 bg-[#8B2B3E] hover:bg-[#6d2230] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  Send Referral Invitations
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
               </div>
             )}
             
@@ -899,19 +884,6 @@ function EventCard({ event, onRegister }: { event: typeof events[0]; onRegister:
             className="inline-flex items-center gap-2 text-[#8B2B3E] font-semibold hover:underline mb-4"
           >
             Read More <ArrowRight className="w-4 h-4" />
-          </Link>
-        )}
-
-        {/* Referral Program Link */}
-        {(event as typeof events[0] & { hasReferralProgram?: boolean; referralLink?: string }).hasReferralProgram && (
-          <Link 
-            href={(event as typeof events[0] & { referralLink?: string }).referralLink || "#"}
-            className="inline-flex items-center gap-2 bg-[#D4A574]/20 text-[#8B2B3E] font-semibold px-4 py-2 rounded-lg hover:bg-[#D4A574]/30 transition-colors mb-4"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            Invite Friends & Earn Rewards
           </Link>
         )}
 

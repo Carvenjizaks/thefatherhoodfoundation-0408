@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/server"
 import { sendEmail, createContact } from "@/lib/email-service"
 
 interface Friend {
@@ -9,7 +9,7 @@ interface Friend {
 
 export async function POST(request: NextRequest) {
   try {
-    const { referrerName, personalNote, friends, refCode } = await request.json()
+    const { referrerName, referrerId, referrerEmail, personalNote, friends, token } = await request.json()
 
     if (!referrerName || !friends || !Array.isArray(friends) || friends.length === 0) {
       return NextResponse.json(
@@ -18,7 +18,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
+
+    // Verify token if provided (required for private referral links)
+    if (token) {
+      const { data: registration } = await supabase
+        .from("event_registrations")
+        .select("id, referral_token")
+        .eq("referral_token", token)
+        .eq("event_id", "goc26")
+        .single()
+
+      if (!registration) {
+        return NextResponse.json(
+          { error: "Invalid referral token" },
+          { status: 403 }
+        )
+      }
+    }
+
     const results = []
 
     for (const friend of friends) {
@@ -31,7 +49,7 @@ export async function POST(request: NextRequest) {
 
       // Create contact for the referred friend (captures email immediately)
       try {
-        console.log("[v0] Creating contact for referral:", friend.email)
+        console.log("[Referral] Creating contact for:", friend.email)
         await createContact({
           firstName: friendFirstName,
           lastName: friendLastName,
@@ -40,26 +58,29 @@ export async function POST(request: NextRequest) {
           sourceDetails: `GOC2026 Referral from ${referrerName}`,
           gender: "male",
         })
-        console.log("[v0] Contact created for referral:", friend.email)
+        console.log("[Referral] Contact created for:", friend.email)
       } catch (contactError) {
-        console.error("[v0] Error creating contact for referral:", contactError)
+        console.error("[Referral] Error creating contact:", contactError)
         // Don't fail the referral if contact creation fails
       }
 
-      // Store referral in database
+      // Store referral in database with full tracking information
       const { error: dbError } = await supabase
         .from("goc26_referrals")
         .insert({
+          referrer_id: referrerId || null,
           referrer_name: referrerName,
-          referrer_code: refCode,
+          referrer_email: referrerEmail || null,
           friend_name: friend.name,
           friend_email: friend.email,
+          personal_note: personalNote || null,
           sent_at: new Date().toISOString(),
-          status: "sent"
+          status: "sent",
+          converted: false,
         })
 
       if (dbError) {
-        console.error("Database error:", dbError)
+        console.error("[Referral] Database error:", dbError)
       }
 
       // Send invitation email
@@ -100,26 +121,26 @@ export async function POST(request: NextRequest) {
                         <p style="font-size:18px;color:#1a0a0e;line-height:1.6;margin:0 0 20px 0;">Hey ${firstName},</p>
                         
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 20px 0;">
-                            It's <strong>${referrerName}</strong>. I just registered for <strong>Gathering of Champions 2026</strong> — 
-                            a men's conference happening July 17-18 in Windhoek.
+                            <strong>${referrerName}</strong> registered for <strong>Gathering of Champions 2026</strong> — 
+                            a men's conference happening July 17-18 in Windhoek — and thought of you.
                         </p>
                         
                         ${personalNoteHtml}
                         
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 20px 0;">
-                            I immediately thought of you. This isn't just another event. It's for men who are serious 
+                            This isn't just another event. It's for men who are serious 
                             about stepping up — in their homes, their work, their lives.
                         </p>
                         
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 25px 0;">
-                            I think you'd get a lot out of it. And honestly? I think you'd bring something to the room too.
+                            ${referrerName} thinks you'd get a lot out of it. And honestly? That you'd bring something to the room too.
                         </p>
                         
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
                             <tr>
                                 <td align="center">
                                     <a href="https://thefatherhoodfoundation.org/events" style="display:inline-block;background:#3D2314;color:#f5ede4;text-decoration:none;padding:16px 36px;border-radius:6px;font-size:16px;font-weight:bold;">
-                                        Learn More & Register →
+                                        Learn More & Register
                                     </a>
                                 </td>
                             </tr>
@@ -158,21 +179,41 @@ export async function POST(request: NextRequest) {
 
       await sendEmail({
         to: friend.email,
-        subject: `${referrerName} thinks you'd benefit from this...`,
+        toName: friend.name,
+        subject: `${referrerName} thinks you should join him at GOC2026`,
         html: emailHtml,
       })
 
       results.push({ name: friend.name, email: friend.email, status: "sent" })
     }
 
+    // Update the referrer's record to track how many referrals they've sent
+    if (referrerId) {
+      const { data: currentReg } = await supabase
+        .from("event_registrations")
+        .select("referrals_sent")
+        .eq("id", referrerId)
+        .single()
+      
+      const currentCount = currentReg?.referrals_sent || 0
+      
+      await supabase
+        .from("event_registrations")
+        .update({ 
+          referrals_sent: currentCount + results.length,
+          last_referral_sent_at: new Date().toISOString()
+        })
+        .eq("id", referrerId)
+    }
+
     return NextResponse.json({
       success: true,
-      message: `Sent ${results.length} invitations`,
+      message: `Sent ${results.length} invitation(s)`,
       results
     })
 
   } catch (error) {
-    console.error("Referral send error:", error)
+    console.error("[Referral] Send error:", error)
     return NextResponse.json(
       { error: "Failed to send invitations" },
       { status: 500 }
