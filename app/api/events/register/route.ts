@@ -102,7 +102,7 @@ export async function POST(request: Request) {
     const referralToken = isGOC26 ? crypto.randomBytes(16).toString("hex") : null
 
     // Insert registration (matching actual database schema)
-    const insertData = {
+    const insertData: Record<string, unknown> = {
       first_name: firstName,
       last_name: lastName,
       email,
@@ -118,15 +118,43 @@ export async function POST(request: Request) {
       spouse_phone: null,
       checked_in: false,
       tags: eventTags,
-      ...(isGOC26 && { referral_token: referralToken }),
     }
-    const { data: registration, error: insertError } = await supabase
+    
+    // Try to add referral_token if the column exists (GOC26 only)
+    if (isGOC26 && referralToken) {
+      insertData.referral_token = referralToken
+    }
+    
+    console.log("[v0] Inserting registration for event:", eventSlug, "isGOC26:", isGOC26)
+    
+    let registration
+    let insertError
+    
+    // First try with referral_token (if GOC26)
+    const result = await supabase
       .from("event_registrations")
       .insert(insertData)
       .select()
       .single()
+    
+    // If insert failed due to referral_token column not existing, retry without it
+    if (result.error && result.error.message.includes("referral_token")) {
+      console.log("[v0] referral_token column not found, retrying without it")
+      delete insertData.referral_token
+      const retryResult = await supabase
+        .from("event_registrations")
+        .insert(insertData)
+        .select()
+        .single()
+      registration = retryResult.data
+      insertError = retryResult.error
+    } else {
+      registration = result.data
+      insertError = result.error
+    }
 
     if (insertError) {
+      console.log("[v0] Registration insert error:", insertError.message)
       return NextResponse.json(
         { error: "Failed to create registration", details: insertError.message },
         { status: 500 }
