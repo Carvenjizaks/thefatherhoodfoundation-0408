@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/mgm-anniversary",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/send-referral-followup",
+      "schedule": "0 6 * * *"
     }
   ]
 }
