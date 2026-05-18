@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
                             <tr>
                                 <td align="center">
-                                    <a href="https://thefatherhoodfoundation.org/events" style="display:inline-block;background:#3D2314;color:#f5ede4;text-decoration:none;padding:16px 36px;border-radius:6px;font-size:16px;font-weight:bold;">
+                                    <a href="https://thefatherhoodfoundation.org/events/goc26?ref=${encodeURIComponent(referrerName)}&invited=${encodeURIComponent(friend.email)}" style="display:inline-block;background:#3D2314;color:#f5ede4;text-decoration:none;padding:16px 36px;border-radius:6px;font-size:16px;font-weight:bold;">
                                         Learn More & Register
                                     </a>
                                 </td>
