@@ -17,18 +17,12 @@ export async function GET(request: Request) {
 
     const supabase = createAdminClient()
 
-    // TEST MODE: Check for registrations from 10 minutes ago
-    // In production, change this back to 24 hours (86400000 ms)
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString()
-    const now = new Date().toISOString()
-
-    // Find GOC26 registrations from last 10 minutes that haven't received referral email
+    // SEND TO ALL: Find ALL GOC26 registrations that haven't received referral email yet
+    // This will send to everyone already registered
     const { data: registrations, error: fetchError } = await supabase
       .from("event_registrations")
       .select("*")
       .eq("event_id", "goc26")
-      .gte("created_at", tenMinutesAgo)
-      .lte("created_at", now)
       .or("referral_email_sent.is.null,referral_email_sent.eq.false")
 
     if (fetchError) {
