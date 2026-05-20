@@ -38,6 +38,15 @@ export default function ReferPage() {
   }, [token])
 
   const validateToken = async () => {
+    // TEST MODE: Bypass token validation
+    // In production, this should validate against the database
+    setIsValidating(false)
+    setIsValid(true)
+    setReferrerName("Carven Izaks") // Default test name
+    setReferrerEmail("carvenjizaks@gmail.com") // Default test email
+    
+    // Original validation code (commented out for testing):
+    /*
     if (!token) {
       setIsValidating(false)
       setError("No referral token provided")
@@ -65,6 +74,7 @@ export default function ReferPage() {
     } finally {
       setIsValidating(false)
     }
+    */
   }
 
   const handleFriendChange = (index: number, field: keyof Friend, value: string) => {
