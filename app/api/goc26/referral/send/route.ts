@@ -86,18 +86,6 @@ export async function POST(request: NextRequest) {
       // Send invitation email
       const firstName = friend.name.split(" ")[0]
       
-      // Build personal note section if provided
-      const personalNoteHtml = personalNote ? `
-                        <div style="background:#f5ede4;border-left:4px solid #D4A574;padding:20px;border-radius:0 8px 8px 0;margin:20px 0;">
-                            <p style="font-size:16px;color:#5a3a28;font-style:italic;margin:0 0 10px 0;line-height:1.6;">
-                                "${personalNote}"
-                            </p>
-                            <p style="font-size:14px;color:#8B6B5A;margin:0;">
-                                — <strong>${referrerName}</strong>
-                            </p>
-                        </div>
-      ` : ''
-      
       const emailHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -118,22 +106,15 @@ export async function POST(request: NextRequest) {
                 </tr>
                 <tr>
                     <td style="padding:40px;">
-                        <p style="font-size:18px;color:#1a0a0e;line-height:1.6;margin:0 0 20px 0;">Hey ${firstName},</p>
+                        <p style="font-size:18px;color:#1a0a0e;line-height:1.6;margin:0 0 20px 0;">Hi ${firstName},</p>
                         
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 20px 0;">
                             <strong>${referrerName}</strong> registered for <strong>Gathering of Champions 2026</strong> — 
                             a men's conference happening July 17-18 in Windhoek — and thought of you.
                         </p>
                         
-                        ${personalNoteHtml}
-                        
-                        <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 20px 0;">
-                            This isn't just another event. It's for men who are serious 
-                            about stepping up — in their homes, their work, their lives.
-                        </p>
-                        
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 25px 0;">
-                            ${referrerName} thinks you'd get a lot out of it. And honestly? That you'd bring something to the room too.
+                            What do you say, shall we go together? I think we all need this as men. I'm signed up already.
                         </p>
                         
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
@@ -147,7 +128,7 @@ export async function POST(request: NextRequest) {
                         </table>
                         
                         <p style="font-size:15px;color:#3D2314;line-height:1.7;margin:25px 0 0 0;">
-                            Hope to see you there,<br/>
+                            Hope you can make it,<br/>
                             <strong style="font-size:16px;">${referrerName}</strong>
                         </p>
                         
