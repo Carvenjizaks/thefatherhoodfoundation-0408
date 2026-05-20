@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
                         <p style="font-size:16px;color:#3D2314;line-height:1.7;margin:0 0 25px 0;">
                             What do you say, shall we go together? I think we all need this as men. I'm signed up already.
                         </p>
+                        <!-- v2.0 -->
                         
                         <table width="100%" cellpadding="0" cellspacing="0" style="margin:30px 0;">
                             <tr>
