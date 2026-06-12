@@ -112,9 +112,11 @@ export default function AdminReferralsPage() {
       if (regError) throw regError
 
       // Calculate stats for each referrer
-      const stats: ReferrerStats[] = (regData || []).map(reg => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const stats: ReferrerStats[] = (regData || []).map((reg: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const conversions = (referralData || []).filter(
-          r => r.referrer_email === reg.email && r.converted
+          (r: any) => r.referrer_email === reg.email && r.converted
         ).length
 
         return {

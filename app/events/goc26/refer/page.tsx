@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +16,14 @@ interface Friend {
 }
 
 export default function ReferPage() {
+  return (
+    <Suspense>
+      <ReferPageContent />
+    </Suspense>
+  )
+}
+
+function ReferPageContent() {
   const searchParams = useSearchParams()
   const token = searchParams.get("token")
   

@@ -1,630 +1,247 @@
-"use client"
-
-// v8 - Cinematic multi-image carousel hero
+import type { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { JourneySection } from "@/components/journey-section"
-import { QuotesTicker } from "@/components/quotes-ticker"
-import { CinematicImageCarousel } from "@/components/cinematic-image-carousel"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
-import { BookOpen, TrendingUp, Heart, Users } from "lucide-react"
+import { Phone, MessageCircle, Mail, Shield, Star, Users, Award } from "lucide-react"
+import { TrustBar } from "@/components/omega/trust-bar"
 
-const ArrowRightIcon = () => (
-  <svg className="inline-block w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-  </svg>
-)
+const PHONE_DISPLAY = "+264 61 000 0000"
+const TEL_HREF = "tel:+264610000000"
+const WHATSAPP_HREF = "https://wa.me/264610000000"
+const EMAIL = "colin@omegainsurance.com.na"
+
+export const metadata: Metadata = {
+  title: "Omega Insurance | Trusted Broker in Windhoek | Colin Van Wyk",
+  description:
+    "17 years of trusted insurance advice in Namibia. Colin Van Wyk, NAMFISA-registered broker. Call or WhatsApp today.",
+  alternates: { canonical: "https://omegainsurance.com.na" },
+}
+
+const testimonials = [
+  {
+    quote:
+      "Colin didn't just sell us insurance — he made sure we understood exactly what we were buying. For the first time, we feel truly protected.",
+    name: "Sarah M.",
+    location: "Windhoek",
+  },
+  {
+    quote:
+      "I've been with Colin for over 10 years. He always picks up the phone and gives honest advice. Never once tried to upsell me.",
+    name: "Johan P.",
+    location: "Klein Windhoek",
+  },
+  {
+    quote:
+      "When my business had a claim, Colin handled everything personally. That's the difference between an advisor and a salesman.",
+    name: "David N.",
+    location: "Windhoek",
+  },
+]
+
+const services = [
+  {
+    icon: Shield,
+    title: "Personal Insurance",
+    desc: "Life, health, home, and vehicle insurance for you and your family.",
+  },
+  {
+    icon: Award,
+    title: "Business Insurance",
+    desc: "Commercial, liability, and employee benefits for businesses of all sizes.",
+  },
+  {
+    icon: Star,
+    title: "Retirement Planning",
+    desc: "Retirement annuities, pension planning, and estate planning.",
+  },
+]
 
 export default function HomePage() {
-
   return (
     <>
-      <Header />
+      {/* Trust Bar — sticky below navbar on mobile */}
+      <TrustBar />
 
-      <main className="bg-white text-black min-h-screen overflow-hidden">
-        {/* Hero Section - Images on top, text below */}
-        <section className="relative">
-          {/* Image Carousel - Full width, no overlays */}
-          <div className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
-            <CinematicImageCarousel />
-          </div>
-          
-          {/* Hero Text Section - Below images, stands out */}
-          <div className="relative bg-[#8B2B3E]">
-            {/* Decorative top border */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-[#D4A574]" />
-            
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
-              {/* Main headline */}
-              <FadeIn delay={0.2} direction="up">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-8 leading-tight text-balance text-center">
-                  Empowering men to{" "}
-                  <span className="text-[#D4A574] inline-block">Learn</span>,{" "}
-                  <span className="text-[#D4A574] inline-block">Grow</span> and{" "}
-                  <span className="text-[#D4A574] inline-block">Contribute</span>{" "}
-                  through serving
-                </h1>
-              </FadeIn>
-              
-              {/* Mission statement */}
-              <FadeIn delay={0.4} direction="up">
-                <p className="text-lg lg:text-xl xl:text-2xl text-white/95 leading-relaxed max-w-5xl mx-auto mb-10 text-center text-pretty">
-                  The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop{" "}
-                  <span className="font-bold text-[#D4A574]">intentional fathers</span>,{" "}
-                  <span className="font-bold text-[#D4A574]">committed husbands</span>, and{" "}
-                  <span className="font-bold text-[#D4A574]">impactful leaders</span>.
-                </p>
-              </FadeIn>
-              
-              {/* CTA Buttons */}
-              <FadeIn delay={0.5} direction="up">
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    className="text-lg px-10 py-7 bg-white text-[#8B2B3E] hover:bg-[#D4A574] hover:text-white transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl btn-shine hover:scale-105 font-semibold"
-                  >
-                    <Link href="/get-involved">
-                      Get Involved <ArrowRightIcon />
-                    </Link>
-                  </Button>
-                  <Button 
-                    asChild 
-                    size="lg" 
-                    variant="outline"
-                    className="text-lg px-10 py-7 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#8B2B3E] transition-all duration-300 rounded-full font-semibold"
-                  >
-                    <Link href="#pillars">
-                      Explore Programs
-                    </Link>
-                  </Button>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-          
-          {/* Stats bar */}
-          <div className="bg-[#FAF8F5] border-b-4 border-[#D4A574]">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-10">
-              <FadeIn delay={0.6} direction="up">
-                <div className="flex flex-wrap justify-center gap-8 lg:gap-16">
-                  <div className="text-center">
-                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                      <CountUp end={20} suffix="k+" duration={2} />
-                    </p>
-                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Men Mentored</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                      <CountUp end={25} suffix="+" duration={2} />
-                    </p>
-                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Years Impact</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-4xl lg:text-5xl font-bold text-[#8B2B3E]">
-                      <CountUp end={1000} suffix="+" duration={2} />
-                    </p>
-                    <p className="text-sm lg:text-base text-black/70 font-medium mt-2">Families Helped</p>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
+      {/* Hero */}
+      <section className="bg-[#1a365d] py-20 md:py-28 px-4">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="order-2 md:order-1">
+            <h1 className="font-[family-name:var(--font-inter)] text-3xl md:text-5xl font-bold text-white leading-tight mb-5">
+              Trusted Insurance Advice for Namibian Families &amp; Businesses
+            </h1>
+            <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-8">
+              For 17 years, Colin Van Wyk and the Omega team have helped Namibians protect what matters most.
+            </p>
 
-        {/* Scrolling Quotes Ticker */}
-        <QuotesTicker />
-
-        {/* Mission Statement with animations */}
-        <section className="py-20 lg:py-32 bg-white relative overflow-hidden">
-          <Parallax speed={-0.2} className="absolute top-0 right-0 w-72 h-72 bg-[#D4A574]/10 rounded-full blur-3xl" />
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-            <FadeIn direction="up">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-                Building Stronger Families, One Man at a Time
-              </h2>
-            </FadeIn>
-            <FadeIn direction="up" delay={0.2}>
-              <p className="text-lg lg:text-xl text-black leading-relaxed text-pretty font-medium">
-                We believe that strong families are built by strong men. Through our programs and community, we equip men
-                with the tools, wisdom, and support they need to thrive in their roles as fathers, husbands, and community
-                leaders.
-              </p>
-            </FadeIn>
-            
-
-          </div>
-        </section>
-
-        {/* Journey to Authentic Manhood */}
-        <JourneySection />
-
-        {/* Empowering Men Section */}
-        <section id="empowering-section" className="py-24 lg:py-32 bg-[#D4B896] relative overflow-hidden">
-          {/* Animated gradient background */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#D4B896] via-[#C9A882] to-[#D4B896] animate-gradient-shift" 
-                 style={{ backgroundSize: '400% 400%', animation: 'gradientShift 15s ease infinite' }} />
-          </div>
-          
-          {/* Floating orbs with motion */}
-          <div className="absolute top-10 left-10 w-64 h-64 bg-[#8B2B3E]/15 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-white/20 rounded-full blur-3xl animate-float-medium" />
-          <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-[#8B2B3E]/10 rounded-full blur-2xl animate-float-fast" />
-          <div className="absolute bottom-1/3 right-1/3 w-32 h-32 bg-white/15 rounded-full blur-xl animate-pulse-slow" />
-          
-          {/* Moving light streaks */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 -left-full w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent animate-streak-1" />
-            <div className="absolute top-1/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-[#8B2B3E]/20 to-transparent animate-streak-2" />
-            <div className="absolute top-2/3 -left-full w-full h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent animate-streak-3" />
-          </div>
-          
-          {/* Particle dots */}
-          <div className="absolute inset-0">
-            <div className="absolute top-[20%] left-[15%] w-1 h-1 bg-white/40 rounded-full animate-twinkle" />
-            <div className="absolute top-[40%] right-[20%] w-1.5 h-1.5 bg-[#D4A574]/50 rounded-full animate-twinkle-delay-1" />
-            <div className="absolute bottom-[30%] left-[25%] w-1 h-1 bg-white/30 rounded-full animate-twinkle-delay-2" />
-            <div className="absolute top-[60%] right-[35%] w-2 h-2 bg-white/20 rounded-full animate-twinkle-delay-3" />
-            <div className="absolute bottom-[20%] right-[15%] w-1 h-1 bg-[#D4A574]/40 rounded-full animate-twinkle" />
-            <div className="absolute top-[15%] right-[40%] w-1.5 h-1.5 bg-white/25 rounded-full animate-twinkle-delay-2" />
-          </div>
-          
-          <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-            <FadeIn direction="up">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#3D2314] mb-8 text-balance leading-tight">
-                Empowering men to Learn, Grow and Contribute through serving
-              </h2>
-            </FadeIn>
-            
-            <FadeIn direction="up" delay={0.2}>
-              <p className="text-lg lg:text-xl text-[#3D2314]/85 leading-relaxed max-w-4xl mx-auto">
-                The Fatherhood Foundation equips men through practical resources, training, teaching, and active engagement to build a healthy community and develop intentional fathers, committed husbands, and impactful leaders.
-              </p>
-            </FadeIn>
-          </div>
-          
-        </section>
-
-        {/* Five Pillars with staggered animations */}
-        <section id="pillars" className="py-20 lg:py-32 bg-gray-50 relative overflow-hidden">
-          <Parallax speed={0.3} className="absolute bottom-0 left-0 w-96 h-96 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up" className="text-center mb-16">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-4">Our Five Pillars</h2>
-              <p className="text-lg text-black max-w-2xl mx-auto text-balance font-medium">
-                Comprehensive programs designed to strengthen every aspect of manhood and family life.
-              </p>
-            </FadeIn>
-
-            <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
-              <FadeIn delay={0.1} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-all duration-500 group-hover:scale-110">
-                      <Image
-                        src="/images/tabletalk-logo.jpg"
-                        alt="TableTalk for Men - Fatherhood Foundation logo"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Monthly Table Talk for Men</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Connect with experienced mentors who provide guidance, accountability, and wisdom for your journey
-                    as a man and leader.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/mentoring-men">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </FadeIn>
-
-              {/* ActiveParenting card - Hidden for now, activate later
-              <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-[#8B2B3E]/50 bg-white">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
-                      <Image
-                        src="/pillars/active-parenting.jpg"
-                        alt="Diverse fathers with their children"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">ActiveParenting</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Learn practical skills and strategies to become an engaged, present, and effective father to your
-                    children.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/active-parenting">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              */}
-
-              <FadeIn delay={0.2} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
-                      <Image
-                        src="/pillars/great-marriage.jpg"
-                        alt="Diverse couples celebrating their marriages"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-semibold text-[#8B2B3E] mb-4 text-center">My Great Marriage</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Build a thriving marriage through proven principles, practical tools, and supportive community for
-                    couples.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/my-great-marriage">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </FadeIn>
-
-              <FadeIn delay={0.3} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
-                      <Image
-                        src="/pillars/missions-for-men.jpg"
-                        alt="Men on mission trips serving communities"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Missions for Men</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Go beyond your comfort zone on domestic and international mission trips. Serve alongside brothers, transform communities, and discover your purpose through hands-on impact.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/missions-for-men">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </FadeIn>
-
-              <FadeIn delay={0.4} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors group-hover:scale-110 duration-500">
-                      <Image
-                        src="/pillars/community-development.jpg"
-                        alt="Diverse men working together in community service"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Social Impact</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Make a lasting impact in your community through service, leadership, and collaborative initiatives.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/community-development">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </FadeIn>
-
-              <FadeIn delay={0.5} direction="up" className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
-              <Card className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 hover:border-[#8B2B3E]/50 bg-white h-full">
-                <CardContent className="p-8 lg:p-10">
-                  <div className="flex justify-center mb-6">
-                    <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#8B2B3E]/20 group-hover:border-[#8B2B3E] transition-colors">
-                      <Image
-                        src="/pillars/men-on-mission.jpg"
-                        alt="Men united on a mission to serve"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#8B2B3E] mb-4 text-center">Men on a Mission</h3>
-                  <p className="text-black mb-6 leading-relaxed text-center">
-                    Unite with purpose-driven men committed to making a difference through faith, service, and intentional action in their families and communities.
-                  </p>
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="group/button p-0 h-auto text-[#8B2B3E] hover:text-[#6B1B2E]"
-                    >
-                      <Link href="/missions-for-men">
-                        Explore Program <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Monthly ManTalk CTA Banner */}
-        <section className="relative py-20 lg:py-24 bg-[#1E3A5F] overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/table-talk-banner.jpg"
-              alt="Men gathering at Monthly Table Talk"
-              fill
-              className="object-cover opacity-40"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1E3A5F]/95 via-[#1E3A5F]/80 to-[#1E3A5F]/60" />
-          </div>
-          
-          {/* Decorative elements */}
-          <Parallax speed={0.2} className="absolute top-10 right-10 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
-          
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
-              <div className="flex-1 text-center lg:text-left">
-                <FadeIn direction="left">
-                  <div className="flex items-center gap-4 justify-center lg:justify-start mb-4">
-                    <Image
-                      src="/images/tabletalk-logo.jpg"
-                      alt="TableTalk for Men logo"
-                      width={64}
-                      height={64}
-                      className="rounded-full shadow-lg border-2 border-white/20"
-                    />
-                    <span className="inline-block px-4 py-2 bg-[#D4A574]/20 text-[#D4A574] rounded-full text-sm font-semibold">
-                      Monthly Gathering
-                    </span>
-                  </div>
-                </FadeIn>
-                <FadeIn direction="left" delay={0.1}>
-                  <h2 className="text-3xl lg:text-5xl font-bold text-white mb-4 text-balance">
-                    Join the Monthly ManTalk
-                  </h2>
-                </FadeIn>
-                <FadeIn direction="left" delay={0.2}>
-                  <p className="text-lg text-white/80 max-w-xl leading-relaxed">
-                    Where men rub shoulders, share life experiences, and engage in meaningful conversations about the <span className="text-[#D4A574] font-semibold">Matters of Life</span> — as men, husbands, and fathers. Every first Saturday of the month.
-                  </p>
-                </FadeIn>
-              </div>
-              
-              <FadeIn direction="right" delay={0.3}>
-                <div className="flex flex-col gap-6">
-                  {/* Next Session Highlight */}
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                    <p className="text-[#D4A574] text-sm font-semibold mb-1">Next Session</p>
-                    <p className="text-white text-xl font-bold">6 June 2026</p>
-                    <p className="text-white/70 text-sm">8:30am - 10:30am | Scouts Hall, Suiderhof</p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button 
-                      asChild 
-                      size="lg" 
-                      className="text-lg px-8 py-6 bg-[#D4A574] text-[#1E3A5F] hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 font-bold"
-                    >
-                      <Link href="/mentoring-men">
-                        Learn More <ArrowRightIcon />
-                      </Link>
-                    </Button>
-                    <Button 
-                      asChild 
-                      size="lg" 
-                      variant="outline"
-                      className="text-lg px-8 py-6 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-all duration-300 rounded-full font-semibold"
-                    >
-                      <Link href="/events">
-                        Register Now
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Preview Section */}
-        <section className="py-20 lg:py-28 bg-[#FAF8F5] relative overflow-hidden">
-          <Parallax speed={-0.1} className="absolute top-0 right-0 w-80 h-80 bg-[#8B2B3E]/5 rounded-full blur-3xl" />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <FadeIn direction="up" className="text-center mb-12">
-              <span className="inline-block px-4 py-2 bg-[#8B2B3E]/10 text-[#8B2B3E] rounded-full text-sm font-semibold mb-4">
-                Success Stories
-              </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#8B2B3E] mb-4 text-balance">
-                Hear From Our Community
-              </h2>
-              <p className="text-lg text-black/70 max-w-2xl mx-auto">
-                Real stories from real men whose lives have been transformed.
-              </p>
-            </FadeIn>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              <FadeIn delay={0.1} direction="up">
-                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
-                      {`"The Fatherhood Foundation transformed my perspective on being a father. I am now a more intentional father and husband."`}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src="/images/testimonials/james-ipinginge.jpg"
-                          alt="James Ipinginge"
-                          width={40}
-                          height={40}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">James Ipinginge</p>
-                        <p className="text-xs text-black/60">Business Man</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-
-              <FadeIn delay={0.2} direction="up">
-                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
-                      {`"Being part of the community development initiatives opened my eyes to the power of men supporting each other in Namibia."`}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">PN</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Petrus Naubeb</p>
-                        <p className="text-xs text-black/60">Program Graduate</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-
-              <FadeIn delay={0.3} direction="up">
-                <Card className="group h-full bg-white border-2 border-transparent hover:border-[#8B2B3E]/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 md:col-span-2 lg:col-span-1">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 text-[#D4A574]" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-black/80 leading-relaxed mb-4 italic text-sm">
-                      {`"The marriage enrichment program gave us tools to communicate better. Our marriage has never been stronger."`}
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#8B2B3E]/10 flex items-center justify-center">
-                        <span className="text-[#8B2B3E] font-semibold">VR</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-[#1a1a1a] text-sm">Johan & Mariska Van Rensburg</p>
-                        <p className="text-xs text-black/60 font-serif italic">My Great Marriage Couple</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-            </div>
-
-            <FadeIn delay={0.4} direction="up" className="text-center">
-              <Button 
-                asChild 
-                variant="outline"
-                size="lg" 
-                className="text-base px-8 py-6 border-2 border-[#8B2B3E] text-[#8B2B3E] hover:bg-[#8B2B3E] hover:text-white transition-all duration-300 rounded-full"
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a
+                href={TEL_HREF}
+                className="flex items-center justify-center gap-2.5 bg-white text-[#1a365d] px-6 py-4 rounded-xl font-bold text-base hover:bg-gray-50 transition-colors min-h-[48px] flex-1 sm:flex-none"
               >
-                <Link href="/testimonials">
-                  Read More Stories <ArrowRightIcon />
-                </Link>
-              </Button>
-            </FadeIn>
+                <Phone className="w-5 h-5 flex-shrink-0" />
+                Call Colin: {PHONE_DISPLAY}
+              </a>
+              <a
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2.5 border-2 border-[#c9a227] text-[#c9a227] px-6 py-4 rounded-xl font-bold text-base hover:bg-[#c9a227] hover:text-[#1a365d] transition-colors min-h-[48px] flex-1 sm:flex-none"
+              >
+                <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                WhatsApp Colin
+              </a>
+            </div>
           </div>
-        </section>
 
-        {/* Call to Action with cinematic effects */}
-        <section className="py-20 lg:py-32 bg-white relative overflow-hidden">
-          <Parallax speed={0.2} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-[#8B2B3E]/5 to-transparent rounded-full" />
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-            <FadeIn direction="up">
-              <h2 className="text-3xl lg:text-5xl font-bold text-[#8B2B3E] mb-6 text-balance">
-                Ready to Take the Next Step?
-              </h2>
-            </FadeIn>
-            <FadeIn direction="up" delay={0.2}>
-              <p className="text-lg lg:text-xl text-black mb-10 text-balance leading-relaxed font-medium">
-                Join thousands of men who are transforming their families and communities through The Fatherhood
-                Foundation.
+          {/* Colin photo placeholder */}
+          <div className="order-1 md:order-2 flex justify-center md:justify-end">
+            <div className="relative">
+              <div className="w-56 h-56 md:w-72 md:h-72 rounded-full bg-white/10 border-4 border-[#c9a227] flex items-center justify-center overflow-hidden">
+                <div className="flex flex-col items-center gap-2 text-white/60">
+                  <Users className="w-16 h-16 md:w-20 md:h-20" />
+                  <span className="text-sm font-medium">Colin Van Wyk</span>
+                  <span className="text-xs opacity-70">Photo coming soon</span>
+                </div>
+              </div>
+              {/* Experience badge */}
+              <div className="absolute -bottom-2 -right-2 md:bottom-4 md:-right-6 bg-[#c9a227] text-[#1a365d] rounded-full w-20 h-20 flex flex-col items-center justify-center shadow-lg">
+                <span className="font-bold text-2xl leading-none">17</span>
+                <span className="text-xs font-semibold leading-tight">Years</span>
+                <span className="text-xs font-semibold leading-tight">Trusted</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Colin */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">Meet Your Advisor</p>
+          <h2 className="font-[family-name:var(--font-inter)] text-3xl md:text-4xl font-bold text-[#1a365d] mb-6">
+            Meet Colin &amp; The Team
+          </h2>
+          <div className="flex flex-col md:flex-row items-center gap-8 text-left bg-[#f7fafc] rounded-2xl p-8 mt-8">
+            <div className="w-28 h-28 rounded-full bg-[#1a365d] flex items-center justify-center flex-shrink-0 border-4 border-[#c9a227]">
+              <span className="text-white font-bold text-3xl">CV</span>
+            </div>
+            <div>
+              <h3 className="font-[family-name:var(--font-inter)] text-xl font-bold text-[#1a365d] mb-1">
+                Colin Van Wyk
+              </h3>
+              <p className="text-[#c9a227] font-semibold text-sm mb-3">Founder &amp; Managing Director</p>
+              <p className="text-[#2d3748] leading-relaxed">
+                Colin Van Wyk founded Omega in 2008 with a simple belief: Namibians deserve insurance advice they can
+                trust. 17 years later, that belief hasn&apos;t changed. Colin is just a phone call away — always.
               </p>
-            </FadeIn>
-            <FadeIn direction="up" delay={0.4}>
-              <Button asChild size="lg" className="text-base px-10 py-6 bg-[#8B2B3E] hover:bg-[#6B1B2E] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl rounded-full">
-                <Link href="/get-involved">
-                  Get Involved Today <ArrowRightIcon />
-                </Link>
-              </Button>
-            </FadeIn>
+            </div>
           </div>
-        </section>
+          <div className="mt-6">
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 bg-[#1a365d] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#2a4a7f] transition-colors"
+            >
+              Get to Know Us
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      </main>
+      {/* Testimonials */}
+      <section className="py-20 px-4 bg-[#f7fafc]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">Social Proof</p>
+            <h2 className="font-[family-name:var(--font-inter)] text-3xl md:text-4xl font-bold text-[#1a365d]">
+              What Our Clients Say
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((t, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} className="w-4 h-4 fill-[#c9a227] text-[#c9a227]" />
+                  ))}
+                </div>
+                <blockquote className="text-[#2d3748] leading-relaxed mb-4 italic">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#1a365d] flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">{t.name[0]}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[#1a365d]">{t.name}</p>
+                    <p className="text-xs text-[#718096]">{t.location}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <Footer />
+      {/* Services Preview */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">What We Do</p>
+            <h2 className="font-[family-name:var(--font-inter)] text-3xl md:text-4xl font-bold text-[#1a365d]">
+              How We Can Help
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {services.map(({ icon: Icon, title, desc }, i) => (
+              <div
+                key={i}
+                className="bg-[#f7fafc] rounded-2xl p-8 border border-gray-100 hover:border-[#c9a227] transition-colors"
+              >
+                <div className="w-12 h-12 bg-[#1a365d] rounded-xl flex items-center justify-center mb-5">
+                  <Icon className="w-6 h-6 text-[#c9a227]" />
+                </div>
+                <h3 className="font-[family-name:var(--font-inter)] text-lg font-bold text-[#1a365d] mb-2">
+                  {title}
+                </h3>
+                <p className="text-[#718096] text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact CTA */}
+      <section className="py-20 px-4 bg-[#1a365d]">
+        <div className="max-w-lg mx-auto text-center">
+          <h2 className="font-[family-name:var(--font-inter)] text-3xl md:text-4xl font-bold text-white mb-3">
+            Ready to Talk?
+          </h2>
+          <p className="text-white/70 text-lg mb-8">Colin is just a call or message away.</p>
+          <div className="flex flex-col gap-3">
+            <a
+              href={TEL_HREF}
+              className="flex items-center justify-center gap-2.5 bg-white text-[#1a365d] px-6 py-4 rounded-xl font-bold text-base hover:bg-gray-50 transition-colors min-h-[48px]"
+            >
+              <Phone className="w-5 h-5" />
+              Call Colin Now
+            </a>
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2.5 border-2 border-[#c9a227] text-[#c9a227] px-6 py-4 rounded-xl font-bold text-base hover:bg-[#c9a227] hover:text-[#1a365d] transition-colors min-h-[48px]"
+            >
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp Colin
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="flex items-center justify-center gap-2 text-white/60 hover:text-white transition-colors py-2 text-sm"
+            >
+              <Mail className="w-4 h-4" />
+              {EMAIL}
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

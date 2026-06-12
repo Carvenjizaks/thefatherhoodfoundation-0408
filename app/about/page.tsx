@@ -1,420 +1,202 @@
-"use client"
+import type { Metadata } from "next"
+import { Phone, MessageCircle, Shield, Award, Users } from "lucide-react"
+import { TrustBar } from "@/components/omega/trust-bar"
 
-import { useState } from "react"
-import Link from "next/link"
-import { Shield, Target, Heart, Users, TrendingUp, Award, Globe, HandHeart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { FadeIn, ScaleIn, Parallax, CountUp } from "@/components/ui/motion"
-// named imports — header.tsx and footer.tsx use named exports only
+const TEL_HREF = "tel:+264610000000"
+const WHATSAPP_HREF = "https://wa.me/264610000000"
 
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const stats = [
-  { value: "20,000+", label: "Men Impacted" },
-  { value: "1,500+",  label: "Marriages Strengthened" },
-  { value: "15,000+", label: "Youth Reached" },
-  { value: "10+",     label: "Years of Service" },
-]
-
-const whyPartner = [
-  { icon: TrendingUp, title: "Measurable Results",   desc: "Every programme is tracked to ensure real transformation in families and communities." },
-  { icon: Award,      title: "Proven Approach",      desc: "Our three-pillar model of Identity, Affirmation, and Purpose creates lasting change." },
-  { icon: Globe,      title: "Growing Reach",        desc: "Expanding from local communities to national and international impact." },
-  { icon: HandHeart,  title: "100% Committed",       desc: "Every donation directly supports programmes that transform lives." },
-]
-
-const values = [
-  { icon: Shield, title: "Service",        desc: "We lead by serving others, putting the needs of families and communities at the forefront of everything we do." },
-  { icon: Target, title: "Responsibility", desc: "We believe in accountability and taking ownership of our roles as fathers, husbands, and community leaders." },
-  { icon: Heart,  title: "Transformation",desc: "We are committed to long-term, lasting change that impacts generations to come." },
-  { icon: Users,  title: "Brotherhood",   desc: "We foster authentic community where men can grow, be challenged, and support one another." },
-]
-
-const chairman = {
-  name: "Carven J. Izaks",
-  initials: "CJI",
-  role: "Founder & Chairman",
-  image: "/team/carven-izaks.jpg",
-  bio: "Carven J. Izaks is the Founder and Chairman of The Fatherhood Foundation. He is a speaker, mentor, and strategic leader committed to restoring men, strengthening families, and advancing community transformation through principled leadership and values-based development. His public profile also identifies him as Director at Nexium Business Intelligence.",
+export const metadata: Metadata = {
+  title: "About Colin Van Wyk | Omega Insurance Brokers",
+  description:
+    "Meet Colin Van Wyk, founder of Omega Insurance Brokers. 17 years of trusted, NAMFISA-registered insurance advice in Namibia.",
+  alternates: { canonical: "https://omegainsurance.com.na/about" },
 }
 
-const governors = [
+const team = [
   {
-    name: "Christo Nicholls",
-    initials: "CN",
-    role: "Board of Governors",
-    image: "/team/christo-nicholls.jpg",
-    bio: "Christo Nicholls serves as Chief Executive Officer of Utility Consulting Solutions (UtCS), where he leads efforts to develop practical, affordable electricity solutions. His leadership is marked by innovation, strategic thinking, and a commitment to improving utility access and energy sustainability.",
+    initials: "CV",
+    name: "Colin Van Wyk",
+    role: "Founder & Managing Director",
+    bio: "17+ years in insurance. Founded Omega in 2008.",
   },
   {
-    name: "Robert Burdett",
-    initials: "RB",
-    role: "Board of Governors",
-    image: "/team/robert-burdett.jpg",
-    bio: "Robert Burdett is Senior Pastor of PowerHouse Church, Katy TX, with 22 years of corporate management experience. He leads Intense Men, consults through GenesisTeam.org, and oversees international church plants in Peru and Sri Lanka — bringing deep commitment to fatherhood and manhood to The Fatherhood Foundation's Board of Governors.",
+    initials: "TM",
+    name: "Team Member",
+    role: "Senior Insurance Broker",
+    bio: "8+ years of client advisory experience.",
   },
   {
-    name: "Brandon Sanders",
-    initials: "BS",
-    role: "Board of Governors",
-    image: "/team/brandon-sanders.jpg",
-    bio: "Brandon Sanders is a leader with Wings of Life, committed to empowering men and strengthening families through mentorship and community-driven initiatives.",
-  },
-  {
-    name: "Bruce Hansen",
-    initials: "BH",
-    role: "Board of Governors",
-    image: "/team/bruce-hansen.jpg",
-    bio: "Bruce Hansen is Managing Director of Simonis Storm Securities, with deep expertise in financial services, investment markets, and economic strategy. His leadership and commitment to community make him a valued member of The Fatherhood Foundation's Board of Governors.",
+    initials: "CS",
+    name: "Team Member",
+    role: "Client Services",
+    bio: "Ensuring every client gets the support they need.",
   },
 ]
 
-const management = [
-  { name: "Bianca Clark",      initials: "BC",  role: "Organisation Secretary", image: "/team/bianca-clark.jpg", bio: "Bianca Clark is a leadership and personal development professional serving through Africa B-Inspired (PTY) Ltd. As Organisation Secretary, she brings coaching expertise and practical development insight to strengthen families and communities through The Fatherhood Foundation." },
-  { name: "Astrido Philander", initials: "AP",  role: "Treasurer",              image: "/team/astrido-philander.jpg", bio: "Astrido Barth-Philander is a Chartered Accountant and Senior Manager: Finance at SanlamAllianz Namibia. Trained through UCT and ICAN, he brings sound financial governance and strategic insight to his role as Treasurer of The Fatherhood Foundation." },
-]
-
-// ─── BoardSection — click-to-flip card grid ──────────────────────────────────
-
-type BoardMember = { name: string; initials: string; role: string; image: string; bio: string }
-
-function BoardMemberCard({ member }: { member: BoardMember }) {
-  const [flipped, setFlipped] = useState(false)
-
-  return (
-    <div
-      className="cursor-pointer"
-      style={{ perspective: "1000px", width: "210px" }}
-      onClick={() => setFlipped(!flipped)}
-    >
-      <div
-        style={{
-          position: "relative",
-          width: "210px",
-          height: "300px",
-          transformStyle: "preserve-3d",
-          transition: "transform 0.55s ease",
-          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-        }}
-      >
-        {/* Front — photo + name */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            borderRadius: "16px",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            background: member.image ? "transparent" : "linear-gradient(135deg, #D4956A 0%, #E8B896 100%)",
-            border: "3px solid #E8D5C4",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-          }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} style={{ width: "100%", height: "200px", objectFit: "cover", objectPosition: "top", flexShrink: 0 }} />
-          ) : (
-            <div style={{ width: "100%", height: "200px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ color: "white", fontWeight: 700, fontSize: "2rem" }}>{member.initials}</span>
-            </div>
-          )}
-          <div style={{ padding: "10px 12px", background: "#FDF8F4", flex: 1 }}>
-            <p style={{ fontWeight: 700, fontSize: "0.85rem", color: "#3D1F0F", margin: 0, lineHeight: 1.3 }}>{member.name}</p>
-            <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", margin: "3px 0 0" }}>{member.role}</p>
-            <p style={{ fontSize: "0.65rem", color: "#9A7B6A", margin: "5px 0 0" }}>Click to read bio</p>
-          </div>
-        </div>
-
-        {/* Back — bio */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            borderRadius: "16px",
-            background: "linear-gradient(135deg, #FDF8F4 0%, #FEF3EB 100%)",
-            border: "3px solid #8B2B3E",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px 16px",
-          }}
-        >
-          <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#3D1F0F", textAlign: "center", marginBottom: "4px" }}>{member.name}</p>
-          <p style={{ fontWeight: 600, fontSize: "0.72rem", color: "#8B2B3E", textAlign: "center", marginBottom: "12px" }}>{member.role}</p>
-          <p style={{ fontSize: "0.72rem", color: "#5C3D2E", lineHeight: 1.6, textAlign: "center", overflowY: "auto", maxHeight: "180px" }}>{member.bio}</p>
-          <p style={{ fontSize: "0.62rem", color: "#9A7B6A", marginTop: "10px", flexShrink: 0 }}>Click to flip back</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function BoardSection({ members }: { members: BoardMember[] }) {
-  return (
-    <div className="flex flex-wrap justify-center gap-6 py-4">
-      {members.map((m) => (
-        <BoardMemberCard key={m.name} member={m} />
-      ))}
-    </div>
-  )
-}
-
-// ─── ManagementCard ───────────────────────────────────────────────────────────
-
-function ManagementCard({ member }: { member: typeof management[0] }) {
-  return (
-    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-white">
-      <CardContent className="p-6 text-center">
-        <div
-          className="w-40 h-48 rounded-2xl mx-auto mb-5 overflow-hidden flex items-center justify-center shadow-md"
-          style={{ background: member.image ? "transparent" : "linear-gradient(135deg, #8B2B3E 0%, #6B1B2E 100%)" }}
-        >
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
-          ) : (
-            <span className="text-white font-bold text-2xl">{member.initials}</span>
-          )}
-        </div>
-        <h3 className="font-bold text-[#1a1a1a] text-lg mb-1">{member.name}</h3>
-        <p className="text-sm text-[#8B2B3E] font-semibold mb-3">{member.role}</p>
-        <p className="text-sm text-gray-600 leading-relaxed">{member.bio}</p>
-      </CardContent>
-    </Card>
-  )
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+const partners = ["Old Mutual", "Hollard", "Alexander Forbes", "Momentum", "Liberty"]
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen font-sans">
-      <Header />
+    <>
+      <TrustBar />
 
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-[#1a1a1a]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#8B2B3E]/20 via-transparent to-[#8B2B3E]/10" />
-        <Parallax speed={0.3} className="absolute top-20 right-10 w-96 h-96 bg-[#D4956A]/10 rounded-full blur-3xl" />
-        <Parallax speed={0.2} className="absolute bottom-10 left-10 w-64 h-64 bg-[#8B2B3E]/10 rounded-full blur-3xl" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <FadeIn delay={0.1} direction="up">
-            <p className="text-sm font-semibold uppercase tracking-widest text-[#D4956A] mb-4">Know That Your Support Makes a Difference</p>
-          </FadeIn>
-          <FadeIn delay={0.2} direction="up">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 text-balance leading-tight">
-              Transforming Lives,{" "}
-              <span className="text-[#D4956A]">One Father at a Time</span>
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.3} direction="up">
-            <p className="text-lg text-white/70 leading-relaxed max-w-3xl mx-auto mb-10">
-              The Fatherhood Foundation is a values-driven organization committed to raising strong men, strengthening families, and building healthier communities. Through mentoring, leadership development, youth engagement, and community initiatives, we equip and empower men to go and train young people in character, values, and practical life tools.
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.4} direction="up">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] hover:scale-105 transition-all duration-300 text-white font-semibold h-12 px-8 shadow-lg hover:shadow-xl">
-                <Link href="/partnership">Partner With Us</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 hover:scale-105 transition-all duration-300 font-semibold h-12 px-8">
-                <Link href="/get-involved">Get Involved</Link>
-              </Button>
+      {/* Page Hero */}
+      <section className="bg-[#1a365d] py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">Our Story</p>
+          <h1 className="font-[family-name:var(--font-inter)] text-3xl md:text-5xl font-bold text-white mb-5">
+            Real People. Real Advice.
+          </h1>
+          <p className="text-white/75 text-lg leading-relaxed max-w-2xl mx-auto">
+            Omega Insurance Brokers was built on a single belief: Namibians deserve insurance advice from someone they
+            can trust — and call.
+          </p>
+        </div>
+      </section>
+
+      {/* Colin's Story */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">The Founder</p>
+              <h2 className="font-[family-name:var(--font-inter)] text-3xl font-bold text-[#1a365d] mb-5">
+                Colin&apos;s Story
+              </h2>
+              <div className="space-y-4 text-[#2d3748] leading-relaxed">
+                <p>
+                  In 2008, Colin founded Omega with a simple belief: Namibians deserve insurance advice they can trust.
+                  17 years later, that belief hasn&apos;t changed.
+                </p>
+                <p>
+                  Colin is an independent broker — which means he works for you, not for any one insurance company.
+                  Colin compares the market, explains your options plainly, and makes sure you only pay for cover that
+                  actually protects you.
+                </p>
+                <p>
+                  Colin is just a call away. Always. That&apos;s not a tagline — it&apos;s how he&apos;s built 17 years
+                  of trusted relationships across Windhoek.
+                </p>
+              </div>
+              <div className="flex gap-4 mt-8">
+                <div className="text-center">
+                  <p className="font-[family-name:var(--font-inter)] text-3xl font-bold text-[#1a365d]">17+</p>
+                  <p className="text-sm text-[#718096]">Years Experience</p>
+                </div>
+                <div className="w-px bg-gray-200" />
+                <div className="text-center">
+                  <p className="font-[family-name:var(--font-inter)] text-3xl font-bold text-[#1a365d]">24+</p>
+                  <p className="text-sm text-[#718096]">Yrs Team Expertise</p>
+                </div>
+                <div className="w-px bg-gray-200" />
+                <div className="text-center">
+                  <p className="font-[family-name:var(--font-inter)] text-3xl font-bold text-[#1a365d]">2008</p>
+                  <p className="text-sm text-[#718096]">Est. in Namibia</p>
+                </div>
+              </div>
             </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-16 bg-[#8B2B3E] overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {stats.map((s, i) => (
-              <FadeIn key={s.label} delay={i * 0.1} direction="up">
-                <div>
-                  <p className="text-4xl font-bold text-white mb-2">{s.value}</p>
-                  <p className="text-white/70 text-sm font-medium">{s.label}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Partner With Us */}
-      <section className="py-24 bg-[#f8f5f2] overflow-hidden">
-        <style>{`
-          @keyframes slideInFromLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
-          }
-          @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(139, 43, 62, 0.2); }
-            50% { box-shadow: 0 0 20px 5px rgba(139, 43, 62, 0.15); }
-          }
-          .partner-card {
-            opacity: 0;
-            animation: slideInFromLeft 0.7s ease forwards;
-          }
-          .partner-card:nth-child(1) { animation-delay: 0.1s; }
-          .partner-card:nth-child(2) { animation-delay: 0.25s; }
-          .partner-card:nth-child(3) { animation-delay: 0.4s; }
-          .partner-card:nth-child(4) { animation-delay: 0.55s; }
-          .partner-card:hover .partner-icon {
-            animation: pulseGlow 1.5s ease-in-out infinite;
-          }
-        `}</style>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">Why Partner With Us</p>
-            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4 text-balance">Your Investment Creates Lasting Change</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              When you support The Fatherhood Foundation, you are directly investing in the transformation of men, families, and entire communities.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyPartner.map((item) => (
-              <Card key={item.title} className="partner-card border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white cursor-pointer">
-                <CardContent className="p-8 text-center">
-                  <div className="partner-icon w-14 h-14 rounded-full bg-[#8B2B3E] flex items-center justify-center mx-auto mb-6 transition-all duration-300">
-                    <item.icon className="w-7 h-7 text-white" />
+            <div className="flex justify-center">
+              <div className="w-64 h-64 rounded-2xl bg-[#f7fafc] border-4 border-[#c9a227] flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-24 h-24 rounded-full bg-[#1a365d] flex items-center justify-center mx-auto mb-3 border-4 border-[#c9a227]">
+                    <span className="text-white font-bold text-3xl">CV</span>
                   </div>
-                  <h3 className="font-bold text-[#1a1a1a] mb-3">{item.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed text-center">{item.desc}</p>
-                </CardContent>
-              </Card>
+                  <p className="font-bold text-[#1a365d]">Colin Van Wyk</p>
+                  <p className="text-sm text-[#c9a227] font-semibold">Founder, 2008</p>
+                  <p className="text-xs text-[#718096] mt-1">Photo coming soon</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Grid */}
+      <section className="py-20 px-4 bg-[#f7fafc]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">The Team</p>
+            <h2 className="font-[family-name:var(--font-inter)] text-3xl md:text-4xl font-bold text-[#1a365d]">
+              Meet The Team
+            </h2>
+            <p className="text-[#718096] mt-3">24+ years of collective insurance expertise</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {team.map((member, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 text-center border border-gray-100">
+                <div className="w-20 h-20 rounded-full bg-[#1a365d] flex items-center justify-center mx-auto mb-4 border-3 border-[#c9a227]">
+                  <span className="text-white font-bold text-xl">{member.initials}</span>
+                </div>
+                <h3 className="font-[family-name:var(--font-inter)] font-bold text-[#1a365d] mb-1">{member.name}</h3>
+                <p className="text-[#c9a227] text-sm font-semibold mb-2">{member.role}</p>
+                <p className="text-[#718096] text-sm">{member.bio}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <section className="py-20 bg-[#8B2B3E]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-white/60 mb-4">Our Mission</p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance leading-relaxed">
-            "To empower men to become the fathers, husbands, and community leaders they were created to be — through mentoring, education, and transformation."
+      {/* Credentials & Partners */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider mb-3">Credentials</p>
+          <h2 className="font-[family-name:var(--font-inter)] text-3xl font-bold text-[#1a365d] mb-12">
+            Registered &amp; Trusted
           </h2>
-          <Button asChild size="lg" className="bg-white text-[#8B2B3E] hover:bg-white/90 font-semibold h-12 px-8">
-            <Link href="/partnership">Support the Mission</Link>
-          </Button>
-        </div>
-      </section>
 
-      {/* Our Values */}
-      <section className="py-24 bg-white overflow-hidden">
-        <style>{`
-          @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(48px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-          .value-card {
-            opacity: 0;
-            animation: slideUpFade 0.6s ease forwards;
-          }
-          .value-card:nth-child(1) { animation-delay: 0.1s; }
-          .value-card:nth-child(2) { animation-delay: 0.25s; }
-          .value-card:nth-child(3) { animation-delay: 0.4s; }
-          .value-card:nth-child(4) { animation-delay: 0.55s; }
-        `}</style>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">What Guides Us</p>
-            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4">Our Values</h2>
-            <p className="text-gray-600 max-w-xl mx-auto">Our work is built on these core principles that guide everything we do.</p>
+          {/* NAMFISA badge */}
+          <div className="inline-flex items-center gap-3 bg-[#1a365d] text-white px-6 py-4 rounded-xl mb-12">
+            <Shield className="w-6 h-6 text-[#c9a227]" />
+            <div className="text-left">
+              <p className="font-bold">NAMFISA Registered</p>
+              <p className="text-white/70 text-sm">Namibia Financial Institutions Supervisory Authority</p>
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((v) => (
-              <div
-                key={v.title}
-                className="value-card border border-[#3D1F0F]/10 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 rounded-2xl bg-white overflow-hidden"
-              >
-                {/* Dark brown header bar */}
-                <div className="h-2 bg-[#3D1F0F]" />
-                <div className="p-8 text-center">
-                  <div className="w-14 h-14 rounded-full bg-[#3D1F0F] flex items-center justify-center mx-auto mb-6">
-                    <v.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="font-bold text-[#3D1F0F] mb-3">{v.title}</h3>
-                  <p className="text-sm text-[#5C3D2E] leading-relaxed text-center">{v.desc}</p>
+
+          {/* Partners */}
+          <div>
+            <p className="text-[#718096] text-sm font-semibold uppercase tracking-wider mb-6">
+              We Work With Leading Insurers
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              {partners.map((p) => (
+                <div
+                  key={p}
+                  className="bg-[#f7fafc] border border-gray-100 px-5 py-3 rounded-xl font-semibold text-[#1a365d] text-sm"
+                >
+                  {p}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Board of Governors */}
-      <section className="py-24 relative overflow-hidden" style={{ background: "#FAF0E8" }}>
-        {/* Decorative circles */}
-        <div className="absolute top-0 left-0 w-48 h-48 rounded-full opacity-40" style={{ background: "#E8B896", transform: "translate(-30%, -30%)" }} />
-        <div className="absolute bottom-20 left-16 w-20 h-20 rounded-full opacity-30" style={{ background: "#D4956A" }} />
-        <div className="absolute top-1/2 right-0 w-48 h-48 rounded-full opacity-20" style={{ background: "#E8B896", transform: "translate(40%, -50%)" }} />
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#D4956A] mb-3">Leadership You Can Trust</p>
-            <h2 className="text-4xl font-bold text-[#3D1F0F] mb-6">The Board of Governors</h2>
-            <p className="text-[#5C3D2E] max-w-3xl mx-auto leading-relaxed">
-              The Board of Governors serves as a strategic advisory body to help strengthen the long-term vision, direction, and governance-minded thinking of The Fatherhood Foundation. This team brings leadership insight, wisdom, and counsel to support the growth and sustainability of the organization.
-            </p>
-          </div>
-
-          {/* All board members — hover avatar to slide in full profile */}
-          <BoardSection members={[chairman, ...governors]} />
-        </div>
-      </section>
-
-      {/* Management Team */}
-      <section className="py-24 bg-white">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#8B2B3E] mb-3">Dedicated Team</p>
-            <h2 className="text-4xl font-bold text-[#1a1a1a] mb-4">Management Team</h2>
-            <p className="text-gray-600 max-w-xl mx-auto">The team that drives the day-to-day work of the Foundation with passion and purpose.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-8">
-            {management.map((m) => (
-              <div key={m.name} className="w-full sm:w-72">
-                <ManagementCard member={m} />
-              </div>
-            ))}
-          </div>
-          
-          {/* Team structure description */}
-          <div className="mt-14 text-center">
-            <p className="text-[#5C3D2E] text-lg leading-relaxed max-w-2xl mx-auto italic">
-              This team manages team leaders, leading teams, who are active in communities.
-            </p>
+      {/* Contact CTA */}
+      <section className="py-16 px-4 bg-[#1a365d]">
+        <div className="max-w-md mx-auto text-center">
+          <h2 className="font-[family-name:var(--font-inter)] text-2xl font-bold text-white mb-2">
+            Ready to Speak to Colin?
+          </h2>
+          <p className="text-white/70 mb-6">One call is all it takes.</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={TEL_HREF}
+              className="flex items-center justify-center gap-2 bg-white text-[#1a365d] px-6 py-3.5 rounded-xl font-bold hover:bg-gray-50 transition-colors flex-1 min-h-[48px]"
+            >
+              <Phone className="w-4 h-4" /> Call Colin
+            </a>
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 border-2 border-[#c9a227] text-[#c9a227] px-6 py-3.5 rounded-xl font-bold hover:bg-[#c9a227] hover:text-[#1a365d] transition-colors flex-1 min-h-[48px]"
+            >
+              <MessageCircle className="w-4 h-4" /> WhatsApp
+            </a>
           </div>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-[#1a1a1a]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Make a Difference?</h2>
-          <p className="text-white/70 mb-8 leading-relaxed">Join hundreds of partners who are investing in the transformation of men, families, and communities across Namibia and beyond.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-[#8B2B3E] hover:bg-[#6d2230] text-white font-semibold h-12 px-8">
-              <Link href="/partnership">Become a Partner</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold h-12 px-8">
-              <Link href="/get-involved">Get Involved</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+    </>
   )
 }

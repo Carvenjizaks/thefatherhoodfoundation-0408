@@ -1,19 +1,13 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
-import { NewsletterPopup } from "@/components/newsletter-popup"
 import { Analytics } from "@vercel/analytics/next"
-
-// Cache bust v9 - Added serif font for cinematic hero
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
+import { OmegaNavbar } from "@/components/omega/navbar"
+import { OmegaFooter } from "@/components/omega/footer"
+import { FloatingWhatsApp } from "@/components/omega/floating-whatsapp"
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#8B2B3E" },
-    { media: "(prefers-color-scheme: dark)", color: "#3D2314" },
-  ],
+  themeColor: "#1a365d",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -21,57 +15,45 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thefatherhoodfoundation.org"),
+  metadataBase: new URL("https://omegainsurance.com.na"),
   title: {
-    default: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
-    template: "%s | The Fatherhood Foundation",
+    default: "Omega Insurance | Trusted Broker in Windhoek | Colin Van Wyk",
+    template: "%s | Omega Insurance Brokers",
   },
   description:
-    "The Fatherhood Foundation empowers men to become intentional fathers, committed husbands, and impactful leaders through mentorship programs, marriage enrichment, and community development initiatives.",
+    "17 years of trusted insurance advice in Namibia. Colin Van Wyk, NAMFISA-registered insurance broker. Call or WhatsApp today.",
   keywords: [
-    "fatherhood programs",
-    "men's mentorship",
-    "marriage enrichment",
-    "father training",
-    "community development",
-    "family strengthening",
-    "intentional fatherhood",
-    "husband leadership",
-    "men's ministry",
-    "parenting resources",
-    "father mentoring",
-    "healthy marriages",
+    "insurance broker windhoek",
+    "namibia insurance",
+    "omega insurance brokers",
+    "colin van wyk",
+    "namfisa registered broker",
+    "life insurance namibia",
+    "business insurance windhoek",
+    "retirement planning namibia",
+    "independent insurance broker",
   ],
-  authors: [{ name: "The Fatherhood Foundation" }],
-  creator: "The Fatherhood Foundation",
-  publisher: "The Fatherhood Foundation",
+  authors: [{ name: "Colin Van Wyk" }],
+  creator: "Omega Financial Services (Pty) Ltd",
+  publisher: "Omega Financial Services (Pty) Ltd",
   formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
+    telephone: true,
+    email: true,
+    address: true,
   },
   openGraph: {
-    title: "The Fatherhood Foundation | Empowering Men, Strengthening Families",
+    title: "Omega Insurance | Trusted Broker in Windhoek | Colin Van Wyk",
     description:
-      "Empowering men to become intentional fathers, committed husbands, and impactful leaders through mentorship and community support.",
-    url: "https://thefatherhoodfoundation.org",
-    siteName: "The Fatherhood Foundation",
-    locale: "en_US",
+      "17 years of trusted insurance advice in Namibia. Colin Van Wyk, NAMFISA-registered broker. Call or WhatsApp today.",
+    url: "https://omegainsurance.com.na",
+    siteName: "Omega Insurance Brokers",
+    locale: "en_NA",
     type: "website",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "The Fatherhood Foundation - Empowering Men, Strengthening Families",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Fatherhood Foundation",
-    description: "Empowering men to become intentional fathers, committed husbands, and impactful leaders.",
-    images: ["/og-image.jpg"],
+    title: "Omega Insurance Brokers | Windhoek",
+    description: "17 years of trusted insurance advice in Namibia. NAMFISA-registered. Call Colin today.",
   },
   robots: {
     index: true,
@@ -79,100 +61,73 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
   alternates: {
-    canonical: "https://thefatherhoodfoundation.org",
-  },
-  category: "nonprofit",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    canonical: "https://omegainsurance.com.na",
   },
 }
 
-import { WebsiteSchema } from "@/components/structured-data"
-import { TooltipProvider } from "@/components/ui/tooltip"
-
-// Organization structured data for SEO - single source of truth
-const organizationJsonLd = {
+const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "NonprofitOrganization",
-  name: "The Fatherhood Foundation",
-  alternateName: "Fatherhood Foundation",
-  url: "https://thefatherhoodfoundation.org",
-  logo: "https://thefatherhoodfoundation.org/logo.png",
-  image: "https://thefatherhoodfoundation.org/og-image.jpg",
+  "@type": "LocalBusiness",
+  "@id": "https://omegainsurance.com.na",
+  name: "Omega Insurance Brokers",
+  legalName: "Omega Financial Services (Proprietary) Limited",
   description:
-    "The Fatherhood Foundation empowers men to become intentional fathers, committed husbands, and impactful leaders through mentorship programs, marriage enrichment, and community development initiatives.",
-  foundingDate: "2014",
+    "NAMFISA-registered independent insurance brokerage founded by Colin Van Wyk in 2008. Trusted insurance advice for Namibian families and businesses.",
+  url: "https://omegainsurance.com.na",
+  foundingDate: "2008",
+  founder: {
+    "@type": "Person",
+    name: "Colin Van Wyk",
+    jobTitle: "Founder & Managing Director",
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Windhoek",
     addressCountry: "NA",
   },
-  sameAs: [
-    "https://www.facebook.com/thefatherhoodfoundation",
-    "https://www.instagram.com/thefatherhoodfoundation",
-    "https://www.linkedin.com/company/thefatherhoodfoundation",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    email: "admin@fathersfound.org",
-  },
-  areaServed: {
-    "@type": "Country",
-    name: "Namibia",
+  areaServed: { "@type": "Country", name: "Namibia" },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "08:00",
+    closes: "17:00",
   },
   knowsAbout: [
-    "Fatherhood programs",
-    "Marriage enrichment",
-    "Men's mentorship",
-    "Community development",
-    "Family strengthening",
-    "Active parenting",
-    "Table Talk for Men",
+    "Personal Insurance",
+    "Business Insurance",
+    "Life Insurance",
+    "Retirement Planning",
+    "Estate Planning",
+    "Employee Benefits",
   ],
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
-        <WebsiteSchema />
       </head>
-      <body className={`${inter.className} ${playfair.variable} font-sans antialiased`}>
-        <TooltipProvider>
-          {children}
-          <NewsletterPopup />
-          <Analytics />
-        </TooltipProvider>
+      <body className="antialiased bg-white text-[#2d3748]">
+        <OmegaNavbar />
+        <div className="pt-16">{children}</div>
+        <OmegaFooter />
+        <FloatingWhatsApp />
+        <Analytics />
       </body>
     </html>
   )
